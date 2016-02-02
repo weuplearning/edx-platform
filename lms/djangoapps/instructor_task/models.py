@@ -27,6 +27,7 @@ from boto.s3.key import Key
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models, transaction
+from django.conf import settings
 
 from xmodule_django.models import CourseKeyField
 
@@ -417,6 +418,6 @@ class LocalFSReportStore(ReportStore):
         files.sort(key=lambda (filename, full_path): os.path.getmtime(full_path), reverse=True)
 
         return [
-            (filename, ("file://" + urllib.quote(full_path)))
+            (filename, (settings.MEDIA_URL[:-1] + urllib.quote(full_path)))
             for filename, full_path in files
         ]
