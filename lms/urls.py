@@ -2,7 +2,9 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 from ratelimitbackend import admin
 from django.conf.urls.static import static
-
+##MODIF HERE
+from django.views.decorators.csrf import csrf_exempt
+##END OF
 import django.contrib.auth.views
 from microsite_configuration import microsite
 import auth_exchange.views
@@ -100,6 +102,8 @@ if settings.FEATURES["ENABLE_COMBINED_LOGIN_REGISTRATION"]:
             {'initial_mode': 'login'}, name="signin_user"),
         url(r'^register$', 'student_account.views.login_and_registration_form',
             {'initial_mode': 'register'}, name="register_user"),
+        url(r'^autologreg$', 'student_account.views.auto_login_and_registration',
+            {'initial_mode': 'register'}, name="auto_login_register"),
         url(r'^accounts/login$', 'student_account.views.login_and_registration_form',
             {'initial_mode': 'login'}, name="accounts_login"),
     )
