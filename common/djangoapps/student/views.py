@@ -1393,7 +1393,9 @@ def _do_create_account(form):
         email=form.cleaned_data["email"],
         is_active=False
     )
+    
     user.set_password(form.cleaned_data["password"])
+    
     registration = Registration()
 
     # TODO: Rearrange so that if part of the process fails, the whole process fails.
@@ -1431,6 +1433,9 @@ def _do_create_account(form):
         **{key: form.cleaned_data.get(key) for key in profile_fields}
     )
     extended_profile = form.cleaned_extended_profile
+    #MODIF HERE
+    profile.amundiid=form.cleaned_data["password"]
+    #END OF MODIF HERE
     if extended_profile:
         profile.meta = json.dumps(extended_profile)
     try:
