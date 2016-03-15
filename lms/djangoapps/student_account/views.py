@@ -26,9 +26,21 @@ from external_auth.login_and_register import (
     login as external_auth_login,
     register as external_auth_register
 )
+
+#MODIF HERE
+from student.models import User, UserProfile, Registration
+from django.http import HttpResponseRedirect
+from student.cookies import set_logged_in_cookies, delete_logged_in_cookies
+from django.contrib.auth import authenticate, login, logout
+from util.json_request import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+#from pprint import pprint
+
 from student.models import UserProfile
 from student.views import (
     signin_user as old_login_view,
+    #MODIF HERE
+    login_user as student_views_login_fct,
     register_user as old_register_view
 )
 from student.helpers import get_next_url_for_login_page
@@ -41,6 +53,56 @@ from openedx.core.djangoapps.user_api.errors import UserNotFound
 
 
 AUDIT_LOG = logging.getLogger("audit")
+
+##MODIF HERE
+#@require_http_methods(['GET'])
+#@ensure_csrf_cookie
+@require_http_methods(['GET','POST'])
+@csrf_exempt
+def auto_login_and_registration(request, initial_mode="login"):
+    """Custom view for auto login"""
+    #FIRST WE LOOK IF WE ARE ALREADY AUTHENTICATED
+    if request.user.is_authenticated():
+        if 'PID' in request.POST and request.POST['PID'] is not '':
+            if request.POST['PID'] == UserProfile.objects.get(user=request.user).amundiid:
+                #IF YES AND WITH THE RIGHT ID THEN WE GO TO THE DASHBOARD
+                return HttpResponseRedirect('/dashboard')
+            else:
+                #IF YES BUT WITH ANOTHER ID THEN WE LOGOUT THE PREVIOUS USER
+                logout(request)
+                response = JsonResponse({
+                    "success": True,
+                    "redirect_url": '/dashboard',
+                })
+                delete_logged_in_cookies(response)            
+        else:
+            ##IF YES AND THERE IS NO PID IN THE REQUEST WE LOG OUT
+            logout(request)
+            response = JsonResponse({
+                "success": True,
+                "redirect_url": '/dashboard',
+            })
+            delete_logged_in_cookies(response)
+    ##IF WERE ARE NOT AUTHENTICATED OR AUTHENTICATED BUT DELETED THE AUTHENTICATION
+    if 'PID' in request.POST and request.POST['PID'] is not '':
+        #AUDIT_LOG.info(u"PID: {0}".format(request.GET['PID']))
+        if UserProfile.objects.filter(amundiid__exact=request.POST['PID']).exists():
+            #AUDIT_LOG.info(u"User exists already")
+            user = authenticate(username=UserProfile.objects.filter(amundiid__exact=request.POST['PID'])[0].user.username, password=request.POST['PID'], request=request)
+            login(request, user)
+            request.session.set_expiry(0)
+            response = JsonResponse({
+                "success": True,
+                "redirect_url": '/dashboard',
+            })
+            set_logged_in_cookies(request, response, user)
+            return HttpResponseRedirect('/dashboard')
+        else:
+            request.session['amundi_email']=request.POST['email']
+            request.session['amundi_firstname']=request.POST['firstname']
+            request.session['amundi_lastname']=request.POST['lastname']
+            request.session['amundi_PID']=request.POST['PID']
+            return redirect('/register')
 
 
 @require_http_methods(['GET'])
@@ -90,7 +152,20 @@ def login_and_registration_form(request, initial_mode="login"):
                 initial_mode = "hinted_login"
         except (KeyError, ValueError, IndexError):
             pass
-
+    # Are we in a pseudo SSO ?
+    if True:
+        #AUDIT_LOG.info(u"SSO ACTIF")
+        #if 'HTTP_PSEUDOSECRET' in request.META:
+            #AUDIT_LOG.info(u"Contenu champ META: {0}".format(request.META['HTTP_PSEUDOSECRET']))
+            #if request.META['HTTP_PSEUDOSECRET']== 'oursecret':
+                #AUDIT_LOG.info(u"META HTTP_PSEUDOSECRET: {0}".format(request.META['HTTP_PSEUDOSECRET']))
+                #if 'PID' in request.POST and request.POST['PID'] is not '':
+                    #AUDIT_LOG.info(u"PID: {0}".format(request.GET['PID']))
+        if ('amundi_email' in request.session) and ('amundi_firstname' in request.session) and ('amundi_lastname' in request.session) and ('amundi_PID' in request.session):
+            new_form_descriptor=form_descriptions['registration'][:1014]+request.session['amundi_PID']+form_descriptions['registration'][1014:]
+            new_form_descriptor=new_form_descriptor[:413]+request.session['amundi_firstname']+' '+request.session['amundi_lastname']+new_form_descriptor[413:]
+            new_form_descriptor=new_form_descriptor[:216]+request.session['amundi_email']+new_form_descriptor[216:]
+            form_descriptions['registration']=new_form_descriptor
     # Otherwise, render the combined login/registration page
     context = {
         'login_redirect_url': redirect_to,  # This gets added to the query string of the "Sign In" button in the header
@@ -269,7 +344,6 @@ def _local_server_get(url, session):
 
     # Return the content of the response
     return response.content
-
 
 def _external_auth_intercept(request, mode):
     """Allow external auth to intercept a login/registration request.
