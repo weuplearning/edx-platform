@@ -458,6 +458,8 @@ button.accordion-trigger, button.prerequisite-button {
   .date-summary {
     @include clearfix;
     @include border-left(3px solid $gray-300);
+    display: flex;
+    justify-content: space-between;
 
     padding: $baseline/2;
 
@@ -469,18 +471,25 @@ button.accordion-trigger, button.prerequisite-button {
       color: theme-color("dark");
     }
 
-    .description {
-      margin-top: $baseline/2;
-      margin-bottom: $baseline/2;
-      display: inline-block;
+    .left-column {
+      flex: 30%;
     }
 
-    .date-summary-link {
-      font-weight: $font-semibold;
+    .right-column {
+      flex: 65%;
+      .description {
+        margin-top: $baseline/2;
+        margin-bottom: $baseline/2;
+        display: inline-block;
+      }
 
-      a {
-        color: $link-color;
-        font-weight: $font-regular;
+      .date-summary-link {
+        font-weight: $font-semibold;
+
+        a {
+          color: $link-color;
+          font-weight: $font-regular;
+        }
       }
     }
 
