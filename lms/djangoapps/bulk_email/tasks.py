@@ -41,6 +41,7 @@ from markupsafe import escape
 from six import text_type
 
 from bulk_email.models import CourseEmail, Optout
+from bulk_email.api import get_unsubscribed_link
 from lms.djangoapps.courseware.courses import get_course
 from lms.djangoapps.instructor_task.models import InstructorTask
 from lms.djangoapps.instructor_task.subtasks import (
@@ -502,6 +503,7 @@ def _send_course_email(entry_id, email_id, to_list, global_email_context, subtas
 
     # use the CourseEmailTemplate that was associated with the CourseEmail
     course_email_template = course_email.get_template()
+
     try:
         connection = get_connection()
         connection.open()
@@ -537,6 +539,7 @@ def _send_course_email(entry_id, email_id, to_list, global_email_context, subtas
             email_context['name'] = current_recipient['profile__name']
             email_context['user_id'] = current_recipient['pk']
             email_context['course_id'] = course_email.course_id
+            email_context['unsubscribe_link'] = get_unsubscribed_link(email, text_type(course_email.course_id))
 
             # Construct message content using templates and context:
             plaintext_msg = course_email_template.render_plaintext(course_email.text_message, email_context)

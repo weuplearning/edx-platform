@@ -376,8 +376,7 @@ class CourseUpdateResolver(BinnedSchedulesBaseResolver):
                 if (COURSE_UPDATE_SHOW_UNSUBSCRIBE_WAFFLE_SWITCH.is_enabled() and
                         'bulk_email_optout' in settings.ACE_ENABLED_POLICIES):
                     unsubscribe_url = reverse('bulk_email_opt_out', kwargs={
-                        'token': UsernameCipher.encrypt(user.username),
-                        'course_id': str(enrollment.course_id),
+                        'token': UsernameCipher.encrypt(user.username + ' ' + str(enrollment.course_id)),
                     })
 
                 template_context.update({

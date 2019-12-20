@@ -25,19 +25,19 @@ from opaque_keys.edx.keys import CourseKey
 log = logging.getLogger(__name__)
 
 
-def opt_out_email_updates(request, token, course_id):
+def opt_out_email_updates(request, token):
     """
     A view that let users opt out of any email updates.
 
     This meant is meant to be the target of an opt-out link or button.
-    The `token` parameter must decrypt to a valid username.
-    The `course_id` is the string course key of any course.
+    The `token` parameter must decrypt to a valid username and course id.
 
     Raises a 404 if there are any errors parsing the input.
     """
+
     try:
-        username = UsernameCipher().decrypt(token.encode())
-        user = User.objects.get(username=username)
+        email, course_id = UsernameCipher().decrypt(token).decode().split(' ')
+        user = User.objects.get(email=email)
         course_key = CourseKey.from_string(course_id)
         course = get_course_by_id(course_key, depth=0)
     except UnicodeDecodeError:
@@ -45,27 +45,26 @@ def opt_out_email_updates(request, token, course_id):
     except UsernameDecryptionException as exn:
         raise Http404(text_type(exn))
     except User.DoesNotExist:
-        raise Http404("username")
+        raise Http404("email")
     except InvalidKeyError:
-        raise Http404("course")
+        raise Http404("courseId")
 
+    unsub_check = request.POST.get('unsubscribe', False)
     context = {
         'course': course,
-        'cancelled': False,
-        'confirmed': False,
+        'unsubscribe': unsub_check
     }
 
-    if request.method == 'POST':
-        if request.POST.get('submit') == 'confirm':
-            Optout.objects.get_or_create(user=user, course_id=course.id)
-            log.info(
-                u"User %s (%s) opted out of receiving emails from course %s",
-                user.username,
-                user.email,
-                course_id,
-            )
-            context['confirmed'] = True
-        else:
-            context['cancelled'] = True
+    if request.method == 'GET':
+        return render_to_response('bulk_email/confirm_unsubscribe.html', context)
 
-    return render_to_response('bulk_email/unsubscribe.html', context)
+    if request.method == 'POST' and unsub_check:
+        Optout.objects.get_or_create(user=user, course_id=course_key)
+        log.info(
+            u"User %s (%s) opted out of receiving emails from course %s",
+            user.username,
+            user.email,
+            course_id,
+        )
+
+    return render_to_response('bulk_email/unsubscribe_success.html', context)

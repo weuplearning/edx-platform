@@ -5,6 +5,7 @@ Unit tests for student optouts from course email
 
 
 import json
+import re
 
 from django.core import mail
 from django.core.management import call_command
@@ -86,6 +87,51 @@ class TestOptoutCourseEmails(ModuleStoreTestCase):
         # Assert that self.student.email not in mail.to, outbox should only contain "myself" target
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].to[0], self.instructor.email)
+
+    def test_optout_using_unsubscribe_link_in_email(self):
+        """
+        Make sure email (with Unicode characters) send to all goes there.
+        """
+        self.client.logout()
+
+        self.client.login(username=self.instructor.username, password="test")
+        self.navigate_to_email_view()
+
+        test_email = {
+            'action': 'Send email',
+            'send_to': '["learners"]',
+            'subject': 'Checking unsubscribe link in email',
+            'message': 'test message for all'
+        }
+        response = self.client.post(self.send_mail_url, test_email)
+        self.assertEquals(json.loads(response.content.decode('utf-8')), self.success_content)
+
+        # check unsubscribe link in template
+        plain_template = mail.outbox[0].body
+        html_template = mail.outbox[0].alternatives[0][0]
+
+        assert u'bulk_email/email/optout/' in plain_template
+        assert u'bulk_email/email/optout/' in html_template
+
+        unsubscribe_link = re.findall(r"""/bulk_email.*?=[^']""", mail.outbox[0].alternatives[0][0])[0].strip()
+        response = self.client.get(unsubscribe_link + '/')
+
+        self.assertContains(response, 'unsubscribe')
+
+        response = self.client.post(unsubscribe_link + '/', {'unsubscribe': True})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'You are successfully unsubscribed')
+
+        test_email = {
+            'action': 'Send email',
+            'send_to': '["staff", "learners"]',
+            'subject': 'Checking unsubscribe link in email',
+            'message': 'test message for all'
+        }
+        response = self.client.post(self.send_mail_url, test_email)
+        self.assertEquals(json.loads(response.content.decode('utf-8')), self.success_content)
+        self.assertEqual(len(mail.outbox), 1)
 
     def test_optin_course(self):
         """
