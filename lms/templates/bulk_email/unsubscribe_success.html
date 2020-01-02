@@ -22,14 +22,14 @@ from django.utils.translation import ugettext as _
 
             %if unsubscribe:
                 ${Text(_("You have successfully unsubscribed from {org} {course} emails.")).format(
-                        org=HTML("<strong>{}'s</strong>".format(course.display_org_with_default)),
-                        course=HTML("<strong>{}</strong>".format(course.display_name_with_default))
+                        org=HTML("<strong>{}'s</strong>").format(course.display_org_with_default),
+                        course=HTML("<strong>{}</strong>").format(course.display_name_with_default)
                 )}
 
             %else:
                 ${Text(_("You have not been unsubscribed from {org} {course} emails.")).format(
-                        org=HTML("<strong>{}'s</strong>".format(course.display_org_with_default)),
-                        course=HTML("<strong>{}</strong>".format(course.display_name_with_default))
+                        org=HTML("<strong>{}'s</strong>").format(course.display_org_with_default),
+                        course=HTML("<strong>{}</strong>").format(course.display_name_with_default)
                 )}
 
             %endif

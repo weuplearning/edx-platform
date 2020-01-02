@@ -25,9 +25,10 @@ from django.utils.translation import ugettext as _
             <input type="hidden" name="csrfmiddlewaretoken" value="${ csrf_token }">
             <input type="checkbox" name="unsubscribe" checked>
             ${Text(_("confirm unsubscribe from {org} {course} emails.")).format(
-                    org=HTML("<strong>{}'s</strong>".format(course.display_org_with_default)),
-                    course=HTML("<strong>{}</strong>".format(course.display_name_with_default))
-            )}
+                    org=HTML("<strong>{}'s</strong>").format(course.display_org_with_default),
+                    course=HTML("<strong>{}</strong>").format(course.display_name_with_default)
+                    )
+            }
             <br><br>
             <p>
                  <strong>${_("Note:")}</strong>

@@ -121,7 +121,7 @@ class TestOptoutCourseEmails(ModuleStoreTestCase):
         response = self.client.post(unsubscribe_link + '/', {'unsubscribe': True})
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'You are successfully unsubscribed')
+        self.assertContains(response, 'You have successfully unsubscribed from')
 
         test_email = {
             'action': 'Send email',
