@@ -616,7 +616,7 @@ class TestEmailSendFromDashboardMockedHtmlToText(EmailSendFromDashboardTestCase)
             'message': 'test message for all'
         }
         response = self.client.post(self.send_mail_url, test_email)
-        self.assertEquals(json.loads(response.content.decode('utf-8')), self.success_content)
+        self.assertEqual(json.loads(response.content.decode('utf-8')), self.success_content)
 
         # check unsubscribe link in template
         for m in mail.outbox:

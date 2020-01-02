@@ -104,7 +104,7 @@ class TestOptoutCourseEmails(ModuleStoreTestCase):
             'message': 'test message for all'
         }
         response = self.client.post(self.send_mail_url, test_email)
-        self.assertEquals(json.loads(response.content.decode('utf-8')), self.success_content)
+        self.assertEqual(json.loads(response.content.decode('utf-8')), self.success_content)
 
         # check unsubscribe link in template
         plain_template = mail.outbox[0].body
@@ -130,7 +130,7 @@ class TestOptoutCourseEmails(ModuleStoreTestCase):
             'message': 'test message for all'
         }
         response = self.client.post(self.send_mail_url, test_email)
-        self.assertEquals(json.loads(response.content.decode('utf-8')), self.success_content)
+        self.assertEqual(json.loads(response.content.decode('utf-8')), self.success_content)
         self.assertEqual(len(mail.outbox), 1)
 
     def test_optin_course(self):
