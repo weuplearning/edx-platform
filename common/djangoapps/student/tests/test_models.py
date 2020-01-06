@@ -376,6 +376,7 @@ class TestManualEnrollmentAudit(SharedModuleStoreTestCase):
             'manually enrolling unenrolled user again', other_enrollment
         )
         self.assertTrue(ManualEnrollmentAudit.objects.filter(enrollment=enrollment).exists())
+        self.assertTrue(ManualEnrollmentAudit.history.objects.filter(enrollment=enrollment).exists())
         # retire the ManualEnrollmentAudit objects associated with the above enrollments
         ManualEnrollmentAudit.retire_manual_enrollments(user=self.user, retired_email="xxx")
         self.assertTrue(ManualEnrollmentAudit.objects.filter(enrollment=enrollment).exists())
@@ -383,6 +384,14 @@ class TestManualEnrollmentAudit(SharedModuleStoreTestCase):
             enrolled_email="xxx"
         ))
         self.assertFalse(ManualEnrollmentAudit.objects.filter(enrollment=enrollment).exclude(
+            reason=""
+        ))
+        # make sure that retiring the ManualEnrollmentAudit objects created above is propagated
+        # to the history tables for this model.
+        self.assertFalse(ManualEnrollmentAudit.history.objects.filter(enrollment=enrollment).exclude(
+            enrolled_email="xxx"
+        ))
+        self.assertFalse(ManualEnrollmentAudit.history.objects.filter(enrollment=enrollment).exclude(
             reason=""
         ))
 
