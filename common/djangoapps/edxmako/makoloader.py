@@ -4,12 +4,13 @@ import logging
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
-from django.template import Engine, engines, TemplateDoesNotExist
+from django.template import Engine, engines, TemplateDoesNotExist, Origin
 from django.template.loaders.app_directories import Loader as AppDirectoriesLoader
 from django.template.loaders.filesystem import Loader as FilesystemLoader
 
 from edxmako.template import Template
 from openedx.core.lib.tempdir import mkdtemp_clean
+
 
 log = logging.getLogger(__name__)
 
@@ -27,8 +28,8 @@ class MakoLoader(object):
 
     def __init__(self, base_loader):
         # base_loader is an instance of a BaseLoader subclass
+        self.engine = engines['mako']
         self.base_loader = base_loader
-
         module_directory = getattr(settings, 'MAKO_MODULE_DIR', None)
 
         if module_directory is None:
@@ -40,8 +41,14 @@ class MakoLoader(object):
     def __call__(self, template_name, template_dirs=None):
         return self.load_template(template_name, template_dirs)
 
-    def load_template(self, template_name, template_dirs=None):
-        source, file_path = self.load_template_source(template_name, template_dirs)
+    def get_template_sources(self, template_name):
+        return self.base_loader.get_template_sources(template_name)
+
+    def get_contents(self, origin):
+        source = ''
+        file_path = origin.name
+        with open(origin.name) as fp:
+            source = fp.read()
 
         # In order to allow dynamic template overrides, we need to cache templates based on their absolute paths
         # rather than relative paths, overriding templates would have same relative paths.
@@ -55,8 +62,8 @@ class MakoLoader(object):
                                 output_encoding='utf-8',
                                 default_filters=['decode.utf8'],
                                 encoding_errors='replace',
-                                uri=template_name,
-                                engine=engines['mako'])
+                                uri=origin.template_name,
+                                engine=self.engine)
             return template, None
         else:
             # This is a regular template
@@ -73,6 +80,13 @@ class MakoLoader(object):
                 # This allows for eventual correct identification of the actual template that does
                 # not exist.
                 return source, file_path
+
+    def load_template(self, template_name, template_dirs=None):
+        source, display_name = self.load_template_source(
+            template_name, template_dirs,
+        )
+        origin = Origin(name=display_name, template_name=template_name, loader=self)
+        return self.get_contents(origin)
 
     def load_template_source(self, template_name, template_dirs=None):
         # Just having this makes the template load as an instance, instead of a class.
