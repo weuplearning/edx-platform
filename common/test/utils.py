@@ -122,15 +122,14 @@ class MockS3BotoMixin(object):
     """
     def setUp(self):
         super(MockS3BotoMixin, self).setUp()
-
-        with patch('boto.connect_s3') as self.mocked_connection:
-            self.mocked_connection.return_value = Mock()
+        _mocked_connection = patch('boto.connect_s3',  return_value= Mock())
+        self.mocked_connection = _mocked_connection.start()
 
         self.patcher = patch('storages.backends.s3boto.S3BotoStorage.save')
         self.patcher.start()
 
     def tearDown(self):
-        self.patcher.start().stop()
+        patch.stopall()
         super(MockS3BotoMixin, self).tearDown()
 
 
