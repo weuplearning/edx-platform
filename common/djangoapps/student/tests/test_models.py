@@ -386,14 +386,6 @@ class TestManualEnrollmentAudit(SharedModuleStoreTestCase):
         self.assertFalse(ManualEnrollmentAudit.objects.filter(enrollment=enrollment).exclude(
             reason=""
         ))
-        # make sure that retiring the ManualEnrollmentAudit objects created above is propagated
-        # to the history tables for this model.
-        self.assertFalse(ManualEnrollmentAudit.history.objects.filter(enrollment=enrollment).exclude(
-            enrolled_email="xxx"
-        ))
-        self.assertFalse(ManualEnrollmentAudit.history.objects.filter(enrollment=enrollment).exclude(
-            reason=""
-        ))
 
 
 class TestAccountRecovery(TestCase):
