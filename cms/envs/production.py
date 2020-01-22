@@ -35,6 +35,7 @@ def get_env_setting(setting):
 
 # A file path to a YAML file from which to load all the configuration for the edx platform
 CONFIG_FILE = get_env_setting('STUDIO_CFG')
+CONFIG_FILE = "/edx/etc/cms.yml"
 
 with codecs.open(CONFIG_FILE, encoding='utf-8') as f:
     __config__ = yaml.safe_load(f)
