@@ -1,12 +1,12 @@
 ## mako
 <%page expression_filter="h" args="online_help_token"/>
-<%namespace name='static' file='../static_content.html'/>
-<%namespace file='../main.html' import="login_query"/>
+<%namespace name='static' file='static_content.html'/>
+<%namespace file='main.html' import="login_query"/>
 <%!
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
 
-#from context_processors import doc_url
+from context_processors import doc_url
 from lms.djangoapps.ccx.overrides import get_current_ccx
 from openedx.core.djangolib.markup import HTML, Text
 
@@ -14,7 +14,7 @@ from openedx.core.djangolib.markup import HTML, Text
 from branding import api as branding_api
 # app that handles site status messages
 from status.status import get_site_status_msg
-#from util.enterprise_helpers import get_enterprise_customer_logo_url
+from util.enterprise_helpers import get_enterprise_customer_logo_url
 from student.models import User
 
 %>
@@ -79,8 +79,6 @@ if configuration_helpers.get_value('third_color') :
   third_color = configuration_helpers.get_value('third_color')
 else:
   third_color='#05144d'
-val_logo = str(configuration_helpers.get_value('logo'))
-statu='/static/images/{}'.format(val_logo)
 %>
 
 
@@ -260,6 +258,8 @@ else :
 %>
 
 
+
+
 <nav id="barre-nav-atp" class="navbar navbar-default third-color-bg third-color-border navbar-fixed-top">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
@@ -274,7 +274,7 @@ else :
       %endif
       %if configuration_helpers.get_value('logo'):
       <a class="navbar-brand ${separation_logos}" href="/dashboard" onclick="followClickEvents(this,'home','navigation')">
-        <img id="main_atp_logo" src="${statu}" />
+        <img id="main_atp_logo" src="${configuration_helpers.get_value('logo')}" />
       </a>
       %else :
       <a class="navbar-brand ${separation_logos}" href="/dashboard" onclick="followClickEvents(this,'home','navigation')">
@@ -411,4 +411,4 @@ $(window).resize(function() {
 </script>
 
 </%block>
-<%include file="../help_modal.html"/>
+<%include file="help_modal.html"/>
