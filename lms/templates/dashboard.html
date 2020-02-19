@@ -21,7 +21,7 @@ import random
 from django.utils.translation import LANGUAGE_SESSION_KEY
 
 from courseware.courses import (
-    get_course_by_id,
+    get_course_by_id
 )
 first_course_name = ''
 %>
@@ -52,7 +52,11 @@ else:
 
 <script>
 // load courses values
+
 var courses_atp = {
+    start_courses:${dump_js_escaped_json(start_course) | n, decode.utf8},
+    progress_courses:${dump_js_escaped_json(progress_courses) | n, decode.utf8},
+    end_courses:${dump_js_escaped_json(finish_courses) | n, decode.utf8}
 
 }
 

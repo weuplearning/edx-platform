@@ -102,6 +102,17 @@ class CourseOverview(TimeStampedModel):
     invitation_only = BooleanField(default=False)
     max_student_enrollments_allowed = IntegerField(null=True)
 
+    #######TMA CUSTOM - Adding field for handling categorie among other things
+    is_required_atp = BooleanField(default=False)
+    content_data_data = {"video":False,"quiz":False,"webzine":False,"serious_game":False,"document_pdf":False,"text_image":False}
+    content_data = TextField(default=content_data_data)
+    is_graded = BooleanField(default=True)
+    categ = TextField(default='None')
+    editor = TextField(default='None')
+
+    # geoffrey
+    max_student_enrollments_allowed = IntegerField(null=True)
+
     # Catalog information
     catalog_visibility = TextField(null=True)
     short_description = TextField(null=True)

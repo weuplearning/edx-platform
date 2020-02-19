@@ -33,6 +33,7 @@ function tma_show_more() {
 
   if(text.indexOf('+') != -1) {
     // re render courses
+    console.log('ici')
     course_status[key] = true;
     render_course_cards(_courses,_cible,course_status[key],_status,course_category);
     text = text.replace('+','-');
