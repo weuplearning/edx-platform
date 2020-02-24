@@ -69,9 +69,9 @@ ${static.get_page_title_breadcrumbs(course_name())}
 <%
   completion_enabled = settings.FEATURES.get('TMA_ENABLE_COMPLETION_TRACKING')
   accordian_dots_enabled = settings.FEATURES.get('TMA_SHOW_COMPLETION_ON_COURSEWARE_NAVIGATION')
-  course_id = unicode(course.id)
-  #custom_track_url = reverse('track_html_component', args=[unicode(course_id)]) if completion_enabled else ''
-  #completion_status_url = reverse('completion_status', args=[unicode(course_id)]) if accordian_dots_enabled else ''
+  course_id = str(course.id)
+  #custom_track_url = reverse('track_html_component', args=[str(course_id)]) if completion_enabled else ''
+  #completion_status_url = reverse('completion_status', args=[str(course_id)]) if accordian_dots_enabled else ''
   floating_button_enabled = settings.FEATURES.get('TMA_ENABLE_FORUM_FLOATING_BUTTON')
   custom_units_enabled = settings.FEATURES.get('TMA_ENABLE_CUSTOM_UNIT_LISTING')
 %>
@@ -88,7 +88,7 @@ ${static.get_page_title_breadcrumbs(course_name())}
   var empty_img = "${static.url('images/nav/empty.png')}";
   var previous_button = "${static.url('images/nav/previous-button.png')}";
   var next_button = "${static.url('images/nav/next-button.png')}";
-  var course_id = "${unicode(course.id)}";
+  var course_id = "${str(course.id)}";
 </script>
 <!-- //TMA FEATURES-->
 
@@ -120,7 +120,7 @@ ${static.get_page_title_breadcrumbs(course_name())}
 <%static:css group='style-course-vendor'/>
 <%static:css group='style-course'/>
 ## Utility: Notes
-% if is_edxnotes_enabled(course):
+% if is_edxnotes_enabled(course,user):
 <%static:css group='style-student-notes'/>
 % endif
 
@@ -255,8 +255,7 @@ courseware = static.get_value('css_overrides_courseware')
       <div style="clear:both;"></div>
 
     </div>
-
-% endif
+%endif
         <section class="course-content" id="course-content">
         <div class="path"></div>
         <main id="main" aria-label="Content" tabindex="-1">
@@ -318,7 +317,7 @@ courseware = static.get_value('css_overrides_courseware')
 
 <nav class="nav-utilities ${"has-utility-calculator" if course.show_calculator else ""}" aria-label="${_('Course Utilities')}">
   ## Utility: Notes
-  % if is_edxnotes_enabled(course):
+  % if is_edxnotes_enabled(course,user):
     <%include file="/edxnotes/toggle_notes.html" args="course=course"/>
   % endif
 

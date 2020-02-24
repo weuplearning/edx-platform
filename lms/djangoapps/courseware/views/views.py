@@ -57,6 +57,7 @@ from lms.djangoapps.courseware.courses import (
     can_self_enroll_in_course,
     course_open_for_self_enrollment,
     get_course,
+    get_course_by_id,
     get_course_overview_with_access,
     get_course_with_access,
     get_courses,
@@ -954,7 +955,13 @@ def course_about(request, course_id):
         # Embed the course reviews tool
         reviews_fragment_view = CourseReviewsModuleFragmentView().render_to_fragment(request, course=course)
 
+        #TMA custom atp
+        user_id = request.user.id
+        course_id = course.id
+        categ = get_course_by_id(course_id).categ
+
         context = {
+            'categ':categ,
             'course': course,
             'course_details': course_details,
             'staff_access': staff_access,

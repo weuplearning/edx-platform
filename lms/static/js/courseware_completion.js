@@ -108,12 +108,12 @@ getCompletionStatus = function(){
 }
 
 // Call the functions on document ready
-$(document).ready(function(){
+/*$(document).ready(function(){
   if(completionEnabled){
     trackHTMLComponent();
     getCompletionStatus();
   }
-});
+});*/
 
 // Call the functions on specific events
 $(document).ajaxSuccess(function(event, xhr, settings){
