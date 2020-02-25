@@ -53,6 +53,15 @@ from student import views as student_views
 from track import views as track_views
 from util import views as util_views
 
+# ATP CUSTOM IMPORT
+from atp_lang.views import change_lang
+from lms.djangoapps.end_courses_atp.views import ensure_certif
+from atp_certificates.views import atp_check_certificate
+from atp_certificates.views import atp_generate_certificate
+
+from lms.djangoapps.atp_task.views import calculate_grades_xls,get_xls,download_xls
+
+
 if settings.DEBUG or settings.FEATURES.get('ENABLE_DJANGO_ADMIN_SITE'):
     django_autodiscover()
     admin.site.site_header = _('LMS Administration')
@@ -981,3 +990,90 @@ if 'openedx.testing.coverage_context_listener' in settings.INSTALLED_APPS:
     ]
 
 urlpatterns.extend(plugin_urls.get_patterns(plugin_constants.ProjectType.LMS))
+
+
+
+
+# TMA CUSTOM 
+
+# Whether to track the html components for completion
+if settings.FEATURES.get('TMA_ENABLE_COMPLETION_TRACKING'):
+    urlpatterns += (
+        url(
+            r'^track_html_component/$',
+            'course_progress.custom_track.track_html_component',
+            name='track_html_component'
+        ),
+    )
+
+# Whether to show green dots on course nav
+if settings.FEATURES.get('TMA_SHOW_COMPLETION_ON_COURSEWARE_NAVIGATION'):
+    urlpatterns += (
+        url(
+            r'^completion_status/',
+            'course_progress.views.get_completion_status',
+            name='completion_status'
+        ),
+    )
+
+
+#Reset unit progress for quiz reset_bouton
+if settings.FEATURES.get('TMA_SHOW_COMPLETION_ON_COURSEWARE_NAVIGATION'):
+    urlpatterns += (
+        url(
+            r'^completion_status/reset_unit',
+            'course_progress.views.reset_unit_completion',
+            name='completion_status'
+        ),
+    )
+
+
+#changer la langue
+urlpatterns += (
+    url(
+        r'^api/atp/lang/(?P<langue>[^/]*)/$',
+        change_lang,
+        name='atp_change_lang'
+    ),
+)
+
+
+#generate certificates
+
+urlpatterns += (
+    url(
+        r'^api/atp/couseware_certif/(?P<course_id>[^/]*)/$',
+        ensure_certif,
+        name='courseware_certif',
+    ),
+    url(
+        r'^api/atp/check/certificate/(?P<course_id>[^/]*)/$',
+        atp_check_certificate,
+        name='atp_check_certiticate'
+    ),
+    url(
+        r'^api/atp/generate/certificate/(?P<course_id>[^/]*)/$',
+        atp_generate_certificate,
+        name='atp_generate_certiticate'
+    ),
+)
+
+#task genereta grades reports
+
+urlpatterns += (
+    url(
+        r'api/atp/task/grades/(?P<course_id>[^/]*)/$',
+        calculate_grades_xls,
+        name='calculate_grades_xls',
+    ),
+    url(
+        r'api/atp/check/grades/(?P<course_id>[^/]*)/$',
+        get_xls,
+        name='check_grades_xls',
+    ),
+    url(
+        r'api/atp/download/grades/(?P<course_id>[^/]*)/(?P<filename>[^/]*)/$',
+        download_xls,
+        name='download_grades_xls',
+    ),
+)
