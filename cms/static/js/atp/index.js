@@ -22,8 +22,6 @@ define(["domReady", "jquery", "underscore"],
           formData.append('contact_address',$('#new-microsite-contact').val());
           formData.append('language',$('#language-value').val());
           formData.append('amundi_brand',$('#amundi-brand').val());
-          formData.append('disclaimer',$('#new-microsite-disclaimer').val());
-          formData.append('trademark',$('#new-microsite-trademark').val());
           $.ajax({
             url:url,
             data:formData,
@@ -357,7 +355,6 @@ define(["domReady", "jquery", "underscore"],
           $('img.svg').show();
         }
         var onReady = function () {
-
             $('.new-microsite-button').bind('click',new_microsite_form);
             $('.new-microsite-save').bind('click',ajax_call_create_microsite);
             $('.new-microsite-cancel').bind('click',ajax_cancel_microsite);
@@ -366,6 +363,8 @@ define(["domReady", "jquery", "underscore"],
             search_module();
             search_campaign();
 
+
+            // Redirection vers le module concerné après create my campaign back to modules
             function getParameterByName(name, url) {
                 if (!url) url = window.location.href;
                 name = name.replace(/[\[\]]/g, "\\$&");
@@ -393,44 +392,6 @@ define(["domReady", "jquery", "underscore"],
               $("#info_my_module").css("display","inline");
               document.getElementById(module_from).scrollIntoView();
             }
-            $('.course-item').each(function(){
-              var This = $(this);
-              var data = This.data('status');
-              if(data == 'template') {
-                This.hide();
-              }
-            })
-            /* action on click on the index menu */
-            $('.sub_menu').find('button').click(function(){
-              var This = $(this);
-              var data = This.data('sub');
-              $('.sub_menu').find('button').not(This).removeClass('active_button');
-              This.addClass('active_button');
-              $('.course-item').each(function(){
-                var That = $(this);
-                var that_data = That.data('status');
-                if(that_data == data){
-                  That.show();
-                }else{
-                  That.hide();
-                }
-                if(data != 'all') {
-                  $('.up_list_courses').hide();
-                }else{
-                  $('.up_list_courses').show();
-                }
-              })
-            });
-            /* action on svgs */
-            // Get the Object by ID
-            $(".svg-class").each(function(){
-              var This = $(this);
-              This.contents().find('svg').attr("fill", "#dc9e29");
-            })
-            $('.svg-class-title').each(function(){
-              var This = $(this);
-              This.contents().find('svg').attr("fill", "#05144d");
-            })
 
             //$('#course-index-tabs .microsite-tab').bind('click', showTab('microsite'));
         };

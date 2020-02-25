@@ -1,65 +1,211 @@
-## mako
-<%page expression_filter="h"/>
 <%!
 from django.utils.translation import ugettext as _
-from django.urls import reverse
-from datetime import datetime
-from django.conf import settings
-import pytz
-from cms.djangoapps.contentstore.config.waffle import waffle, ENABLE_ACCESSIBILITY_POLICY_PAGE
-from openedx.core.djangolib.markup import HTML, Text
+from django.core.urlresolvers import reverse
+#from microsite_manager.models import MicrositeAdminManager
+#from microsite_configuration.models import Microsite
+from student.models import User
 %>
 
-<div class="wrapper-footer wrapper">
-  <footer class="primary" role="contentinfo">
 
-    <div class="footer-content-primary">
-      <div class="colophon">
-        <p>&copy; ${datetime.now(pytz.timezone(settings.TIME_ZONE)).year} <a data-rel="edx.org" href="${marketing_link('ROOT')}" rel="external">${settings.PLATFORM_NAME}</a>.</p>
-      </div>
 
-        <nav class="nav-peripheral" aria-label="${_("Policies")}">
-          <ol>
-            % if is_marketing_link_set('TOS'):
-              <li class="nav-item nav-peripheral-tos">
-                <a data-rel="edx.org" href="${marketing_link('TOS')}">${_("Terms of Service")}</a>
-              </li>
-            % endif
-            % if is_marketing_link_set('PRIVACY'):
-              <li class="nav-item nav-peripheral-pp">
-                <a data-rel="edx.org" href="${marketing_link('PRIVACY')}">${_("Privacy Policy")}</a>
-              </li>
-            % endif
-            % if waffle().is_enabled(ENABLE_ACCESSIBILITY_POLICY_PAGE):
-              <li class="nav-item nav-peripheral-aar">
-                <a data-rel="edx.org" href="${reverse('accessibility')}">${_("Accessibility Accommodation Request")}</a>
-              </li>
-            %endif
-            <li class="nav-item">
-              <a data-rel="edx.org" id="lms-link" href="${settings.LMS_ROOT_URL}">${_("LMS")}</a>
-            </li>
-          </ol>
-        </nav>
-    </div>
+<%
+#Microsite-logo
+default_contact = ''
+trademark='© Amundi 2018'
+contact_address='amundiacademy@amundi.com'
+primary_color="#0C1C49"
+disclaimer=''
+cms_supplemental_js=''
 
-    <div class="footer-content-secondary" aria-label="${_("Legal")}">
-      <div class="footer-about-copyright">
-        ## Site operators: Please do not remove this paragraph! This attributes back to edX and makes your acknowledgement of edX's trademarks clear.
-        <p>
-          ## Translators: 'edX' and 'Open edX' are trademarks of 'edX Inc.'. Please do not translate any of these trademarks and company names.
-          ${Text(_("edX, Open edX, and the edX and Open edX logos are registered trademarks of {link_start}edX Inc.{link_end}")).format(
-            link_start=HTML(u"<a data-rel='edx.org' href='https://www.edx.org/'>"),
-            link_end=HTML(u"</a>")
-          )}
-        </p>
-      </div>
+try:
+  microsite_key = MicrositeAdminManager.objects.get(user=user).microsite_id
+  microsite_data=Microsite.objects.get(pk=microsite_key).values
 
-      <div class="footer-about-openedx">
-        <a href="http://open.edx.org" title="${_("Powered by Open edX")}">
-          <img alt="${_("Powered by Open edX")}" src="https://files.edx.org/openedx-logos/edx-openedx-logo-tag.png">
-        </a>
-      </div>
-    </div>
-  </footer>
+  if microsite_data.get('trademark') is not None and microsite_data.get('trademark')!='':
+    trademark=microsite_data.get('trademark')
+
+  if microsite_data.get('contact_address') is not None and microsite_data.get('contact_address')!='':
+    contact_address=microsite_data.get('contact_address')
+
+  if microsite_data.get('primary_color') is not None:
+    primary_color=microsite_data.get('primary_color')
+
+  if microsite_data.get('disclaimer') is not None:
+    disclaimer=microsite_data.get('disclaimer')
+
+  if microsite_data.get('cms_supplemental_js') is not None :
+    cms_supplemental_js = microsite_data.get('cms_supplemental_js')
+
+except:
+  pass
+%>
+
+
+<style>
+/*Modal shape up */
+  .modal-close {
+    text-align: center;
+    height: auto;
+    min-height: 80px;
+    vertical-align: middle;
+  }
+  .btn,.btn:hover,.btn:focus,.btn:visited {
+    background-color: #dc9f0d;
+    border: none;
+    padding: 10px 30px;
+    width: 150px;
+    font-weight: 600;
+    color: #fff;
+    border-radius: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    cursor:pointer;
+  }
+  #close_legal {
+    display: block;
+  }
+  .pop_up_atp p{
+    text-align: justify;
+    text-justify: inter-word;
+    color: #000;
+    font-size: 12px;
+    line-height: 12px;
+  }
+  .pop_up_atp {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      background-clip: padding-box;
+      border: 1px solid #999;
+      border: 1px solid rgba(0,0,0,.2);
+      border-radius: 6px;
+      outline: 0;
+      box-shadow: 0 3px 9px rgba(0,0,0,.5);
+      z-index: 10000000000000;
+      padding: 30px 60px 30px;
+  }
+  #atp_footer_nav {
+    float: right;
+  }
+  #atp_footer_nav button,#atp_footer_nav button:hover,#atp_footer_nav button:focus,#atp_footer_nav button:visited,#atp_footer_nav a,#atp_footer_nav a:hover,#atp_footer_nav a:focus,#atp_footer_nav button:visited{
+    color: #fff !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    text-shadow: !important;
+    text-transform: uppercase;
+    outline: none;
+    font-weight: 600;
+  }
+  .legal_is_display {
+    display: block !important;
+  }
+#atp_footer_nav button:hover, #atp_footer_nav a:hover {
+color: #dda000 !important;
+text-decoration: none !important;
+font-weight: 600;
+}
+
+/* footer css */
+#footer-studio{
+  background-color:${primary_color};
+  height: 25px;
+  color:white;
+  font-size: 12px;
+  padding: 0px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: "mywebfont";
+}
+#footer-studio a{
+  color: white;
+  font-family: "mywebfont";
+}
+ul{
+  padding-left: 0;
+}
+#legal_notice{
+  margin-left: 15px;
+  cursor: pointer;
+}
+.pop_up_atp h1,.pop_up_atp h2, .pop_up_atp h3,.pop_up_atp p {
+  width: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.pop_up_atp h1 {
+  margin-bottom: 20px !important;
+  font-size: 32px !important;
+}
+
+.pop_up_atp h2 {
+  margin-bottom: 10px !important;
+  font-size: 25px !important;
+}
+
+.pop_up_atp h3,.pop_up_atp p {
+  margin-top: 5px !important;
+  margin-bottom: 5px !important;
+  font-size: 18px !important;
+}
+#pop_up_legal_notice{
+  font-size: 14px;
+  overflow: scroll;
+  max-height: 650px;
+  text-align: center;
+}
+#close_cross{
+  font-size: 20px;
+  margin-bottom: 10px;
+  text-align: right;
+}
+#close_cross span{
+  cursor: pointer;
+}
+#close_legal{
+  margin-top: 10px;
+}
+</style>
+
+
+<!--- legal notice -->
+<div id="pop_up_legal_notice" class="pop_up_atp">
+  <div class="text-right" id="close_cross"><span onclick="hidePopUp()">X</span></div>
+  ${disclaimer|n}
+  <div class="modal-close">
+    <a  class="btn btn-success btn-no-green" id="close_legal">
+      ${_('Close')}
+    </a>
+  </div>
 </div>
+
+<!-- footer -->
+<footer id="footer-studio">
+  <div id="footer-left">
+    <p>${trademark}</p>
+  </div>
+  <div id="footer-right">
+    <a href="mailto:${contact_address}">${_("Contact")}</a>
+    <span id="legal_notice" class="capitalize">${_("disclaimer")}</span>
+  </div>
+</footer>
+%  if cms_supplemental_js and cms_supplemental_js is not '' :
+  <script id="cms_supplemental_js" type="text/javascript" charset="utf-8">
+    ${cms_supplemental_js | n}
+  </script>
+% endif
+
+<script>
+function hidePopUp(){
+  document.getElementById('pop_up_legal_notice').style.display = 'none';
+}
+</script>
+
+
+
 
