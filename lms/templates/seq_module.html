@@ -1,7 +1,22 @@
 <%page expression_filter="h"/>
 <%! from django.utils.translation import pgettext, ugettext as _ %>
-
+<%! from openedx.core.djangolib.js_utils import js_escaped_string, dump_js_escaped_json %>
 <style>
+  .sequence-bottom{
+    visibility: visible!important;
+    position: inherit !important;
+  }
+  .sequence-bottom button{
+    display: block !important;
+    position: inherit!important;
+  }
+  .notcompletedborders .sequence-bottom{
+    visibility: hidden!important;
+  }
+  .vert.notcompletedborders{
+    border: #00A0E3 solid 3px;
+    border-bottom: #00A0E3 solid 3px !important;
+  }
   .nav-item.active i {
     transform: rotate(90deg)!important;
   }
@@ -56,7 +71,7 @@
 
     % for idx, item in enumerate(items):
     <div class="tma_tab">
-    <nav class="sequence-list-wrapper" aria-label="${_('Sequence')}" onclick="appendAccordion()">
+    <nav class="sequence-list-wrapper" aria-label="${_('Sequence')}" >
       <ol id="sequence-list" role="tablist">
         % if gated_content['gated']:
         <li>
@@ -130,21 +145,122 @@
     </div>
     % endfor
     <div id="seq_content" role="tabpanel"></div>
-
     % endif
   % else:
     <div id="seq_content" role="tabpanel"></div>
   % endif
   </div>
   <script>
-      var appendAccordion = function(){
+      var page_test = ${dump_js_escaped_json(items) | n, decode.utf8};
+      function button_nav_title() {
+        var xblock_id = $('.xblock').find('.xblock').data('usage-id');
+        for(var i=0;i<page_test.length;i++) {
 
+          var _cur_id = page_test[i].id;
+          if(_cur_id == xblock_id) {
+              //get previous unit title
+              try {
+                var previous = page_test[i-1];
+                var previous_title = previous.page_title;
+                $('.previous_title_nav').find('span').text(previous_title);
+              }
+              catch(error) {
+                if(error instanceof TypeError) {
+                  $('.previous_title_nav').find('span').text("");
+                }
+              }
+              //get nex unit title
+              try {
+                var next = page_test[i+1];
+                var next_title = next.page_title;
+                $('.next_title_nav').find('span').text(next_title);
+              }
+              catch(error) {
+                if(error instanceof TypeError) {
+                  $('.next_title_nav').find('span').text("");
+                }
+              }
+          }
+        }
+      }
+
+      button_nav_title();
+      $('#nav_button').find('button').click(function(){
+        var data = $(this).data('class');
+        $('.sequence-bottom').find('.'+data).click();
+        button_nav_title();
+      })
+
+
+      function toggleClass(input,Class) {
+        if($(input).hasClass(Class)){
+          $(input).removeClass(Class);
+        }else{
+          $(input).addClass(Class);
+        }
+      }
+
+
+
+      var appendAccordion = function(){
+        /*function mark_unit_completed(unit_id) {
+          $("#" + unit_id.replace(/([$%&()*+,./:;<=>?@\[\\\]^\{|}~])/g, "\\$1"))
+              $("div.vert[" + selector + "]").removeClass("notcompletedborders");
+          }
+          });*/
+        currentUnit = $(
+          ".xblock.xblock-student_view.xblock-student_view-vertical.xblock-initialized"
+        ).data("usage-id");
+        url =
+          "/tma_apps/" +
+          course_id +
+          "/" +
+          currentUnit +
+          "/completion/get_unit_completion";
+        $.ajax({
+          type: "get",
+          url: url,
+          success: function (response) {
+            console.log(response)
+            borderedUncompletedBlocks = false;
+            allBlocksCompleted = true;
+            response.unit_blocks.children.forEach(function (block) {
+              selector = "data-id='" + block.id + "'";
+              if (!block.complete) {
+                allBlocksCompleted = false;
+                if (borderedUncompletedBlocks) {
+                  $("div.vert[" + selector + "]").addClass("notcompletedborders");
+                }
+              } else {
+                $("div.vert[" + selector + "]").removeClass("notcompletedborders");
+              }
+            });
+            if (allBlocksCompleted) {
+              mark_unit_completed(currentUnit);
+              if (isLinear) {
+                isUnitAvailable(currentUnit);
+              }
+            }
+          }
+      });
+
+      $('#seq_content').hide()
       currentNmb = $('#seq_content').attr('aria-labelledby')
       currentNmbSeq = $('#seq_contents_'+currentNmb.split('_')[1])
+      console.log(currentNmb)
       $('#seq_content').insertAfter(currentNmbSeq)
       $('.sequence-bottom').insertAfter($('#seq_content'))
+      $('#seq_content').show()
       }
     $(document).ready(function(){
+      $('.sequence-list-wrapper').click(function(){
+        appendAccordion()
+      })
+      $('.button-next').click(function(){
+        console.log('click')
+        appendAccordion()
+      })
+
       appendAccordion()
     })
   </script>

@@ -122,7 +122,39 @@ except:
 <% required = course.is_required_atp %>
 
 
-<%include file='../dashboard/_dashboard_course_listing.html' args='percent=percent_atp,passed=pass_atp,categ=categ,content_data=content_data,required=required,duration=duration,course_about_link=course_about_link,course_about_id=course_about_id,course_about_img=course_about_img,course_about_name = course_about_name,course_about = course_about,course_progression = course_progression,compteur=compteur,atp_rank=atp_rank,course_overview=course_tma, enrollment=False, show_courseware_link=False, cert_status=False, can_unenroll=can_unenroll, credit_status=credit_status, show_email_settings=show_email_settings, course_mode_info=course_mode_info, show_refund_option=show_refund_option, is_paid_course=is_paid_course, is_course_blocked=is_course_blocked, verification_status=False, course_requirements=False, dashboard_index=False, share_settings=False, user=user, related_programs=False, display_course_modes_on_dashboard=True' />
+<%include file='../dashboard/_dashboard_course_listing.html' args=
+'percent=percent_atp,
+passed=pass_atp,
+categ=categ,
+content_data=content_data,
+required=required,
+duration=duration,
+course_about_link=course_about_link,
+course_about_id=course_about_id,
+course_about_img=course_about_img,
+course_about_name = course_about_name,
+course_about = course_about,
+course_progression = course_progression,
+compteur=compteur,
+atp_rank=atp_rank,
+course_overview=course_tma,
+ enrollment=False,
+ show_courseware_link=False,
+ cert_status=False,
+ can_unenroll=can_unenroll,
+ credit_status=credit_status,
+ show_email_settings=show_email_settings,
+ course_mode_info=course_mode_info,
+ show_refund_option=show_refund_option,
+ is_paid_course=is_paid_course,
+ is_course_blocked=is_course_blocked,
+ verification_status=False,
+ course_requirements=False,
+ dashboard_index=False,
+ share_settings=False,
+ user=user,
+ related_programs=False,
+ display_course_modes_on_dashboard=True' />
 <span style="display:block;clear:left;"></span>
 </ul>
 </section>
@@ -314,11 +346,5 @@ $('#certiticate').click(function(e){
 
 <style>
 
-% if status <= 99:
-@media(max-width: 1655px) {
- #course_about_details .over_campaign {
-    margin-top: 0px;
- }
-}
-% endif
+
 </style>

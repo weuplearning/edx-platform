@@ -994,7 +994,7 @@ urlpatterns.extend(plugin_urls.get_patterns(plugin_constants.ProjectType.LMS))
 
 
 
-# TMA CUSTOM 
+# TMA CUSTOM
 
 # Whether to track the html components for completion
 if settings.FEATURES.get('TMA_ENABLE_COMPLETION_TRACKING'):
@@ -1077,3 +1077,8 @@ urlpatterns += (
         name='download_grades_xls',
     ),
 )
+
+#TMA APPS
+urlpatterns += [
+    url(r'tma_apps/', include('tma_apps.urls')),
+]
