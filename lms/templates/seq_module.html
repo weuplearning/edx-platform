@@ -1,13 +1,44 @@
 <%page expression_filter="h"/>
-<%!
-from django.utils.translation import ugettext as _
-from openedx.core.djangolib.js_utils import js_escaped_string, dump_js_escaped_json
-%>
+<%! from django.utils.translation import pgettext, ugettext as _ %>
 
-<div id="sequence_${element_id}" class="sequence" data-id="${item_id}" data-position="${position}" data-ajax-url="${ajax_url}" data-next-url="${next_url}" data-prev-url="${prev_url}">
+<style>
+  .nav-item.active i {
+    transform: rotate(90deg)!important;
+  }
+  .sequence-nav{
+    display : flex;
+    flex-direction: column;
+  }
+  .sequence-list-wrapper{
+    padding: 20px 10px;
+  }
+  .sequence-list-wrapper>ol>li>button{
+    text-align: left !important;
+  }
+  .window-wrap{
+    background-color: #f5f5f5 !important;
+  }
+  .tma_tab{
+    margin : 15px 0px;
+    background-color: #fff !important;
+  }
+  .sequence-nav{
+    background : transparent !important;
+  }
+</style>
+
+<div id="sequence_${element_id}" class="sequence" data-id="${item_id}"
+     data-position="${position}" data-ajax-url="${ajax_url}"
+     data-next-url="${next_url}" data-prev-url="${prev_url}"
+     data-save-position="${'true' if save_position else 'false'}"
+     data-show-completion="${'true' if show_completion else 'false'}"
+>
+  % if not exclude_units:
+
   % if banner_text:
     <div class="pattern-library-shim alert alert-information subsection-header" tabindex="-1">
-      <span class="pattern-library-shim icon alert-icon fa fa-bullhorn" aria-hidden="true"></span>
+      <span class="pattern-library-shim icon alert-icon fa fa-info-circle" aria-hidden="true"></span>
+      <span class="sr">${_('Important!')}&nbsp;</span>
       <div class="pattern-library-shim alert-message">
         <p class="pattern-library-shim alert-copy">
           ${banner_text}
@@ -15,161 +46,115 @@ from openedx.core.djangolib.js_utils import js_escaped_string, dump_js_escaped_j
       </div>
     </div>
   % endif
-  <%
-  current_suptitle = ""
-  item_iterator = 1
-  i = 0
-  %>
-  % for idx, item in enumerate(items):
-    % if ">" in item['page_title']:
-      <%
-      i+=1
-      unit_title = item['page_title'].split(" > ")[1]
-      %>
-      % if item['page_title'].split(" > ")[0] != current_suptitle:
-        <%
-        current_suptitle = item['page_title'].split(" > ")[0]
-        %>
-        <div class="sequence-suptitle tma_chapters" id="chapter_tma_${i}">
-            <h3>${current_suptitle}</h3>
-        </div>
-      % endif
-    % else:
-      <%
-      unit_title = item['page_title']
-      %>
-    % endif
-  <div class="sr-is-focusable" tabindex="-1" id="sr-is-focusable_${item_iterator}" data-seq="chapter_tma_${i}"></div>
-  <div id="seq_contents_${idx}"
-    aria-labelledby="tab_${idx}"
-    aria-hidden="true"
-    class="seq_contents tex2jax_ignore asciimath2jax_ignore">
-    ${item['content']}
-  </div>
-    <div id="tma_tab_${i}" class="sequence-nav">
-      <nav class="sequence-list-wrapper" aria-label="${_('Unit')}">
-        <ol id="sequence-list">
-          <li>
-             <button class="seq_${item['type']} inactive nav-item disabled_unit_tma"
-             data-id="${item['id']}"
-             data-element="${idx+1}"
-             data-page-title=""
-             data-path="${item['path']}"
-             data-seq="chapter_tma_${i}"
-             id="tab_${idx}"
-             % if item_iterator > 1:
-               disabled="disabled"
-             % endif
-             >
-               <h3 class="inactive-color-text"><i class="fa fa-chevron-right "></i> ${unit_title}</h3>
-             </button>
-           </li>
-         </ol>
-       </nav>
-     </div>
-    % if item_iterator < len(items):
-      <div class='seq_content_next disabled_tma' id='seq_content_next_${item_iterator}' data-id="${item['id']}" onclick='$("#tab_${item_iterator}").click()'>
-        <a class="primary-color-bg">${_('Next')}</a>
-      </div>
-    % endif
-     <%
-     item_iterator = item_iterator + 1
-     %>
-  % endfor
-  <div class="sequence-suptitle result-score-title">
-     <h3 class="">${_("Results")}</h3>
-  </div>
+  % endif
   <div class="sequence-nav">
-    <nav class="sequence-list-wrapper" aria-label="${_('Unit')}">
-      <ol id="sequence-list">
+    % if not exclude_units:
+    % if gated_content['gated']:
+      <%include file="_gated_content.html" args="prereq_url=gated_content['prereq_url'], prereq_section_name=gated_content['prereq_section_name'], gated_section_name=gated_content['gated_section_name']"/>
+    % else:
+    <div class="sr-is-focusable" tabindex="-1"></div>
+
+    % for idx, item in enumerate(items):
+    <div class="tma_tab">
+    <nav class="sequence-list-wrapper" aria-label="${_('Sequence')}" onclick="appendAccordion()">
+      <ol id="sequence-list" role="tablist">
+        % if gated_content['gated']:
         <li>
-        <button class="result-score" id="holding-section-result" disabled="disabled">
-            <h3 class="disabled_score"><i class="fa fa-chevron-right" style='padding:5px;'></i>${_("Score")}</h3>
+          <button class="active nav-item tab" title="${_('Content Locked')}" id="tab_0" role="tab" tabindex="-1" aria-selected="true" aria-expanded="true" aria-controls="content_locked" disabled>
+            <span class="icon fa fa-lock" aria-hidden="true"></span>
           </button>
         </li>
+        % else:
+        <li role="presentation">
+          <button class="seq_${item['type']} inactive nav-item tab"
+            role="tab"
+            tabindex="-1"
+            aria-selected="false"
+            aria-expanded="false"
+            aria-controls="seq_content"
+            data-index="${idx}"
+            data-id="${item['id']}"
+            data-element="${idx+1}"
+            data-page-title="${item['page_title']}"
+            data-path="${item['path']}"
+            data-graded="${item['graded']}"
+            % if item.get('href'):
+            data-href="${item['href']}"
+            % endif
+            id="tab_${idx}">
+            <i class="fa fa-chevron-right"></i>
+            <span class="icon fa seq_${item['type']}" aria-hidden="true"></span>
+            % if 'complete' in item:
+              <span
+                class="fa fa-check-circle check-circle ${"is-hidden" if not item['complete'] else ""}"
+                style="color:green"
+                aria-hidden="true"
+              ></span>
+              % if item['complete']:
+                <span class="sr">${_("Completed")}</span>
+              %endif
+            % endif
+            <span class="fa fa-fw fa-bookmark bookmark-icon ${"is-hidden" if not item['bookmarked'] else "bookmarked"}" aria-hidden="true"></span>
+            <div class="sequence-tooltip sr"><span class="sr">${item['type']}&nbsp;</span>${item['page_title']}<span class="sr bookmark-icon-sr">&nbsp;${_("Bookmarked") if item['bookmarked'] else ""}</span></div>
+            <h3 class="secondary-color-text hover-primary-text" style="display: inline;">${item['page_title']}</h3>
+          </button>
+        </li>
+        % endif
+        % if exclude_units:
+        <li role="presentation">
+          <button class="seq_new_button inactive xnav-item tab"
+            role="tab"
+            tabindex="-1"
+            aria-selected="false"
+            aria-expanded="false"
+            aria-controls="seq_content"
+            data-parent="${item_id}"
+            data-category="vertical"
+            data-default-name="${_('Unit')}"
+          >
+          <span
+                class="fa fa-plus"
+                aria-hidden="true"
+          ></span> New Unit
+        </button>
+        </li>
+        % endif
       </ol>
     </nav>
-  </div>
-  <div id="result-content"></div>
-  <div id="seq_content"></div>
-</div>
-<script>
-var page_test = ${dump_js_escaped_json(items) | n, decode.utf8};
-function button_nav_title() {
-  if($("#nav_button").length == 0) {
-    //var generate = '<div id="sub_nav" class="border_radius_left border_radius_right"><div id="nav_button"><button class="previous_title_nav" data-class="button-previous "><i class="fas fa-chevron-left"></i><span></span></button><button id="separator"></button><button class="next_title_nav" data-class="button-next"><span></span><i class="fas fa-chevron-right"></i></button></div><div id="sub_context"><button id="zoom">Zoom</div><button id="full" class="border_radius_right"><i class="fas fa-plus-circle"></i><i class="fas fa-minus-circle is_none_atp"></i></div></div></div>';
-    //$("body").append(generate);
-  }
-  var xblock_id = $('.xblock').find('.xblock').data('usage-id');
-  for(var i=0;i<page_test.length;i++) {
+    <div id="seq_contents_${idx}"
+      aria-labelledby="tab_${idx}"
+      aria-hidden="true"
+      class="seq_contents tex2jax_ignore asciimath2jax_ignore">
+      ${item['content']}
+    </div>
+    </div>
+    % endfor
+    <div id="seq_content" role="tabpanel"></div>
 
-    var _cur_id = page_test[i].id;
-    if(_cur_id == xblock_id) {
-        //get previous unit title
-        try {
-          var previous = page_test[i-1];
-          var previous_title = previous.page_title;
-          $('.previous_title_nav').find('span').text(previous_title);
-        }
-        catch(error) {
-          if(error instanceof TypeError) {
-            $('.previous_title_nav').find('span').text("");
-          }
-        }
-        //get nex unit title
-        try {
-          var next = page_test[i+1];
-          var next_title = next.page_title;
-          $('.next_title_nav').find('span').text(next_title);
-        }
-        catch(error) {
-          if(error instanceof TypeError) {
-            $('.next_title_nav').find('span').text("");
-          }
-        }
-    }
-  }
-}
-// toggle class
-function toggleClass(input,Class) {
-  if($(input).hasClass(Class)){
-    $(input).removeClass(Class);
-  }else{
-    $(input).addClass(Class);
-  }
-}
-$(document).ready(function(){
-  button_nav_title();
-  // navigation
-  $('#nav_button').find('button').click(function(){
-    var data = $(this).data('class');
-    $('.sequence-bottom').find('.'+data).click();
-    button_nav_title();
-  })
-  // zoom
-  $('#zoom').click(function(){
-    toggleClass('#course-content','full_width');
-    toggleClass('.course-index','is_none_atp');
-  })
-  $('#full').click(function(){
-    $('#sub_nav').find('button').each(function(){
-      var This = $(this);
-      if(This.hasClass('is_none_atp')) {
-        This.removeClass('is_none_atp');
-      }else{
-        This.addClass('is_none_atp');
+    % endif
+  % else:
+    <div id="seq_content" role="tabpanel"></div>
+  % endif
+  </div>
+  <script>
+      var appendAccordion = function(){
+
+      currentNmb = $('#seq_content').attr('aria-labelledby')
+      currentNmbSeq = $('#seq_contents_'+currentNmb.split('_')[1])
+      $('#seq_content').insertAfter(currentNmbSeq)
+      $('.sequence-bottom').insertAfter($('#seq_content'))
       }
+    $(document).ready(function(){
+      appendAccordion()
     })
-    $('#full').removeClass('is_none_atp');
-    if($('#full').hasClass('border_radius_left')) {
-      $('#full').removeClass('border_radius_left');
-      $('.fa-plus-circle').addClass('is_none_atp');
-      $('.fa-minus-circle').removeClass('is_none_atp');
-    }else{
-      $('#full').addClass('border_radius_left');
-      $('.fa-plus-circle').removeClass('is_none_atp');
-      $('.fa-minus-circle').addClass('is_none_atp');
-    }
-  })
-});
-</script>
+  </script>
+% if not exclude_units:
+  <nav class="sequence-bottom" aria-label="${_('Section')}">
+    <button class="sequence-nav-button button-next">
+      ## Translators: A button for showing the Next Unit
+      <span>${pgettext('unit', 'Next')}</span>
+      <span class="icon fa fa-chevron-next" aria-hidden="false"></span>
+    </button>
+  </nav>
+</div>
+% endif
