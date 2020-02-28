@@ -16,7 +16,7 @@ from datetime import datetime, date
 
 from opaque_keys.edx.keys import CourseKey
 from openedx.core.djangoapps.bookmarks.api import get_bookmark,get_bookmarks
-from opaque_keys.edx.locator import CourseLocator
+from opaque_keys.edx.locations import SlashSeparatedCourseKey
 from xmodule.modulestore.django import modulestore
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 from openedx.core.djangolib.js_utils import dump_js_escaped_json, js_escaped_string
@@ -419,7 +419,7 @@ course_key_id_cleared=str(course_id).replace('+','').replace(':','')
               </div>
               <div id="licorne" style="display:none">
                 <%
-                course_key = CourseLocator.from_string(course_id)
+                course_key = SlashSeparatedCourseKey.from_string(course_id)
                 task_key=''
                 results=tmaTask.objects.filter(
                       course_id=course_key,task_key=task_key
@@ -602,6 +602,7 @@ $(window).resize(function(){
   alignCells();
   info_p();
 })
+
 $('#generate_xls').click(function(){
   var current_path = window.location.pathname;
   var url = current_path+'/generate_xls/'
@@ -610,6 +611,7 @@ $('#generate_xls').click(function(){
     url:url,
     dataType:'json',
     success:function(data) {
+        console.log(data.filename)
       var filename = data.filename;
       var xls_url = '/atp/download_xls/'+filename;
       window.open(xls_url,'_self');

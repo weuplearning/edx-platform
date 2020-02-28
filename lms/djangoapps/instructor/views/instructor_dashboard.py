@@ -20,7 +20,7 @@ from django.utils.translation import ugettext as _
 from django.utils.translation import ugettext_noop
 from django.views.decorators.cache import cache_control
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST,require_GET
 from edx_when.api import is_enabled_for_course
 from mock import patch
 from opaque_keys import InvalidKeyError
@@ -70,7 +70,7 @@ from .tools import get_units_with_due_date, title_or_url
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
 from courseware.courses import get_course_by_id
 from django.db import connection,connections
-from opaque_keys.edx.locator import CourseLocator
+from opaque_keys.edx.locations import SlashSeparatedCourseKey
 from lms.djangoapps.grades.course_grade_factory import CourseGradeFactory
 #GEOFFREY 2
 #from courseware.models import StudentModule
@@ -115,7 +115,7 @@ def show_analytics_dashboard_message(course_key):
     Defines whether or not the analytics dashboard URL should be displayed.
 
     Arguments:
-        course_key (CourseLocator): The course locator to display the analytics dashboard message on.
+        course_key (SlashSeparatedCourseKey): The course locator to display the analytics dashboard message on.
     """
     if hasattr(course_key, 'ccx'):
         ccx_analytics_enabled = settings.FEATURES.get('ENABLE_CCX_ANALYTICS_DASHBOARD_URL', False)
@@ -891,7 +891,7 @@ def is_ecommerce_course(course_key):
 @login_required
 def stat_dashboard(request, course_id):
     #GET course_key
-    course_key = CourseLocator.from_string(course_id)
+    course_key = SlashSeparatedCourseKey.from_string(course_id)
     course_key_modulestore = CourseKey.from_string(course_id)
     #course_module
     course_module = modulestore().get_course(course_key, depth=0)
@@ -933,10 +933,10 @@ def stat_dashboard(request, course_id):
 
     # Users who completed the quiz (overall_progress equals 100.0 only if user completed the quiz)
     for user in row:
-        overall_progress = get_overall_progress(user.id, course_key)
-        if overall_progress == 100.0:
-            users_completed_quiz = users_completed_quiz + 1
-            user_completed_quiz_list.append(user.username)
+        #overall_progress = get_overall_progress(user.id, course_key)
+        #if overall_progress == 100.0:
+        users_completed_quiz = users_completed_quiz + 1
+        user_completed_quiz_list.append(user.username)
 
     # connect mongodb return values:
     mongo_persist = dashboardStats()
@@ -985,7 +985,6 @@ def stat_dashboard(request, course_id):
           for component in vertical['children']:
             if 'problem' in str(component):
               problem_components.append(str(component))
-
     context = {
      "course_id":course_id,
      "course":course,
@@ -1008,7 +1007,7 @@ def stat_dashboard(request, course_id):
 @ensure_csrf_cookie
 @login_required
 def get_dashboard_username(request,course_id,email):
-    course_key = CourseLocator.from_string(course_id)
+    course_key = SlashSeparatedCourseKey.from_string(course_id)
     row = User.objects.raw('SELECT a.id,a.email,a.first_name,a.last_name FROM auth_user a,student_courseenrollment b WHERE a.id=b.user_id AND b.course_id=%s' ,[course_id])
     emails = []
     email = str(email).lower()
@@ -1064,7 +1063,7 @@ def stat_dashboard_username(request, course_id, email):
         # get user id
         user_id= users.id
         # get course_key from url's param
-        course_key = CourseLocator.from_string(course_id)
+        course_key = SlashSeparatedCourseKey.from_string(course_id)
         # get course from course_key
         course = get_course_by_id(course_key)
         # get all courses block of the site
@@ -1211,6 +1210,7 @@ def get_result_page_info(request,course_id):
 
 @ensure_csrf_cookie
 @login_required
+@require_GET
 def get_course_users(request,course_id):
 
     #Get all course-enrollment
@@ -1219,7 +1219,7 @@ def get_course_users(request,course_id):
     CourseEnrollment
     CourseEnrollmentAllowed
     """
-    course_key = CourseLocator.from_string(course_id)
+    course_key = SlashSeparatedCourseKey.from_string(course_id)
     invite = CourseEnrollmentAllowed.objects.all().filter(course_id=course_key)
     enroll = CourseEnrollment.objects.all().filter(course_id=course_key)
     users = []
@@ -1317,10 +1317,9 @@ def get_course_users(request,course_id):
             sheet.write(j, 7, ' ')
 
     wb.save(filepath)
-
     context = {
         'filename':filename,
-        'users':str(users)
+        'users':str(users),
     }
 
     return JsonResponse(context)
