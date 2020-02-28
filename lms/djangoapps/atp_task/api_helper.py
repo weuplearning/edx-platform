@@ -8,7 +8,7 @@ from util.db import outer_atomic
 from celery.result import AsyncResult
 from celery.states import READY_STATES, SUCCESS, FAILURE, REVOKED
 from courseware.module_render import get_xqueue_callback_url_prefix
-from atp_task.models import tmaTask, PROGRESS
+from lms.djangoapps.atp_task.models import tmaTask, PROGRESS
 from datetime import datetime, timedelta
 
 log = logging.getLogger(__name__)

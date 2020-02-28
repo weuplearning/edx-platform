@@ -1,6 +1,6 @@
 from celery.states import READY_STATES
 
-from atp_task.models import tmaTask
+from lms.djangoapps.atp_task.models import tmaTask
 from atp_task.tasks import (
     calculate_grades_xls
 )
@@ -27,4 +27,3 @@ def submit_calculate_grades_xls(request, course_key, course_id):
     task_key = ""
 
     return submit_task(request, task_type, task_class, course_key, task_input, task_key)
-

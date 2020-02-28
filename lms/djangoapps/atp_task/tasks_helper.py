@@ -22,7 +22,7 @@ from track import contexts
 
 from courseware.courses import get_course_by_id, get_problems_in_section
 
-from atp_task.models import tmaTask, PROGRESS
+from lms.djangoapps.atp_task.models import tmaTask, PROGRESS
 
 from util.db import outer_atomic
 

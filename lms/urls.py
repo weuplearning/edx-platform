@@ -59,6 +59,13 @@ from lms.djangoapps.end_courses_atp.views import ensure_certif
 from atp_certificates.views import atp_check_certificate
 from atp_certificates.views import atp_generate_certificate
 
+# ATP CUSTOM IMPORT Grades
+from lms.djangoapps.instructor.views.instructor_dashboard import (
+stat_dashboard, stat_dashboard_username,get_course_blocks_grade,get_dashboard_username,get_course_users,download_xls,get_course_users_grades,download_grades
+)
+
+
+
 from lms.djangoapps.atp_task.views import calculate_grades_xls,get_xls,download_xls
 
 
@@ -475,6 +482,75 @@ urlpatterns += [
         name='instructor_dashboard',
     ),
 
+    # Geoffrey Stats
+    # stat_dashboard render url
+    url(
+        r'^courses/{}/stat_dashboard$'.format(
+            settings.COURSE_ID_PATTERN,
+        ),
+        stat_dashboard,
+        name='stat_dashboard',
+    ),
+    # return the score per users
+    url(
+        r'^courses/{}/stat_dashboard/get_grade/(?P<email>[^/]*)/$'.format(
+            settings.COURSE_ID_PATTERN,
+        ),
+        stat_dashboard_username,
+        name='stat_dashboard_username',
+    ),
+    # return average grades of differents blocks
+    url(
+        r'^courses/{}/stat_dashboard/get_course_blocks_grade/$'.format(
+            settings.COURSE_ID_PATTERN,
+        ),
+        get_course_blocks_grade,
+        name='get_course_blocks_grade',
+    ),
+    # return list of username for search input of stat_dashboard page
+    url(
+        r'^courses/{}/stat_dashboard/get_user/(?P<email>[^/]*)/$'.format(
+            settings.COURSE_ID_PATTERN,
+        ),
+        get_dashboard_username,
+        name='stat_dashboard_username_search',
+    ),
+    # stat_dashboard_average_test
+    # return list of username for search input of stat_dashboard page
+    url(
+        r'^courses/{}/stat_dashboard/generate_xls/'.format(
+            settings.COURSE_ID_PATTERN,
+        ),
+        get_course_users,
+        name='generate xls',
+    ),
+    # return list of username for search input of stat_dashboard page
+    url(
+        r'^atp/download_xls/(?P<filename>[^/]*)/$'.format(
+            settings.COURSE_ID_PATTERN,
+        ),
+        download_xls,
+        name='download xls',
+    ),
+    #grades reports
+    # generate grades reports
+    url(
+        r'^courses/{}/stat_dashboard/generate_grades/'.format(
+            settings.COURSE_ID_PATTERN,
+        ),
+        get_course_users_grades,
+        name='generate grades',
+    ),
+    # return grades reports
+    url(
+        r'^atp/download_grades/(?P<filename>[^/]*)/$'.format(
+            settings.COURSE_ID_PATTERN,
+        ),
+        download_grades,
+        name='download grades',
+    ),
+
+    #END STAT
 
     url(
         r'^courses/{}/set_course_mode_price$'.format(

@@ -62,6 +62,11 @@
     </div>
   % endif
   % endif
+    <%
+    current_suptitle = ""
+    item_iterator = 1
+    i = 0
+    %>
   <div class="sequence-nav">
     % if not exclude_units:
     % if gated_content['gated']:
@@ -71,6 +76,24 @@
 
     % for idx, item in enumerate(items):
     <div class="tma_tab">
+        % if ">" in item['page_title']:
+          <%
+          i+=1
+          unit_title = item['page_title'].split(" > ")[1]
+          %>
+          % if item['page_title'].split(" > ")[0] != current_suptitle:
+            <%
+            current_suptitle = item['page_title'].split(" > ")[0]
+            %>
+            <div class="sequence-suptitle tma_chapters" id="chapter_tma_${i}">
+                <h3>${current_suptitle}</h3>
+            </div>
+          % endif
+        % else:
+          <%
+          unit_title = item['page_title']
+          %>
+        % endif
     <nav class="sequence-list-wrapper" aria-label="${_('Sequence')}" >
       <ol id="sequence-list" role="tablist">
         % if gated_content['gated']:

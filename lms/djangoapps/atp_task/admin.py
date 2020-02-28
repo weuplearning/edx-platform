@@ -5,7 +5,7 @@ from django.contrib import admin
 
 from config_models.admin import ConfigurationModelAdmin
 
-from atp_task.models import tmaTask
+from lms.djangoapps.atp_task.models import tmaTask
 
 class tmaTaskAdmin(admin.ModelAdmin):
     """Admin for tmatasks."""
