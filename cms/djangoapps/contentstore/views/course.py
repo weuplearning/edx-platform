@@ -107,6 +107,14 @@ from .library import LIBRARIES_ENABLED, get_library_creator_status
 from openedx.core.djangoapps.site_configuration.models import SiteConfiguration
 from lms.djangoapps.courseware.courses import get_course_by_id
 
+#GEOFFREY TMA ATP
+import sys
+from django.core.mail import send_mail
+from importlib import reload
+from pprint import pformat
+from django.views.decorators.csrf import csrf_exempt
+#for verbose request
+
 log = logging.getLogger(__name__)
 
 __all__ = ['course_info_handler', 'course_handler', 'course_listing',
@@ -1908,8 +1916,8 @@ def invite_handler(request, course_key_string):
 
     # POST = SEND INVITATIONS
     if request.method == 'POST':
+        log.info('iciiicicici')
         reload(sys)
-        sys.setdefaultencoding('utf8')
 
         files = ''
         request_type = request.POST.get('request_type')

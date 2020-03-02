@@ -2,13 +2,24 @@
 <%! from django.utils.translation import pgettext, ugettext as _ %>
 <%! from openedx.core.djangolib.js_utils import js_escaped_string, dump_js_escaped_json %>
 <style>
-  .sequence-bottom{
+  .tma_tab>.seq_content{
+    display: none;
+    }
+  .tma_tab.active>.seq_content{
+    display: block !important;
+    }
+  .tma_tab>.sequence-bottom{
+    display: none;
+    }
+  .tma_tab.active>.sequence-bottom{
+    display: block !important;
     visibility: visible!important;
     position: inherit !important;
-  }
+    }
   .sequence-bottom button{
     display: block !important;
     position: inherit!important;
+    margin: 0 auto;
   }
   .notcompletedborders .sequence-bottom{
     visibility: hidden!important;
@@ -165,9 +176,17 @@
       class="seq_contents tex2jax_ignore asciimath2jax_ignore">
       ${item['content']}
     </div>
+     <div class="seq_content" role="tabpanel"></div>
+     <nav class="sequence-bottom" aria-label="${_('Section')}">
+       <button class="sequence-nav-button button-next">
+         ## Translators: A button for showing the Next Unit
+         <span>${pgettext('unit', 'Next')}</span>
+         <span class="icon fa fa-chevron-next" aria-hidden="false"></span>
+       </button>
+     </nav>
     </div>
     % endfor
-    <div id="seq_content" role="tabpanel"></div>
+    <!--<div id="seq_content" role="tabpanel"></div>-->
     % endif
   % else:
     <div id="seq_content" role="tabpanel"></div>
@@ -267,20 +286,13 @@
           }
       });
 
-      $('#seq_content').hide()
-      currentNmb = $('#seq_content').attr('aria-labelledby')
-      currentNmbSeq = $('#seq_contents_'+currentNmb.split('_')[1])
-      console.log(currentNmb)
-      $('#seq_content').insertAfter(currentNmbSeq)
-      $('.sequence-bottom').insertAfter($('#seq_content'))
-      $('#seq_content').show()
+
       }
     $(document).ready(function(){
       $('.sequence-list-wrapper').click(function(){
         appendAccordion()
       })
       $('.button-next').click(function(){
-        console.log('click')
         appendAccordion()
       })
 
@@ -288,12 +300,5 @@
     })
   </script>
 % if not exclude_units:
-  <nav class="sequence-bottom" aria-label="${_('Section')}">
-    <button class="sequence-nav-button button-next">
-      ## Translators: A button for showing the Next Unit
-      <span>${pgettext('unit', 'Next')}</span>
-      <span class="icon fa fa-chevron-next" aria-hidden="false"></span>
-    </button>
-  </nav>
 </div>
 % endif

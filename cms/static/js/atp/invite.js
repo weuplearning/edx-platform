@@ -1,4 +1,4 @@
-define(['domReady', 'jquery', 'underscore','atp_theme/js/utilitaires/dynatable/jquery.dynatable','atp_theme/js/utilitaires/papaparse/papaparse.min','jquery.ui'],function(domReady, $, _, dynatable, Papa) {
+define(['domReady', 'jquery', 'underscore','js/utilitaires/dynatable/jquery.dynatable','js/utilitaires/papaparse/papaparse.min','jquery.ui'],function(domReady, $, _, dynatable, Papa) {
   var onReady = function() {
 
 
