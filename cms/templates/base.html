@@ -170,7 +170,7 @@ from openedx.core.release import RELEASE_LINE
 
     % if user.is_authenticated:
       <%static:webpack entry='js/sock'/>
-      require(['${static.url("js/custo.js")}']);
+      <script>require(['${static.url("js/custo.js")}']);</script>
     % endif
     <%block name='page_bundle'>
       <script type="text/javascript">

@@ -2,6 +2,10 @@
 <%! from django.utils.translation import pgettext, ugettext as _ %>
 <%! from openedx.core.djangolib.js_utils import js_escaped_string, dump_js_escaped_json %>
 <style>
+    .wrap-instructor-info{
+        float: right;
+        margin-right: 20px;
+    }
   .tma_tab>.seq_content{
     display: none;
     }
@@ -10,6 +14,9 @@
     }
   .tma_tab>.sequence-bottom{
     display: none;
+    }
+  .tma_tab>.sequence-bottom>button>span{
+    display: inline-block !important;
     }
   .tma_tab.active>.sequence-bottom{
     display: block !important;
@@ -20,6 +27,7 @@
     display: block !important;
     position: inherit!important;
     margin: 0 auto;
+    border: none!important;
   }
   .notcompletedborders .sequence-bottom{
     visibility: hidden!important;
@@ -86,7 +94,6 @@
     <div class="sr-is-focusable" tabindex="-1"></div>
 
     % for idx, item in enumerate(items):
-    <div class="tma_tab">
         % if ">" in item['page_title']:
           <%
           i+=1
@@ -105,6 +112,8 @@
           unit_title = item['page_title']
           %>
         % endif
+    <div class="tma_tab">
+
     <nav class="sequence-list-wrapper" aria-label="${_('Sequence')}" >
       <ol id="sequence-list" role="tablist">
         % if gated_content['gated']:
@@ -177,11 +186,11 @@
       ${item['content']}
     </div>
      <div class="seq_content" role="tabpanel"></div>
-     <nav class="sequence-bottom" aria-label="${_('Section')}">
-       <button class="sequence-nav-button button-next">
+     <nav class="sequence-bottom" style="margin: 30px 0px"aria-label="${_('Section')}">
+       <button class="sequence-nav-button button-next" style="width: 100px;border: 1px solid #0c1c48!important;border-radius: 15px;height: 30px;color: #fff;background-color: #0c1c48;font-weight: 600">
          ## Translators: A button for showing the Next Unit
-         <span>${pgettext('unit', 'Next')}</span>
-         <span class="icon fa fa-chevron-next" aria-hidden="false"></span>
+         <span style="font-family: mywebfont;">${pgettext('unit', 'Next')}</span>
+
        </button>
      </nav>
     </div>
@@ -192,6 +201,21 @@
     <div id="seq_content" role="tabpanel"></div>
   % endif
   </div>
+  <div class="sequence-suptitle result-score-title">
+     <h3 class="">${_("Results")}</h3>
+  </div>
+  <div class="sequence-nav">
+    <nav class="sequence-list-wrapper" style="    background-color: #fff;" aria-label="${_('Unit')}">
+      <ol id="sequence-list">
+        <li>
+        <button class="result-score" id="holding-section-result" disabled="disabled">
+              <h3 class="disabled_score"><i class="fa fa-chevron-right" style='padding:5px;transform: rotate(90deg)!important;'></i>${_("Score")}</h3>
+          </button>
+        </li>
+      </ol>
+    </nav>
+  </div>
+  <div id="result-content" style="display:block;padding:0;margin: 0 40px;"></div>
   <script>
       var page_test = ${dump_js_escaped_json(items) | n, decode.utf8};
       function button_nav_title() {

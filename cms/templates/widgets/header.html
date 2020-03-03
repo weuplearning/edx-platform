@@ -409,7 +409,8 @@ course_org = ''
   -->
   % if not context_course and request.user.is_staff:
   <div id="burger-menu">
-    <img src="${settings.LMS_ROOT_URL}/media/menu_mobile.png"/ id="burger-icone">
+    <i class="icons fa fa-bars" style="color: #fff;font-size: 40px;"></i>
+    <!--<img src="${settings.LMS_ROOT_URL}/media/menu_mobile.png"/ id="burger-icone">-->
     <div id="burger-dropdown">
       <ul>
         <li><a href='#' class="button new-button new-library-button">${_('New Library')}</a></li>

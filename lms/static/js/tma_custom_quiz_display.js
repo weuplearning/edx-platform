@@ -1,4 +1,5 @@
 /* DISPLAY ANSWERS ON QUIZ */
+
 $(document).ajaxSuccess(function(event, xhr, settings){
   if( settings.url.endsWith('problem_check') ) {
     var url_check_pb=settings.url;
@@ -298,8 +299,12 @@ function all_questions_answered(){
 }
 
 $(document).ready(function() {
+  //to change
   url_last_question=$('.problems-wrapper').last().attr('data-url');
-  result_enabled=false;
+  enable_score_panel(url_last_question);
+  result_enabled=true;
+  insert_info_score()
+  generate_result_fail(40)
   // Last question has been answered
   $(document).ajaxSuccess(function(event, xhr, settings) {
       url_last_question=$('.problems-wrapper').last().attr('data-url');

@@ -396,7 +396,7 @@ log.info("timer 7 {}".format(datetime.datetime.now()))
 
           <div class="actions">
             <input type="hidden" value="False" class="allow-unicode-course-id">
-            <input type="submit" value="Create" class="action action-primary new-microsite-save">
+            <input type="submit" value="Create" class="action action-primary new--save">
             <input type="button" value="Cancel" class="action action-secondary action-cancel new-microsite-cancel">
           </div>
         </form>
@@ -753,9 +753,9 @@ log.info("timer 8 {}".format(datetime.datetime.now()))
                 % if len(orgs)>0:
                   %for org in sorted(orgs):
                   <li class="course-item" data-status="microsites" style="display:none;">
-                  <div class="content_img">
+                  <div class="content_img" style="background-color :#0C1C49 ">
                     <a href="/update-microsite/${org}">
-                      <img src="blank.gif" data-src="${settings.LMS_ROOT_URL}/media/microsite/${org}/images/${org}" class="img_course b-lazy"/>
+                      <img src="https://qualif-atp.themoocagency.com/media/logo-amundi.png" data-src="${settings.LMS_ROOT_URL}/media/microsite/${org}/images/${org}" class="img_course b-lazy"/>
                     </a>
                   </div>
                   <div class="content_info">
@@ -929,7 +929,6 @@ log.info("timer 8 {}".format(datetime.datetime.now()))
         %if amundi_template:
           %for a_t in amundi_template:
             %for q in a_t:
-                ${q['courses_stats']}    
                 <%
                 course_info = q['course_info']
                 course_key_id = q['course_key_id']
