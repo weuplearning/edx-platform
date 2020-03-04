@@ -2297,6 +2297,43 @@ def email_dashboard_handler(request, course_key_string):
 
 
 
+@login_required
+@require_http_methods(("GET", "PUT", "POST"))
+@expect_json
+def manage_handler(request, course_key_string):
+    if request.method == "GET":
+        # appel de bibliotheque
+        # GET course_key from course_key_string
+        course_key = CourseKey.from_string(course_key_string)
+        overview = CourseOverview.get_from_id(course_key)
+        details = CourseDetails.fetch(course_key)
+        course = get_course_by_id(course_key)
+    _ensure_user_status = list(CourseEnrollment.objects.raw('select a.id from student_courseenrollment a where not exists (select * from student_courseaccessrole b where a.user_id=b.user_id and a.course_id=b.course_id) and a.course_id=%s',[course_key_string]))
+    if len(_ensure_user_status) > 0:
+        _enroll_start = True
+    else:
+        _enroll_start = False
+        module_store = modulestore().get_course(course_key, depth=0)
+        start_date = overview.start.strftime('%Y-%d-%m')
+        if overview.end is not None:
+            end_date = overview.end.strftime('%Y-%d-%m')
+        else:
+            end_date = ''
+
+        context = {
+            'course':course,
+            'course_key':course_key_string,
+	        'enroll_start':_enroll_start,
+            'overview':overview,
+            'details':details,
+            'module_store':module_store,
+            'start_date':start_date,
+            'end_date':end_date,
+            'language_course':get_course_langue(course.language)
+        }
+        retour = {'course-key_string':context}
+        return render_to_response('manage_course.html', context)
+
 language_setup={
     "en":{
         'platform_lang' :'en',
