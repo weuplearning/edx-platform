@@ -581,7 +581,7 @@ def course_listing(request):
     for course_info in sorted(active_courses, key=lambda s: s['display_name'].lower() if s['display_name'] is not None else ''):
       q={}
       q['course_key_id'] = CourseKey.from_string(course_info['course_key'])
-      is_true = False
+      is_true = True
       q['staf_users'] = CourseStaffRole(q['course_key_id']).users_with_role()
       for n in q['staf_users']:
         if n.email == user_email or request.user.is_staff:
@@ -618,7 +618,6 @@ def course_listing(request):
           cur_indice = 4
 
       #sort by arrays
-      log.info(course_info)
       if (not 'AMUNDI-GENERIC-TEMPLATE' in course_info['display_name']) and (current_date < q['course_start_compare']) and is_true and (not q['course_key_id'] in course_scheduled):
            course_scheduled[cur_indice].append(q)
            _active_camp = True
@@ -631,6 +630,7 @@ def course_listing(request):
       elif ('AMUNDI-GENERIC-TEMPLATE' in course_info['display_name']) and (not q['course_key_id'] in amundi_template):
            amundi_template[cur_indice].append(q)
 
+    log.info(get_list_lang())
     return render_to_response(u'index.html', {
 
         u'courses': active_courses,
@@ -1885,8 +1885,11 @@ def get_list_lang():
 
 #GEOFFREY
 def get_course_langue(lang_code):
+    language = 'en'
+    if lang_code:
+        language = lang_code
     language_options_dict=get_list_lang()
-    course_language=language_options_dict[lang_code]
+    course_language=language_options_dict[language]
     return course_language
 
 
@@ -1900,7 +1903,9 @@ def invite_handler(request, course_key_string):
     course_details = CourseDetails.fetch(course_key)
     overview = CourseOverview.get_from_id(course_key)
     module_store = modulestore().get_course(course_key, depth=0)
-
+    course_language = 'en'
+    if get_course_langue(course.language):
+        course_language = get_course_langue(course.language)
     #  GET = RENDER INVITE PAGE
     if request.method == "GET":
         context = {
@@ -1909,7 +1914,7 @@ def invite_handler(request, course_key_string):
             'details':course_details,
             'module_store':module_store,
             'course_key':course_key_string,
-            'language_course':get_course_langue(course.language)
+            'language_course':course_language
         }
         #retour = {'course-key_string':context}
         return render_to_response('invite_course.html', context)
