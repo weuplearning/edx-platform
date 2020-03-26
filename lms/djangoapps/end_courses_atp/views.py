@@ -12,18 +12,22 @@ from xmodule.modulestore.django import modulestore
 
 #TMA GRADE TRACKING LIB
 from lms.djangoapps.tma_grade_tracking.models import dashboardStats
+import logging
+log = logging.getLogger()
 
 @ensure_csrf_cookie
 @require_GET
 @login_required
 def ensure_certif(request,course_id):
+    log.info('ensure certidddddddddddddddd')
     user_id = request.user.id
     username = request.user.username
-    course_key = SlashSeparatedCourseKey.from_deprecated_string(course_id)
+    course_key = SlashSeparatedCourseKey.from_string(course_id)
     course_tma = get_course_by_id(course_key)
-    is_graded = course_tma.is_graded
+    log.info(course_tma)
+    is_graded = True
     grade_cutoffs = modulestore().get_course(course_key, depth=0).grade_cutoffs['Pass'] * 100
-    grading_note =  CourseGradeFactory().create(request.user, course_tma)
+    grading_note =  CourseGradeFactory().read(request.user, course_tma)
 
     #TMA GRADE TRACKING UPDATE
     mongo_persist = dashboardStats()

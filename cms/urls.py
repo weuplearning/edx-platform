@@ -100,8 +100,6 @@ urlpatterns = [
         name='course_search_index_handler'
         ),
     url(r'^course/{}?$'.format(settings.COURSE_KEY_PATTERN), contentstore.views.course_handler, name='course_handler'),
-
-
     #GEOFFREY
     url(r'^settings/invite/{}$'.format(settings.COURSE_KEY_PATTERN), contentstore.views.course.invite_handler),
     url(r'^settings/invite/{}/list$'.format(settings.COURSE_KEY_PATTERN), contentstore.views.course.invitelist_handler),

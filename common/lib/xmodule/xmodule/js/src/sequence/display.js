@@ -192,10 +192,11 @@
         };
 
         Sequence.prototype.enableButton = function(buttonClass, buttonAction) {
-            this.$(buttonClass)
+            /*this.$(buttonClass)
                 .removeClass('disabled')
                 .removeAttr('disabled')
-                .click(buttonAction);
+                .click(buttonAction);*/
+            this.$(buttonClass).click(buttonAction);
         };
 
         Sequence.prototype.disableButton = function(buttonClass) {
@@ -214,6 +215,7 @@
             var isFirstTab, isLastTab, nextButtonClass, previousButtonClass;
 
             this.$('.sequence-nav-button').unbind('click');
+
 
             // previous button
             isFirstTab = this.position === 1;
@@ -430,12 +432,14 @@
             var completionUrl = this.ajaxUrl + '/get_completion';
             var usageKey = element[0].attributes['data-id'].value;
             var completionIndicators = element.find('.check-circle');
+            var completionIndicatorstma = element.find('.tma_tab');
             if (completionIndicators.length) {
                 $.postWithPrefix(completionUrl, {
                     usage_key: usageKey
                 }, function(data) {
                     if (data.complete === true) {
                         completionIndicators.removeClass('is-hidden');
+                        completionIndicatorstma.removeClass('disabled');
                     }
                 });
             }

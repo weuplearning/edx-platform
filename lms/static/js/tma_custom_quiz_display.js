@@ -105,6 +105,7 @@ function get_all_questions(){
 function reset_all_problems() {
   var i=0;
   problem_xblock_list=get_all_questions();
+
   problem_xblock_list.forEach(function(xblock_id) {
    $.ajax({
     url:'/courses/'+course_id+'/xblock/'+xblock_id+'/handler/xmodule_handler/problem_reset',
@@ -118,7 +119,9 @@ function reset_all_problems() {
       if(i>=problem_xblock_list.length){
         window.location.reload(true);
       }
-    }
+    },error : function(error){
+      console.log(error)
+  }
    });
   });
 };
@@ -140,7 +143,7 @@ var score_div = '<div id="score_div_info"><span class="primary-color-text">'+sco
 var boutton_certificat = '<div id="score_button"><button class="primary-color-bg" onclick=\"followClickEvents(this,\'certificate\',\'download\')\">'+certificate_wording+'</button></div>';
 // Messages for modules over
 var message_termine='<div id="module-over" class="primary-color-text">'+training_over_wording+'</div>';
-var reset_bouton='<div onclick="reset_all_problems()"><a id="reset_bouton" class="reset-btn primary-color-bg" >'+start_again_wording+'</a></div>';
+var reset_bouton='<div onclick="reset_all_problems()"><a id="reset_bouton" class="reset-btn primary-color-bg reset" >'+start_again_wording+'</a></div>';
 
 function generate_certif() {
   var url_certif = '/api/atp/check/certificate/'+course_id+'/';
@@ -204,6 +207,7 @@ function insert_info_score(value) {
 
 // Display/Hide score panel on title click
 $('.result-score').live('click', function(){
+  console.log('click')
   $(this).toggleClass('active');
   if($(this).hasClass('active')){
     $("#result-content").html('');
@@ -221,13 +225,27 @@ function open_result_panel(){
   }
 }
 
-
+function get_completion_status_tma(username,course_key,subsection_id){
+  console.log('entering ajax call')
+  $.ajax({
+      url:"/api/completion/v1/subsection-completion/"+username+"/"+ course_key +"/"+subsection_id+'/',
+      type:'GET',
+      dataType:'json',
+      success:function(data){
+        console.log(data)
+      },
+      error: function(error){
+        console.log(error)
+      }
+    });
+}
 function returnScore() {
   $.ajax({
     url:'/api/atp/couseware_certif/'+course_id+'/',
     type:'GET',
     dataType:'json',
     success:function(data) {
+      console.log(data)
       var passed = data.passed;
       var is_graded = data.is_graded;
       var score = parseFloat(data.percent);
@@ -300,15 +318,11 @@ function all_questions_answered(){
 
 $(document).ready(function() {
   //to change
-  url_last_question=$('.problems-wrapper').last().attr('data-url');
-  enable_score_panel(url_last_question);
-  result_enabled=true;
-  insert_info_score()
-  generate_result_fail(40)
+  url_last_question=$('.sequence-nav').last().attr('data-url');
   // Last question has been answered
   $(document).ajaxSuccess(function(event, xhr, settings) {
       url_last_question=$('.problems-wrapper').last().attr('data-url');
-      if (settings.url.indexOf(url_last_question+'/problem_check') > -1) {
+      if ($('.sequence-nav').eq(-2).html().indexOf('Completed') > -1) {
         enable_score_panel(url_last_question);
         result_enabled=true;
         }

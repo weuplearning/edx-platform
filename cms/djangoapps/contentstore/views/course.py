@@ -590,7 +590,6 @@ def course_listing(request):
       q['is_true'] = is_true
       q['courses_overviews'] = CourseOverview.get_from_id(q['course_key_id'])
       q['courses_stats'] = CourseOverview.get_from_id(q['course_key_id'])
-      log.info(q['courses_stats'])
       q['categories'] = q['courses_stats'].categ
       q['course_img'] = q['courses_overviews'].image_urls
       q['course_start'] = q['courses_overviews'].start.strftime('%Y-%m-%d')
@@ -630,7 +629,7 @@ def course_listing(request):
       elif ('AMUNDI-GENERIC-TEMPLATE' in course_info['display_name']) and (not q['course_key_id'] in amundi_template):
            amundi_template[cur_indice].append(q)
 
-    log.info(get_list_lang())
+    log.info(_get_course_creator_status(user))
     return render_to_response(u'index.html', {
 
         u'courses': active_courses,

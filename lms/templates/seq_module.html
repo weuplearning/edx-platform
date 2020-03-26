@@ -18,6 +18,9 @@
   .tma_tab>.sequence-bottom>button>span{
     display: inline-block !important;
     }
+  .tma_tab>.sequence-bottom>button.disabledtma{
+        display: none!important;
+    }
   .tma_tab.active>.sequence-bottom{
     display: block !important;
     visibility: visible!important;
@@ -187,7 +190,7 @@
     </div>
      <div class="seq_content" role="tabpanel"></div>
      <nav class="sequence-bottom" style="margin: 30px 0px"aria-label="${_('Section')}">
-       <button class="sequence-nav-button button-next" style="width: 100px;border: 1px solid #0c1c48!important;border-radius: 15px;height: 30px;color: #fff;background-color: #0c1c48;font-weight: 600">
+       <button class="sequence-nav-button button-next disabled " disabled="disabled" style="width: 100px;border: 1px solid #0c1c48!important;border-radius: 15px;height: 30px;color: #fff;background-color: #0c1c48;font-weight: 600">
          ## Translators: A button for showing the Next Unit
          <span style="font-family: mywebfont;">${pgettext('unit', 'Next')}</span>
 
@@ -208,7 +211,7 @@
     <nav class="sequence-list-wrapper" style="    background-color: #fff;" aria-label="${_('Unit')}">
       <ol id="sequence-list">
         <li>
-        <button class="result-score" id="holding-section-result" disabled="disabled">
+        <button class="result-score disabled" id="holding-section-result" disabled="disabled">
               <h3 class="disabled_score"><i class="fa fa-chevron-right" style='padding:5px;transform: rotate(90deg)!important;'></i>${_("Score")}</h3>
           </button>
         </li>
@@ -266,61 +269,64 @@
         }
       }
 
-
-
-      var appendAccordion = function(){
-        /*function mark_unit_completed(unit_id) {
-          $("#" + unit_id.replace(/([$%&()*+,./:;<=>?@\[\\\]^\{|}~])/g, "\\$1"))
-              $("div.vert[" + selector + "]").removeClass("notcompletedborders");
-          }
-          });*/
-        currentUnit = $(
-          ".xblock.xblock-student_view.xblock-student_view-vertical.xblock-initialized"
-        ).data("usage-id");
-        url =
-          "/tma_apps/" +
-          course_id +
-          "/" +
-          currentUnit +
-          "/completion/get_unit_completion";
-        $.ajax({
-          type: "get",
-          url: url,
-          success: function (response) {
-            console.log(response)
-            borderedUncompletedBlocks = false;
-            allBlocksCompleted = true;
-            response.unit_blocks.children.forEach(function (block) {
-              selector = "data-id='" + block.id + "'";
-              if (!block.complete) {
-                allBlocksCompleted = false;
-                if (borderedUncompletedBlocks) {
-                  $("div.vert[" + selector + "]").addClass("notcompletedborders");
-                }
-              } else {
-                $("div.vert[" + selector + "]").removeClass("notcompletedborders");
-              }
-            });
-            if (allBlocksCompleted) {
-              mark_unit_completed(currentUnit);
-              if (isLinear) {
-                isUnitAvailable(currentUnit);
-              }
-            }
-          }
-      });
-
-
-      }
     $(document).ready(function(){
-      $('.sequence-list-wrapper').click(function(){
-        appendAccordion()
-      })
-      $('.button-next').click(function(){
-        appendAccordion()
-      })
+        var urlCompletion ="/tma_apps/" + course_id +"/completion/get_course_completion";
+        var url = $(location).attr("href").split('/')[4];
+        if(!$('.tma_tab').children('.sequence-li-wrapper>ol>li>button>.span').hasClass('is_hidden')){
 
-      appendAccordion()
+        }
+        if(!$('.tma_tab.active').children('.sequence-li-wrapper>ol>li>button>.span').hasClass('is_hidden')){
+            console.log('ici')
+            $('.tma_tab.active>.sequence-bottom>button').removeClass('disabled');
+            $('.tma_tab.active>.sequence-bottom>button').removeAttr('disabled');
+        }
+        get_completion_status_tma('${user}',url,"${items[0]['id']}")
+
+        $(document).ajaxSuccess(function(event, xhr, settings) {
+            var currentUnit = $(".xblock.xblock-student_view.xblock-student_view-vertical.xblock-initialized").data("usage-id");
+            var  url ="/tma_apps/" + course_id +"/" + currentUnit +"/completion/get_unit_completion";
+            if (settings.url.indexOf('/publish_completion') > -1) {
+            $.ajax({
+              type: "get",
+              url: url,
+              success: function (response) {
+                console.log(response)
+                console.log($('.tma_tab.active').children('.sequence-bottom').children('.button-next'))
+                if(response.success){
+                    $('.tma_tab.active').children('.sequence-bottom').children('.button-next').removeAttr('disabled')
+                    $('.tma_tab.active').children('.sequence-bottom').children('.button-next').removeClass('disabled')
+                    $.ajax({
+                      type: "get",
+                      url: urlCompletion,
+                      success: function (response) {
+                      console.log(response.completion_rate)
+                        if(response.completion_rate === 1){
+                            $('.result-score').removeClass('disabled')
+                            returnScore()
+                        }
+                      },error : function(error){
+                            console.log('error')
+                    }
+                  });
+                }
+              }
+          });
+
+        };
+      });
+      $.ajax({
+        type: "get",
+        url: urlCompletion,
+        success: function (response) {
+        console.log(response.completion_rate)
+          if(response.completion_rate === 1){
+              $('.result-score').removeClass('disabled')
+              returnScore()
+          }
+        },error : function(error){
+              console.log('error')
+      }
+    });
     })
   </script>
 % if not exclude_units:
