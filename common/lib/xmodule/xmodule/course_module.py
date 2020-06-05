@@ -740,6 +740,51 @@ class CourseFields(object):
         scope=Scope.settings
     )
 
+    # Custom TMA
+    is_required_atp = Boolean(
+        display_name=_("Is required"),
+        help=_("If course is required"),
+        default=False,
+        scope=Scope.settings
+    )
+
+    content_data_data = {"video":False,"quiz":False,"webzine":False,"serious_game":False,"document_pdf":False,"text_image":False}
+
+    content_data = Dict(
+        display_name=_("Advanced content data"),
+        help=_("Advanced content data"),
+        default=content_data_data,
+        scope=Scope.settings
+    )
+
+    categ = String(
+        display_name=_("Category"),
+        help=_(
+            "Course category",
+        ),
+        default='None',
+        scope=Scope.settings
+    )
+
+    editor = String(
+        display_name=_("Editor"),
+        help=_(
+            "Course editor",
+        ),
+        default='None',
+        scope=Scope.settings
+    )
+
+
+    categ = String(
+        display_name=_("Category"),
+        help=_(
+            "Course category",
+        ),
+        default='None',
+        scope=Scope.settings
+    )
+
     course_survey_name = String(
         display_name=_("Pre-Course Survey Name"),
         help=_("Name of SurveyForm to display as a pre-course survey to the user."),

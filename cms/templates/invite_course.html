@@ -1,0 +1,372 @@
+	<%page expression_filter="h"/>
+<%!
+from django.utils.translation import ugettext as _
+import time
+from openedx.core.djangolib.markup import HTML, Text
+from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
+primary_color=configuration_helpers.get_value('primary_color')
+%>
+<%inherit file="base.html" />
+
+
+<%def name="online_help_token()"><% return "home" %></%def>
+<%block name="title">${_("{studio_name} Home").format(studio_name=settings.STUDIO_SHORT_NAME)}</%block>
+<%block name="bodyclass">is-signedin index view-dashboard</%block>
+<script>
+  //prepare wording
+  var wording_missing = '${_("missing")}';
+  var wording_incorrect_header = '';
+  var wording_prisencompte = '${_("Participants list has been registered to course")}';
+  var wording_ligne='${_("line")}';
+</script>
+<%block name="requirejs">
+  require(["js/factories/index"], function (IndexFactory) {
+      IndexFactory();
+  });
+  //require(['${static.url("js/invite.js")}']);
+  //require(['https://amundi.qualif-atp.themoocagency.com/media/jswork/invite.js']);
+  require(['${static.url("js/atp/invite.js")}']);
+</%block>
+<%namespace name='static' file='static_content.html'/>
+<%block name="content">
+<%
+    course_opened=True
+    if course.start and time.time() < int(course.start.strftime("%s")) :
+      course_opened=False
+
+    if course.end and time.time() > int(course.end.strftime("%s")):
+      course_opened=False
+%>
+<link rel="stylesheet" type="text/css" href="${static.url('js/vendor/timepicker/jquery.timepicker.css')}">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="${static.url('css/invite_course.css')}">
+<link rel="stylesheet" href="${static.url('css/jquery.dynatable.css')}">
+
+
+<style>
+.wrapper-notification.wrapper-notification-warning{
+  display: none;
+}
+.all_dates {
+    width: 100%;
+    height: auto
+}
+.all_dates ul {
+    width: 100%;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    list-style-type: none
+}
+.all_dates ul li {
+    width: 35%;
+    height: auto;
+    float: left;
+    margin: 0;
+    padding: 0
+}
+.all_dates ul li span {
+    font-size: 13px;
+    font-style: italic;
+    font-family: "mywebfont";
+    color: #05144d
+}
+.all_dates ul li span:first-child {
+    font-weight: bold
+}
+.pop_up_mail {
+    width: calc(100% - 40px);
+    height: auto;
+    padding-left: 10px;
+    padding-right: 10px;
+    display: none;
+    margin-left: 8px;
+    margin-right: 8px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    border: 2px solid #39B2B6;
+}
+.pop_up_mail p {
+    font-size: 17px;
+    font-weight: bold;
+    font-family: "mywebfont";
+    color: #39B2B6 !important;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    width: 100% !important;
+    text-align: left !important;
+    display: block !important;
+    float: none !important;
+}
+.is_show {
+    display: block !important;
+}
+.is_error {
+  color: #fff !important;
+  background-color: red !important;
+}
+#logo_cms {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+#title p {
+  text-transform: inherit !important;
+}
+#title h1{
+  text-transform: initial!important;
+}
+.language_display{
+  font-size: 13px;
+  font-style: italic;
+  font-family: "mywebfont";
+  color: #05144d;
+  font-weight: 600;
+}
+.campaign-link-back{
+  width:70%;
+  text-align: center;
+}
+.sub_particularity {
+  position: relative;
+  height: auto;
+  min-height: 50px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.svg_bis {
+  height: 40px !important;
+  width: 40px !important;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  margin-top: -20px;
+}
+.sub_particularity p {
+  color: #06144D;
+  font-family: "mywebfont";
+  width: calc(100% - 55px) !important;
+  margin-left: 54px !important;
+  float: none !important;
+  text-align: left !important;
+  font-size: 14px !important;
+}
+#upload_form_participant {
+  width: 300px;
+}
+.img_fundamentals {
+  background-image: url('/static/images/fondamentaux.png');
+}
+#pop_up_mail_fail {
+  color: red !important;
+  border-color: red !important;
+}
+#pop_up_mail_fail p {
+  color: red !important;
+}
+#csv_import th{
+  text-align: left;
+}
+#csv_import  th, #csv_import  td{
+  padding: 8px;
+  border:1px solid lightgray;
+}
+#primary, .campaign-link-back{
+  width:100%!important;
+}
+#csv_import, #dynatable-pagination-links-csv_import{
+  margin-top: 20px;
+}
+ #dynatable-record-count-csv_import{
+   display: none;
+ }
+ #triangle i{
+   font-size: 45px;
+ }
+ #example_header{
+   margin-top: 15px;
+ }
+ #csv_import_error{
+   color:red;
+   border:1px solid red;
+   padding:10px;
+   margin-top:10px;
+ }
+ #example_header td{
+   padding: 5px;
+ }
+ #csv_import_feedback{
+   border: 1px solid green;
+  padding: 10px;
+  color: green;
+  margin-top: 10px;
+ }
+ .primary-color-bg{
+   background-color:${primary_color}!important;
+ }
+ .pad-20{
+   padding: 20px;
+ }
+</style>
+<%
+course_key_cleared=str(course_key).replace('+','').replace(':','')
+%>
+<section id="content">
+  <div id="csrf" style="display:none">${csrf_token}</div>
+  <section id="primary">
+    <div id="fil_ariane"></div>
+    <div id="title">
+      <h1 style="text-transform:uppercase!important;"><a href="/home/?campaign=${course_key_cleared}" class="primary_color">< ${_('My campaigns')}</a> | ${_('Invite participants')}</h1>
+      <p>
+        ${_('Invite participants to your training campaign')}
+      </p>
+    </div>
+    <ul class="list-courses">
+      <!-- suite -->
+      <li class="course-item">
+        <div class="content_img">
+          <span class="img_${course.categ.lower().replace(' ','')}" /></span>
+          <span class="course_module_categ">${_(course.categ)}</span>
+          <img src="${overview.image_urls['raw']}" class="img_course"/>
+        </div>
+        <div class="content_info">
+          <h3 class="course-title">${course.display_name_with_default_escaped}</h3>
+          <div class="all_dates">
+            <ul>
+              <li><span>${_('Starting date')} :</span> <span id="add_course_start">${course.start.strftime('%Y-%m-%d')}</span></li>
+              % if course.end is not None:
+                <li><span>${_('Ending date')} :</span> <span id="add_course_end">${course.end.strftime('%Y-%m-%d')}</span></li>
+              % else:
+                <li><span>${_('Ending date')} :</span> <span id="add_course_end"></span></li>
+              % endif
+              <span style="display:block;clear:left;"></span>
+            </ul>
+          </div>
+          <div class="all_dates">
+            <ul>
+              <li><span id="add_course_org">${course.org}</span></li>
+              <span class="language_display">${_('Language')} : ${_(language_course)} </span>
+
+              <span style="display:block;clear:left;"></span>
+            </ul>
+          </div>
+          <div class="duration_course">
+            <object oa-reusable-svg
+                    data="${static.url('images/duree.svg')}"
+                    type="image/svg+xml"
+                    class="svg-class"
+                    data-class="timer_svg_color"
+                    >
+            </object>
+            <span style="margin-left: 24px;">${details.effort}</span>
+          </div>
+        </div>
+        <span style="clear:left;display:block;"></span>
+      </li>
+    </ul>
+    <!-- cell 1/2 -->
+
+    <div class="pad-20" style="padding-left:0px!important;">
+      <a href="/settings/invite/${course_key}/list">
+        <button class="buton_from_file boutons-cms">${_('View participants invited')}</button>
+      </a>
+    </div>
+    <div class="cell_title">
+      <h3 id="h3_5"><div class="num" id="num_5">1/1</div><span class="primary-color-text">${_('Participants')}</span></h3>
+    </div>
+    <div class="cell_content" id="cell_5">
+      <div class="date_title particulary">
+        <h5 class="primary-color-text">${_('Invite participants to your training campaign')}</h5>
+        <span style="clear:both;display:block;"></span>
+        <div class="invite_instructions">
+          %if course_opened :
+          <div class="classic_instructions">
+            <p class="primary-color-text" style='width:100%;text-align:left;float:none;'>${_('Add your csv file to invite participants to your course. CSV must have the following header')}</p>
+            <table id="example_header">
+              <tr>
+                <td class="primary-color-text">email</td>
+                <td class="primary-color-text">first_name</td>
+                <td class="primary-color-text">last_name</td>
+                <td class="primary-color-text">level_1</td>
+                <td class="primary-color-text">level_2</td>
+                <td class="primary-color-text">level_3</td>
+                <td class="primary-color-text">level_4</td>
+              </tr>
+            </table>
+          </div>
+          %else:
+          <div id="closed_instructions">
+            <i class="primary-color-text fa fa-exclamation-triangle pad-20" style='font-size:45px;'></i> <span class="primary-color-text ">${_("In order to invite participants to your training campaign, it is imperative that starting date of the training session is set before the current date.")}</span>
+            <div>
+
+            </div>
+          </div>
+          %endif
+        </div>
+      </div>
+      <div class="field participants">
+        <form id="upload_form_participant" enctype="multipart/form-data">
+          <input type="file" name="file" id="invite_participant">
+        </form>
+      </div>
+      <span style="display:block;clear:left;"></span>
+    </div>
+
+    <div>
+      <div id="csv_import_error" class="pad-20" style="display:none;">
+        <span class="error-message" id="incorrect_header" style='display:none;'>${_("Your file header is incorrect, please include required information")} :</span>
+        <span id="header-error-details"></span>
+        <span class="error-message" id="incorrect-data" style='display:none;'>${_("Some participants' data is incorrect please modify your file")} :</span>
+        <span id="incorrect-error-detail"></span>
+        <span class="error-message" id="required-data" style='display:none;'>${_("Some participants' required data is missing please complete your file")} :</span>
+        <span id="missing-error-detail"></span>
+      </div>
+      <div id="csv_import_feedback" style='display:none;'>${_("Your request has been taken into account. Invitations have been sent to participants.")}</div>
+      <div id="csv_import_preview" class="pad-20" style='display:none;'>
+        <table id="csv_import">
+
+        </table>
+      </div>
+    </div>
+    <div id="register_user_btn" class="pad-20" style='display:none'>
+      <button class="buton_from_file boutons-cms" id="register_from_csv">${_("Upload participants list")}</button>
+      <div class="check_box_field" style="width:auto;display:inline-block;margin-left:20px;">
+        <input type="checkbox" id="notify_participants_chkbox" name="notify_participants_chkbox" class="checkbox_mail_field" checked>
+        <label id="notify_participants_label" for="notify_participants_chkbox">${_("Notify participants")}</label>
+      </div>
+    </div>
+
+  </section>
+  <section id="secondary">
+  </section>
+  <span style="display:block;clear:left;"></span>
+</section>
+
+
+<div class="campaign-link-back"><a href="/home/?campaign=${course_key_cleared}" class="primary_color">< ${_('Back to')} ${_('My campaigns')}</a></div>
+
+
+
+<!-- title font-size scale -->
+<script>
+var _h3 = document.getElementsByClassName('course-title');
+var elem;
+for(var i=0;i<_h3.length;i++) {
+  if(i == 0) {
+    elem = _h3[i]
+  }
+}
+var height = 0;
+var default_font = 2.2;
+var incredent = 0.1;
+var lim = 42;
+var actual = elem.clientHeight;
+while(actual > lim) {
+  default_font = default_font - incredent;
+  elem.style.fontSize = default_font+'em';
+  actual = elem.clientHeight;
+}
+</script>
+
+</%block>

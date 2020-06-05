@@ -3003,3 +3003,21 @@ class AllowedAuthUser(TimeStampedModel):
             "this model then that employee can login via third party authentication backend only."),
         unique=True,
     )
+
+#CLASS auth_user_preprofile
+
+class UserPreprofile(models.Model):
+
+    class Meta(object):
+        db_table = "auth_user_preprofile"
+
+    email = models.CharField(blank=True, max_length=255, db_index=True)
+    first_name = models.CharField(blank=True, max_length=255, db_index=True)
+    last_name = models.CharField(blank=True, max_length=255, db_index=True)
+    language = models.CharField(blank=True, max_length=255, db_index=True)
+    uuid = models.CharField(blank=True, max_length=255, db_index=True)
+    level_1 = models.CharField(blank=True, max_length=255, db_index=True)
+    level_2 = models.CharField(blank=True, max_length=255, db_index=True)
+    level_3 = models.CharField(blank=True, max_length=255, db_index=True)
+    level_4 = models.CharField(blank=True, max_length=255, db_index=True)
+    last_invite = models.DateTimeField(null=True, blank=True)

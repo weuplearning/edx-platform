@@ -25,6 +25,20 @@ from openedx.core.djangolib.js_utils import dump_js_escaped_json, js_escaped_str
 from openedx.core.release import RELEASE_LINE
 from pipeline_mako import render_require_js_path_overrides
 
+if configuration_helpers.get_value('secondary_color') :
+  secondary_color = configuration_helpers.get_value('secondary_color')
+else:
+  secondary_color='#00B6ED'
+if configuration_helpers.get_value('primary_color') :
+  primary_color = configuration_helpers.get_value('primary_color')
+else:
+  primary_color='#05144d'
+if configuration_helpers.get_value('third_color') :
+  third_color = configuration_helpers.get_value('third_color')
+else:
+  third_color='#05144d'
+
+
 %>
 <!DOCTYPE html>
 <!--[if lte IE 9]><html class="ie ie9 lte9" lang="${LANGUAGE_CODE}"><![endif]-->
@@ -210,7 +224,184 @@ from pipeline_mako import render_require_js_path_overrides
   <script type="text/javascript" src="${static.url('js/header/header.js')}"></script>
   <%static:optional_include_mako file="body-extra.html" is_theming_enabled="True" />
   <script type="text/javascript" src="${static.url('js/src/jquery_extend_patch.js')}"></script>
+
+  <script type="text/javascript">
+  ////////////////////////// XITI /////////////////////////////////////////
+  var tag = new ATInternet.Tracker.Tag();
+  var language_at="${LANGUAGE_CODE[:2].lower()}";
+  var subdomain=window.location.host.split('.')[0];
+  var level2_at = 0;
+
+  var correspondingSubDomain = [
+          {
+              "subdomain": "amundi",
+              "lang": "en",
+              "level2_at": "3"
+          },
+          {
+              "subdomain": "amundi",
+              "lang": "fr",
+              "level2_at": "2"
+          },
+          {
+              "subdomain": "amundi",
+              "lang": "it",
+              "level2_at": "14"
+          },
+          {
+              "subdomain": "lcl",
+              "lang": "fr",
+              "level2_at": "4"
+          },
+          {
+              "subdomain": "canextbank",
+              "lang": "de",
+              "level2_at": "5"
+          },
+          {
+              "subdomain": "canextbank",
+              "lang": "fr",
+              "level2_at": "6"
+          },
+          {
+              "subdomain": "etoilegestion",
+              "lang": "fr",
+              "level2_at": "9"
+          },
+          {
+              "subdomain": "etf",
+              "lang": "en",
+              "level2_at": "11"
+          },
+          {
+              "subdomain": "etf",
+              "lang": "de",
+              "level2_at": "13"
+          },
+          {
+              "subdomain": "etf",
+              "lang": "fr",
+              "level2_at": "10"
+          },
+          {
+              "subdomain": "etf",
+              "lang": "it",
+              "level2_at": "12"
+          },
+          {
+              "subdomain": "bankaustria",
+              "lang": "de",
+              "level2_at": "15"
+          },
+          {
+              "subdomain": "sbi",
+              "lang": "en",
+              "level2_at": "16"
+          },
+          {
+              "subdomain": "kb",
+              "lang": "en",
+              "level2_at": "17"
+          },
+          {
+              "subdomain": "kb",
+              "lang": "cs",
+              "level2_at": "18"
+          },
+          {
+              "subdomain": "crelan",
+              "lang": "fr",
+              "level2_at": "7"
+          },
+          {
+              "subdomain": "crelan",
+              "lang": "nl",
+              "level2_at": "8"
+          },
+          {
+              "subdomain": "sgpb",
+              "lang": "fr",
+              "level2_at": "19"
+          },
+          {
+              "subdomain": "ucb-cz",
+              "lang": "cs",
+              "level2_at": "20"
+          },
+          {
+              "subdomain": "ucb-ro",
+              "lang": "ro",
+              "level2_at": "21"
+          },
+          {
+              "subdomain": "ucb-sk",
+              "lang": "sk",
+              "level2_at": "22"
+          },
+          {
+              "subdomain": "midacademy",
+              "lang": "en",
+              "level2_at": "23"
+          },
+          {
+              "subdomain": "midacademy",
+              "lang": "fr",
+              "level2_at": "24"
+          },
+          {
+              "subdomain": "ucb-hu",
+              "lang": "hu",
+              "level2_at": "25"
+          },
+          {
+              "subdomain": "myacademy",
+              "lang": "en",
+              "level2_at": "26"
+          }
+      ]
+
+
+  for (let i = 0; i < correspondingSubDomain.length; i++) {
+    if(subdomain == correspondingSubDomain[i].subdomain){
+      //if subdomain matches, use it, even if it is not yet the right language, but continue looking for a better option
+      level2_at= correspondingSubDomain[i].level2_at;
+      if(language_at == correspondingSubDomain[i].lang){
+        //if this is a full matching, subdomain and language, stop looking for a better option
+        i = correspondingSubDomain.length;
+      }
+    }
+  }
+
+  if(page_name === undefined){
+    page_name="amundi_academy_page"
+  }
+
+  tag.page.set({
+      'name':page_name,
+      'chapter1':subdomain,
+      'chapter2':'zone_authentifiee',
+      'chapter3':'espace_apprenant',
+      'level2':level2_at.toString()
+  });
+  tag.dispatch();
+
+  // Follow click events
+  function followClickEvents(element, element_tag, type_click){
+    return tag.click.send({
+      elem:element, // DOM element given
+      name:element_tag,
+      chapter1: subdomain,
+      chapter2:'zone_authentifiee',
+      chapter3:'espace_apprenant',
+      level2:level2_at.toString(),
+      type:type_click,
+    });
+  }
+
+    </script>
+
 </body>
+
 </html>
 
 <%def name="login_query()">${
@@ -218,3 +409,34 @@ from pipeline_mako import render_require_js_path_overrides
     next=urlquote_plus(login_redirect_url if login_redirect_url else request.path)
   ) if (login_redirect_url or request) else ""
 }</%def>
+
+
+<!-- TMA ATP CUSTOM -->
+
+<script>
+jQuery('img.svg').each(function(){
+    var $img = jQuery(this);
+    var imgID = $img.attr('id');
+    var imgClass = $img.attr('class');
+    var imgURL = $img.attr('src');
+    jQuery.get(imgURL, function(data) {
+        // Get the SVG tag, ignore the rest
+        var $svg = jQuery(data).find('svg');
+        // Add replaced image's ID to the new SVG
+        if(typeof imgID !== 'undefined') {
+            $svg = $svg.attr('id', imgID);
+        }
+        // Add replaced image's classes to the new SVG
+        if(typeof imgClass !== 'undefined') {
+            $svg = $svg.attr('class', imgClass+' replaced-svg');
+        }
+        // Remove any invalid XML tags as per http://validator.w3.org
+        $svg = $svg.removeAttr('xmlns:a');
+        // Replace image with new SVG
+        $img.replaceWith($svg);
+
+    }, 'xml');
+});
+$('img.svg').show();
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_SVG"></script>

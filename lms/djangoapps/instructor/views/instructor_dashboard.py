@@ -19,7 +19,7 @@ from django.utils.translation import ugettext as _
 from django.utils.translation import ugettext_noop
 from django.views.decorators.cache import cache_control
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST,require_GET
 from edx_when.api import is_enabled_for_course
 from mock import patch
 from opaque_keys import InvalidKeyError
@@ -55,7 +55,7 @@ from openedx.core.djangolib.markup import HTML, Text
 from openedx.core.lib.url_utils import quote_slashes
 from openedx.core.lib.xblock_utils import wrap_xblock
 from shoppingcart.models import Coupon, CourseRegCodeItem, PaidCourseRegistration
-from student.models import CourseEnrollment
+from student.models import CourseEnrollment , CourseEnrollmentAllowed, User, UserPreprofile
 from student.roles import CourseFinanceAdminRole, CourseInstructorRole, CourseSalesAdminRole, CourseStaffRole
 from util.json_request import JsonResponse
 from xmodule.html_module import HtmlBlock
@@ -64,8 +64,32 @@ from xmodule.tabs import CourseTab
 
 from .tools import get_units_with_due_date, title_or_url
 
-log = logging.getLogger(__name__)
+#GEOFFREY
+#from course_progress.helpers import get_overall_progress
+from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
+from courseware.courses import get_course_by_id
+from django.db import connection,connections
+from opaque_keys.edx.locations import SlashSeparatedCourseKey
+from lms.djangoapps.grades.course_grade_factory import CourseGradeFactory
+#GEOFFREY 2
+#from courseware.models import StudentModule
+from course_api.blocks.api import get_blocks
+from course_api.blocks.views import BlocksInCourseView,BlocksView
 
+from django.db.models import Q
+
+from lms.djangoapps.tma_grade_tracking.models import dashboardStats
+from xlwt import *
+import os
+#GEOFFREY
+
+#AGATHE
+#from course_progress.helpers import get_overall_progress
+#from course_progress.models import StudentCourseProgress
+
+
+log = logging.getLogger(__name__)
+from pprint import pformat
 
 class InstructorDashboardTab(CourseTab):
     """
@@ -90,7 +114,7 @@ def show_analytics_dashboard_message(course_key):
     Defines whether or not the analytics dashboard URL should be displayed.
 
     Arguments:
-        course_key (CourseLocator): The course locator to display the analytics dashboard message on.
+        course_key (SlashSeparatedCourseKey): The course locator to display the analytics dashboard message on.
     """
     if hasattr(course_key, 'ccx'):
         ccx_analytics_enabled = settings.FEATURES.get('ENABLE_CCX_ANALYTICS_DASHBOARD_URL', False)
@@ -857,3 +881,582 @@ def is_ecommerce_course(course_key):
     """
     sku_count = len([mode.sku for mode in CourseMode.modes_for_course(course_key) if mode.sku])
     return sku_count > 0
+
+# GEOFFREY STAT DASHBOARD
+# GEOFFREY STAT DASHBOARD
+# GEOFFREY STAT DASHBOARD
+# GEOFFREY STAT DASHBOARD
+
+@login_required
+def stat_dashboard(request, course_id):
+    #GET course_key
+    course_key = SlashSeparatedCourseKey.from_string(course_id)
+    course_key_modulestore = CourseKey.from_string(course_id)
+    #course_module
+    course_module = modulestore().get_course(course_key, depth=0)
+    #course cutoff
+    course_cutoff = course_module.grade_cutoffs['Pass']
+    #GET COURSE
+    course = get_course_by_id(course_key)
+    #overview
+    overview = CourseOverview.get_from_id(course_key)
+    #Get all course-enrollment
+    row = User.objects.raw('SELECT a.id ,a.email FROM auth_user a,student_courseenrollment b WHERE a.id=b.user_id AND b.course_id=%s' ,[course_id])
+    invite = CourseEnrollmentAllowed.objects.all().filter(course_id=course_key)
+    participant_list = []
+    all_user = 0
+    for _user in row:
+        participant_list.append(_user.email)
+        all_user = all_user + 1
+    for _u in invite:
+        if not str(_u.email) in str(participant_list):
+            all_user = all_user + 1
+    #number of user who started the course
+    user_course_started = 0
+    #number of users who completed the entire quiz
+    users_completed_quiz = 0
+    #count passed
+    num_passed = 0
+    #add course average grade
+    course_average_grade = 0
+    course_average_grade_global = 0
+    #number of user who finished the course
+    user_finished = 0
+    # Users who completed the quiz entirely
+    user_completed_quiz = 0
+    user_completed_quiz_list = []
+    #course_structure
+    course_structure = get_course_structure(request,course_id)
+    course_usage_key = modulestore().make_course_usage_key(course_key)
+    blocks = get_blocks(request,course_usage_key,requested_fields=['display_name','children'])
+
+    # Users who completed the quiz (overall_progress equals 100.0 only if user completed the quiz)
+    for user in row:
+        #overall_progress = get_overall_progress(user.id, course_key)
+        #if overall_progress == 100.0:
+        users_completed_quiz = users_completed_quiz + 1
+        user_completed_quiz_list.append(user.username)
+
+    # connect mongodb return values:
+    mongo_persist = dashboardStats()
+    collection = mongo_persist.connect()
+    find_mongo_persist_course = mongo_persist.find_by_course_id(collection,course_id)
+    for n in row:
+        user_id = n.id
+        users = User.objects.get(pk=user_id)
+
+    try:
+        users_info = find_mongo_persist_course['users_info']
+        for key, value in users_info.iteritems():
+            #log.info("user_info key:"+pformat(key)+" value"+pformat(value))
+            _passed = value['passed']
+            _percent = value['percent']
+            user_course_started = user_course_started + 1
+            # Average grade of all users who completed the quiz
+            _username = value['username']
+            if _username in user_completed_quiz_list:
+                course_average_grade_global = course_average_grade_global + (_percent * 100)
+            # Average grade of users who passed the quiz
+            if _passed:
+                course_average_grade = course_average_grade + (_percent * 100)
+                user_finished = user_finished + 1
+                if _percent >= course_cutoff:
+                    num_passed = num_passed + 1
+    except:
+        pass
+
+    #return context
+    if user_finished != 0:
+        final_course_average_grade = round((course_average_grade / user_finished),1)
+    else :
+        final_course_average_grade=0.0
+
+    if users_completed_quiz !=0:
+        course_average_grade_global = round((course_average_grade_global / users_completed_quiz), 1)
+    else :
+        course_average_grade_global=0.0
+
+    #store problems components order
+    problem_components=[]
+    for chapter in course_structure:
+      for section in chapter['children']:
+        for vertical in section['children']:
+          for component in vertical['children']:
+            if 'problem' in str(component):
+              problem_components.append(str(component))
+    context = {
+     "course_id":course_id,
+     "course":course,
+     "row":row,
+     'course_module':course_module,
+     "all_user":all_user,
+     "num_passed":num_passed,
+     "user_course_started":user_course_started,
+     'course_average_grade':final_course_average_grade,
+     'course_average_grade_global': course_average_grade_global,
+     'user_finished':user_finished,
+     'course_structure':course_structure,
+     'overview':overview,
+     'language_course':get_course_langue(course.language),
+     'problem_components':problem_components
+    }
+
+    return render_to_response('courseware/stat.html', context)
+
+@ensure_csrf_cookie
+@login_required
+def get_dashboard_username(request,course_id,email):
+    course_key = SlashSeparatedCourseKey.from_string(course_id)
+    row = User.objects.raw('SELECT a.id,a.email,a.first_name,a.last_name FROM auth_user a,student_courseenrollment b WHERE a.id=b.user_id AND b.course_id=%s' ,[course_id])
+    emails = []
+    email = str(email).lower()
+    for n in row:
+        low = [
+            n.email.lower(),
+            n.first_name.lower(),
+            n.last_name.lower()
+        ]
+        if email in str(low).lower():
+            q = {
+                "values" : [
+                    n.email,
+                    n.first_name,
+                    n.last_name
+                ],
+                "id":n.email
+            }
+            emails.append(q)
+    response = JsonResponse({
+            "usernames":emails,
+            "email":email
+        })
+
+    return response
+
+@ensure_csrf_cookie
+@login_required
+def stat_dashboard_username(request, course_id, email):
+    try:
+        # get users info
+        users = User.objects.get(email=email)
+        #user_email
+        user_email = users.email
+        lvl_1 = ''
+        lvl_2 = ''
+        lvl_3 = ''
+        lvl_4 = ''
+        try:
+            preprofile = UserPreprofile.objects.filter(email=user_email).first()
+            lvl_1 = preprofile.level_1
+            lvl_2 = preprofile.level_2
+            lvl_3 = preprofile.level_3
+            lvl_4 = preprofile.level_4
+        except:
+            pass
+
+        #ordered course
+        course_grade = []
+        ordered_course_grade=[]
+        quiz_order=get_quiz_structure(request, course_id)
+
+        # get user id
+        user_id= users.id
+        # get course_key from url's param
+        course_key = SlashSeparatedCourseKey.from_string(course_id)
+        # get course from course_key
+        course = get_course_by_id(course_key)
+        # get all courses block of the site
+        course_block = StudentModule.objects.all().filter(student_id=user_id,course_id=course_key,max_grade__isnull=False)
+        # var of grades / course_structure
+        course_grade = []
+        # get course_users_info
+        course_user_info = CourseGradeFactory().create(users, course)
+        # user info responses
+        user_info = [
+        {'Score':str(course_user_info.percent * 100)+'%'},
+        {'First_name':users.first_name},
+        {'Last_name':users.last_name},
+        {'Email':users.email},
+        {'Niveau_1':lvl_1},
+        {'Niveau_2':lvl_2},
+        {'Niveau_3':lvl_3},
+        {'Niveau_4':lvl_4}
+        ]
+        for n in course_block:
+            q = {}
+            usage_key = n.module_state_key
+            block_view = BlocksView()
+            block_name = get_blocks(request,usage_key,requested_fields=['display_name'])
+            root = block_name['root']
+            display_name = block_name['blocks'][root]['display_name']
+            q['earned'] = n.grade
+            q['possible'] = n.max_grade
+            q['display_name'] = display_name
+            q['root'] = root
+            course_grade.append(q)
+
+        #Order blocks
+        for id in quiz_order:
+            for block in course_grade :
+                if block['root']==str(id):
+                    ordered_course_grade.append(block)
+
+        return JsonResponse({
+                "course_id":course_id,
+        		"email":email,
+                "user_id":user_id,
+                "course_grade": ordered_course_grade,
+                "user_info": user_info,
+                "quiz_order":quiz_order
+            })
+    except:
+        return JsonResponse({
+                "course_id":course_id,
+        		"username":username,
+                "user_id": '',
+                "course_grade": [],
+                "user_info": '',
+            })
+
+
+@login_required
+def get_course_structure(request, course_id):
+
+    course_key = CourseKey.from_string(course_id)
+    course_usage_key = modulestore().make_course_usage_key(course_key)
+    log.info(type(course_usage_key))
+    blocks = get_blocks(request,course_usage_key,requested_fields=['display_name','children'])
+    root = blocks['root']
+    blocks_overviews = []
+    try:
+        children = blocks['blocks'][root]['children']
+        for z in children:
+            q = {}
+            child = blocks['blocks'][z]
+            q['display_name'] = child['display_name']
+            q['id'] = child['id']
+            try:
+                sub_section = child['children']
+                q['children'] = []
+                for s in sub_section:
+                    sub_ = blocks['blocks'][s]
+                    a = {}
+                    a['id'] = sub_['id']
+                    a['display_name'] = sub_['display_name']
+                    vertical = sub_['children']
+                    try:
+                        a['children'] = []
+                        for v in vertical:
+                            unit = blocks['blocks'][v]
+                            w = {}
+                            w['id'] = unit['id']
+                            w['display_name'] = unit['display_name']
+                            try:
+                                w['children'] = unit['children']
+                            except:
+                                w['children'] = []
+                            a['children'].append(w)
+                    except:
+                        a['children'] = []
+                    q['children'].append(a)
+            except:
+                q['children'] = []
+            blocks_overviews.append(q)
+    except:
+        children = ''
+    return blocks_overviews
+
+
+@ensure_csrf_cookie
+@login_required
+@require_POST
+def get_course_blocks_grade(request,course_id):
+
+    data = json.loads(request.body)
+    data_id = data.get('data_id')
+    course_block = StudentModule.objects.raw("SELECT id,AVG(grade) AS moyenne,count(id) AS total,MAX(max_grade) AS max_grade,course_id,module_id FROM courseware_studentmodule WHERE course_id = %s AND max_grade IS NOT NULL AND grade <= max_grade GROUP BY module_id", [course_id])
+    course_grade = {}
+    for n in course_block:
+        usage_key = n.module_state_key
+        block_view = BlocksView()
+        try:
+            block_name = get_blocks(request,usage_key,requested_fields=['display_name'])
+            root = block_name['root']
+            for z in data_id:
+                if root in z.get('id'):
+                    if not root in course_grade:
+                        course_grade[root] = {}
+                        course_grade[root]['moyenne'] = n.moyenne
+                        course_grade[root]['total'] = n.total
+                        course_grade[root]['max_grade'] = n.max_grade
+                        course_grade[root]['course_id'] = str(n.course_id)
+                        course_grade[root]['module_id'] = str(n.module_state_key)
+                        course_grade[root]['display_name'] = block_name['blocks'][root]['display_name']
+                        course_grade[root]['vertical_name'] = z.get('title')
+
+        except:
+            pass
+
+    return JsonResponse({'course_grade':course_grade})
+
+def get_result_page_info(request,course_id):
+
+    response = JsonResponse({
+      "course_id":course_id
+    })
+
+    return response
+
+@ensure_csrf_cookie
+@login_required
+@require_GET
+def get_course_users(request,course_id):
+
+    #Get all course-enrollment
+    """
+    UserPreprofile
+    CourseEnrollment
+    CourseEnrollmentAllowed
+    """
+    course_key = SlashSeparatedCourseKey.from_string(course_id)
+    invite = CourseEnrollmentAllowed.objects.all().filter(course_id=course_key)
+    enroll = CourseEnrollment.objects.all().filter(course_id=course_key)
+    users = []
+    for _ui in invite:
+        email = _ui.email
+        if not str(email) in str(users):
+            q = {}
+            q['email'] = email
+            q['statut'] = 'sent'
+            q['Nom'] = ''
+            q['Prenom'] = ''
+            q['Niveau 1'] = ''
+            q['Niveau 2'] = ''
+            q['Niveau 3'] = ''
+            q['Niveau 4'] = ''
+            users.append(q)
+
+    for _ue in enroll:
+        try:
+            email = User.objects.get(pk=_ue.user_id).email
+            if not str(email) in str(users):
+                q = {}
+                q['email'] = email
+                q['statut'] = 'accepted'
+                q['Nom'] = ''
+                q['Prenom'] = ''
+                q['Niveau 1'] = ''
+                q['Niveau 2'] = ''
+                q['Niveau 3'] = ''
+                q['Niveau 4'] = ''
+                users.append(q)
+            else:
+                for user in users:
+                    if user['email'] == email:
+                        user['statut'] = 'accepted'
+        except:
+            pass
+
+    for user in users:
+        try:
+            email = user['email']
+            profile = UserPreprofile.objects.filter(email=email).first()
+            user['Nom'] = profile.last_name
+            user['Prenom'] = profile.first_name
+            user['Niveau 1'] = profile.level_1
+            user['Niveau 2'] = profile.level_2
+            user['Niveau 3'] = profile.level_3
+            user['Niveau 4'] = profile.level_4
+        except:
+            pass
+
+    filename = '{}_registered_users.xls'.format(course_id).replace('+','_')
+    filepath = '/edx/var/edxapp/'+filename
+    HEADERS = (u"Nom",u"Prenom",u"Adresse email",u"Niveau 1",u"Niveau 2",u"Niveau 3",u"Niveau 4",u"Statut")
+    wb = Workbook(encoding='utf-8')
+    sheet = wb.add_sheet('Users')
+
+    for i, header in enumerate(HEADERS):
+        sheet.write(0, i, header)
+
+    j = 0
+    for i in range(len(users)):
+        j=j+1
+        try:
+            sheet.write(j, 0, users[i]['Nom'])
+        except:
+            sheet.write(j, 0, ' ')
+        try:
+            sheet.write(j, 1, users[i]['Prenom'])
+        except:
+            sheet.write(j, 1, ' ')
+        try:
+            sheet.write(j, 2, users[i]['email'])
+        except:
+            sheet.write(j, 2, ' ')
+        try:
+            sheet.write(j, 3, users[i]['Niveau 1'])
+        except:
+            sheet.write(j, 3, ' ')
+        try:
+            sheet.write(j, 4, users[i]['Niveau 2'])
+        except:
+            sheet.write(j, 4, ' ')
+        try:
+            sheet.write(j, 5, users[i]['Niveau 3'])
+        except:
+            sheet.write(j, 5, ' ')
+        try:
+            sheet.write(j, 6, users[i]['Niveau 4'])
+        except:
+            sheet.write(j, 6, ' ')
+        try:
+            sheet.write(j, 7, users[i]['statut'])
+        except:
+            sheet.write(j, 7, ' ')
+
+    wb.save(filepath)
+    context = {
+        'filename':filename,
+        'users':str(users),
+    }
+
+    return JsonResponse(context)
+
+def download_xls(request,filename):
+    full_path = '/edx/var/edxapp/'+filename
+    _file = open(full_path,'r')
+    _content = _file.read()
+    response = HttpResponse(_content, content_type="application/vnd.ms-excel")
+    response['Content-Disposition'] = "attachment; filename="+filename
+    os.remove(full_path)
+    return response
+
+#generate current_course grade reports
+
+def get_course_users_grades(request,course_id):
+
+    # connect mongodb return values:
+    mongo_persist = dashboardStats()
+    collection = mongo_persist.connect()
+    find_mongo_persist_course = mongo_persist.find_by_course_id(collection,course_id)
+    # get users saved data
+    users_info = find_mongo_persist_course.get('users_info')
+    #get users id
+    users_id = users_info.keys()
+    q = {
+        'title': [
+            'email','first name','last name'
+        ],
+        'users': []
+    }
+
+    k = 0
+    for _user_id in users_id:
+        #try:
+        current = users_info[_user_id]
+        user = User.objects.get(pk=users_info[str(_user_id)]["user_id"])
+        percent = str(current["percent"] * 100)+'%'
+        summary = current["summary"]["section_breakdown"]
+        user_info = {
+            'email':user.email,
+            'first_name':user.first_name,
+            'last_name':user.last_name,
+            'percent': percent,
+            'grades':[]
+        }
+
+        for section in summary:
+            if k == 0:
+                if not section['label'] in q['title']:
+                    q['title'].append(section['label'])
+            _section = {
+                'label':section['label'],
+                'percent':str(section['percent'] * 100)+'%'
+            }
+            user_info['grades'].append(_section)
+        q['users'].append(user_info)
+
+        k = k + 1
+        """
+        except:
+            pass
+        """
+    if not 'final grade' in q['title']:
+        q['title'].append('final grade')
+    filename = '{}_grades_reports.xls'.format(course_id).replace('+','_')
+    filepath = '/edx/var/edxapp/'+filename
+    HEADERS = q['title']
+    wb = Workbook(encoding='utf-8')
+    sheet = wb.add_sheet('Grades')
+
+    for i, header in enumerate(HEADERS):
+        sheet.write(0, i, header)
+
+    j = 0
+    for i in range(len(q['users'])):
+        j=j+1
+        try:
+            sheet.write(j, 0, q['users'][i]['email'])
+        except:
+            sheet.write(j, 0, ' ')
+        try:
+            sheet.write(j, 1, q['users'][i]['first_name'])
+        except:
+            sheet.write(j, 1, ' ')
+        try:
+            sheet.write(j, 2, q['users'][i]['last_name'])
+        except:
+            sheet.write(j, 2, ' ')
+        d = 2
+        for grade in q['users'][i]['grades']:
+            d = d + 1
+            try:
+                sheet.write(j, d, grade['percent'])
+            except:
+                sheet.write(j, d, ' ')
+        d = d + 1
+        sheet.write(j, d, q['users'][i]['percent'])
+
+    wb.save(filepath)
+
+    context = {
+        'filename':filename,
+        'course_id':course_id
+    }
+
+    return JsonResponse(context)
+
+def download_grades(request,filename):
+    full_path = '/edx/var/edxapp/'+filename
+    _file = open(full_path,'r')
+    _content = _file.read()
+    response = HttpResponse(_content, content_type="application/vnd.ms-excel")
+    response['Content-Disposition'] = "attachment; filename="+filename
+    os.remove(full_path)
+    return response
+
+def get_list_lang():
+    language_options_tulp=settings.ALL_LANGUAGES
+    language_options_dict={}
+    for lang, label in language_options_tulp:
+        language_options_dict[lang]=label
+    return language_options_dict
+
+def get_course_langue(lang_code):
+    language_options_dict=get_list_lang()
+    course_language=language_options_dict[lang_code]
+    return course_language
+
+def get_quiz_structure(request, course_id):
+  course_key = CourseKey.from_string(course_id)
+  course_usage_key = modulestore().make_course_usage_key(course_key)
+  course_blocks = get_blocks(request,course_usage_key,requested_fields=['display_name','children'])
+  blocks_overviews = []
+  quiz_elements=[]
+  blocks_list=[]
+
+  for block in course_blocks['blocks'] :
+    if course_blocks['blocks'][block].get('children') and "problem" in course_blocks['blocks'][block].get('children')[0]:
+      blocks_list=course_blocks['blocks'][block]['children']
+  return blocks_list

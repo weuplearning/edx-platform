@@ -51,6 +51,7 @@
             this.path = $('.path');
             this.contents = this.$('.seq_contents');
             this.content_container = this.$('#seq_content');
+            this.content_containertma = this.$('.seq_content');
             this.sr_container = this.$('.sr-is-focusable');
             this.num_contents = this.contents.length;
             this.id = this.el.data('id');
@@ -191,10 +192,11 @@
         };
 
         Sequence.prototype.enableButton = function(buttonClass, buttonAction) {
-            this.$(buttonClass)
+            /*this.$(buttonClass)
                 .removeClass('disabled')
                 .removeAttr('disabled')
-                .click(buttonAction);
+                .click(buttonAction);*/
+            this.$(buttonClass).click(buttonAction);
         };
 
         Sequence.prototype.disableButton = function(buttonClass) {
@@ -214,6 +216,7 @@
 
             this.$('.sequence-nav-button').unbind('click');
 
+
             // previous button
             isFirstTab = this.position === 1;
             previousButtonClass = '.sequence-nav-button.button-previous';
@@ -227,6 +230,7 @@
         };
 
         Sequence.prototype.render = function(newPosition) {
+            console.log(this)
             var bookmarked, currentTab, modxFullUrl, sequenceLinks,
                 self = this;
             if (this.position !== newPosition) {
@@ -255,6 +259,10 @@
                     .html(currentTab.text())  // xss-lint: disable=javascript-jquery-html
                     .attr('aria-labelledby', currentTab.attr('aria-labelledby'))
                     .data('bookmarked', bookmarked);
+                this.content_containertma.eq(newPosition - 1)
+                    .html(currentTab.text())  // xss-lint: disable=javascript-jquery-html
+                    .attr('aria-labelledby', currentTab.attr('aria-labelledby'))
+                    .data('bookmarked', bookmarked);
 
 
                 if (this.anyUpdatedProblems(newPosition)) {
@@ -271,6 +279,7 @@
                     });
                 }
                 XBlock.initializeBlocks(this.content_container, this.requestToken);
+                XBlock.initializeBlocks(this.content_containertma.eq(newPosition - 1), this.requestToken);
 
                 // For embedded circuit simulator exercises in 6.002x
                 if (window.hasOwnProperty('update_schematics')) {
@@ -280,7 +289,7 @@
                 this.toggleArrows();
                 this.hookUpContentStateChangeEvent();
                 this.updatePageTitle();
-                sequenceLinks = this.content_container.find('a.seqnav');
+                sequenceLinks =   this.content_containertma.eq(newPosition - 1).find('a.seqnav');
                 sequenceLinks.click(this.goto);
 
                 this.sr_container.focus();
@@ -406,6 +415,11 @@
         Sequence.prototype.mark_visited = function(position) {
             // Don't overwrite class attribute to avoid changing Progress class
             var element = this.link_for(position);
+            $('.tma_tab').eq(position - 1).attr({tabindex: '0', 'aria-selected': 'true', 'aria-expanded': 'true'})
+                .removeClass('inactive')
+                .removeClass('visited')
+                .removeClass('focused')
+                .addClass('active');
             element.attr({tabindex: '-1', 'aria-selected': 'false', 'aria-expanded': 'false'})
                 .removeClass('inactive')
                 .removeClass('active')
@@ -418,12 +432,14 @@
             var completionUrl = this.ajaxUrl + '/get_completion';
             var usageKey = element[0].attributes['data-id'].value;
             var completionIndicators = element.find('.check-circle');
+            var completionIndicatorstma = element.find('.tma_tab');
             if (completionIndicators.length) {
                 $.postWithPrefix(completionUrl, {
                     usage_key: usageKey
                 }, function(data) {
                     if (data.complete === true) {
                         completionIndicators.removeClass('is-hidden');
+                        completionIndicatorstma.removeClass('disabled');
                     }
                 });
             }
@@ -432,6 +448,12 @@
         Sequence.prototype.mark_active = function(position) {
             // Don't overwrite class attribute to avoid changing Progress class
             var element = this.link_for(position);
+            $('.tma_tab').removeClass('active')
+            $('.tma_tab').eq(position - 1).attr({tabindex: '0', 'aria-selected': 'true', 'aria-expanded': 'true'})
+                .removeClass('inactive')
+                .removeClass('visited')
+                .removeClass('focused')
+                .addClass('active');
             element.attr({tabindex: '0', 'aria-selected': 'true', 'aria-expanded': 'true'})
                 .removeClass('inactive')
                 .removeClass('visited')
@@ -451,7 +473,6 @@
             this.el.find('.nav-item.active .bookmark-icon').removeClass('bookmarked').addClass('is-hidden');
             this.el.find('.nav-item.active .bookmark-icon-sr').text('');
         };
-
         return Sequence;
     }());
 }).call(this);

@@ -1,0 +1,693 @@
+<%page expression_filter="h"/>
+<%inherit file="/main.html" />
+<%namespace name='static' file='/static_content.html'/>
+<%def name="online_help_token()"><% return "courseware" %></%def>
+<%!
+import time
+from django.utils.translation import ugettext as _
+from django.conf import settings
+
+from edxnotes.helpers import is_feature_enabled as is_edxnotes_enabled
+from openedx.core.djangolib.markup import HTML
+from openedx.core.djangolib.js_utils import js_escaped_string
+from datetime import datetime, date
+
+#GEOFFREY
+
+from opaque_keys.edx.keys import CourseKey
+from openedx.core.djangoapps.bookmarks.api import get_bookmark,get_bookmarks
+from opaque_keys.edx.locations import SlashSeparatedCourseKey
+from xmodule.modulestore.django import modulestore
+from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
+from openedx.core.djangolib.js_utils import dump_js_escaped_json, js_escaped_string
+
+#LO task mgmt
+from lms.djangoapps.atp_task.models import tmaTask
+
+%>
+<%block name="pagetitle">${_("Dashboard")}</%block>
+<!--
+<script src="${static.url('js/stat_dashboard.js')}"></script>
+-->
+<!-- css assets -->
+<%
+stat_dashboard = static.get_value('css_overrides_stat_dashboard')
+
+if configuration_helpers.get_value('logo_couleur') and configuration_helpers.get_value('logo_couleur')!="":
+  logo_url=configuration_helpers.get_value('logo_couleur')
+else:
+  if configuration_helpers.get_value('logo'):
+    logo_url=configuration_helpers.get_value('logo')
+  else:
+    logo_url = '/static/images/logo.png'
+
+if configuration_helpers.get_value('primary_color'):
+  primary_color=configuration_helpers.get_value('primary_color')
+else :
+  primary_color = "#132149"
+
+target = course_id.split('+')
+
+
+%>
+
+<style>
+.course-bg-img{
+  background-image:url('${overview.image_urls['small']}');
+  background-size: cover;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  flex-direction: column;
+}
+
+/*Colors */
+.white-bg{
+  background-color: white!important;
+}
+.content-wrapper{
+  background-color: #F8F8F8!important;
+}
+.container{
+  min-width: auto!important;
+}
+.lg-border{
+  border:1px solid lightgray;
+}
+
+/*Margins Paddings */
+.mt-0{
+  margin-top: 0px!important;
+}
+.mb-0{
+  margin-bottom: 0px!important;
+}
+.pl-0{
+  padding-left: 0;
+}
+.pr-0{
+  padding-right: 0;
+}
+.pr-15{
+  padding-right: 15px;
+}
+
+/*Width */
+.w-100{
+  width: 100%!important;
+}
+
+/* Fonts */
+h1,h2,h3,h4{
+  font-family: "mywebfont"!important;
+}
+h2{
+  font-size: 20px;
+  line-height: 1.5;
+}
+p{
+  font-size: 18px;
+}
+
+/*Display */
+.absolute{
+  position: absolute;
+}
+
+/* Other */
+.key-figure{
+  font-size: 45px;
+}
+.key-figure-title{
+  font-size:22px;
+}
+.logo-reseau img{
+  max-width: 100%;
+}
+.user_grade_cell{
+  margin: 15px!important;
+  padding: 15px!important;
+  width:100%!important;
+}
+@media only screen and (min-width: 1100px)  {
+  .display-flex{
+    display: flex;
+    width: 100%;
+  }
+  .same-height-colums{
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .user_grade_cell{
+    width: 30%!important;
+  }
+
+}
+#body_block_stat_question{
+  padding: 0!important;
+  margin: 0!important;
+  width: 100%!important;
+}
+#block_stat_question{
+  margin: 0!important;
+  width: 100%!important;
+  margin-top: 20px!important;
+}
+.chapter_box h3{
+  background-color: transparent!important;
+}
+#nav_block_stat_question{
+  margin: 0!important;
+}
+#table_participant table{
+  margin: 0 auto!important;
+}
+
+#nav_block_stat_question button:nth-child(2){
+  margin-left: 0;
+  background-color: #fff;
+  opacity: 0.5;
+  padding-left: 0;
+  padding-right: 0;
+}
+#name_participant{
+  font:inherit!important;
+}
+.user_grade_cell .vertical_name{
+  display: none!important;
+}
+#generate_grades_task, #generate_grades_task:visited, #generate_grades_task:hover{
+  text-transform: inherit!important;
+}
+
+</style>
+<%
+course_key_id_cleared=str(course_id).replace('+','').replace(':','')
+%>
+
+<div class="container">
+
+<!-- FIL ARIANE ET CARTOUCHE -------------------------------------------------->
+  <div class="row">
+    <div class="col-md-12">
+      <div id="fil_ariane"></div>
+      <div id="title">
+        <h1 class="primary-color-text"><a href="https://${settings.CMS_BASE}/home/?campaign=${course_key_id_cleared}" class="primary-color-text">< ${_('My campaigns')}</a> | ${_('Statistics')}</h1>
+      </div>
+
+      <div class="mt-20">
+        <div class="row display-flex m-0 lg-border">
+          <div class="col-md-3 pr-0 course-bg-img">
+            <img id="course_categ_bandeau" src="" alt="" style="max-width:100%;">
+            <p class="white-text bold-text text-right absolute pr-15">${_(course.categ)}</p>
+          </div>
+          <div class="col-md-9 white-bg pl-0">
+            <div class="pad-30">
+              <h3 class="primary-color-text bold-text">${course.display_name_with_default_escaped}</h3>
+              <p class="primary-color-text"><span class="primary-color-text">${_("Results on ")}</span>
+                  ${time.strftime('%Y-%m-%d')}
+              </p>
+              <p class="language_paragraph">
+              <span class="language_display primary-color-text">${_('Language')} : ${_(language_course)} </span>
+              </p>
+              <p class="mt-0 mb-0">
+                <span class="gold-text"><i class="fa fa-clock-o" aria-hidden="true"></i> ${overview.effort}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row mt-20">
+<!-- INFOS GENERALES -------------------------------------------------->
+    <div class="col-md-4">
+      <div class="white-bg pad-30">
+        <div class="primary-color-bg">
+          <h2 class="primary-color-bg white-text bold-text pad-20 m-0 text-center">${_('training campaign info')}</h2>
+        </div>
+        <div class="mt-10"><button id="generate_xls" class="w-100">${_("Download participants' list")}</button></div>
+        <div class="mt-20">
+          <p class="primary-color-text">${_("Editor")} : <span class="gold-text bold-text">${course.editor}</span>
+          % if course.start :
+          <p class="primary-color-text">${_('Starting date')} : <span class="gold-text bold-text">${course.start.strftime('%Y-%m-%d')}</span></p>
+          %endif
+          % if course.end:
+          <p class="primary-color-text">${_('Ending date')} : <span class="gold-text bold-text">${course.end.strftime('%Y-%m-%d')}</span></p>
+          % endif
+          <p class="primary-color-text">${_("Number of questions")} : <span id="question_num" class="gold-text bold-text"></span>
+          <p class="primary-color-text">${_('Percentage for success')} : <span class="gold-text bold-text">${course_module.grade_cutoffs['Pass'] * 100} %</span></p>
+          <p class="primary-color-text">${_('Mode')} :
+          % if course.is_required_atp:
+            <span class="gold-text bold-text">${_('mandatory')}</span>
+          % else:
+            <span class="gold-text bold-text">${_('optional')}</span>
+          % endif
+          </p>
+          <p class="primary-color-text">${_('Status')} :
+            % if course.end:
+              % if course.end.date() > datetime.today().date():
+                <span class="gold-text bold-text">${_('In progress')}</span>
+              % else:
+                <span class="gold-text bold-text">${_('End')}</span>
+              % endif
+            % else:
+            </span class="gold-text bold-text">${_('In progress')}</span>
+            % endif
+          </p>
+          <p class="primary-color-text">
+            ${_('Network')} :
+            <div class="logo-reseau">
+              <img src="${logo_url}" />
+            </div>
+          </p>
+        </div>
+      </div>
+    </div>
+
+<!-- A PROPOS DES PARTICIPANTS -------------------------------------------------->
+    <div class="col-md-8">
+      <div class="">
+        <div class="primary-color-bg">
+          <h2 class="primary-color-bg white-text bold-text pad-20 text-center">${_('users stats')}</h2>
+        </div>
+        <div class="mt-20">
+          <div class="row  m-0 figures-wrap display-flex">
+            <div class="col-md-4 text-center pad-20 primary-color-text bold-text figure-element primary-color-border pl-0">
+              <div class="white-bg same-height-colums">
+                <p class="key-figure-title">${_('Target')}</p>
+                <p id="" class="">${target[1]}<br>${target[2]}</p>
+              </div>
+            </div>
+            <div class="col-md-4 text-center pad-20 primary-color-text bold-text figure-element primary-color-border">
+              <div class="white-bg same-height-colums">
+                <p class="key-figure-title">${_('Guests')}</p>
+                <p id="" class="key-figure">${all_user}</p>
+              </div>
+            </div>
+            <div class="col-md-4 text-center pad-20 primary-color-text bold-text figure-element primary-color-border pr-0">
+              <div class="white-bg same-height-colums">
+                <p class="key-figure-title">${_('Participants')}</p>
+                <p id="" class="key-figure">${user_course_started}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<!-- RESULTATS -------------------------------------------------->
+
+
+    <div class="col-md-8">
+      <div class="">
+        <div class="primary-color-bg">
+          <h2 class="primary-color-bg white-text bold-text pad-20 m-0 text-center">${_('Results')}</h2>
+        </div>
+        <div class="mt-20">
+          <div class="row m-0 figures-wrap  display-flex">
+            <div class="col-md-4 text-center pad-20 primary-color-text bold-text figure-element primary-color-border pl-0">
+              <div class="white-bg same-height-colums">
+                <p class="key-figure-title">${_('Number of certified partipants')}</p>
+                <p id="" class="gold-text key-figure">${num_passed}</p>
+              </div>
+            </div>
+            <div class="col-md-4 text-center pad-20 primary-color-text bold-text figure-element primary-color-border">
+              <div class="white-bg same-height-colums">
+                <p class="key-figure-title">${_('Average result for all certified participants')}</p>
+                <p id="" class="key-figure">${course_average_grade} %</p>
+              </div>
+            </div>
+            <div class="col-md-4 text-center pad-20 primary-color-text bold-text figure-element primary-color-border pr-0">
+              <div class="white-bg same-height-colums">
+                <p class="key-figure-title">${_('Average result for all quiz participants')}</p>
+                <p id="" class="key-figure">${course_average_grade_global} %</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-20">
+    <div class="col-md-12">
+      <section class="section_block">
+        <div id="" class="w-100">
+          <h2 class="primary-color-bg white-text bold-text pad-20 m-0">${_('Average score')}</h2>
+        </div>
+        <div id="block_stat_question">
+        <div id="voile"><div id="loader"></div></div>
+          <div id="nav_block_stat_question">
+            <button data-position="average" class="secondary-color-text" style="opacity:1">${_('per question')}</button>
+            <button data-position="participant" class="secondary-color-text">${_('per participant')}</button>
+            <span style="display:block;clear:left;"></span>
+            <div id="pop_up_grades">
+              <span>
+                % if LANGUAGE_CODE == "fr":
+                Le rapport avec les résultats de tous les participants est en cours d’exécution. Il vous sera envoyé par mail. Cette tâche peut prendre jusqu’à 15 minutes.
+                % elif LANGUAGE_CODE == "en":
+                The report with all participants’ results is in progress. It will be sent to you by email. This task may last maximum 15 minutes.
+                % elif LANGUAGE_CODE == "de-de":
+                Der Bericht mit den Ergebnissen aller Teilnehmer ist in Bearbeitung. Es wird Ihnen per E-Mail gesendet werden. Diese Aufgabe kann maximal 15 Minuten dauern.
+                % endif
+              </span>
+            </div>
+          </div>
+          <div id="body_block_stat_question" class="primary-color-text">
+            <div id="block_average" class="block_question">
+              % for chapter in course_structure:
+                % if 'problem' in str(chapter):
+                <div class="chapter_box">
+                  <h3 data-id="${chapter['id']}">${chapter['display_name']}</h3>
+                  % for section in chapter['children']:
+                    % if 'problem' in str(section):
+                    <div class="section_box">
+                      <h4 data-id="${section['id']}">${section['display_name']}</h4>
+                      % for vertical in section['children']:
+                        % if 'problem' in str(vertical):
+                        <span data-children="${vertical['children']}" data-title="${vertical['display_name']}" class="data_content"></span>
+                        % endif
+                      % endfor
+                      <div class="problem_box"></div>
+                    </div>
+                    % endif
+                  % endfor
+                </div>
+                % else:
+                <div class="chapter_box">
+                  <h3 data-id="${chapter['id']}">${chapter['display_name']}</h3>
+                  % for section in chapter['children']:
+                      <div class="section_box">
+                        <h4 data-id="${section['id']}">${section['display_name']}</h4>
+                          <div class="problem_box">
+                            <ul>
+                      % for vertical in section['children']:
+                              <li><span class="puce_li"></span><p>${vertical['display_name']} <span class="unrated_unit_span">(${_('unrated unit')})</span></p></li>
+                      % endfor
+                            </ul>
+                          </div>
+                      </div>
+                  % endfor
+                </div>
+                % endif
+              % endfor
+            </div>
+            <!-- block participant -->
+            <div id="block_participant" class="block_question">
+              <!-- nav paricipant -->
+              <div id="nav_participant">
+                <!-- search block -->
+                <div id="form_participant">
+                  <input type="text" name="name_participant" id="name_participant" value="" />
+                  <button id="participant_search" class="secondary-color-bg" data-courseid="${course_id}"></button>
+                  <div style="clear:left;"></div>
+                  <div id="list_participant"></div>
+                </div>
+              <!--
+                <button id="generate_grades">${_("Download all participants' detailled results")}</button>
+              -->
+                <button id="generate_grades_task">${_("Download all participants' detailled results")}</button>
+                <div id="table_participant">
+                </div>
+              </div>
+              <div id="licorne" style="display:none">
+                <%
+                course_key = SlashSeparatedCourseKey.from_string(course_id)
+                task_key=''
+                results=tmaTask.objects.filter(
+                      course_id=course_key,task_key=task_key
+                  )
+                %>
+                ${course_key}
+                <br><br>
+                % for result in results :
+                ${result.task_output}<br><br><br>
+                % endfor
+
+
+              </div>
+              <div id="content_participant">
+              <span id="inside_user_content">
+              <%
+              num_question = 0
+              %>
+              % for chapter in course_structure:
+                % if 'problem' in str(chapter):
+                <div class="chapter_box">
+                  <h3 data-id="${chapter['id']}">${chapter['display_name']}</h3>
+                  % for section in chapter['children']:
+                    % if 'problem' in str(section):
+                    <div class="section_box">
+                      <h4 data-id="${section['id']}">${section['display_name']}</h4>
+                      % for vertical in section['children']:
+                        % if 'problem' in str(vertical):
+                        <span data-children="${vertical['children']}" data-title="${vertical['display_name']}" class="data_content"></span>
+                        <%
+                        for n in vertical['children']:
+                          if 'problem' in n:
+                            num_question = num_question + 1
+                        %>
+                        % endif
+                      % endfor
+                      <div class="problem_box"></div>
+                    </div>
+                    % endif
+                  % endfor
+                </div>
+                % else:
+                <div class="chapter_box">
+                  <h3 data-id="${chapter['id']}">${chapter['display_name']}</h3>
+                  % for section in chapter['children']:
+                      <div class="section_box">
+                        <h4 data-id="${section['id']}">${section['display_name']}</h4>
+                          <div class="problem_box">
+                            <ul>
+                      % for vertical in section['children']:
+                              <li><span class="puce_li"></span><p>${vertical['display_name']} <span class="unrated_unit_span">(${_('unrated unit')})</span></p></li>
+                      % endfor
+                            </ul>
+                          </div>
+                      </div>
+                  % endfor
+                </div>
+                % endif
+              % endfor
+              </span>
+              </div>
+            </div>
+          </div>
+      </section>
+    </div>
+  </div>
+  <div class="campaign-back-link mt-20 text-center">
+    <a class="primary-color-text bold-text" href="https://${settings.CMS_BASE}/home/?campaign=${course_key_id_cleared}" style="font-size:20px;"><  ${_('Back to')}  ${_('My campaigns')}</a>
+  </div>
+</div>
+
+</div><!-- container -->
+
+
+
+
+<%
+course_key = CourseKey.from_string(course_id)
+course_usage_key = modulestore().make_course_usage_key(course_key)
+%>
+
+<script>
+
+$('#generate_grades_task').click(function(){
+  var url = "/api/atp/task/grades/${course_key}/";
+  $.ajax({
+    url:url,
+    type:"POST",
+    dataType:"json",
+    success:function(data) {
+      $('#pop_up_grades').addClass('pop_up_show');
+    }
+  })
+})
+
+// check values
+
+function intervalcheck() {
+  var url = "/api/atp/check/grades/${course_key}/";
+  $.ajax({
+    type:"GET",
+    dataType:"json",
+    url:url,
+    success:function(data) {
+      console.log(data);
+      setTimeout(function(){
+        intervalcheck();
+      },8000);
+    }
+  })
+}
+
+//intervalcheck();
+
+// test
+var course_key = "${course_usage_key}";
+// final
+var grade_img_success = "${static.url('images/user_grade_success.png')}";
+var grade_img_fail = "${static.url('images/user_grade_fail.png')}";
+// translate
+var stat_email = '${_("Email")}';
+var stat_grade = '${_("Grade")}';
+var stat_first = '${_("First name")}';
+var stat_last = '${_("Last name")}';
+
+//order of problem components for component grade display
+var question_orders = ${dump_js_escaped_json(problem_components) | n, decode.utf8};
+
+</script>
+
+<script src="${static.url('js/stat_dashboard.js')}"></script>
+<!--
+<script src="/media/stat/stat_dashboard.js"></script>
+-->
+<!-- action sur le dom -->
+<script>
+function info_p() {
+  var p = 0;
+  $('#table_info').find('p').attr('style','');
+  var width = $(document).width();
+  if(width < 729){
+    $('#table_info').find('p').each(function(){
+      var This = $(this);
+      var c = This.height();
+      if(c > p) {
+        p = c;
+      }
+    })
+    $('#table_info').find('p').css('height',p+'px');
+  }else{
+    $('#table_info').find('p').attr('style','');
+  }
+}
+function heightCelluleStat() {
+  $('.cellule_stat').each(function(){
+    var This = $(this);
+    var width = This.width();
+    This.css('height',width+'px');
+    var heightP = This.find('p:first-child').height();
+    var paddingP = 50;
+    var heightS = heightP + 50;
+  })
+}
+</script>
+<!-- action on dom -->
+<script>
+$(document).ready(function(){
+  heightCelluleStat();
+  info_p();
+  $('#question_num').text("${num_question}");
+  setInterval(function(){
+    $('.svg-class').each(function(){
+      $(this).contents().find('svg').attr('fill','#cf9c49');
+    })
+  },500);
+
+})
+$(window).resize(function(){
+  heightCelluleStat();
+  alignCells();
+  info_p();
+})
+
+$('#generate_xls').click(function(){
+  var current_path = window.location.pathname;
+  var url = current_path+'/generate_xls/'
+  $.ajax({
+    type:'get',
+    url:url,
+    dataType:'json',
+    success:function(data) {
+        console.log(data.filename)
+      var filename = data.filename;
+      var xls_url = '/atp/download_xls/'+filename;
+      window.open(xls_url,'_self');
+    }
+  })
+
+})
+$('#generate_grades').click(function(){
+  var current_path = window.location.pathname;
+  var url = current_path+'/generate_grades/'
+  $.ajax({
+    type:'get',
+    url:url,
+    dataType:'json',
+    success:function(data) {
+      var filename = data.filename;
+      var xls_url = '/atp/download_grades/'+filename;
+      window.open(xls_url,'_self');
+    }
+  })
+
+})
+</script>
+% if not stat_dashboard:
+<link rel="stylesheet" type="text/css" href="${static.url('css/stat_dashboard.css')}">
+% else:
+  <link rel="stylesheet" type="text/css" href="${static.url(stat_dashboard)}" />
+% endif
+
+<script>
+function cell_result_h(){
+ $('.cell_result').attr('style','');
+ var height = 0;
+ $('.cell_result').each(function(){
+  var h = $(this).height();
+  if(h > height){
+    height = h;
+   }
+ })
+ $('.cell_result').css('min-height',height+'px');
+ $('.cell_result').css('height','auto');
+}
+$(document).ready(function(){
+ cell_result_h();
+})
+$(window).resize(function(){
+ cell_result_h();
+})
+var info = $("#categorie_info").text();
+console.log(info);
+</script>
+
+<!--- CATEGORIES IMG --->
+<script>
+course_category="${course.categ.lower().replace(' ','')}";
+img_url='';
+if(course_category=="fundamental" || course_category=="fundamentals"){
+  img_url='/static/images/fondamentaux.png';
+}
+else if (course_category=="oursolutions") {
+  img_url='/static/images/nos_solutions.png';
+}
+else if (course_category=="salesapproach") {
+  img_url='/static/images/zdemarche_comm.png';
+}
+else if (course_category=="expert") {
+  img_url='/static/images/expert.png';
+}
+else if (course_category=="softskills") {
+  img_url='/static/images/softskills.png';
+}
+else if(course_category=="regulatory"){
+  img_url='/static/images/reglementaire.png';
+}
+
+if(img_url!=''){
+  $('#course_categ_bandeau').attr('src', img_url);
+}
+</script>

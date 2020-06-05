@@ -3,13 +3,23 @@
 from django.utils.translation import ugettext as _
 
 from openedx.core.djangolib.markup import HTML, Text
-from openedx.core.djangolib.js_utils import (
-      dump_js_escaped_json
-  )
+
+#GEOFFREY
+import datetime
+current_date = int(datetime.datetime.now().strftime("%s"))
+from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
+from openedx.core.djangoapps.models.course_details import CourseDetails
+from opaque_keys.edx.keys import CourseKey
+from lms.djangoapps.courseware.courses import get_course_by_id
+from student.roles import CourseInstructorRole,CourseStaffRole
+import logging
+from openedx.core.djangoapps.site_configuration.models import SiteConfiguration
+orgs = SiteConfiguration.get_all_orgs()
+log = logging.getLogger(__name__)
 %>
 
 <%inherit file="base.html" />
-<%namespace name='static' file='static_content.html'/>
+
 <%def name="online_help_token()"><% return "home" %></%def>
 <%block name="title">${_("{studio_name} Home").format(studio_name=settings.STUDIO_SHORT_NAME)}</%block>
 <%block name="bodyclass">is-signedin index view-dashboard</%block>
@@ -18,13 +28,124 @@ from openedx.core.djangolib.js_utils import (
   require(["js/factories/index"], function (IndexFactory) {
       IndexFactory();
   });
+
+  //require(["https://demo-atp.themoocagency.com/media/index-bis.js"]);
+  require(['${static.url("js/atp/index.js")}']);
 </%block>
-
+<%namespace name='static' file='static_content.html'/>
 <%block name="content">
-<div class="wrapper-mast wrapper">
-  <header class="mast has-actions">
-    <h1 class="page-header">${_("{studio_name} Home").format(studio_name=settings.STUDIO_SHORT_NAME)}</h1>
 
+<link rel="stylesheet" type="text/css" href="${static.url('css/index.css')}">
+<link rel="stylesheet" type="text/css" href="${static.url('css/index_sub.css')}">
+<style>
+.course-item .img_fundamentals,.course-item .img_regulatory,.course-item .img_fundamental,.course-item .img_oursolutions,.course-item .img_salesapproach, .course-item .img_softskills, .course-item .img_expert {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 75%;
+  height: 127px;
+  z-index: 2;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  outline: none;
+  border: none !important;
+  border-left-color: transparent !important;
+}
+.course-item .img_fundamental {
+  background-image: url("${static.url('images/fondamentaux.png')}");
+}
+.course-item .img_fundamentals {
+  background-image: url("${static.url('images/fondamentaux.png')}");
+}
+.course-item .img_oursolutions {
+  background-image: url("${static.url('images/nos_solutions.png')}");
+}
+.course-item .img_salesapproach {
+  background-image: url("${static.url('images/zdemarche_comm.png')}");
+}
+.course-item .img_regulatory {
+  background-image: url("${static.url('images/reglementaire.png')}");
+}
+.course-item .img_softskills {
+  background-image: url("${static.url('images/softskills.png')}");
+}
+.course-item .img_expert {
+  background-image: url("${static.url('images/expert.png')}");
+}
+
+.is_block_clear {
+  display: block;
+  clear: both;
+}
+#search_block input, #search_block button,#search_block_campaign input, #search_block_campaign button {
+  float: left;
+  display: block;
+}
+#search_block_campaign button {
+  width: 38px;
+  height: 38px;
+}
+#search_block button {
+  width: 38px;
+  height: 38px;
+}
+#search_block_campaign button,#search_block_campaign button:focus,#search_block_campaign button:hover,#search_block button,#search_block button:focus,#search_block button:hover {
+  color: #fff !important;
+  background-color: #31aeee !important;
+  border: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  background-image: url("${static.url('images/search.png')}");
+  background-position: center;
+  background-repeat: no-repeat;
+}
+#search_block_campaign input,#search_block input {
+  width: calc(100% - 38px);
+  height: 38px;
+  border-radius: 0px;
+  border-right: none !important;
+}
+.up_list_courses p{
+  width: 100%!important;
+  line-height: 1.3;
+}
+.title-page-back{
+  text-transform: initial!important;
+}
+
+/* Page Titles */
+#main-header-wrapper{
+  margin: 0!important;
+  padding: 0!important;
+  margin-bottom: 15px!important;
+  padding-bottom: 0!important;
+}
+header{
+  margin:0!important;
+  padding-top: 30px!important;
+  padding-bottom: 0px!important;
+}
+.page-header{
+  float: none!important;
+  text-transform: initial!important;
+}
+.page-sub-header{
+  margin-top: 30px;
+}
+
+</style>
+<%
+log.info("timer 4 {}".format(datetime.datetime.now()))
+%>
+
+
+
+<!-- BLOC TITRE ET ONGLETS NAV NOUVEAU COURS / NOUVELLE BIBLIOTHEQUE HIDDEN -->
+<div  id="main-header-wrapper" class="wrapper-mast wrapper">
+  <header class="mast has-actions">
+    <h1 class="page-header">${_("Welcome to your training modules management interface")}</h1>
+    <h2 class="page-sub-header">${_("You can browse within two separate universes")} :</h2>
     % if user.is_active:
     <nav class="nav-actions" aria-label="${_('Page Actions')}">
       <h3 class="sr">${_("Page Actions")}</h3>
@@ -36,9 +157,15 @@ from openedx.core.djangolib.js_utils import (
           % elif course_creator_status=='disallowed_for_this_site' and settings.FEATURES.get('STUDIO_REQUEST_EMAIL',''):
           <a href="mailto:${settings.FEATURES.get('STUDIO_REQUEST_EMAIL','')}">${_("Email staff to create course")}</a>
           % endif
+
           % if show_new_library_button:
             <a href="#" class="button new-button new-library-button"><span class="icon fa fa-plus icon-inline" aria-hidden="true"></span>
             ${_("New Library")}</a>
+          % endif
+
+          % if is_programs_enabled:
+            <a href=${program_authoring_url + 'new'} class="button new-button new-program-button"><span class="icon fa fa-plus icon-inline" aria-hidden="true"></span>
+            ${_("New Program")}</a>
           % endif
         </li>
       </ul>
@@ -47,11 +174,13 @@ from openedx.core.djangolib.js_utils import (
   </header>
 </div>
 
+
+
 <div class="wrapper-content wrapper">
   % if user.is_active:
   <section class="content">
     <article class="content-primary" role="main">
-
+<!-- FORMULAIRE DE CREATION DE MODULE/COURS -->
       % if course_creator_status=='granted':
       <div class="wrapper-create-element wrapper-create-course">
         <form class="form-create create-course course-info" id="create-course-form" name="create-course-form">
@@ -60,7 +189,6 @@ from openedx.core.djangolib.js_utils import (
             <p>${_("Please correct the highlighted fields below.")}</p>
             </div>
           </div>
-
           <div class="wrapper-form">
             <h3 class="title">${_("Create a New Course")}</h3>
 
@@ -76,7 +204,7 @@ from openedx.core.djangolib.js_utils import (
                   <span class="tip" id="tip-new-course-name">${_("The public display name for your course. This cannot be changed, but you can set a different display name in Advanced Settings later.")}</span>
                   <span class="tip tip-error is-hiding" id="tip-error-new-course-name"></span>
                 </li>
-                <li class="field text required">
+                <li class="field text required" id="field-organization">
                   <label for="new-course-org">${_("Organization")}</label>
                   ## Translators: This is an example for the name of the organization sponsoring a course, seen when filling out the form to create a new course. The organization name cannot contain spaces.
                   ## Translators: "e.g. UniversityX or OrganizationX" is a placeholder displayed when user put no data into this field.
@@ -87,7 +215,6 @@ from openedx.core.djangolib.js_utils import (
                   )}</span>
                   <span class="tip tip-error is-hiding" id="tip-error-new-course-org"></span>
                 </li>
-
                 <li class="field text required" id="field-course-number">
                   <label for="new-course-number">${_("Course Number")}</label>
                   ## Translators: This is an example for the number used to identify a course,
@@ -124,9 +251,12 @@ from openedx.core.djangolib.js_utils import (
           </div>
         </form>
       </div>
-
       % endif
+<%
+log.info("timer 6 {}".format(datetime.datetime.now()))
+%>
 
+<!-- FORMULAIRE DE CREATION DE LIBRAIRIES -->
       %if libraries_enabled and show_new_library_button:
       <div class="wrapper-create-element wrapper-create-library">
         <form class="form-create create-library library-info" id="create-library-form" name="create-library-form">
@@ -138,10 +268,8 @@ from openedx.core.djangolib.js_utils import (
 
           <div class="wrapper-form">
             <h3 class="title">${_("Create a New Library")}</h3>
-
             <fieldset>
               <legend class="sr">${_("Required Information to Create a New Library")}</legend>
-
               <ol class="list-input">
                 <li class="field text required" id="field-library-name">
                   <label for="new-library-name">${_("Library Name")}</label>
@@ -152,13 +280,12 @@ from openedx.core.djangolib.js_utils import (
                   <span class="tip" id="tip-new-library-name">${_("The public display name for your library.")}</span>
                   <span class="tip tip-error is-hiding" id="tip-error-new-library-name"></span>
                 </li>
-                <li class="field text required">
+                <li class="field text required" id="field-organization">
                   <label for="new-library-org">${_("Organization")}</label>
                   <input class="new-library-org" id="new-library-org" type="text" name="new-library-org" required placeholder="${_('e.g. UniversityX or OrganizationX')}" aria-describedby="tip-new-library-org tip-error-new-library-org" />
                   <span class="tip" id="tip-new-library-org">${_("The public organization name for your library.")} ${_("This cannot be changed.")}</span>
                   <span class="tip tip-error is-hiding" id="tip-error-new-library-org"></span>
                 </li>
-
                 <li class="field text required" id="field-library-number">
                   <label for="new-library-number">${_("Library Code")}</label>
                   ## Translators: This is an example for the "code" used to identify a library,
@@ -173,7 +300,6 @@ from openedx.core.djangolib.js_utils import (
                   <span class="tip tip-error is-hiding" id="tip-error-new-library-number"></span>
                 </li>
               </ol>
-
             </fieldset>
           </div>
 
@@ -186,24 +312,95 @@ from openedx.core.djangolib.js_utils import (
       </div>
       % endif
 
-      %if optimization_enabled:
-      <div class="optimization-form">
-        <h2 class="title title-3">${_("Organization and Library Settings")}</h2>
-        <form class="form" action="/home/" method="GET">
-          <fieldset class="form-group">
-            <div class="field">
-              <label class="field-label">${_("Show all courses in organization:")}
-                <input class="field-input input-text" type="text" name="org"
-                       placeholder="${_('For example, MITx')}"/>
-              </label>
+<%
+log.info("timer 7 {}".format(datetime.datetime.now()))
+%>
+
+<!-- FORMULAIRE DE CREATION DE MICROSITE -->
+      % if request.user.is_staff:
+      <div class="wrapper-create-element wrapper-create-microsite">
+        <form class="form-create create-microsite microsite-info" id="create-microsite-form" name="create-microsite-form" enctype="multipart/form-data">
+          <div class="wrap-error">
+            <div id="microsite_creation_error" name="microsite_creation_error" class="message message-status message-status error" role="alert">
+            <p>Please correct the highlighted fields below.</p>
             </div>
-          </fieldset>
-          <div class="form-actions">
-              <button class="btn-brand btn-base" type="submit">${_("Submit")}</button>
+          </div>
+
+          <div class="wrapper-form">
+            <h3 class="title">Create a New Microsite</h3>
+
+            <fieldset>
+              <legend class="sr">Required Information to Create a New Microsite</legend>
+
+              <ol class="list-input">
+                <li class="field text required" id="field-microsite-name">
+                  <label for="new-microsite-name">Microsite Name</label>
+                  <input class="new-microsite-name" id="new-microsite-name" type="text" name="display_name" required="" placeholder="e.g. XYZ" aria-describedby="tip-new-microsite-name tip-error-new-microsite-name">
+                  <span class="tip tip-error is-hiding" id="tip-error-new-microsite-name"></span>
+                </li>
+                <li class="field file required" id="field-microsite-logo">
+                  <label for="new-microsite-logo">Microsite White Logo</label>
+                  <input class="new-microsite-logo" id="new-microsite-logo" type="file" name="logo" required="" aria-describedby="tip-new-microsite-logo tip-error-new-microsite-logo">
+                  <span class="tip tip-error is-hiding" id="tip-error-new-microsite-logo"></span>
+                </li>
+                <li class="field file required" id="field-microsite-logo-couleur">
+                  <label for="new-microsite-logo-couleur">Microsite Logo Color</label>
+                  <input class="new-microsite-logo-couleur" id="new-microsite-logo-couleur" type="file" name="logo-couleur" required="" aria-describedby="tip-new-microsite-logo-couleur tip-error-new-microsite-logo-couleur">
+                  <span class="tip tip-error is-hiding" id="tip-error-new-microsite-logo-couleur"></span>
+                </li>
+                <li class="field color required" id="field-microsite-new-microsite-primary_color">
+                  <label for="new-microsite-new-microsite-primary_color">Microsite primary color</label>
+                  <input type="text" class="new-microsite-new-microsite-primary_color" id="new-microsite-primary_color" name="primary_color" required="" aria-describedby="tip-new-microsite-new-microsite-primary_color tip-error-new-microsite-new-microsite-primary_color">
+                  <span class="tip tip-error is-hiding" id="tip-error-new-microsite-new-microsite-primary_color"></span>
+                </li>
+                <li class="field color required" id="field-microsite-secondary_color">
+                  <label for="new-microsite-color">Microsite secondary color</label>
+                  <input type="text" class="new-microsite-secondary_color" id="new-microsite-secondary_color" name="secondary_color" required="" aria-describedby="tip-new-microsite-secondary_color tip-error-new-microsite-secondary_color">
+                  <span class="tip tip-error is-hiding" id="tip-error-new-microsite-secondary_color"></span>
+                </li>
+                <li class="field color required" id="field-microsite-contact">
+                  <label for="new-microsite-contact">Microsite technical support address</label>
+                  <input type="text" class="new-microsite-contact" id="new-microsite-contact" name="contact" required="" aria-describedby="tip-new-microsite-contact tip-error-new-microsite-contact" placeholder="ex support@company.com">
+                  <span class="tip tip-error is-hiding" id="tip-error-new-microsite-contact"></span>
+                </li>
+                <li class="field color required" id="field-microsite-trademark">
+                  <label for="new-microsite-trademark">Microsite trademark</label>
+                  <input type="text" class="new-microsite-trademark" id="new-microsite-trademark" name="trademark" required="" aria-describedby="tip-new-microsite-trademark tip-error-new-microsite-trademark" placeholder="ex © Amundi 2018">
+                  <span class="tip tip-error is-hiding" id="tip-error-new-microsite-trademark"></span>
+                </li>
+                <li class="field color required" id="field-microsite-trademark">
+                  <label for="new-microsite-trademark">Microsite Disclaimer</label>
+                  <textarea name="disclaimer" rows="10" class="new-microsite-disclaimer" id="new-microsite-disclaimer" name="disclaimer" required="" aria-describedby="tip-new-microsite-disclaimer tip-error-new-microsite-disclaimer"></textarea>
+                  <span class="tip tip-error is-hiding" id="tip-error-new-microsite-trademark"></span>
+                </li>
+                <li class="field select required" id="field-microsite-amundibrand">
+                  <label for="new-microsite-amundibrand">AmundiAcademy Brand</label>
+                  <select class="input new-microsite-amundibrand select language-selector" id="amundi-brand" name="amundi_brand">
+                    <option value="true">Display</value>
+                    <option value="false">Hide</value>
+                  </select>
+                </li>
+                <li class="field select required" id="field-microsite-language">
+                  <input type="hidden" id="csrf_token" name="csrfmiddlewaretoken" value="Pk4rfUS0ea5LpsHOnRyt5DELzIHQVpa4">
+                  <label for="new-microsite-language">Choose Language</label>
+                  <select class="input new-microsite-language select language-selector" id="language-value" name="language_code">
+                    <option value="fr">Français</value>
+                    <option value="en">English</value>
+                  </select>
+                </li>
+              </ol>
+            </fieldset>
+          </div>
+
+          <div class="actions">
+            <input type="hidden" value="False" class="allow-unicode-course-id">
+            <input type="submit" value="Create" class="action action-primary new--save">
+            <input type="button" value="Cancel" class="action action-secondary action-cancel new-microsite-cancel">
           </div>
         </form>
       </div>
-      %endif
+      % endif
+
 
       <!-- STATE: processing courses -->
       %if allow_course_reruns and rerun_creator_status and len(in_process_course_actions) > 0:
@@ -256,7 +453,6 @@ from openedx.core.djangolib.js_utils import (
             </li>
             %endif
 
-            <!-- - - - -->
 
             <!-- STATE: re-run has error -->
             %if course_info['is_failed']:
@@ -311,42 +507,503 @@ from openedx.core.djangolib.js_utils import (
       </div>
       %endif
 
-      % if libraries_enabled or archived_courses:
+
+<!-- ONGLETS DE NAVIGATION -->
+      % if libraries_enabled or is_programs_enabled:
       <ul id="course-index-tabs">
-        <li class="courses-tab active"><a>${_("Courses")}</a></li>
-        % if archived_courses:
-        <li class="archived-courses-tab"><a>${_("Archived Courses")}</a></li>
-        % endif
-        % if libraries_enabled:
-        <li class="libraries-tab"><a>${_("Libraries")}</a></li>
-        % endif
+        <li class="sub_menu"><button id="my-campaigns" class="active_button" data-sub="all" onclick="var bLazy = new Blazy(); bLazy.revalidate();">${_('My campaigns')}</button></li>
+        <li class="sub_menu"><button id="my-modules" data-sub="template" onclick="var bLazy = new Blazy(); bLazy.revalidate();">${_('My modules')}</button></li>
+          % if request.user.is_staff:
+        <li class="sub_menu"><button data-sub="microsites" onclick="var bLazy = new Blazy(); bLazy.revalidate();">${_('Microsites')}</button></li>
+            %if len(libraries) > 0:
+        <li class="sub_menu"><button data-sub="libraries-tab">${_('Libraries')}</button></li>
+            % endif
+          % endif
       </ul>
       % endif
 
-      %if len(courses) > 0 or optimization_enabled:
-      <div class="courses courses-tab react-course-listing active">
-        ${static.renderReact(
-          component="CourseOrLibraryListing",
-          id="react-course-listing",
-          props={
-            'items': sorted(courses, key=lambda s: s['display_name'].lower() if s['display_name'] is not None else ''),
-            'linkClass': 'course-link',
-            'idBase': 'course',
-            'allowReruns': allow_course_reruns and rerun_creator_status and course_creator_status=='granted'
+
+<%
+log.info("timer 8 {}".format(datetime.datetime.now()))
+%>
+
+<!-- SI AU MOINS UN MODULE -->
+      %if len(courses) > 0:
+<!-- CALCUL NOMBRE DE CAMPAGNES -->
+        <%
+        course_num_utils = 0
+        for course_info in sorted(courses, key=lambda s: s['display_name'].lower() if s['display_name'] is not None else ''):
+          if not 'AMUNDI-GENERIC-TEMPLATE' in course_info['display_name']:
+            course_num_utils = course_num_utils + 1
+        %>
+
+
+<!-- SI AUCUNE CAMPAGNE -->
+        %if course_num_utils == 0:
+        <style>
+        .view-dashboard .content-supplementary {
+          top: 0 !important;
+          z-index: 1000000;
+        }
+        .message_atp_no_course {
+      	  width: 100%;
+      	  text-align: center;
+          font-style: italic;
+      	  font-weight: bold;
+        }
+          #no_course{
+            display: none!important;
           }
-        )}
+          #course-index-tabs li:first-child{
+            display: none;
+          }
+          .up_list_courses{
+            display: block;
+          }
+          .page-sub-header{
+            display: none!important;
+          }
+          .modules_items{
+            display: block!important;
+          }
+          #my-modules{
+            color: #31aeee;
+            border-bottom: 3px solid #31aeee;
+          }
+        </style>
+        <div class="courses courses-tab active">
+          <div id="no_course">
+            <p>${_("No training campaign has been set")}.</p>
+            <p>${_("To launch a training campaign")}, ${_("select a training module in")} <span>${_("My Modules")}</span></button>, ${_("then click on")} <span>${_("Create my campaign")}</span>.</p>
+            <p class="message_atp_no_course">${_("No training campaign has been launched yet.")}</p>
+	        </div>
+        </div>
+
+
+<!-- SI AU MOINS UNE CAMPAGNE DISPO-->
+        % else:
+        <span id="courses_listing_all">
+  <!-- CAMPAGNES CREES -->
+            <div class="up_list_courses">
+              <h3>
+                <img src="${static.url('images/campagne_prgrammee.svg')}" class='svg svg-class-title' />
+                <span style="text-transform:initial;">${_('Created training campaigns')}</span>
+              </h3>
+              <p>${_("The following training campaigns have not been launched yet (starting date not exceeded).")}
+                <br>
+                ${_("To launch your campaign, please click on ")} « ${_("Manage my campaign")} » ${_("and set up starting date at today.")}
+            </div>
+            <ul class="list-courses my_campaign_listing">
+            %if course_scheduled:
+              %for _c_s in course_scheduled:
+                % for q in _c_s:
+                    <%
+                    course_info = q['course_info']
+                    course_key_id = q['course_key_id']
+                    is_true = q['is_true']
+                    courses_overviews = q['courses_overviews']
+                    courses_stats = q['courses_stats']
+                    categories = q['categories']
+                    course_img = q['course_img']
+                    course_start = q['course_start']
+                    course_end = q['course_end']
+                    course_end_compare = q['course_end_compare']
+                    course_start_compare = q['course_start_compare']
+                    duration = q['duration']
+                    course_key_id_cleared=str(course_key_id).replace('+','').replace(':','')
+                    %>
+
+                    <div id="${course_key_id_cleared}"></div>
+                    <li class="course-item campaign_items" data-course-key="${course_info['course_key']}" data-search="${categories.lower().replace(' ','')}" data-status="all">
+                      <div class="content_img">
+                        <span class="img_${categories.lower().replace(' ','')}" /></span>
+                        <img src="blank.gif" data-src="${course_img['raw']}" class="img_course b-lazy"/>
+                        <span class="course_module_categ">${_(categories)}</span>
+                      </div>
+                      <div class="content_info">
+                        % if request.user.is_staff:
+                          <a class="course-link" href="${course_info['url']}">
+                        % else:
+                          <a class="course-link" href="#">
+                        % endif
+                          <h3 class="course-title">${course_info['display_name']}</h3>
+                        </a>
+                        <div class="all_dates">
+                          <ul>
+                            <li><span>${_('Starting date')} :</span> <span>${course_start}</span></li>
+                            <li><span>${_('Ending date')} :</span> <span>${course_end}</span></li>
+                            <span style="display:block;clear:left;"></span>
+                          </ul>
+                        </div>
+                        <div class="all_dates">
+                          <ul>
+                            <li><span>${course_info['org']}</span></li>
+                            <span class="language_display">${_('Language')} : ${_(language_options_dict[courses_stats.language])} </span>
+                            <span style="display:block;clear:left;"></span>
+                          </ul>
+                        </div>
+                        <div class="duration_course">
+                          <img src="${static.url('images/duree.svg')}" class='svg timer_svg_color' />
+                          <span>${duration}</span>
+                        </div>
+                        <ul class="more_about_courses">
+                          <li><a href="${settings.LMS_ROOT_URL.replace('https://','https://'+course_info['org']+'.')}/courses/${course_info['course_key']}/about" target="_blank">${_('About the training module')}</a></li>
+                          <li><a href="/settings/manage/${course_info['course_key']}">${_('Manage my campaign')}</a></li>
+                          <!--<li><a href="/settings/invite/${course_info['course_key']}">${_('Invite participants')}</a></li>
+                          <li><a href="/settings/email_dashboard/${course_info['course_key']}">${_('Send email to participants')}</a></li>
+                          <li><a href="${settings.LMS_ROOT_URL.replace('https://','https://'+course_info['org']+'.')}/courses/${course_info['course_key']}/stat_dashboard" target="_blank">${_('Statistics')}</a></li>-->
+                          % if request.user.is_staff:
+                          <li><a class="course-link" href="${course_info['url']}">${_('Course administration')}</a></li>
+                          % endif
+                        </ul>
+                      </div>
+                      <span style="clear:left;display:block;"></span>
+                    </li>
+                %endfor
+              %endfor
+              %endif
+            </ul>
+
+    <!-- CAMPAGNES EN COURS -->
+            <div class="up_list_courses next_list">
+              <h3>
+                <img src="${static.url('images/campagne_encours.svg')}" class='svg svg-class-title' />
+                <span style="text-transform:initial;">${_('In progress training campaigns')}</span>
+              </h3>
+              <p>${_("The following training campaigns have not been launched yet (starting date not exceeded).")}
+                <br>
+                ${_("To modify ending date, please click on")} « ${_('Manage my campaign')} ».
+                <br>
+                ${_("To add new participants, please click on")} « ${_("Invite participants")} » . ${_("To access statistics, please click on")} « ${_("Statistics")} ».</p>
+            </div>
+            <ul class="list-courses my_campaign_listing">
+              <!-- new script -->
+            %if course_in_progress:
+              %for c_i_p in course_in_progress:
+                % for q in c_i_p:
+                    <%
+                    course_info = q['course_info']
+                    course_key_id = q['course_key_id']
+                    is_true = q['is_true']
+                    courses_overviews = q['courses_overviews']
+                    courses_stats = q['courses_stats']
+                    categories = q['categories']
+                    course_img = q['course_img']
+                    course_start = q['course_start']
+                    course_end = q['course_end']
+                    course_end_compare = q['course_end_compare']
+                    course_start_compare = q['course_start_compare']
+                    duration = q['duration']
+                    course_key_id_cleared=str(course_key_id).replace('+','').replace(':','')
+                    %>
+
+                    <div id="${course_key_id_cleared}"></div>
+                    <li class="course-item campaign_items" data-course-key="${course_info['course_key']}" data-search="${categories.lower().replace(' ','')}" data-status="all">
+                      <div class="content_img">
+                        <span class="img_${categories.lower().replace(' ','')}" /></span>
+                        <img src="blank.gif" data-src="${course_img['raw']}" class="img_course b-lazy"/>
+                        <span class="course_module_categ">${_(categories)}</span>
+                      </div>
+                      <div class="content_info">
+                        % if request.user.is_staff:
+                          <a class="course-link" href="${course_info['url']}">
+                        % else:
+                          <a class="course-link" href="#">
+                        % endif
+                          <h3 class="course-title">${course_info['display_name']}</h3>
+                        </a>
+                        <div class="all_dates">
+                          <ul>
+                            <li><span>${_('Starting date')} :</span> <span>${course_start}</span></li>
+                            <li><span>${_('Ending date')} :</span> <span>${course_end}</span></li>
+                            <span style="display:block;clear:left;"></span>
+                          </ul>
+                        </div>
+                        <div class="all_dates">
+                          <ul>
+                            <li><span>${course_info['org']}</span></li>
+                            <span class="language_display">${_('Language')} : ${_(language_options_dict[courses_stats.language])} </span>
+                            <span style="display:block;clear:left;"></span>
+                          </ul>
+                        </div>
+                        <div class="duration_course">
+                          <img src="${static.url('images/duree.svg')}" class='svg timer_svg_color' />
+                          <span>${duration}</span>
+                        </div>
+                        <ul class="more_about_courses">
+                          <li><a href="${settings.LMS_ROOT_URL.replace('https://','https://'+course_info['org']+'.')}/courses/${course_info['course_key']}/about" target="_blank">${_('About the training module')}</a></li>
+                          <li><a href="/settings/manage/${course_info['course_key']}">${_('Manage my campaign')}</a></li>
+                          <li><a href="/settings/invite/${course_info['course_key']}">${_('Invite participants')}</a></li>
+                          <li><a href="/settings/email_dashboard/${course_info['course_key']}">${_('Send email to participants')}</a></li>
+                          <li><a href="${settings.LMS_ROOT_URL.replace('https://','https://'+course_info['org']+'.')}/courses/${course_info['course_key']}/stat_dashboard" target="_blank">${_('Statistics')}</a></li>
+                          % if request.user.is_staff:
+                          <li><a class="course-link" href="${course_info['url']}">${_('Course administration')}</a></li>
+                          % endif
+                        </ul>
+                      </div>
+                      <span style="clear:left;display:block;"></span>
+                    </li>
+                %endfor
+              %endfor
+            %endif
+              <!-- new script -->
+              % if request.user.is_staff:
+                % if len(orgs)>0:
+                  %for org in sorted(orgs):
+                  <li class="course-item" data-status="microsites" style="display:none;">
+                  <div class="content_img" style="background-color :#0C1C49 ">
+                    <a href="/update-microsite/${org}">
+                      <img src="https://qualif-atp.themoocagency.com/media/logo-amundi.png" data-src="${settings.LMS_ROOT_URL}/media/microsite/${org}/images/${org}" class="img_course b-lazy"/>
+                    </a>
+                  </div>
+                  <div class="content_info">
+                    <a class="course-link" href="/update-microsite/${org}">
+                      <h3 class="course-title">${org}</h3>
+                    </a>
+                  </div>
+                  <span style="clear:left;display:block;"></span>
+                    <ul class="more_about_courses">
+                      <li><a href="https://${org}.${settings.SITE_NAME}">${_('Microsite')}</a></li>
+                      <li><a href="/update-microsite/${org}">${_('Manage Microsite')}</a></li>
+                      <li><a href="/admin-microsite/${org}">${_('Manage Microsite Admin')}</a></li>
+                    </ul>
+                  </li>
+                  %endfor
+                % endif
+              % endif
+            </ul>
+
+    <!-- CAMPAGNES TERMINEES -->
+            <div class="up_list_courses next_list">
+              <h3>
+                <img src="${static.url('images/campagne_terminee.svg')}" class='svg svg-class-title' />
+                <span style="text-transform:initial;">${_('Completed training campaigns')}</span>
+              </h3>
+              <p>${_('The following training campaigns are completed (ending date is exceeded).')}
+                <br>
+                ${_('To access statistics, please click on.')} « ${_("Statistics")} ».</p>
+            </div>
+            <ul class="list-courses my_campaign_listing">
+              <!-- new script -->
+            %if course_completed:
+              %for c_c in course_completed:
+                % for q in c_c:
+                    <%
+                    course_info = q['course_info']
+                    course_key_id = q['course_key_id']
+                    is_true = q['is_true']
+                    courses_overviews = q['courses_overviews']
+                    courses_stats = q['courses_stats']
+                    categories = q['categories']
+                    course_img = q['course_img']
+                    course_start = q['course_start']
+                    course_end = q['course_end']
+                    course_end_compare = q['course_end_compare']
+                    course_start_compare = q['course_start_compare']
+                    duration = q['duration']
+                    course_key_id_cleared=str(course_key_id).replace('+','').replace(':','')
+                    %>
+
+                    <div id="${course_key_id_cleared}"></div>
+                    <li class="course-item campaign_items" data-course-key="${course_info['course_key']}" data-search="${categories.lower().replace(' ','')}" data-status="all">
+                      <div class="content_img">
+                        <span class="img_${categories.lower().replace(' ','')}" /></span>
+                        <img src="blank.gif" data-src="${course_img['raw']}" class="img_course b-lazy"/>
+                        <span class="course_module_categ">${_(categories)}</span>
+                      </div>
+                      <div class="content_info">
+                        % if request.user.is_staff:
+                          <a class="course-link" href="${course_info['url']}">
+                        % else:
+                          <a class="course-link" href="#">
+                        % endif
+                          <h3 class="course-title">${course_info['display_name']}</h3>
+                        </a>
+                        <div class="all_dates">
+                          <ul>
+                            <li><span>${_('Starting date')} :</span> <span>${course_start}</span></li>
+                            <li><span>${_('Ending date')} :</span> <span>${course_end}</span></li>
+                            <span style="display:block;clear:left;"></span>
+                          </ul>
+                        </div>
+                        <div class="all_dates">
+                          <ul>
+                            <li><span>${course_info['org']}</span></li>
+                            <span class="language_display">${_('Language')} : ${_(language_options_dict[courses_stats.language])} </span>
+                            <span style="display:block;clear:left;"></span>
+                          </ul>
+                        </div>
+                        <div class="duration_course">
+                          <img src="${static.url('images/duree.svg')}" class='svg timer_svg_color' />
+                          <span>${duration}</span>
+                        </div>
+                        <ul class="more_about_courses">
+                          <li><a href="${settings.LMS_ROOT_URL.replace('https://','https://'+course_info['org']+'.')}/courses/${course_info['course_key']}/about" target="_blank">${_('About the training module')}</a></li>
+                          <li><a href="${settings.LMS_ROOT_URL.replace('https://','https://'+course_info['org']+'.')}/courses/${course_info['course_key']}/stat_dashboard" target="_blank">${_('Statistics')}</a></li>
+                          % if request.user.is_staff:
+                          <li><a class="course-link" href="${course_info['url']}">${_('Course administration')}</a></li>
+                          % endif
+                        </ul>
+                      </div>
+                      <span style="clear:left;display:block;"></span>
+                    </li>
+                %endfor
+              %endfor
+            %endif
+              <!-- new script -->
+            </ul>
+          %if libraries:
+            %if len(libraries) > 0:
+            <div class="libraries libraries-tab">
+              <ul class="list-courses">
+                %for library_info in sorted(libraries, key=lambda s: s['display_name'].lower() if s['display_name'] is not None else ''):
+                <li class="course-item" data-status="libraries-tab">
+                  <a class="library-link" href="${library_info['url']}">
+                    <h3 class="course-title">${library_info['display_name']}</h3>
+
+                    <div class="course-metadata">
+                      <span class="course-org metadata-item">
+                        <span class="label">${_("Organization:")}</span> <span class="value">${library_info['org']}</span>
+                      </span>
+                      <span class="course-num metadata-item">
+                        <span class="label">${_("Course Number:")}</span>
+                        <span class="value">${library_info['number']}</span>
+                      </span>
+                      % if not library_info["can_edit"]:
+                        <span class="extra-metadata">${_("(Read-only)")}</span>
+                      % endif
+                    </div>
+                  </a>
+                </li>
+                %endfor
+              </ul>
+            </div>
+
+            %else:
+            <!--<div class="notice notice-incontext notice-instruction notice-instruction-nocourses list-notices libraries-tab">
+              <div class="notice-item">
+                <div class="msg">
+                    <h3 class="title">${_("Were you expecting to see a particular library here?")}</h3>
+                    <div class="copy">
+                        <p>${_('The library creator must give you access to the library. Contact the library creator or administrator for the library you are helping to author.')}</p>
+                    </div>
+                </div>
+              </div>
+
+              % if show_new_library_button:
+              <div class="notice-item has-actions">
+                <div class="msg">
+                    <h3 class="title">${_('Create Your First Library')}</h3>
+                    <div class="copy">
+                        <p>${_('Libraries hold a pool of components that can be re-used across multiple courses. Create your first library with the click of a button!')}</p>
+                    </div>
+                </div>
+
+              <ul class="list-actions">
+                <li class="action-item">
+                    <a href="#" class="action-primary action-create new-button action-create-library new-library-button"><span class="icon fa fa-plus icon-inline" aria-hidden="true"></span> ${_('Create Your First Library')}</a>
+                </li>
+              </ul>
+              </div>
+              % endif
+            </div>-->
+            %endif
+            <!-- end courses end courses -->
+          </span>
+        %endif
+      %endif
+
+
+<!-- ONGLET MES MODULES -->
+        <div class="up_list_courses next_list" id="generic_title">
+          <h3>
+            <img src="${static.url('images/th.svg')}" class='svg svg-class-title' />
+            <span class="title-page-back">${_('My modules')}</span>
+          </h3>
+          <p>${_('You have at your disposal a library of training modules made available by Amundi. Select the module of your choice and launch the associated training campaign.')}</p>
+        </div>
+        <ul class="list-courses">
+          <!-- new script -->
+        %if amundi_template:
+          %for a_t in amundi_template:
+            %for q in a_t:
+                <%
+                course_info = q['course_info']
+                course_key_id = q['course_key_id']
+                is_true = q['is_true']
+                courses_overviews = q['courses_overviews']
+                courses_stats = q['courses_stats']
+                categories = q['categories']
+                course_img = q['course_img']
+                course_start = q['course_start']
+                course_end = q['course_end']
+                course_end_compare = q['course_end_compare']
+                course_start_compare = q['course_start_compare']
+                duration = q['duration']
+                %>
+
+                <div id="${course_key_id}"></div>
+                <li class="course-item modules_items" data-course-key="${course_info['course_key']}" data-status="template" data-search="${categories.lower().replace(' ','')}">
+                  <div class="content_img">
+                    <span class="img_${categories.lower().replace(' ','')}" /></span>
+                    <img src="blank.gif" data-src="${course_img['raw']}" class="img_course b-lazy"/>
+                    <span class="course_module_categ">${_(categories)}</span>
+                  </div>
+                  <div class="content_info">
+                    % if request.user.is_staff:
+                      <a class="course-link" href="${course_info['url']}">
+                    % else:
+                      <a class="course-link" href="#">
+                    % endif
+                      <h3 class="course-title">${course_info['display_name']}</h3>
+                      <%
+                          languagecourse = 'en'
+                          if courses_stat:
+                            languagecourse = courses_stat.language
+                      %>
+                      <span class="language_display">${_('Language')} : ${_(language_options_dict[languagecourse])} </span>
+                    </a>
+                    <!--<div class="all_dates">
+                      <ul>
+                        <li><span>${_('Starting date')} :</span> <span>${course_start}</span></li>
+                        <li><span>${_('Ending date')} :</span> <span>${course_end}</span></li>
+                        <span style="display:block;clear:left;"></span>
+                      </ul>
+                    </div>
+                    <div class="all_dates">
+                      <ul>
+                        <li><span>${course_info['org']}</span></li>
+                        <span style="display:block;clear:left;"></span>
+                      </ul>
+                    </div>-->
+                    <div class="duration_course">
+                      <img src="${static.url('images/duree.svg')}" class='svg timer_svg_color' />
+                      <span>${duration}</span>
+                    </div>
+                    <ul class="more_about_courses">
+                      <li><a href="${settings.LMS_ROOT_URL.replace('https://','https://'+course_info['org']+'.')}/courses/${course_info['course_key']}/about" target="_blank">${_('About the training module')}</a></li>
+        	            % if not request.user.is_staff and check_admin_microsite:
+                            <li><a href="/settings/create/${course_info['course_key']}">${_("Create my campaign")}</a></li>
+        		          % endif
+                      % if request.user.is_staff:
+                      <li><a class="course-link" href="${course_info['url']}">${_('Course administration')}</a></li>
+                      <li><a class="course-link" href="/course_rerun/${course_info['course_key']}">${_('Re-run Course')}</a></li>
+                      % endif
+                    </ul>
+                  </div>
+                  <span style="clear:left;display:block;"></span>
+                </li>
+            %endfor
+          %endfor
+        %endif
+        </ul>
       </div>
 
+  <!-- fin de ici les cours -->
+
+<!-- SI AUCUN MODULE %if len(courses) = 0-->
       %else:
-      <div class="notice notice-incontext notice-instruction notice-instruction-nocourses list-notices courses-tab active">
-        <div class="notice-item">
-          <div class="msg">
-            <h3 class="title">${_("Are you staff on an existing {studio_name} course?").format(studio_name=settings.STUDIO_SHORT_NAME)}</h3>
-            <div class="copy">
-              <p>${_('The course creator must give you access to the course. Contact the course creator or administrator for the course you are helping to author.')}</p>
-            </div>
-          </div>
-        </div>
+    <!--<div class="notice notice-incontext notice-instruction notice-instruction-nocourses list-notices courses-tab active">
 
         %if course_creator_status == "granted":
         <div class="notice-item has-actions">
@@ -364,8 +1021,13 @@ from openedx.core.djangolib.js_utils import (
           </ul>
         </div>
         % endif
-
+      </div>-->
+      <div id="no_course">
+        <p>${_("No training campaign has been set")}.</p>
+        <p>${_("To Create a training campaign")}, ${_("select a training module in")} <span>${_("My Modules")}</span></button>, ${_("then click on")} <span>${_("Create my campaign")}</span>.</p>
       </div>
+    </section>
+  </div>
       % endif
 
 
@@ -451,113 +1113,397 @@ from openedx.core.djangolib.js_utils import (
         </div>
       </div>
       % endif
+      % if is_programs_enabled:
+        % if len(programs) > 0:
+          <div class="programs programs-tab">
+            <!-- Classes related to courses are intentionally reused here, to duplicate the styling used for course listing. -->
+            <ul class="list-courses">
+              % for program in programs:
+              <li class="course-item">
 
-      %if archived_courses:
-      <div class="archived-courses react-archived-course-listing archived-courses-tab">
-        ${static.renderReact(
-          component="CourseOrLibraryListing",
-          id="react-archived-course-listing",
-          props={
-            'items': sorted(archived_courses, key=lambda s: s['display_name'].lower() if s['display_name'] is not None else ''),
-            'linkClass': 'course-link',
-            'idBase': 'archived',
-            'allowReruns': allow_course_reruns and rerun_creator_status and course_creator_status=='granted'
-          }
-        )}
-      </div>
-      %endif
+                <a class="program-link" href=${program_authoring_url + str(program['id'])}>
+                  <h3 class="course-title">${program['name']}</h3>
 
-      %if len(libraries) > 0 or optimization_enabled:
-      <div class="libraries react-library-listing libraries-tab">
-        ${static.renderReact(
-          component="CourseOrLibraryListing",
-          id="react-library-listing",
-          props={
-            'items': sorted(libraries, key=lambda s: s['display_name'].lower() if s['display_name'] is not None else ''),
-            'linkClass': 'library-link',
-            'idBase': 'library',
-            'allowReruns': allow_course_reruns and rerun_creator_status and course_creator_status=='granted'
-          }
-        )}
-      </div>
+                  <div class="course-metadata">
+                    <span class="course-org metadata-item">
+                      <!-- As of this writing, programs can only be owned by one organization. If that constraint is relaxed, this will need to be revisited. -->
+                      <span class="label">${_("Organization:")}</span> <span class="value">${program['organizations'][0]['key']}</span>
+                    </span>
+                  </div>
+                </a>
 
-      %else:
-      <div class="notice notice-incontext notice-instruction notice-instruction-nocourses list-notices libraries-tab">
-        <div class="notice-item">
-          <div class="msg">
-              <h3 class="title">${_("Were you expecting to see a particular library here?")}</h3>
-              <div class="copy">
-                  <p>${_('The library creator must give you access to the library. Contact the library creator or administrator for the library you are helping to author.')}</p>
-              </div>
-          </div>
-        </div>
-        % if show_new_library_button:
-        <div class="notice-item has-actions">
-          <div class="msg">
-              <h3 class="title">${_('Create Your First Library')}</h3>
-              <div class="copy">
-                  <p>${_('Libraries hold a pool of components that can be re-used across multiple courses. Create your first library with the click of a button!')}</p>
-              </div>
+              </li>
+              % endfor
+            </ul>
           </div>
 
-        <ul class="list-actions">
-          <li class="action-item">
-              <a href="#" class="action-primary action-create new-button action-create-library new-library-button"><span class="icon fa fa-plus icon-inline" aria-hidden="true"></span> ${_('Create Your First Library')}</a>
-          </li>
-        </ul>
-        </div>
+        % else:
+          <div class="notice notice-incontext notice-instruction notice-instruction-nocourses list-notices programs-tab">
+            <div class="notice-item has-actions">
+
+              <div class="msg">
+                <h3 class="title">${_("You haven't created any programs yet.")}</h3>
+                <div class="copy">
+                  <p>${_("Programs are groups of courses related to a common subject.")}</p>
+                </div>
+              </div>
+
+              <ul class="list-actions">
+                <li class="action-item">
+                  <a href=${program_authoring_url + 'new'} class="action-primary action-create new-button action-create-program new-program-button"><span class="icon fa fa-plus icon-inline" aria-hidden="true"></span> ${_('Create Your First Program')}</a>
+                </li>
+              </ul>
+
+            </div>
+          </div>
         % endif
-      </div>
-      %endif
+      % endif
+
 
     </article>
+  </section>
+  <style>
+  .active_s_atp,.active_s_atp:focus,.active_s_atp:hover {
+    color: #fff !important;
+  }
+  .active_s_atp#fundamental_search,.active_s_atp#fundamental_search:focus,.active_s_atp#fundamental_search:hover {
+    background-color: rgb(0,84,131) !important;
+    color: #fff !important;
+  }
+  .active_s_atp#oursolutions_search,.active_s_atp#oursolutions_search:hover,.active_s_atp#oursolutions_search:focus {
+    background-color: rgb(160,120,40) !important;
+    color: #fff !important;
+  }
+  .active_s_atp#salesapproach_search,.active_s_atp#salesapproach_search:focus,.active_s_atp#salesapproach_search:hover {
+    background-color: rgb(200,50,80) !important;
+    color: #fff !important;
+  }
+  .active_s_atp#regulatory_search,.active_s_atp#regulatory_search:hover,.active_s_atp#regulatory_search:focus {
+    background-color: rgb(57,178,182) !important;
+    color: #fff !important;
+  }
+  .active_s_atp#softskills_search,.active_s_atp#softskills_search:hover,.active_s_atp#softskills_search:focus {
+    background-color: #39B2B6 !important;
+    color: #fff !important;
+  }
+  .active_s_atp#expert_search,.active_s_atp#expert_search:hover,.active_s_atp#expert_search:focus {
+    background-color: #004F9B !important;
+    color: #fff !important;
+  }
+  #campaign_search,#module_search {
+    border: 1px solid rgb(200, 200, 200);
+    padding: 10px;
+    width: calc(30% - 22px);
+    padding-top: 25px;
+    padding-bottom: 25px;
+    float: left;
+    margin-top: 40px;
+  }
+  #category_block_campaign {
+    text-align: center;
+  }
+  #search_block_campaign {
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+  #category_block_campaign button,#category_block_campaign button:hover,#category_block_campaign button:focus {
+    border-radius: 5px;
+    background-color: transparent;
+    outline: none;
+    height: 38px;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-left: 3px;
+    margin-right: 3px;
+    font-size: 13px;
+    font-weight: bold;
+    width: calc(25% - 6px);
+    display: block;
+    float: left;
+    text-shadow: none;
+    color: rgb(102,102,102);
+    font-size: 13px;
+    font-weight: normal;
+  }
+  #campaign_search h2,#module_search h2 {
+    font-family: "mywebfont";
+    font-size: 16px;
+    font-weight: bold;
+    color: #05144d;
+  }
+  .search_result p{
+    color: #666;
+    margin-top: 10px !important;
+    font-size: 14px !important;
+  }
+  .search_result button,.search_result button:hover,.search_result button:focus{
+    color: #fff !important;
+    border: none !important;
+    background-image: none !important;
+    border-radius: 5px !important;
+    background-color: #31aeee !important;
+    font-family: "mywebfont";
+    font-size: 14px;
+  }
+  .is_hidden_atp {
+    /*visibility: hidden;*/
+    display: none;
+  }
+  #fundamental_search {
+    border: 2px solid #005483;
+  }
+  #oursolutions_search {
+    border: 2px solid #a07828;
+  }
+  #salesapproach_search {
+    border: 2px solid #c83250;
+  }
+  #regulatory_search {
+    border: 2px solid #39B2C0;
+  }
+  #softskills_search{
+    border: 2px solid #39B2B6;
+  }
+  #expert_search{
+    border:2px solid #004F9F;
+  }
+
+  ::-webkit-input-placeholder {
+      font-style: italic;
+  }
+  ::-moz-placeholder {
+      font-style: italic;
+  }
+  :-ms-input-placeholder {
+      font-style: italic;
+  }
+  .step-numbers{
+    padding: 4px 9px;
+    background-color: gray;
+    border-radius: 100%;
+    color: white;
+  }
+  .step-info{
+    margin-bottom: 40px;
+  }
+  .language_display{
+    font-size: 13px;
+    font-style: italic;
+    font-family: "mywebfont";
+    color: #05144d;
+    font-weight: 600;
+  }
+
+  #category_block button, #category_block button:hover, #category_block button:focus {
+    font-size: 13px !important;
+    color: rgb(102,102,102) !important;
+    font-weight: normal !important;
+  }
+  </style>
+
+
+
+  <!-- block recherche campagne -->
+  <div id="campaign_search" class="is_show_atp">
+    <h2>${_("SEARCH IN MY CAMPAIGNS")}…</h2>
+    <div id="search_block_campaign">
+      <input type="text" name="text" value="" placeholder='${_("Search for a campaign")}'/>
+      <button class="action_search_campaign"></button>
+      <span class="is_block_clear"></span>
+    </div>
+    <div id="category_block_campaign">
+      <button class="action_search" id="fundamental_search" data-categ="fundamental">${_("Fundamentals")}</button>
+      <button class="action_search" id="oursolutions_search" data-categ="oursolutions">${_("Our solutions")}</button>
+      <button class="action_search" id="salesapproach_search" data-categ="salesapproach">${_("Sales approach")}</button>
+      <button class="action_search" id="regulatory_search" data-categ="regulatory">${_("Regulatory")}</button>
+      <button class="action_search" id="softskills_search" data-categ="softskills">${_("SoftSkills")}</button>
+      <button class="action_search" id="expert_search" data-categ="expert">${_("Expert")}</button>
+      <span class="is_block_clear"></span>
+    </div>
+    <div class="search_result is_hide_atp">
+      <p class="is_hidden_atp p_1">${_("No match! Please, try a new search")}.</p>
+      <p class="is_hidden_atp p_2"><span></span> ${_("results found in your campaigns")}.</p>
+      <button>${_("New search")}</button>
+    </div>
+  </div>
+  <!-- block recherche module -->
+    <div id="module_search" class="is_hide_atp">
+      <h2>${_("SEARCH IN MY MODULES")}…</h2>
+      <div id="search_block">
+        <input type="text" name="text" value="" placeholder='${_("Search in a module")}'/>
+        <button class="action_search"></button>
+        <span class="is_block_clear"></span>
+      </div>
+      <div id="category_block">
+        <button class="action_search" id="fundamental_search" data-categ="fundamental">${_("Fundamentals")}</button>
+        <button class="action_search" id="oursolutions_search" data-categ="oursolutions">${_("Our solutions")}</button>
+        <button class="action_search" id="salesapproach_search" data-categ="salesapproach">${_("Sales approach")}</button>
+        <button class="action_search" id="regulatory_search" data-categ="regulatory">${_("Regulatory")}</button>
+        <button class="action_search" id="softskills_search" data-categ="softskills">${_("SoftSkills")}</button>
+        <button class="action_search" id="expert_search" data-categ="expert">${_("Expert")}</button>
+        <span class="is_block_clear"></span>
+      </div>
+      <div class="search_result is_hide_atp">
+        <p class="is_hidden_atp p_1">${_("No match! Please, try a new search")}.</p>
+        <p class="is_hidden_atp p_2"><span></span> ${_("results found in your modules")}.</p>
+        <button>${_("New search")}</button>
+      </div>
+    </div>
     <aside class="content-supplementary" role="complementary">
       <div class="bit">
-        <h3 class="title title-3">${_('New to {studio_name}?').format(studio_name=settings.STUDIO_NAME)}</h3>
-        <p>${_('Click Help in the upper-right corner to get more information about the {studio_name} page you are viewing. You can also use the links at the bottom of the page to access our continually updated documentation and other {studio_name} resources.').format(studio_name=settings.STUDIO_SHORT_NAME)}</p>
+        % if LANGUAGE_CODE == 'fr':
+        <span id="info_my_campaign">
+          <h3 class="title title-3">${_('WHAT YOU CAN DO')}…</h3>
+          <div class="step-info">
+            <p><span class="step-numbers">1</span>  <strong>Administrer ma campagne</strong></p>
+            <h5>Dans mes campagnes créées, vous administrez la campagne de formation :</h5>
+            <ul class="list">
+              <li>- Date de début / date de fin</li>
+              <li>- Pourcentage de réussite minimum requis</li>
+              <li>- Campagne obligatoire ou facultative</li>
+            </ul>
+            <h5>Ces paramètres peuvent être modifiés tout au long de votre campagne de formation.</h5>
+          </div>
 
-        <ol class="list-actions">
-          <li class="action-item">
+          <div class="step-info">
+            <p><span class="step-numbers">2</span> <strong> Inviter des participants</strong></p>
+            <h5>Dans mes campagnes en cours, vous invitez des participants à la campagne de formation :</h5>
+            <ul class="list">
+              <li>- Il faut impérativement que la date de début de la campagne de formation paramétrée soit antérieure à la date de chargement du fichier des participants</li>
+              <li>- Vous pouvez inviter des participants tout au long de la campagne de formation</li>
+            </ul>
+          </div>
 
-            <a href="${get_online_help_info(online_help_token())['doc_url']}" rel="noopener" target="_blank">${_("Getting Started with {studio_name}").format(studio_name=settings.STUDIO_NAME)}</a>
-          </li>
-        </ol>
+          <div class="step-info">
+            <p><span class="step-numbers">3</span> <strong>Envoyer un email aux participants</strong></p>
+            <h5>Dans mes campagnes en cours, vous pouvez envoyer un email avec un contenu personnalisé aux participants :</h5>
+            <ul class="list">
+              <li>- Ce peut être un email de relance pour rappeler aux participants que la campagne de formation touche bientôt à sa fin, pour formuler que la campagne de formation est obligatoire, etc.</li>
+              <li>- Cet email peut être envoyé à tous les participants ou à une liste de destinataires personnalisée</li>
+            </ul>
+          </div>
+
+          <div class="step-info">
+            <p><span class="step-numbers">4</span> <strong>Statistiques</strong></p>
+            <h5>Dans mes campagnes en cours, vous pouvez accéder aux statistiques de la campagne de formation en cours : taux de participation, résultats par participant, etc.</h5>
+            <h5>Dans mes campagnes terminées, vous pouvez accéder aux statistiques de la campagne de formation après la fin de celle-ci : taux de participation, résultats par participant, etc.</h5>
+            </ul>
+          </div>
+        </span>
+
+
+
+        <span id="info_my_module">
+          <h3 class="title title-3">CE QUE VOUS POUVEZ FAIRE…</h3>
+          <p>Dans mes modules:</p>
+          <ul class="list">
+            <li>- Accédez à la bibliothèque des modules de formation mise à disposition par Amundi</li>
+            <li>- Créez une campagne de formation associée au module que vous aurez sélectionné en cliquant sur « Créer ma campagne »</li>
+          </ul>
+        </span>
+
+        % elif LANGUAGE_CODE == 'cs':
+        <span id="info_my_campaign">
+          <h3 class="title title-3">${_('WHAT YOU CAN DO')}…</h3>
+          <div class="step-info">
+            <p><span class="step-numbers">1</span>  <strong>Spravujte své kampaně</strong></p>
+            <h5>Ve vytvořených kampaních můžete spravovat:</h5>
+            <ul class="list">
+              <li>- datum začátku/konce</li>
+              <li>- minimální procento pro úspěšné splnění</li>
+              <li>- povinnost/volitelnost kampaně</li>
+            </ul>
+            <h5>Tyto parametry můžete kdykoliv upravit.</h5>
+          </div>
+
+          <div class="step-info">
+            <p><span class="step-numbers">2</span> <strong> Pozvěte účastníky</strong></p>
+            <h5>U probíhajících vytvořených kampaní můžete pozvat účastníky:</h5>
+            <ul class="list">
+              <li>- účastníky lze pozvat pouze do již probíhající kampaně (začátek data musí být přesažen)</li>
+              <li>- do probíhající kampaně můžete kdykoliv přizvat i další účastníky</li>
+            </ul>
+          </div>
+
+          <div class="step-info">
+            <p><span class="step-numbers">3</span> <strong>Pošlete emaily účastníkům</strong></p>
+            <h5>U probíhajících kampaní můžete kdykoliv poslat personalizovaný email:</h5>
+            <ul class="list">
+              <li>- Můžete vytvořit email, abyste připomněli účastníkům vzdělávací kurz, či jim poslat odkaz na nové materiály</li>
+              <li>- Email může být zaslán na všechny účastníky neboi jen na některé</li>
+            </ul>
+          </div>
+
+          <div class="step-info">
+            <p><span class="step-numbers">4</span> <strong>Statistiky</strong></p>
+            <h5>V probíhajících kampaních můžete prohlížet následující statistiky: míra účasti, míra úspěšnosti, skóre dle jednotlivých účastníků atd.</h5>
+            </ul>
+          </div>
+        </span>
+
+        <span id="info_my_module">
+          <h3 class="title title-3">${_('WHAT YOU CAN DO')}…</h3>
+          <p>${_('My modules:')}</p>
+          <ul class="list">
+            <li>- ${_('Access the training modules library provided by Amundi')}</li>
+            <li>- ${_('Create a training campaign associated to the module you selected by clicking on "Create my Campaign"')}</li>
+          </ul>
+        </span>
+
+        % else:
+        <span id="info_my_campaign">
+          <h3 class="title title-3">${_('WHAT YOU CAN DO')}…</h3>
+          <div class="step-info">
+            <p><span class="step-numbers">1</span>  <strong>Manage my campaign</strong></p>
+            <h5>In created training campaigns , you can manage your training campaign:</h5>
+            <ul class="list">
+              <li>- Starting / Ending date</li>
+              <li>- Minimum percentage of success required</li>
+              <li>- Mandatory or optional training campaign</li>
+            </ul>
+            <h5>These parameters can be modified all along the training campaign.</h5>
+          </div>
+
+          <div class="step-info">
+            <p><span class="step-numbers">2</span> <strong>Invite participants</strong></p>
+            <h5>In in progress training campaigns, your can invite participants to your training campaign:</h5>
+            <ul class="list">
+              <li>- Starting date has to be exceeded to invite participants </li>
+              <li>- You can invite participants all along the training campaign</li>
+            </ul>
+          </div>
+
+          <div class="step-info">
+            <p><span class="step-numbers">3</span> <strong>Send email to participants</strong></p>
+            <h5>In in progress training campaigns, you can send a personalized email to participants:</h5>
+            <ul class="list">
+              <li>- It can be an email to remind participants the training campaign will end soon, the training campaign is mandatory, etc. </li>
+              <li>- Email can be sent to all participants or to a customized mailing list</li>
+            </ul>
+          </div>
+
+          <div class="step-info">
+            <p><span class="step-numbers">4</span> <strong>Statistics</strong></p>
+            <h5>In in progress training campaigns, you can access statistics of the in progress training campaign: participation rate, success rate, score by participant, etc. </h5>
+            <h5>In completed training campaigns, you can access statistics of the training campaign after it ended: participation rate, success rate, score by participant, etc.</h5>
+            </ul>
+          </div>
+
+        </span>
+
+
+        <span id="info_my_module">
+          <h3 class="title title-3">${_('WHAT YOU CAN DO')}…</h3>
+          <p>${_('My modules:')}</p>
+          <ul class="list">
+            <li>- ${_('Access the training modules library provided by Amundi')}</li>
+            <li>- ${_('Create a training campaign associated to the module you selected by clicking on "Create my Campaign"')}</li>
+          </ul>
+        </span>
+        % endif
       </div>
 
-      % if course_creator_status=='disallowed_for_this_site' and settings.FEATURES.get('STUDIO_REQUEST_EMAIL',''):
-      <div class="bit">
-        <h3 class="title title-3">${_("Can I create courses in {studio_name}?").format(studio_name=settings.STUDIO_NAME)}</h3>
-        <p>${Text(_("In order to create courses in {studio_name}, you must {link_start}contact {platform_name} staff to help you create a course{link_end}.")).format(
-            studio_name=settings.STUDIO_NAME,
-            platform_name=settings.PLATFORM_NAME,
-            link_start=HTML('<a href="mailto:{email}">').format(email=settings.FEATURES.get('STUDIO_REQUEST_EMAIL','')),
-            link_end=HTML("</a>"),
-          )}</p>
-      </div>
-      % endif
-
-      % if course_creator_status == "unrequested":
-      <div class="bit">
-        <h3 class="title title-3">${_("Can I create courses in {studio_name}?").format(studio_name=settings.STUDIO_NAME)}</h3>
-        <p>${_('In order to create courses in {studio_name}, you must have course creator privileges to create your own course.').format(studio_name=settings.STUDIO_NAME)}</p>
-      </div>
-
-      % elif course_creator_status == "denied":
-      <div class="bit">
-        <h3 class="title title-3">${_("Can I create courses in {studio_name}?").format(studio_name=settings.STUDIO_NAME)}</h3>
-        <p>${Text(_("Your request to author courses in {studio_name} has been denied. Please {link_start}contact {platform_name} Staff with further questions{link_end}.")).format(
-            studio_name=settings.STUDIO_NAME,
-            platform_name=settings.PLATFORM_NAME,
-            link_start=HTML('<a href="mailto:{email}">').format(email=settings.TECH_SUPPORT_EMAIL),
-            link_end=HTML('</a>'),
-          )}</p>
-      </div>
-
-      % endif
     </aside>
-  </section>
-
-
   % else:
   <section class="content">
     <article class="content-primary" role="main">
@@ -585,4 +1531,8 @@ from openedx.core.djangolib.js_utils import (
 
   %endif
 </div>
+<div style="clear:both"></div>
+<%
+log.info("timer 9 {}".format(datetime.datetime.now()))
+%>
 </%block>
