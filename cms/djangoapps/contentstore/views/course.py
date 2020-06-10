@@ -590,6 +590,7 @@ def course_listing(request):
       q['is_true'] = is_true
       q['courses_overviews'] = CourseOverview.get_from_id(q['course_key_id'])
       q['courses_stats'] = CourseOverview.get_from_id(q['course_key_id'])
+      log.info(q['courses_stats'])
       q['categories'] = q['courses_stats'].categ
       q['course_img'] = q['courses_overviews'].image_urls
       q['course_start'] = q['courses_overviews'].start.strftime('%Y-%m-%d')

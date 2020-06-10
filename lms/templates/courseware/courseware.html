@@ -79,8 +79,8 @@ ${static.get_page_title_breadcrumbs(course_name())}
 %>
 <script type="text/javascript">
   var customTrackUrl = "/track_html_component/";
-  var completionStatusUrl = "/completion_status/?course_id=${course_id}";
-  completionStatusUrl = '';
+  /*var completionStatusUrl = "/completion_status/?course_id=${course_id}";*/
+  var completionStatusUrl = '';
   var completionEnabled = "${completion_enabled}";
   var accordianDotsEnabled = "${accordian_dots_enabled}";
   var graduateicon_url = "${static.url('images/floating_button/graduateicon.png')}";
@@ -350,7 +350,7 @@ courseware = static.get_value('css_overrides_courseware')
 
 </script>
 
-<script src="${static.url('js/courseware_completion.js')}"></script>
+<!--<script src="${static.url('js/courseware_completion.js')}"></script>-->
 <!--<script src="/media/jswork/courseware/courseware_completion.js"></script>-->
 <script src="${static.url('js/tma_custom_quiz_display.js')}"></script>
 <!--<script src="/media/jswork/courseware/tma_custom_quiz_display.js"></script>-->

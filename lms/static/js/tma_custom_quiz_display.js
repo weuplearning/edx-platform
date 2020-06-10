@@ -336,7 +336,7 @@ $(document).ready(function() {
 
 
 /* DISABLE QUIZ IF COURSE IS OVER */
-$(document).ajaxSuccess(function(event, xhr, settings) {
+/*$(document).ajaxSuccess(function(event, xhr, settings) {
   if (settings.url.indexOf('/completion_status') > -1) {
     if(is_course_over()){
       $('.seq_problem').each(function(){
@@ -353,4 +353,4 @@ $(document).ajaxSuccess(function(event, xhr, settings) {
       enable_score_panel(url_last_question);
     }
   }
-});
+});*/
