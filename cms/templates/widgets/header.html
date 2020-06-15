@@ -1,45 +1,470 @@
-<%page expression_filter="h" args="online_help_token"/>
+<%page expression_filter="h" args="_user,online_help_token"/>
 <%namespace name='static' file='../static_content.html'/>
 <%!
-  import six
-  from six.moves.urllib.parse import quote
   from django.conf import settings
   from django.urls import reverse
   from django.utils.translation import ugettext as _
-  from openedx.core.djangoapps.lang_pref.api import header_language_selector_is_enabled, released_languages
+  from contentstore.context_processors import doc_url
+  import os.path
+  #from microsite_manager.models import MicrositeAdminManager
+  #from microsite_configuration.models import Microsite
+  from student.models import User
+  import six
+  from six.moves.urllib.parse import quote
+
 %>
-<div class="wrapper-header wrapper" id="view-top">
-  <header class="primary" role="banner">
 
-    <div class="wrapper wrapper-l">
-      <h1 class="branding">
-        <a class="brand-link" href="/">
-          <img class="brand-image" src="${static.url('images/studio-logo.png')}" alt="${settings.STUDIO_NAME}" />
+
+<%
+#Microsite-logo
+
+#try:
+#  microsite_key = MicrositeAdminManager.objects.get(user=user).microsite_id
+#  microsite_data=Microsite.objects.get(pk=microsite_key).values
+#
+#  if microsite_data.get('logo') is not None:
+#    logo=microsite_data.get('logo')
+#  else :
+#    logo=''
+#
+#  if microsite_data.get('amundi_brand'):
+#    amundi_brand=microsite_data.get('amundi_brand')
+#  else :
+#    amundi_brand=False
+#  if microsite_data.get('primary_color') is not None:
+#    primary_color=microsite_data.get('primary_color')
+#  else :
+#    primary_color="#0C1C49"
+#
+#  if microsite_data.get('secondary_color') is not None:
+#    secondary_color=microsite_data.get('secondary_color')
+#  else :
+#    secondary_color="#00B6ED"
+#except:
+#  logo='/media/logo-amundi.png'
+#  amundi_brand=True
+#  secondary_color="#00B6ED"
+#  primary_color="#0C1C49"
+#  pass
+
+logo='/edx/var/edxapp/media/logo-amundi.png'
+
+amundi_brand=True
+secondary_color="#00B6ED"
+primary_color="#0C1C49"
+%>
+<%
+#
+#  course_org = ''
+#  try:
+#      microsite_key = MicrositeAdminManager.objects.get(user=user).microsite_id
+#      course_org = microsite = Microsite.objects.get(pk=microsite_key).key+'.'
+#  except:
+#      course_org = ''
+#      pass
+#
+course_org = ''
+%>
+<style>
+
+.primary-color-bg{
+  background-color: #0C1C49!important;
+}
+.primary-color-border{
+  border-color: #0C1C49!important;
+}
+.primary-color-text{
+  color: #0C1C49!important;
+}
+.white-text{
+  color:white!important;
+}
+.boutons-cms{
+  border-color: #0C1C49!important;
+  background-color: #0C1C49!important;
+  color:white!important;
+  border-radius:3px;
+  padding:5px 10px;
+}
+
+#fil_ariane a,#fil_ariane a:hover,#fil_ariane a:focus,#fil_ariane a:visited {
+    color: #31aeee;
+    text-shadow: none;
+    text-decoration: none;
+}
+#img_amundi_academy {
+  height: 30px;
+  width: 278.1px;
+  background-image: url("${static.url('images/logo-amundiacademy.png')}");
+  background-size: cover;
+  float: left;
+  margin-top: 20px;
+}
+#logo_cms {
+  float: left;
+}
+.nav-account-help {
+  display: none !important;
+}
+.fa-caret-down {
+  font-family: FontAwesome !important;
+}
+.nav-account-dashboard {
+  display: none !important;
+}
+.wrapper-header {
+  height: 90px;
+}
+.wrapper-l,.wrapper-r {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.bouton-nav-admin{
+  min-width: 143px;
+}
+
+.wrapper-header, .wrapper-header .wrapper-l, .wrapper-header .wrapper-r{
+  background-color: transparent!important;
+}
+
+  nav#studio-nav{
+   background-color: #0C1C49;
+   height: 70px;
+   box-sizing: border-box;
+   padding-bottom: 0;
+   padding-left: 30px;
+  }
+
+  /* Partie gauche nav */
+  .logo-ms{
+    max-width: 250px;
+    max-height: 60px;
+    float: left;
+    margin-bottom: 5px;
+  }
+  #nav-logo{
+    height: 100%;
+    width: 50%;
+    float: left;
+    display: flex;
+    align-items: center;
+  }
+  #logo-ms{
+    padding-top: 5px;
+  }
+  #amundi-academy{
+    float: left;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    border-left: 1px solid rgba(255,255,255, 0.5);
+    padding-left: 30px;
+  }
+  #logo-amundi-academy{
+    max-width: 200px;
+  }
+  #amundi-academy-wrapper{
+    height: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Partie droite nav */
+  #user-icone img{
+    height: 24px;
+  }
+  #user-icone svg:hover{
+    border: 1px solid #00B6ED;
+    background-color: #00B6ED;
+  }
+  #user-icone {
+      color: white;
+      font-size: 22px;
+      padding: 9px 2px 9px 0px;
+      border-radius: 100%;
+      width: 45px;
+  }
+  #account-menu:hover #user-icone{
+    background-color: #00B6ED;
+  }
+  #nav-commandes{
+    height: 100%;
+    width: 50%;
+    float: left;
+  }
+  #burger-menu, #account-menu{
+    width: 60px;
+    float: right;
+    height: 100%;
+    text-align: center;
+    padding-top: 10px;
+    box-sizing: border-box;
+    cursor: pointer;
+  }
+
+  #burger-menu{
+    width: 90px;
+    padding-left: 40px;
+  }
+
+  #account-menu{
+    margin-right: 30px;
+  }
+
+  /* Menu déroulant user */
+  #user-dropdown-menu{
+    background-color: white;
+    position: absolute;
+    z-index: 10000;
+    right: 0;
+    top: 70px;
+    text-align: left;
+    padding: 10px;
+    border:1px solid lightgray;
+    display: none;
+  }
+  #user-dropdown-menu a{
+    color: rgb(74, 74, 74);!important;
+  }
+  .user-menu-element{
+    padding: 5px 10px;
+  }
+  #logout-boutton{
+    text-align: center;
+    text-transform: uppercase;
+    background-color: lightgray;
+  }
+  #access-front{
+    border-top:1px solid lightgray;
+  }
+  #access-front a{
+    font-weight: 600;
+  }
+  #access-front:hover{
+    border-color: #00B6ED;
+  }
+
+  /* Menu déroulant burger */
+  #burger-dropdown{
+    position: absolute;
+    top: 65px;
+    left: 0px;
+    width: 100%;
+    background-color:#0C1C49;
+    z-index:10000;
+    display:none;
+    padding-top: 20px;
+
+  }
+  #burger-dropdown a{
+    background-color: transparent!important;
+    color: white;
+    text-transform: uppercase;
+    font-family: 'mywebfont';
+    font-weight: 600;
+  }
+  #burger-dropdown li{
+    padding: 10px;
+  }
+  #burger-icone{
+    margin-top: 5px;
+  }
+
+  /* Hover EFFECT */
+  #account-menu:hover #user-dropdown-menu, #burger-menu:hover #burger-dropdown{
+    display: block;
+  }
+
+  /*Ajustement des couleurs pages cms*/
+  .language_display, .content_info h3, .content_info .all_dates span, #title h1, .mast.has-actions h1{
+    color:#0C1C49!important;
+  }
+  #course-index-tabs .sub_menu .active_button{
+    border-color: #00B6ED!important;
+  }
+  #course-index-tabs .sub_menu button:hover{
+    color:#00B6ED!important;
+    border-color: #00B6ED!important;
+  }
+  .wrapper-l, .wrapper-r{
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  /* Couleurs page accueil */
+  .up_list_courses h3 span{
+    color:#0C1C49!important;
+  }
+  h3 .svg path{
+    fill:#0C1C49!important;
+  }
+  .more_about_courses li a, #campaign_search h2, #module_search h2, #info_my_campaign .title-3{
+    color:#00B6ED!important;
+  }
+  .sub_menu .active_button{
+    color:#00B6ED!important;
+    border-color:#00B6ED!important;
+  }
+  #campaign_search #search_block_campaign button{
+    background-color: #0C1C49!important;
+  }
+
+  /* Menu not connected */
+  .nav-not-signedin .nav-item{
+    display: inline;
+    color: white;
+    padding: 10px;
+  }
+  .nav-not-signedin.nav-pitch{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    text-align: right;
+  }
+  .nav-not-signedin.nav-pitch ol{
+    width: 100%;
+  }
+  .nav-not-signedin.nav-pitch a{
+    color: white;
+  }
+  .campaign-link-back {
+    padding-top: 50px;
+    font-size: 2.3rem;
+  }
+  .campaign-link-back a{
+    color:#31aeee;
+    font-family: 'mywebfont';
+    font-weight: 700;
+  }
+  .primary_color{
+    color: #0C1C49!important
+  }
+  .img_course{
+    min-height: 153px;
+  }
+  .name-atp-user{
+    text-transform: capitalize;
+    font-weight: bold;
+    font-size: 14px;
+  }
+  .capitalize{
+    text-transform: capitalize;
+  }
+</style>
+
+
+<nav id="studio-nav">
+  <div id="nav-logo">
+    <a id="logo-ms" href="\">
+      %if logo!='':
+        <img class="logo-ms" src="https://qualif-atp.themoocagency.com/media/logo-amundi.png" alt="${settings.STUDIO_NAME}" />
+      %else:
+        <img class="logo-ms" src="https://qualif-atp.themoocagency.com/media/logo-amundi.png" alt="${settings.STUDIO_NAME}" />
+      %endif
+    </a>
+    %if amundi_brand:
+    <div id="amundi-academy-wrapper">
+      <div id="amundi-academy">
+        <img src="https://qualif-atp.themoocagency.com/media/logo-amundiacademy_blanc.png" alt="amundi_academy" id="logo-amundi-academy">
+      </div>
+    </div>
+    %endif
+  </div>
+  <div id="nav-commandes">
+    % if user.is_authenticated():
+    <div id="account-menu">
+      <div id="user-icone">
+        <img src="${settings.LMS_ROOT_URL}/media/user.png" alt="">
+      </div>
+      <div id="user-dropdown-menu">
+      <div class="user-menu-element ">
+        <a class="" href="${settings.LMS_ROOT_URL.replace('https://','https://'+course_org)}/u/${request.user.username}">
+          <p class="name-atp-user">${request.user.first_name} ${request.user.last_name}</p>
+          <p class="email-atp-user">${user.email}</p>
         </a>
-      </h1>
+      </div>
+      <div class="user-menu-element" id="access-front">
+        <a href="${settings.LMS_ROOT_URL.replace('https://','https://'+course_org)}">${_("Access Trainee Interface")}</a>
+      </div>
+      <div class="user-menu-element" id="logout-boutton">
+        <a class="" href="${settings.LMS_ROOT_URL.replace('https://','https://'+course_org)}/logout">
+          <img style="height:20px;"src="${settings.LMS_ROOT_URL}/media/poweroff.png" alt="">
+          <span>${_('logout')}</span>
+        </a>
+      </div>
+    </div>
+    </div>
+    <!-- OLD ACCOUNT MENU
+    <nav class="nav-account nav-is-signedin nav-dd ui-right" aria-label="${_('Account')}">
+      <h2 class="sr-only">${_("Account Navigation")}</h2>
+      <ol>
+        <li class="nav-item nav-account-help">
+          <h3 class="title"><span class="label"><a href="${get_online_help_info(online_help_token)['doc_url']}" title="${_('Contextual Online Help')}" target="_blank">${_("Help")}</a></span></h3>
+        </li>
+        <li class="nav-item nav-account-user">
+          <%include file="user_dropdown.html" args="online_help_token=online_help_token,course_org=course_org" />
+        </li>
+      </ol>
+    </nav>
+  -->
+  % if not context_course and request.user.is_staff:
+  <div id="burger-menu">
+    <i class="icons fa fa-bars" style="color: #fff;font-size: 40px;"></i>
+    <!--<img src="${settings.LMS_ROOT_URL}/media/menu_mobile.png"/ id="burger-icone">-->
+    <div id="burger-dropdown">
+      <ul>
+        <li><a href='#' class="button new-button new-library-button">${_('New Library')}</a></li>
+        <li><a href='#' class="button new-button new-course-button">${_('New module')}</a></li>
+        <li><a href='#' class="button new-button new-microsite-button">${_('New microsite')}</a></li>
+      </ul>
+    </div>
+  </div>
+  %endif
+  % else:
+    <nav class="nav-not-signedin nav-pitch" aria-label="${_('Account')}">
+      <h2 class="sr-only">${_("Account Navigation")}</h2>
+      <ol>
+        <li class="nav-item nav-not-signedin-help">
+          <a href="${get_online_help_info(online_help_token)['doc_url']}" title="${_('Contextual Online Help')}" target="_blank">${_("Help")}</a>
+        </li>
+        <li class="nav-item nav-not-signedin-signup">
+        </li>
+        <li class="nav-item nav-not-signedin-signin">
+        </li>
+      </ol>
+    </nav>
+    %endif
+  </div>
+  <div style="clear:both"></div>
+</nav>
 
-      % if context_course:
-      <%
-            course_key = context_course.id
-            url_encoded_course_key = quote(six.text_type(course_key).encode('utf-8'), safe='')
-            index_url = reverse('course_handler', kwargs={'course_key_string': six.text_type(course_key)})
-            course_team_url = reverse('course_team_handler', kwargs={'course_key_string': six.text_type(course_key)})
-            assets_url = reverse('assets_handler', kwargs={'course_key_string': six.text_type(course_key)})
-            textbooks_url = reverse('textbooks_list_handler', kwargs={'course_key_string': six.text_type(course_key)})
-            videos_url = reverse('videos_handler', kwargs={'course_key_string': six.text_type(course_key)})
-            import_url = reverse('import_handler', kwargs={'course_key_string': six.text_type(course_key)})
-            course_info_url = reverse('course_info_handler', kwargs={'course_key_string': six.text_type(course_key)})
-            export_url = reverse('export_handler', kwargs={'course_key_string': six.text_type(course_key)})
-            settings_url = reverse('settings_handler', kwargs={'course_key_string': six.text_type(course_key)})
-            grading_url = reverse('grading_handler', kwargs={'course_key_string': six.text_type(course_key)})
-            advanced_settings_url = reverse('advanced_settings_handler', kwargs={'course_key_string': six.text_type(course_key)})
-            tabs_url = reverse('tabs_handler', kwargs={'course_key_string': six.text_type(course_key)})
-            certificates_url = ''
-            if settings.FEATURES.get("CERTIFICATES_HTML_VIEW") and context_course.cert_html_view_enabled:
-                certificates_url = reverse('certificates_list_handler', kwargs={'course_key_string': six.text_type(course_key)})
-            checklists_url = reverse('checklists_handler', kwargs={'course_key_string': six.text_type(course_key)})
+% if context_course:
+<div class="wrapper-header wrapper" id="view-top">
+  <header>
+      <span style="display:block;clear:left"></span>
 
-      %>
+        <%
+          course_key = context_course.id
+
+          url_encoded_course_key = quote(six.text_type(course_key).encode('utf-8'), safe='')
+          index_url = reverse('course_handler', kwargs={'course_key_string': six.text_type(course_key)})
+          course_info_url = reverse('course_info_handler', kwargs={'course_key_string': six.text_type(course_key)})
+          course_team_url = reverse('course_team_handler', kwargs={'course_key_string': six.text_type(course_key)})
+          assets_url = reverse('assets_handler', kwargs={'course_key_string': six.text_type(course_key)})
+          textbooks_url = reverse('textbooks_list_handler', kwargs={'course_key_string': six.text_type(course_key)})
+          videos_url = reverse('videos_handler', kwargs={'course_key_string': six.text_type(course_key)})
+          import_url = reverse('import_handler', kwargs={'course_key_string': six.text_type(course_key)})
+          export_url = reverse('export_handler', kwargs={'course_key_string': six.text_type(course_key)})
+          settings_url = reverse('settings_handler', kwargs={'course_key_string': six.text_type(course_key)})
+          grading_url = reverse('grading_handler', kwargs={'course_key_string': six.text_type(course_key)})
+          advanced_settings_url = reverse('advanced_settings_handler', kwargs={'course_key_string': six.text_type(course_key)})
+          tabs_url = reverse('tabs_handler', kwargs={'course_key_string': six.text_type(course_key)})
+          certificates_url = ''
+          if settings.FEATURES.get("CERTIFICATES_HTML_VIEW") and context_course.cert_html_view_enabled:
+              certificates_url = reverse('certificates_list_handler', kwargs={'course_key_string': six.text_type(course_key)})
+          checklists_url = reverse('checklists_handler', kwargs={'course_key_string': six.text_type(course_key)})
+        %>
+
       <h2 class="info-course">
         <span class="sr">${_("Current Course:")}</span>
         <a class="course-link" href="${index_url}">
@@ -108,11 +533,6 @@
                     <a href="${certificates_url}">${_("Certificates")}</a>
                   </li>
                   % endif
-                  % if frontend_app_publisher_url:
-                  <li class="nav-item nav-course-courseware-videos">
-                    <a href="${frontend_app_publisher_url}/course-runs/${url_encoded_course_key}">${_("Publisher")}</a>
-                  </li>
-                  % endif
                 </ul>
               </div>
             </div>
@@ -131,12 +551,9 @@
                   </li>
                   % if settings.FEATURES.get('ENABLE_EXPORT_GIT') and context_course.giturl:
                   <li class="nav-item nav-course-tools-export-git">
-                    <a href="${reverse('export_git', kwargs=dict(course_key_string=six.text_type(course_key)))}">${_("Export to Git")}</a>
+                    <a href="${reverse('export_git', kwargs=dict(course_key_string=unicode(course_key)))}">${_("Export to Git")}</a>
                   </li>
                   % endif
-                  <li class="nav-item nav-course-tools-checklists">
-                    <a href="${checklists_url}">${_("Checklists")}</a>
-                  </li>
                 </ul>
               </div>
             </div>
@@ -151,6 +568,7 @@
             lib_users_url = reverse('manage_library_users', kwargs={'library_key_string': six.text_type(library_key)})
             export_url = reverse('export_handler', kwargs={'course_key_string': six.text_type(library_key)})
       %>
+      <div class="wrapper-header wrapper" id="view-top">
       <h2 class="info-course">
         <span class="sr">${_("Current Library:")}</span>
         <a class="course-link" href="${index_url}">
@@ -193,67 +611,25 @@
           </li>
         </ol>
       </nav>
+    </div>
+      % elif show_programs_header:
+      <h2 class="info-course">
+        <span class="course-org">${settings.PLATFORM_NAME}</span><span class="course-number">${_("Programs")}</span>
+        <span class="course-title">${_("Program Administration")}</span>
+      </h2>
       % endif
     </div>
 
-    <div class="wrapper wrapper-r">
-      % if header_language_selector_is_enabled():
-        <% languages = released_languages() %>
-        % if len(languages) > 1:
-        <nav class="user-language-selector" aria-label="${_('Language preference')}">
-          <form action="/i18n/setlang/" method="post" class="settings-language-form" id="language-settings-form">
-              <input type="hidden" id="csrf_token" name="csrfmiddlewaretoken" value="${csrf_token}">
-              % if user.is_authenticated:
-              <input title="preference api" type="hidden" id="preference-api-url" class="url-endpoint" value="${reverse('preferences_api', kwargs={'username': user.username})}" data-user-is-authenticated="true">
-              % else:
-              <input title="session update url" type="hidden" id="update-session-url" class="url-endpoint" value="${reverse('session_language')}" data-user-is-authenticated="false">
-              % endif
-              <label><span class="sr">${_("Choose Language")}</span>
-              <select class="input select language-selector" id="settings-language-value" name="language">
-              % for language in languages:
-                % if language[0] == LANGUAGE_CODE:
-                 <option value="${language[0]}" selected="selected">${language[1]}</option>
-                % else:
-                 <option value="${language[0]}" >${language[1]}</option>
-                % endif
-              % endfor
-              </select>
-              </label>
-          </form>
-        </nav>
-      % endif
-      % endif
-      % if user.is_authenticated:
-      <nav class="nav-account nav-is-signedin nav-dd ui-right" aria-label="${_('Account')}">
-        <h2 class="sr-only">${_("Account Navigation")}</h2>
-        <ol>
-          <li class="nav-item nav-account-help">
-            <h3 class="title"><span class="label"><a href="${get_online_help_info(online_help_token)['doc_url']}" title="${_('Contextual Online Help')}" rel="noopener" target="_blank">${_("Help")}</a></span></h3>
-          </li>
-          <li class="nav-item nav-account-user">
-            <%include file="user_dropdown.html" args="online_help_token=online_help_token" />
-          </li>
-        </ol>
-      </nav>
 
-    % else:
-      <nav class="nav-not-signedin nav-pitch" aria-label="${_('Account')}">
-        <h2 class="sr-only">${_("Account Navigation")}</h2>
-        <ol>
-          <li class="nav-item nav-not-signedin-help">
-            <a href="${get_online_help_info(online_help_token)['doc_url']}" title="${_('Contextual Online Help')}" rel="noopener" target="_blank">${_("Help")}</a>
-          </li>
-          % if static.get_value('ALLOW_PUBLIC_ACCOUNT_CREATION', settings.FEATURES.get('ALLOW_PUBLIC_ACCOUNT_CREATION')):
-              <li class="nav-item nav-not-signedin-signup">
-                <a class="action action-signup" href="${settings.FRONTEND_REGISTER_URL}?next=${current_url}">${_("Sign Up")}</a>
-              </li>
-          % endif
-          <li class="nav-item nav-not-signedin-signin">
-            <a class="action action-signin" href="${settings.LOGIN_URL}?next=${current_url}">${_("Sign In")}</a>
-          </li>
-        </ol>
-      </nav>
-    % endif
-    </div>
+
   </header>
 </div>
+<style>
+.title .label .button:not(:disabled) {
+  background: transparent;
+}
+#course-index-tabs .sub_menu button:not(:disabled) {
+  background: transparent;
+}
+
+</style>

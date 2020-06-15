@@ -4,8 +4,9 @@ Helpers methods for site configuration.
 
 
 from django.conf import settings
+import logging
+log = logging.getLogger(__name__)
 from openedx.core.lib.cache_utils import request_cached
-
 
 @request_cached("site_config")
 def get_current_site_configuration():
@@ -108,7 +109,6 @@ def get_value(val_name, default=None, **kwargs):
     Returns:
         Configuration value for the given key.
     """
-
     if is_site_configuration_enabled():
         # Retrieve the requested field/value from the site configuration
         configuration_value = get_configuration_value(val_name, default=default)
