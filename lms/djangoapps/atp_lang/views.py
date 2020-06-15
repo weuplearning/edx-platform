@@ -3,7 +3,7 @@ import urllib
 
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import transaction
 from django.conf import settings
 from django.shortcuts import redirect
@@ -21,4 +21,3 @@ def change_lang(request,langue):
     update_user_preferences(request.user, data, user=username)
     response = HttpResponseRedirect("/")
     return response
-

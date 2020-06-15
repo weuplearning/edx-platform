@@ -4,13 +4,9 @@ Helpers methods for site configuration.
 
 
 from django.conf import settings
-<<<<<<< HEAD
 import logging
 log = logging.getLogger(__name__)
-=======
 from openedx.core.lib.cache_utils import request_cached
-
->>>>>>> 8c9c536e82f6098d73c4de634d2c89a6f67aaee0
 
 @request_cached("site_config")
 def get_current_site_configuration():
