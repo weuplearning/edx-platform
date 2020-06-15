@@ -2556,10 +2556,8 @@ INSTALLED_APPS = [
     # so sample_task is available to celery workers
     'openedx.core.djangoapps.heartbeat',
 
-<<<<<<< HEAD
     'lms.djangoapps.atp_task',
     'lms.djangoapps.tma_grade_tracking',
-=======
     # signal handlers to capture course dates into edx-when
     'openedx.core.djangoapps.course_date_signals',
 
@@ -2575,7 +2573,6 @@ INSTALLED_APPS = [
 
     # Learning Sequence Navigation
     'openedx.core.djangoapps.content.learning_sequences.apps.LearningSequencesConfig',
->>>>>>> 8c9c536e82f6098d73c4de634d2c89a6f67aaee0
 ]
 
 ######################### CSRF #########################################
