@@ -4,9 +4,15 @@ Helpers methods for site configuration.
 
 
 from django.conf import settings
+<<<<<<< HEAD
 import logging
 log = logging.getLogger(__name__)
+=======
+from openedx.core.lib.cache_utils import request_cached
 
+>>>>>>> 8c9c536e82f6098d73c4de634d2c89a6f67aaee0
+
+@request_cached("site_config")
 def get_current_site_configuration():
     """
     Return configuration for the current site.
@@ -54,7 +60,7 @@ def has_configuration_override(name):
         (bool): True if given key is present in the configuration.
     """
     configuration = get_current_site_configuration()
-    if configuration and name in configuration.values:
+    if configuration and name in configuration.site_values:
         return True
     return False
 

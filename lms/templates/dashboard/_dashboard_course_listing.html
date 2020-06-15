@@ -43,9 +43,98 @@ course_id = course_overview.id
 #course_progression = get_overall_progress(user_id,course_id)
 course_progression = 50
 
-"""
 if not duration:
     duration = 0
+<li class="course-item">
+  % if display_course_modes_on_dashboard:
+    <%
+        course_verified_certs = enrollment_mode_display(
+            enrollment.mode,
+            verification_status.get('status'),
+            course_overview.id
+        )
+    %>
+    <%
+        mode_class = course_verified_certs.get('display_mode', '')
+        if mode_class:
+            mode_class = ' ' + mode_class ;
+    %>
+  % else:
+    <% mode_class = '' %>
+  % endif
+      <div class="course-container"
+        % if getattr(course_overview, 'language'):
+          lang="${course_overview.language}"
+        % endif
+      >
+<article class="course${mode_class}" aria-labelledby="course-title-${enrollment.course_id}" id="course-card-${course_card_index}">
+  <% course_target = reverse(course_home_url_name(course_overview.id), args=[six.text_type(course_overview.id)]) %>
+  <section class="details" aria-labelledby="details-heading-${enrollment.course_id}">
+      <h2 class="hd hd-2 sr" id="details-heading-${enrollment.course_id}">${_('Course details')}</h2>
+    <div class="wrapper-course-image" aria-hidden="true">
+      % if show_courseware_link and not is_unfulfilled_entitlement:
+        % if not is_course_blocked and not is_course_expired:
+            <a href="${course_target}" data-course-key="${enrollment.course_id}" class="cover course-target-link" tabindex="-1">
+              <img src="${course_overview.image_urls['small']}" class="course-image" alt="${_('{course_number} {course_name} Home Page').format(course_number=course_overview.number, course_name=course_overview.display_name_with_default)}" />
+            </a>
+        % else:
+            <a class="fade-cover">
+              <img src="${course_overview.image_urls['small']}" class="course-image" alt="${_('{course_number} {course_name} Cover Image').format(course_number=course_overview.number, course_name=course_overview.display_name_with_default)}" />
+            </a>
+        % endif
+      % else:
+        <a class="cover">
+          <img src="${course_overview.image_urls['small']}" class="course-image" alt="${_('{course_number} {course_name} Cover Image').format(course_number=course_overview.number, course_name=course_overview.display_name_with_default)}" />
+        </a>
+      % endif
+      % if display_course_modes_on_dashboard and course_verified_certs.get('display_mode') != 'audit':
+        <span class="sts-enrollment" title="${course_verified_certs.get('enrollment_title')}">
+          <span class="label">${_("Enrolled as: ")}</span>
+          % if course_verified_certs.get('show_image'):
+              <img class="deco-graphic" src="${static.url('images/verified-ribbon.png')}" alt="${course_verified_certs.get('image_alt')}" />
+          % endif
+          <div class="sts-enrollment-value">${course_verified_certs.get('enrollment_value')}</div>
+        </span>
+      % endif
+    </div>
+      <div class="wrapper-course-details">
+        <h3 class="course-title" id="course-title-${enrollment.course_id}">
+          % if show_courseware_link and not is_unfulfilled_entitlement:
+            % if not is_course_blocked and not is_course_expired:
+              <a data-course-key="${enrollment.course_id}" href="${course_target}" class="course-target-link">${course_overview.display_name_with_default}</a>
+            % else:
+              <a class="disable-look" data-course-key="${enrollment.course_id}">${course_overview.display_name_with_default}</a>
+            % endif
+          % else:
+            <span>${course_overview.display_name_with_default}</span>
+          % endif
+        </h3>
+        <div class="course-info">
+          <span class="info-university">${course_overview.display_org_with_default} - </span>
+          <span class="info-course-id">${course_overview.display_number_with_default}</span>
+          <%
+            enrollment_date = course_overview.self_paced and enrollment and enrollment.created
+            if course_overview.start_date_is_still_default:
+                container_string = _("Coming Soon")
+                course_date = None
+            else:
+                format = 'shortDate'
+                if course_overview.has_ended():
+                    container_string = _("Ended - {date}")
+                    course_date = course_overview.end
+                elif course_overview.has_started():
+                    container_string = _("Started - {date}")
+                    course_date = enrollment_date or course_overview.dashboard_start_display
+                elif course_overview.starts_within(days=5):
+                    container_string = _("Starts - {date}")
+                    course_date = course_overview.dashboard_start_display
+                    format = 'defaultFormat'
+                else: ## hasn't started yet
+                    container_string = _("Starts - {date}")
+                    course_date = course_overview.dashboard_start_display
+                endif
+            endif
+          %>
 
 hour_string = 'hour'
 if int(duration) > 1:
@@ -54,6 +143,10 @@ if int(duration) > 1:
 %>
 
 <%
+    % else:
+        <%include file="_dashboard_course_resume.html" args="resume_button_url=resume_button_url, course_overview=course_overview, enrollment=enrollment, is_unfulfilled_entitlement=is_unfulfilled_entitlement, is_course_blocked=is_course_blocked, course_target=course_target, related_programs=related_programs"/>
+      % endif
+    % endif
 
 if required:
     required = "mandatory"
@@ -180,6 +273,7 @@ else:
 
 
 
+<<<<<<< HEAD
 % elif atp_rank == 'finish' and course_about == 0:
   % if compteur < 5:
   <li class="atp_course_item" data-categ="${categ.lower().replace(' ','')}">
@@ -198,6 +292,49 @@ else:
    <div class="atp_course_info">
           <div class="atp_course_duration">
                   <div class="inside_atp_left"><img src="${static.url('images/duree.svg')}" class="svg"/><span>${duration}</span><div style="display:block;clear:left;height:0px;"></div></div>
+=======
+        % if verification_status.get('should_display') and verification_status.get('status') in [VERIFY_STATUS_NEED_TO_VERIFY, VERIFY_STATUS_SUBMITTED, VERIFY_STATUS_RESUBMITTED, VERIFY_STATUS_APPROVED, VERIFY_STATUS_NEED_TO_REVERIFY]:
+          <div class="message message-status wrapper-message-primary is-shown">
+            % if verification_status['status'] == VERIFY_STATUS_NEED_TO_VERIFY:
+              <div class="verification-reminder">
+                % if verification_status['days_until_deadline'] is not None:
+                  <h4 class="message-title">${_('Verification not yet complete.')}</h4>
+                  <p class="message-copy">${ungettext(
+                    'You only have {days} day left to verify for this course.',
+                    'You only have {days} days left to verify for this course.',
+                    verification_status['days_until_deadline']
+                  ).format(days=verification_status['days_until_deadline'])}</p>
+                % else:
+                  <h4 class="message-title">${_('Almost there!')}</h4>
+                  <p class="message-copy">${_('You still need to verify for this course.')}</p>
+                % endif
+              </div>
+              <div class="verification-cta">
+                <a href="${reverse('verify_student_verify_now', kwargs={'course_id': six.text_type(course_overview.id)})}" class="btn" data-course-id="${course_overview.id}">${_('Verify Now')}</a>
+              </div>
+            % elif verification_status['status'] == VERIFY_STATUS_SUBMITTED:
+              <h4 class="message-title">${_('You have submitted your verification information.')}</h4>
+              <p class="message-copy">${_('You will see a message on your dashboard when the verification process is complete (usually within 5-7 days).')}</p>
+            % elif verification_status['status'] == VERIFY_STATUS_RESUBMITTED:
+              <h4 class="message-title">${_('Your current verification will expire soon!')}</h4>
+              <p class="message-copy">${_('You have submitted your reverification information. You will see a message on your dashboard when the verification process is complete (usually within 5-7 days).')}</p>
+            % elif verification_status['status'] == VERIFY_STATUS_APPROVED:
+              <h4 class="message-title">${_('You have successfully verified your ID with edX')}</h4>
+              % if verification_status.get('verification_good_until') is not None:
+                <p class="message-copy">${_('Your current verification is effective until {date}.').format(date=verification_status['verification_good_until'])}
+              % endif
+            % elif verification_status['status'] == VERIFY_STATUS_NEED_TO_REVERIFY:
+              <h4 class="message-title">${_('Your current verification will expire soon.')}</h4>
+              ## Translators: start_link and end_link will be replaced with HTML tags;
+              ## please do not translate these.
+              <p class="message-copy">${Text(_('Your current verification will expire in {days} days. {start_link}Re-verify your identity now{end_link} using a webcam and a government-issued photo ID.')).format(
+                  start_link=HTML('<a href="{href}">').format(href=reverse('verify_student_reverify')),
+                  end_link=HTML('</a>'),
+                  days=settings.VERIFY_STUDENT.get("EXPIRING_SOON_WINDOW")
+                )}
+              </p>
+            % endif
+>>>>>>> 8c9c536e82f6098d73c4de634d2c89a6f67aaee0
           </div>
           <div class="atp_course_dificulties">
                   <div class="inside_atp"><span>${_(required)}</span><img src="${static.url('images/obligatoire.svg')}" class="svg"/><div style="display:block;clear:left;height:0px;"></div></div>
@@ -297,6 +434,45 @@ else:
    </div>
   </li>
 
+<<<<<<< HEAD
+=======
+        % if course_mode_info and course_mode_info['show_upsell'] and not entitlement:
+          <div class="message message-upsell has-actions is-shown">
+            <div class="wrapper-extended">
+              <p class="message-copy" align="auto">
+                <b class="message-copy-bold">
+                  ${_("Pursue a {cert_name_long} to highlight the knowledge and skills you gain in this course.").format(cert_name_long=cert_name_long)}
+                </b><br>
+                  ${Text(_("It's official. It's easily shareable. "
+                      "It's a proven motivator to complete the course. {line_break}"
+                      "{link_start}Learn more about the verified {cert_name_long}{link_end}.")).format(
+                        line_break=HTML('<br>'),
+                        link_start=HTML('<a href="{}" class="verified-info" data-course-key="{}">').format(
+                          marketing_link('WHAT_IS_VERIFIED_CERT'),
+                          enrollment.course_id
+                        ),
+                        link_end=HTML('</a>'),
+                        cert_name_long=cert_name_long
+                      )}
+              </p>
+              <div class="action-upgrade-container">
+                % if use_ecommerce_payment_flow and course_mode_info['verified_sku']:
+                  <a class="action action-upgrade" href="${ecommerce_payment_page}?sku=${course_mode_info['verified_sku']}">
+                % else:
+                  <a class="action action-upgrade" href="${reverse('verify_student_upgrade_and_verify', kwargs={'course_id': six.text_type(course_overview.id)})}" data-course-id="${course_overview.id}" data-user="${user.username}">
+                % endif
+                    <span class="action-upgrade-icon" aria-hidden="true"></span>
+                  <span class="wrapper-copy">
+                    <span class="copy" id="upgrade-to-verified">${_("Upgrade to Verified")}</span>
+                      <span class="sr">&nbsp;${_(course_overview.display_name_with_default)}</span>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </div>
+        % endif
+      % endif
+>>>>>>> 8c9c536e82f6098d73c4de634d2c89a6f67aaee0
 
 
 % elif atp_rank == 'cours' and course_about == 1:

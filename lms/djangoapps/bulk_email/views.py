@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 from django.http import Http404
 
 from bulk_email.models import Optout
-from courseware.courses import get_course_by_id
+from lms.djangoapps.courseware.courses import get_course_by_id
 from edxmako.shortcuts import render_to_response
 from lms.djangoapps.discussion.notification_prefs.views import (
     UsernameCipher,
@@ -36,7 +36,7 @@ def opt_out_email_updates(request, token, course_id):
     Raises a 404 if there are any errors parsing the input.
     """
     try:
-        username = UsernameCipher().decrypt(token.encode())
+        username = UsernameCipher().decrypt(token).decode("utf-8")
         user = User.objects.get(username=username)
         course_key = CourseKey.from_string(course_id)
         course = get_course_by_id(course_key, depth=0)
@@ -49,23 +49,22 @@ def opt_out_email_updates(request, token, course_id):
     except InvalidKeyError:
         raise Http404("course")
 
+    unsub_check = request.POST.get('unsubscribe', False)
     context = {
         'course': course,
-        'cancelled': False,
-        'confirmed': False,
+        'unsubscribe': unsub_check
     }
 
-    if request.method == 'POST':
-        if request.POST.get('submit') == 'confirm':
-            Optout.objects.get_or_create(user=user, course_id=course.id)
-            log.info(
-                u"User %s (%s) opted out of receiving emails from course %s",
-                user.username,
-                user.email,
-                course_id,
-            )
-            context['confirmed'] = True
-        else:
-            context['cancelled'] = True
+    if request.method == 'GET':
+        return render_to_response('bulk_email/confirm_unsubscribe.html', context)
 
-    return render_to_response('bulk_email/unsubscribe.html', context)
+    if request.method == 'POST' and unsub_check:
+        Optout.objects.get_or_create(user=user, course_id=course_key)
+        log.info(
+            u"User %s (%s) opted out of receiving emails from course %s",
+            user.username,
+            user.email,
+            course_id,
+        )
+
+    return render_to_response('bulk_email/unsubscribe_success.html', context)

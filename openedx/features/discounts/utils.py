@@ -4,23 +4,23 @@ Utility functions for working with discounts and discounted pricing.
 
 from datetime import datetime
 
+import pytz
 import six
+from django.utils.translation import get_language
 from django.utils.translation import ugettext as _
 from edx_django_utils.cache import RequestCache
-import pytz
-
-from course_modes.models import get_course_prices, format_course_price
-from lms.djangoapps.courseware.date_summary import verified_upgrade_deadline_link
-from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
-from experiments.models import ExperimentData
-
-from openedx.core.djangolib.markup import HTML
 from web_fragments.fragment import Fragment
+
+from course_modes.models import format_course_price, get_course_prices
+from experiments.models import ExperimentData
+from lms.djangoapps.courseware.utils import verified_upgrade_deadline_link
+from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
+from openedx.core.djangolib.markup import HTML, Text
 from openedx.features.discounts.applicability import (
+    REV1008_EXPERIMENT_ID,
     can_receive_discount,
-    get_discount_expiration_date,
     discount_percentage,
-    REV1008_EXPERIMENT_ID
+    get_discount_expiration_date
 )
 
 
@@ -119,7 +119,7 @@ def generate_offer_html(user, course):
                 can_receive_discount(user=user, course=course, discount_expiration_date=discount_expiration_date)):
             # Translator: xgettext:no-python-format
             offer_message = _(u'{banner_open} Upgrade by {discount_expiration_date} and save {percentage}% '
-                              u'[{strikeout_price}]{span_close}{br}Discount will be automatically applied at checkout. '
+                              u'[{strikeout_price}]{span_close}{br}Use code {b_open}{code}{b_close} at checkout! '
                               u'{a_open}Upgrade Now{a_close}{div_close}')
 
             message_html = HTML(offer_message).format(
@@ -127,6 +127,9 @@ def generate_offer_html(user, course):
                     upgrade_link=verified_upgrade_deadline_link(user=user, course=course)
                 ),
                 a_close=HTML('</a>'),
+                b_open=HTML('<b>'),
+                code=Text('BIENVENIDOAEDX') if get_language() == 'es-419' else Text('EDXWELCOME'),
+                b_close=HTML('</b>'),
                 br=HTML('<br>'),
                 banner_open=HTML(
                     '<div class="first-purchase-offer-banner" role="note">'

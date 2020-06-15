@@ -14,7 +14,7 @@
 
 
 from django.conf import settings
-from django.template import Context, engines
+from django.template import Context, engines, Origin
 from edx_django_utils.cache import RequestCache
 from mako.template import Template as MakoTemplate
 from six import text_type
@@ -24,6 +24,8 @@ from .request_context import get_template_request_context
 from .shortcuts import is_any_marketing_link_set, is_marketing_link_set, marketing_link
 
 KEY_CSRF_TOKENS = ('csrf_token', 'csrf')
+
+UNKNOWN_SOURCE = '<unknown source>'
 
 
 class Template(object):
@@ -36,6 +38,8 @@ class Template(object):
     def __init__(self, *args, **kwargs):
         """Overrides base __init__ to provide django variable overrides"""
         self.engine = kwargs.pop('engine', engines[Engines.MAKO])
+        if kwargs.get('origin') is None:
+            self.origin = Origin(UNKNOWN_SOURCE)
         if len(args) and isinstance(args[0], MakoTemplate):
             self.mako_template = args[0]
         else:
@@ -64,9 +68,9 @@ class Template(object):
             # The context_dictionary is later updated with template specific
             # variables. There are potentially hundreds of calls to templates
             # rendering and we don't want them to interfere with each other, so
-            # we store the items() from the output of the context processors and
-            # and recreate a new dict every time we pull from the cache.
-            request_cache.set('cp_output', context_dictionary.items())
+            # we make a copy from the output of the context processors and then
+            # recreate a new dict every time we pull from the cache.
+            request_cache.set('cp_output', dict(context_dictionary))
 
         if isinstance(context, Context):
             context_dictionary.update(context.flatten())

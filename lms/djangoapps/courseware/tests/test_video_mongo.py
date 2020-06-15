@@ -111,6 +111,7 @@ class TestVideoYouTube(TestVideo):  # pylint: disable=test-inherits-tests
                 'end': 3610.0,
                 'transcriptLanguage': 'en',
                 'transcriptLanguages': OrderedDict({'en': 'English', 'uk': u'Українська'}),
+                'ytMetadataEndpoint': '',
                 'ytTestTimeout': 1500,
                 'ytApiUrl': 'https://www.youtube.com/iframe_api',
                 'lmsRootURL': settings.LMS_ROOT_URL,
@@ -194,6 +195,7 @@ class TestVideoNonYouTube(TestVideo):  # pylint: disable=test-inherits-tests
                 'end': 3610.0,
                 'transcriptLanguage': 'en',
                 'transcriptLanguages': OrderedDict({'en': 'English'}),
+                'ytMetadataEndpoint': '',
                 'ytTestTimeout': 1500,
                 'ytApiUrl': 'https://www.youtube.com/iframe_api',
                 'lmsRootURL': settings.LMS_ROOT_URL,
@@ -257,6 +259,7 @@ class TestGetHtmlMethod(BaseTestVideoXBlock):
             'end': 3610.0,
             'transcriptLanguage': 'en',
             'transcriptLanguages': OrderedDict({'en': 'English'}),
+            'ytMetadataEndpoint': '',
             'ytTestTimeout': 1500,
             'ytApiUrl': 'https://www.youtube.com/iframe_api',
             'lmsRootURL': settings.LMS_ROOT_URL,
@@ -1323,7 +1326,6 @@ class TestEditorSavedMethod(BaseTestVideoXBlock):
         }
         # path to subs_3_yD_cEKoCk.srt.sjson file
         self.file_name = 'subs_3_yD_cEKoCk.srt.sjson'
-        # pylint: disable=no-value-for-parameter
         self.test_dir = path(__file__).abspath().dirname().dirname().dirname().dirname().dirname()
         self.file_path = self.test_dir + '/common/test/data/uploads/' + self.file_name
 
@@ -2236,6 +2238,7 @@ class TestVideoWithBumper(TestVideo):  # pylint: disable=test-inherits-tests
                 'end': 3610.0,
                 'transcriptLanguage': 'en',
                 'transcriptLanguages': OrderedDict({'en': 'English', 'uk': u'Українська'}),
+                'ytMetadataEndpoint': '',
                 'ytTestTimeout': 1500,
                 'ytApiUrl': 'https://www.youtube.com/iframe_api',
                 'lmsRootURL': settings.LMS_ROOT_URL,
@@ -2311,6 +2314,7 @@ class TestAutoAdvanceVideo(TestVideo):
                 'end': 3610.0,
                 'transcriptLanguage': 'en',
                 'transcriptLanguages': OrderedDict({'en': 'English', 'uk': u'Українська'}),
+                'ytMetadataEndpoint': '',
                 'ytTestTimeout': 1500,
                 'ytApiUrl': 'https://www.youtube.com/iframe_api',
                 'lmsRootURL': settings.LMS_ROOT_URL,

@@ -30,6 +30,12 @@ from courseware.courses import get_course_by_id
   if secondary_color is None:
     secondary_color="#27ABEA"
 %>
+
+% if display_reset_dates_banner:
+    <script type="text/javascript">
+        $('.reset-deadlines-banner').css('display', 'flex');
+    </script>
+% endif
 <%def name="course_name()">
  <% return _("{course_number} Courseware").format(course_number=course.display_number_with_default) %>
 </%def>

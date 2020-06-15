@@ -23,7 +23,8 @@ from rest_framework.views import APIView
 from six import text_type, iteritems
 
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
-from openedx.core.lib.api.authentication import OAuth2AuthenticationAllowInactiveUser
+from openedx.core.djangoapps.user_api.accounts import BIO_MAX_LENGTH
+from openedx.core.lib.api.authentication import BearerAuthenticationAllowInactiveUser
 from openedx.core.lib.api.permissions import IsUserInUrl
 
 
@@ -120,7 +121,7 @@ def view_auth_classes(is_user=False, is_authenticated=True):
         """
         func_or_class.authentication_classes = (
             JwtAuthentication,
-            OAuth2AuthenticationAllowInactiveUser,
+            BearerAuthenticationAllowInactiveUser,
             SessionAuthenticationAllowInactiveUser
         )
         func_or_class.permission_classes = ()
@@ -154,11 +155,16 @@ def add_serializer_errors(serializer, data, field_errors):
         errors = serializer.errors
         for key, error in iteritems(errors):
             error = clean_errors(error)
+            if key == 'bio':
+                user_message = _(u"The about me field must be at most {} characters long.".format(BIO_MAX_LENGTH))
+            else:
+                user_message = _(u"This value is invalid.")
+
             field_errors[key] = {
                 'developer_message': u"Value '{field_value}' is not valid for field '{field_name}': {error}".format(
                     field_value=data.get(key, ''), field_name=key, error=error
                 ),
-                'user_message': _(u"This value is invalid."),
+                'user_message': user_message,
             }
     return field_errors
 
@@ -417,7 +423,7 @@ def verify_course_exists(view_func):
                 error_code='invalid_course_key'
             )
 
-        if not CourseOverview.get_from_id_if_exists(course_key):
+        if not CourseOverview.course_exists(course_key):
             raise self.api_error(
                 status_code=status.HTTP_404_NOT_FOUND,
                 developer_message=u"Requested grade for unknown course {course}".format(course=text_type(course_key)),

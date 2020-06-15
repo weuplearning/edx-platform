@@ -137,7 +137,7 @@ class CourseModeViewTest(CatalogIntegrationMixin, UrlResetMixin, ModuleStoreTest
         # Configure whether we're upgrading or not
         url = reverse('course_modes_choose', args=[six.text_type(prof_course.id)])
         response = self.client.get(url)
-        self.assertRedirects(response, 'http://testserver/test_basket/add/?sku=TEST', fetch_redirect_response=False)
+        self.assertRedirects(response, '/test_basket/add/?sku=TEST', fetch_redirect_response=False)
         ecomm_test_utils.update_commerce_config(enabled=False)
 
     @httpretty.activate
@@ -197,6 +197,39 @@ class CourseModeViewTest(CatalogIntegrationMixin, UrlResetMixin, ModuleStoreTest
             self.assertContains(response, "Credit")
         else:
             self.assertNotContains(response, "Credit")
+
+    @httpretty.activate
+    @patch('course_modes.views.enterprise_customer_for_request')
+    @patch('course_modes.views.get_course_final_price')
+    @ddt.data(
+        (1.0, True),
+        (50.0, False),
+        (0.0, True),
+        (None, False),
+    )
+    @ddt.unpack
+    def test_display_after_discounted_price(
+        self,
+        discounted_price,
+        is_enterprise_enabled,
+        mock_get_course_final_price,
+        mock_enterprise_customer_for_request
+    ):
+        verified_mode = CourseModeFactory.create(mode_slug='verified', course_id=self.course.id, sku='dummy')
+        CourseEnrollmentFactory(
+            is_active=True,
+            course_id=self.course.id,
+            user=self.user
+        )
+
+        mock_enterprise_customer_for_request.return_value = {'name': 'dummy'} if is_enterprise_enabled else {}
+        mock_get_course_final_price.return_value = discounted_price
+        url = reverse('course_modes_choose', args=[self.course.id])
+        response = self.client.get(url)
+
+        if is_enterprise_enabled:
+            self.assertContains(response, discounted_price)
+        self.assertContains(response, verified_mode.min_price)
 
     @httpretty.activate
     @ddt.data(True, False)

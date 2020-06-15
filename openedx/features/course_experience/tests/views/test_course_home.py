@@ -25,7 +25,7 @@ from experiments.models import ExperimentData
 from lms.djangoapps.commerce.models import CommerceConfiguration
 from lms.djangoapps.commerce.utils import EcommerceService
 from lms.djangoapps.course_goals.api import add_course_goal, remove_course_goal
-from lms.djangoapps.courseware.date_summary import verified_upgrade_deadline_link
+from lms.djangoapps.courseware.utils import verified_upgrade_deadline_link
 from lms.djangoapps.courseware.tests.factories import (
     BetaTesterFactory,
     GlobalStaffFactory,
@@ -51,6 +51,7 @@ from openedx.core.djangolib.markup import HTML
 from openedx.features.course_duration_limits.models import CourseDurationLimitConfig
 from openedx.features.course_experience import (
     COURSE_ENABLE_UNENROLLED_ACCESS_FLAG,
+    RELATIVE_DATES_FLAG,
     SHOW_REVIEWS_TOOL_FLAG,
     SHOW_UPGRADE_MSG_ON_COURSE_HOME,
     UNIFIED_COURSE_TAB_FLAG
@@ -70,7 +71,6 @@ from .test_course_updates import create_course_update, remove_course_updates
 TEST_PASSWORD = 'test'
 TEST_CHAPTER_NAME = 'Test Chapter'
 TEST_COURSE_TOOLS = 'Course Tools'
-TEST_COURSE_TODAY = 'Today is'
 TEST_BANNER_CLASS = '<div class="course-expiration-message">'
 TEST_WELCOME_MESSAGE = '<h2>Welcome!</h2>'
 TEST_UPDATE_MESSAGE = '<h2>Test Update!</h2>'
@@ -311,7 +311,6 @@ class TestCourseHomePageAccess(CourseHomePageTestCase):
 
         # Verify that the course tools and dates are always shown
         self.assertContains(response, TEST_COURSE_TOOLS)
-        self.assertContains(response, TEST_COURSE_TODAY)
 
         is_anonymous = user_type is CourseUserType.ANONYMOUS
         is_enrolled = user_type is CourseUserType.ENROLLED
@@ -365,7 +364,6 @@ class TestCourseHomePageAccess(CourseHomePageTestCase):
 
         # Verify that the course tools and dates are always shown
         self.assertContains(response, TEST_COURSE_TOOLS)
-        self.assertContains(response, TEST_COURSE_TODAY)
 
         # Verify that welcome messages are never shown
         self.assertNotContains(response, TEST_WELCOME_MESSAGE)
@@ -443,7 +441,7 @@ class TestCourseHomePageAccess(CourseHomePageTestCase):
         bannerText = u'''<div class="first-purchase-offer-banner" role="note">
              <span class="first-purchase-offer-banner-bold">
              Upgrade by {discount_expiration_date} and save {percentage}% [{strikeout_price}]</span>
-             <br>Discount will be automatically applied at checkout. <a href="{upgrade_link}">Upgrade Now</a>
+             <br>Use code <b>EDXWELCOME</b> at checkout! <a href="{upgrade_link}">Upgrade Now</a>
              </div>'''.format(
             discount_expiration_date=discount_expiration_date,
             percentage=percentage,
@@ -468,7 +466,7 @@ class TestCourseHomePageAccess(CourseHomePageTestCase):
 
         user = UserFactory.create(password=self.TEST_PASSWORD)
         ScheduleFactory(
-            start=THREE_YEARS_AGO,
+            start_date=THREE_YEARS_AGO,
             enrollment__mode=CourseMode.VERIFIED,
             enrollment__course_id=course.id,
             enrollment__user=user
@@ -502,7 +500,7 @@ class TestCourseHomePageAccess(CourseHomePageTestCase):
 
         user = role_factory.create(password=self.TEST_PASSWORD, course_key=course.id)
         ScheduleFactory(
-            start=THREE_YEARS_AGO,
+            start_date=THREE_YEARS_AGO,
             enrollment__mode=CourseMode.AUDIT,
             enrollment__course_id=course.id,
             enrollment__user=user
@@ -558,7 +556,7 @@ class TestCourseHomePageAccess(CourseHomePageTestCase):
 
         user = role_factory.create(password=self.TEST_PASSWORD)
         ScheduleFactory(
-            start=THREE_YEARS_AGO,
+            start_date=THREE_YEARS_AGO,
             enrollment__mode=CourseMode.AUDIT,
             enrollment__course_id=course.id,
             enrollment__user=user
@@ -590,7 +588,9 @@ class TestCourseHomePageAccess(CourseHomePageTestCase):
         audit_user = UserFactory(password=self.TEST_PASSWORD)
         self.client.login(username=audit_user.username, password=self.TEST_PASSWORD)
         audit_enrollment = CourseEnrollment.enroll(audit_user, course.id, mode=CourseMode.AUDIT)
-        ScheduleFactory(start=THREE_YEARS_AGO + timedelta(days=1), enrollment=audit_enrollment)
+        audit_enrollment.created = THREE_YEARS_AGO + timedelta(days=1)
+        audit_enrollment.save()
+        ScheduleFactory(enrollment=audit_enrollment)
 
         response = self.client.get(url)
 
@@ -639,7 +639,6 @@ class TestCourseHomePageAccess(CourseHomePageTestCase):
         response = self.client.get(course_home_url(audit_only_course))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, TEST_COURSE_TOOLS)
-        self.assertContains(response, TEST_COURSE_TODAY)
         self.assertNotContains(response, TEST_BANNER_CLASS)
 
     @mock.patch.dict(settings.FEATURES, {'DISABLE_START_DATES': False})
@@ -661,7 +660,7 @@ class TestCourseHomePageAccess(CourseHomePageTestCase):
         audit_user = UserFactory(password=self.TEST_PASSWORD)
         self.client.login(username=audit_user.username, password=self.TEST_PASSWORD)
         audit_enrollment = CourseEnrollment.enroll(audit_user, course.id, mode=CourseMode.AUDIT)
-        ScheduleFactory(start=THREE_YEARS_AGO, enrollment=audit_enrollment)
+        ScheduleFactory(start_date=THREE_YEARS_AGO, enrollment=audit_enrollment)
         FBEEnrollmentExclusion.objects.create(
             enrollment=audit_enrollment
         )
@@ -952,6 +951,7 @@ class CourseHomeFragmentViewTests(ModuleStoreTestCase):
         self.course = CourseFactory(
             start=now() - timedelta(days=30),
             end=end,
+            self_paced=True,
         )
         self.url = course_home_url(self.course)
 

@@ -5,18 +5,18 @@ Tests for django admin command `send_verification_expiry_email` in the verify_st
 
 from datetime import timedelta
 
-import boto
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core import mail
 from django.core.management import call_command, CommandError
+from django.test import TestCase
 from django.test.utils import override_settings
 from django.utils.timezone import now
 from mock import patch
 from student.tests.factories import UserFactory
 from testfixtures import LogCapture
 
-from common.test.utils import MockS3Mixin
+from common.test.utils import MockS3BotoMixin
 from lms.djangoapps.verify_student.models import SoftwareSecurePhotoVerification
 from lms.djangoapps.verify_student.tests.test_models import FAKE_SETTINGS, mock_software_secure_post
 
@@ -25,14 +25,12 @@ LOGGER_NAME = 'lms.djangoapps.verify_student.management.commands.send_verificati
 
 @patch.dict(settings.VERIFY_STUDENT, FAKE_SETTINGS)
 @patch('lms.djangoapps.verify_student.models.requests.post', new=mock_software_secure_post)
-class TestSendVerificationExpiryEmail(MockS3Mixin):
+class TestSendVerificationExpiryEmail(MockS3BotoMixin, TestCase):
     """ Tests for django admin command `send_verification_expiry_email` in the verify_student module """
 
     def setUp(self):
         """ Initial set up for tests """
         super(TestSendVerificationExpiryEmail, self).setUp()
-        connection = boto.connect_s3()
-        connection.create_bucket(FAKE_SETTINGS['SOFTWARE_SECURE']['S3_BUCKET'])
         Site.objects.create(domain='edx.org', name='edx.org')
         self.resend_days = settings.VERIFICATION_EXPIRY_EMAIL['RESEND_DAYS']
         self.days = settings.VERIFICATION_EXPIRY_EMAIL['DAYS_RANGE']
@@ -102,6 +100,8 @@ class TestSendVerificationExpiryEmail(MockS3Mixin):
         outdated_verification = self.create_and_submit(user)
         outdated_verification.status = 'approved'
         outdated_verification.save()
+
+        call_command('send_verification_expiry_email')
 
         # Check that the expiry_email_date is not set for the outdated verification
         expiry_email_date = SoftwareSecurePhotoVerification.objects.get(pk=outdated_verification.pk).expiry_email_date
@@ -238,3 +238,32 @@ class TestSendVerificationExpiryEmail(MockS3Mixin):
                      u"emails use --dry-run flag instead."
         with self.assertRaisesRegex(CommandError, err_string):
             call_command('send_verification_expiry_email')
+
+    def test_one_failed_but_others_succeeded(self):
+        """
+        Test that if the first verification fails to send, the rest still do.
+        """
+        verifications = []
+        for _i in range(2):
+            user = UserFactory.create()
+            verification = self.create_and_submit(user)
+            verification.status = 'approved'
+            verification.expiry_date = now() - timedelta(days=self.days)
+            verification.save()
+            verifications.append(verification)
+
+        with patch('lms.djangoapps.verify_student.management.commands.send_verification_expiry_email.ace') as mock_ace:
+            mock_ace.send.side_effect = (Exception('Aw shucks'), None)
+            with self.assertRaisesRegex(CommandError, 'One or more email attempts failed.*'):
+                with LogCapture(LOGGER_NAME) as logger:
+                    call_command('send_verification_expiry_email')
+
+        logger.check_present(
+            (LOGGER_NAME, 'ERROR', 'Could not send email for verification id {}'.format(verifications[0].id)),
+        )
+
+        for verification in verifications:
+            verification.refresh_from_db()
+        self.assertIsNone(verifications[0].expiry_email_date)
+        self.assertIsNotNone(verifications[1].expiry_email_date)
+        self.assertEqual(mock_ace.send.call_count, 2)

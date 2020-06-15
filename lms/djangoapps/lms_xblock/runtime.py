@@ -20,7 +20,7 @@ from openedx.core.lib.xblock_utils import wrap_xblock_aside, xblock_local_resour
 from xmodule.library_tools import LibraryToolsService
 from xmodule.modulestore.django import ModuleI18nService, modulestore
 from xmodule.partitions.partitions_service import PartitionService
-from xmodule.services import SettingsService
+from xmodule.services import SettingsService, TeamsConfigurationService
 from xmodule.x_module import ModuleSystem
 
 
@@ -28,7 +28,13 @@ def handler_url(block, handler_name, suffix='', query='', thirdparty=False):
     """
     This method matches the signature for `xblock.runtime:Runtime.handler_url()`
 
-    See :method:`xblock.runtime:Runtime.handler_url`
+    :param block: The block to generate the url for
+    :param handler_name: The handler on that block that the url should resolve to
+    :param suffix: Any path suffix that should be added to the handler url
+    :param query: Any query string that should be added to the handler url
+        (which should not include an initial ? or &)
+    :param thirdparty: If true, return a fully-qualified URL instead of relative
+        URL. This is useful for URLs to be used by third-party services.
     """
     view_name = 'xblock_handler'
     if handler_name:
@@ -157,6 +163,7 @@ class LmsModuleSystem(ModuleSystem):  # pylint: disable=abstract-method
             services['badging'] = BadgingService(course_id=kwargs.get('course_id'), modulestore=store)
         self.request_token = kwargs.pop('request_token', None)
         services['teams'] = TeamsService()
+        services['teams_configuration'] = TeamsConfigurationService()
         super(LmsModuleSystem, self).__init__(**kwargs)
 
     def handler_url(self, *args, **kwargs):

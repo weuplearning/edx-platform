@@ -260,7 +260,11 @@ class VideoBlock(
         if getattr(self.runtime, 'suppports_state_for_anonymous_users', False):
             # The new runtime can support anonymous users as fully as regular users:
             return self.student_view(context)
-        return Fragment(self.get_html(view=PUBLIC_VIEW))
+
+        fragment = Fragment(self.get_html(view=PUBLIC_VIEW))
+        add_webpack_to_fragment(fragment, 'VideoBlockPreview')
+        shim_xmodule_js(fragment, 'Video')
+        return fragment
 
     def get_html(self, view=STUDENT_VIEW):
 
@@ -415,6 +419,13 @@ class VideoBlock(
             'ytTestTimeout': settings.YOUTUBE['TEST_TIMEOUT'],
             'ytApiUrl': settings.YOUTUBE['API'],
             'lmsRootURL': settings.LMS_ROOT_URL,
+            'ytMetadataEndpoint': (
+                # In the new runtime, get YouTube metadata via a handler. The handler supports anonymous users and
+                # can work in sandboxed iframes. In the old runtime, the JS will call the LMS's yt_video_metadata
+                # API endpoint directly (not an XBlock handler).
+                self.runtime.handler_url(self, 'yt_video_metadata')
+                if getattr(self.runtime, 'suppports_state_for_anonymous_users', False) else ''
+            ),
 
             'transcriptTranslationUrl': self.runtime.handler_url(
                 self, 'transcript', 'translation/__lang__'
@@ -617,6 +628,8 @@ class VideoBlock(
         video_block = runtime.construct_xblock_from_class(cls, keys)
         field_data = cls.parse_video_xml(node)
         for key, val in field_data.items():
+            if key not in cls.fields:
+                continue  # parse_video_xml returns some old non-fields like 'source'
             setattr(video_block, key, cls.fields[key].from_json(val))
         # Don't use VAL in the new runtime:
         video_block.edx_video_id = None
@@ -808,7 +821,8 @@ class VideoBlock(
 
         _ = self.runtime.service(self, "i18n").ugettext
         video_url.update({
-            'help': _('The URL for your video. This can be a YouTube URL or a link to an .mp4, .ogg, or .webm video file hosted elsewhere on the Internet.'),  # pylint: disable=line-too-long
+            'help': _('The URL for your video. This can be a YouTube URL or a link to an .mp4, .ogg, or '
+                      '.webm video file hosted elsewhere on the Internet.'),
             'display_name': _('Default Video URL'),
             'field_name': 'video_url',
             'type': 'VideoList',

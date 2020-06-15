@@ -5,7 +5,6 @@ Much of this file was broken out from views.py, previous history can be found th
 """
 
 
-from functools import wraps
 import json
 import logging
 
@@ -15,7 +14,10 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import login as django_login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib import admin
 from django.http import HttpRequest, HttpResponse
+from django.shortcuts import redirect
+from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_exempt, csrf_protect, ensure_csrf_cookie
@@ -36,6 +38,7 @@ from openedx.core.djangoapps.user_authn.views.password_reset import send_passwor
 from openedx.core.djangoapps.user_authn.config.waffle import ENABLE_LOGIN_USING_THIRDPARTY_AUTH_ONLY
 from openedx.core.djangolib.markup import HTML, Text
 from openedx.core.lib.api.view_utils import require_post_params
+from student.helpers import get_next_url_for_login_page
 from student.models import LoginFailures, AllowedAuthUser, UserProfile
 from student.views import compose_and_send_activation_email
 from third_party_auth import pipeline, provider
@@ -110,8 +113,21 @@ def _check_excessive_login_attempts(user):
     """
     if user and LoginFailures.is_feature_enabled():
         if LoginFailures.is_user_locked_out(user):
-            raise AuthFailedError(_('This account has been temporarily locked due '
-                                    'to excessive login failures. Try again later.'))
+            _generate_locked_out_error_message()
+
+
+def _generate_locked_out_error_message():
+
+    locked_out_period_in_sec = settings.MAX_FAILED_LOGIN_ATTEMPTS_LOCKOUT_PERIOD_SECS
+    raise AuthFailedError(Text(_('To protect your account, it’s been temporarily '
+                                 'locked. Try again in {locked_out_period} minutes.'
+                                 '{li_start}To be on the safe side, you can reset your '
+                                 'password {link_start}here{link_end} before you try again.')).format(
+        link_start=HTML('<a "#login" class="form-toggle" data-type="password-reset">'),
+        link_end=HTML('</a>'),
+        li_start=HTML('<li>'),
+        li_end=HTML('</li>'),
+        locked_out_period=int(locked_out_period_in_sec / 60)))
 
 
 def _enforce_password_policy_compliance(request, user):
@@ -227,6 +243,27 @@ def _handle_failed_authentication(user, authenticated_user):
         else:
             AUDIT_LOG.warning(u"Login failed - password for {0} is invalid".format(user.email))
 
+    if user and LoginFailures.is_feature_enabled():
+        blocked_threshold, failure_count = LoginFailures.check_user_reset_password_threshold(user)
+        if blocked_threshold:
+            if not LoginFailures.is_user_locked_out(user):
+                max_failures_allowed = settings.MAX_FAILED_LOGIN_ATTEMPTS_ALLOWED
+                remaining_attempts = max_failures_allowed - failure_count
+                raise AuthFailedError(Text(_('Email or password is incorrect.'
+                                             '{li_start}You have {remaining_attempts} more sign-in '
+                                             'attempts before your account is temporarily locked.{li_end}'
+                                             '{li_start}If you\'ve forgotten your password, click '
+                                             '{link_start}here{link_end} to reset.{li_end}'
+                                             ))
+                                      .format(
+                    link_start=HTML('<a http="#login" class="form-toggle" data-type="password-reset">'),
+                    link_end=HTML('</a>'),
+                    li_start=HTML('<li>'),
+                    li_end=HTML('</li>'),
+                    remaining_attempts=remaining_attempts))
+            else:
+                _generate_locked_out_error_message()
+
     raise AuthFailedError(_('Email or password is incorrect.'))
 
 
@@ -292,11 +329,19 @@ def _check_user_auth_flow(site, user):
 
         # If user belongs to allowed domain and not whitelisted then user must login through allowed domain SSO
         if user_domain == allowed_domain and not AllowedAuthUser.objects.filter(site=site, email=user.email).exists():
-            msg = _(
-                u'As an {allowed_domain} user, You must login with your {allowed_domain} {provider} account.'
-            ).format(
+            msg = Text(_(
+                u'As {allowed_domain} user, You must login with your {allowed_domain} '
+                u'{link_start}{provider} account{link_end}.'
+            )).format(
                 allowed_domain=allowed_domain,
-                provider=site.configuration.get_value('THIRD_PARTY_AUTH_ONLY_PROVIDER')
+                link_start=HTML("<a href='{tpa_provider_link}'>").format(
+                    tpa_provider_link='{dashboard_url}?tpa_hint={tpa_hint}'.format(
+                        dashboard_url=reverse('dashboard'),
+                        tpa_hint=site.configuration.get_value('THIRD_PARTY_AUTH_ONLY_HINT'),
+                    )
+                ),
+                provider=site.configuration.get_value('THIRD_PARTY_AUTH_ONLY_PROVIDER'),
+                link_end=HTML("</a>")
             )
             raise AuthFailedError(msg)
 
@@ -419,6 +464,8 @@ def login_user(request):
         if is_user_third_party_authenticated:
             running_pipeline = pipeline.get(request)
             redirect_url = pipeline.get_complete_url(backend_name=running_pipeline['backend'])
+        elif settings.FEATURES.get('ENABLE_LOGIN_MICROFRONTEND'):
+            redirect_url = get_next_url_for_login_page(request)
 
         response = JsonResponse({
             'success': True,
@@ -456,6 +503,17 @@ def login_refresh(request):
     except AuthFailedError as error:
         log.exception(error.get_response())
         return JsonResponse(error.get_response(), status=400)
+
+
+def redirect_to_lms_login(request):
+    """
+    This view redirect the admin/login url to the site's login page if
+    waffle switch is on otherwise returns the admin site's login view.
+    """
+    if ENABLE_LOGIN_USING_THIRDPARTY_AUTH_ONLY.is_enabled():
+        return redirect('/login?next=/admin')
+    else:
+        return admin.site.login(request)
 
 
 class LoginSessionView(APIView):

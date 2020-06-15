@@ -16,7 +16,7 @@ from django.utils.timezone import now
 from milestones.tests.utils import MilestonesTestCaseMixin
 from mock import patch
 from six.moves import range
-from six.moves.urllib.parse import parse_qs  # pylint: disable=import-error
+from six.moves.urllib.parse import parse_qs
 
 from course_modes.models import CourseMode
 from lms.djangoapps.courseware.access_response import MilestoneAccessError, StartDateError, VisibilityError
@@ -280,10 +280,10 @@ class TestUserEnrollmentApi(UrlResetMixin, MobileAPITestCase, MobileAuthUserTest
                 user=self.user,
                 course_id=course.id
             )
+            enrollment.created = self.THREE_YEARS_AGO + datetime.timedelta(days=1)
+            enrollment.save()
+
             ScheduleFactory(
-                # TODO replace 'start' field with 'start_date' after data migration,
-                #  in removing writes from old field step in column renaming release
-                start=self.THREE_YEARS_AGO + datetime.timedelta(days=1),
                 enrollment=enrollment
             )
         else:
@@ -320,7 +320,7 @@ class TestUserEnrollmentApi(UrlResetMixin, MobileAPITestCase, MobileAuthUserTest
         Test that expired courses are only returned in v1 of API
         when waffle flag enabled, and un-expired courses always returned
         '''
-        CourseDurationLimitConfig.objects.create(enabled=True, enabled_as_of=datetime.datetime(2018, 1, 1))
+        CourseDurationLimitConfig.objects.create(enabled=True, enabled_as_of=datetime.datetime(2015, 1, 1))
         courses = self._get_enrollment_data(api_version, expired)
         self._assert_enrollment_results(api_version, courses, num_courses_returned, True)
 
