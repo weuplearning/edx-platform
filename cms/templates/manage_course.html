@@ -1,0 +1,349 @@
+<%page expression_filter="h"/>
+<%!
+from django.utils.translation import ugettext as _
+
+from openedx.core.djangolib.markup import HTML, Text
+%>
+<%inherit file="base.html" />
+
+<%def name="online_help_token()"><% return "home" %></%def>
+<%block name="title">${_("{studio_name} Home").format(studio_name=settings.STUDIO_SHORT_NAME)}</%block>
+<%block name="bodyclass">is-signedin index view-dashboard</%block>
+
+<%block name="requirejs">
+  require(["js/factories/index"], function (IndexFactory) {
+      IndexFactory();
+  });
+  require(['${static.url("js/atp/manage.js")}']);
+  //require(['https://demo-atp.themoocagency.com/media/dev/manage.js'])
+</%block>
+<%namespace name='static' file='static_content.html'/>
+<%block name="content">
+<link rel="stylesheet" type="text/css" href="${static.url("js/vendor/timepicker/jquery.timepicker.css")}">
+<link rel="stylesheet" type="text/css" href="${static.url("css/cms-style-vendor.css")}">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+<style>
+.img_fundamentals {
+  background-image: url('/static/images/fondamentaux.png');
+}
+* {
+  font-family: "mywebfont" !important;
+}
+#logo_cms {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+#title p {
+  text-transform: inherit !important;
+}
+.date_title h5 {
+ width: 100% !important;
+}
+#title h1 {
+ margin-bottom: 0;
+ text-transform: initial!important;
+ margin-top: 0px!important;
+}
+.separation-trait{
+  padding: 0!important;
+  margin: 0!important;
+  margin-bottom: 15px!important;
+  padding-bottom: 15px!important;
+}
+.last_sub_input{
+  padding: 0!important;
+  margin:0!important;
+}
+.cell_content{
+  padding-bottom: 0px!important;
+}
+.language_display{
+  font-size: 13px;
+  font-style: italic;
+  font-family: "mywebfont";
+  color: #05144d;
+  font-weight: 600;
+}
+#course_identity_voile_bis,.cell_content .field #course_identity_voile {
+  top: 40px !important;
+}
+.voile_gris{
+  position: relative;
+  height: 40px;
+  width: 40%;
+  left: calc(45% + 4px);
+  z-index: 1;
+  background-color: rgba(0,0,0,0.1);
+}
+#course_date_voile{
+  top: -138px;
+}
+#course_hour_voile{
+    top: -114px;
+}
+#invite_already_msg{
+  height: 30px;
+}
+.campaign-link-back{
+  width:70%;
+  text-align: center;
+}
+</style>
+<%
+course_key_cleared=str(course_key).replace('+','').replace(':','')
+%>
+<section id="content">
+  <section id="primary">
+    <div id="fil_ariane"></div>
+    <div id="title">
+      <h1 style="text-transform:uppercase!important;"><a href="/home/?campaign=${course_key_cleared}" class="primary_color"> < ${_('My campaigns')} </a> | ${_('Manage my campaign')}</h1>
+      <h2></h2>
+      <p>
+        ${_('Provide all the information required to launch your training campaign: starting/ending date, minimum percentage of success required, and campaign type.')}
+      </p>
+    </div>
+    <ul class="list-courses">
+      <!-- suite -->
+      <li class="course-item">
+        <div class="content_img">
+          <span class="img_${course.categ.lower().replace(' ','')}" /></span>
+          <span class="course_module_categ">${_(course.categ)}</span>
+          <img src="${overview.image_urls['raw']}" class="img_course"/>
+        </div>
+        <div class="content_info">
+          <h3 class="course-title">${course.display_name_with_default_escaped}</h3>
+          <div class="all_dates">
+            <ul>
+              <li><span>${_('Starting date')} :</span> <span id="add_course_start">${start_date}</span></li>
+              <li><span>${_('Ending date')} :</span> <span id="add_course_end">${end_date}</span></li>
+              <span style="display:block;clear:left;"></span>
+            </ul>
+          </div>
+          <div class="all_dates">
+            <ul>
+              <li><span id="add_course_org">${course.org}</span></li>
+              <span class="language_display">${_('Language')} : ${_(language_course)} </span>
+              <span style="display:block;clear:left;"></span>
+            </ul>
+          </div>
+          <div class="duration_course">
+            <object oa-reusable-svg
+                    data="${static.url('images/duree.svg')}"
+                    type="image/svg+xml"
+                    class="svg-class"
+                    data-class="timer_svg_color"
+                    >
+            </object>
+            <span>${details.effort}</span>
+          </div>
+        </div>
+        <span style="clear:left;display:block;"></span>
+      </li>
+    </ul>
+    <!-- cell 1/4 -->
+    <!-- cell 1/4 -->
+    <!-- cell 1/4 -->
+    <!-- cell 1/4 -->
+    <!-- cell 1/4 -->
+    <div class="cell_title">
+      <!--
+      <h3 id="h3_2"><div class="num" id="num_2">1/4</div><span>${_('campaign id')}</span></h3>
+      -->
+      <h3 id="h3_2"><div class="num" id="num_2">1/4</div><span>${_('identifying your campaign')}</span></h3>
+    </div>
+    <div class="cell_content" id="cell_2">
+      <div class="date_title">
+        <!--
+        <h5>${_('Create your campagne id')}</h5>
+        -->
+        <h5 style="width:100%;">${_('Specify an unique campaign title as long as a target for your training campaign')}:</h5>
+        <!--
+        <p>${_('This id is indicated in statistic reports.')}</P>
+        <p>${_('Precise your target and/or campaign period.')}</P>
+	-->
+        <span style="clear:both;display:block;"></span>
+      </div>
+      <div class="field date">
+        <div id="course_identity_voile"></div>
+        <div id="course_identity_voile_bis"></div>
+        <label>${_('Campaign title (unique id)')}</label>
+        <label>${_('Target')}</label>
+        <input style="margin-top: 0px;margin-bottom: 0px;" type="text" id="course_identity" placeholder="${_('')}" value="" disabled="true" value="555"/>
+        <input style="margin-top: 0px;margin-bottom: 0px;" type="text" id="course_session_top" placeholder="${_('')}" value="" disabled="true" value="555"/>
+      </div>
+      <div class="sub_input last_sub_input">
+        ${_('Rules for unique ID and target')} : ${_('no space, no punctuation, no special characters')}
+      </div>
+    </div>
+    <!-- cell 2/4 -->
+    <!-- cell 2/4 -->
+    <!-- cell 2/4 -->
+    <!-- cell 2/4 -->
+    <!-- cell 2/4 -->
+    <div class="cell_title">
+      <h3 id="h3_1"><div class="num" id="num_1">2/4</div><span>${_('PERIOD OF THE TRAINING CAMPAIGN')}</span></h3>
+    </div>
+    <div class="cell_content" id="cell_1">
+      <div class="date_title">
+        <h5>${_('Schedule your training campaign')}</h5>
+        <!--
+        <p>${_('Starting and ending dates of the training campaign')}</P>
+        -->
+        <span style="clear:both;display:block;"></span>
+      </div>
+      <div class="field date" id="field-course-start-date">
+        <label>${_('Starting date')}</label>
+        <input type="text" id="course-start-date" placeholder="YYYY/MM/DD" data-key="start_date" data-read="${'false' if not enroll_start else 'true'}">
+      </div>
+      <div class="field date" id="field-course-start-date">
+        <label>${_('Starting time UTC')}</label>
+        <input type="text" id="course-start-time" placeholder="HH:MM" data-key="start_time" data-read="${'false' if not enroll_start else 'true'}">
+      </div>
+      <div class="sub_input last_sub_input" id="invite_already_msg" style="display: none;">
+        ${_('You already have invited participants to this training campaign. Starting date can no longer be edited.')}
+        <div class="voile_gris" id="course_date_voile"></div>
+        <div class="voile_gris" id="course_hour_voile"></div>
+      </div>
+      <div class="sub_input separation-trait">
+	<!--
+        ${_('The day the first invitations are dispatched when launching the training campaign')}
+	-->
+      </div>
+      <div class="field date" id="field-course-start-date">
+        <label>${_('Ending date')}</label>
+        <input type="text" id="course-end-date" placeholder="YYYY/MM/DD" data-key="end_date">
+      </div>
+      <div class="field date" id="field-course-start-date">
+        <label>${_('Ending time UTC')}</label>
+        <input type="text" id="course-end-time" placeholder="HH:MM" data-key="end_time">
+      </div>
+      <div class="sub_input last_sub_input">
+	<!--
+        ${_('Closing day of the training campaign')}
+	-->
+	&nbsp;
+      </div>
+    </div>
+    <!-- end cell 2/4 -->
+    <!-- end cell 2/4 -->
+    <!-- end cell 2/4 -->
+    <!-- end cell 2/4 -->
+    <!-- end cell 2/4 -->
+    <!-- cell 3/4 -->
+    <!-- cell 3/4 -->
+    <!-- cell 3/4 -->
+    <!-- cell 3/4 -->
+    <div class="cell_title">
+      <h3 id="h3_3"><div class="num" id="num_3">3/4</div><span>${_('MINIMUM PERCENTAGE OF SUCCESS REQUIRED')}</span></h3>
+    </div>
+    <div class="cell_content" id="cell_3">
+      <div class="date_title">
+        <h5>${_('Define the minimum score required to validate the training module and receive the certificate of achievement')}</h5>
+        <!-- <p>${_('Minimum score required to validate the training module and receive the certificate of achievement')}</P> -->
+        <span style="clear:both;display:block;"></span>
+      </div>
+    <div id="content_resize" data-grade="${module_store.grade_cutoffs['Pass']}">
+      <div id="resizable">
+        <div class="info_grade" id="fail_grade"><h6>fail</h6><p>0 - <span></span></p></div>
+      </div>
+      <div class="info_grade" id="passed_grade"><h6>Success</h6><p><span></span> - 100</p></div>
+    </div>
+    <ol class="increments">
+      <li class="increment-0">0</li>
+      <li class="increment-10">10</li>
+      <li class="increment-20">20</li>
+      <li class="increment-30">30</li>
+      <li class="increment-40">40</li>
+      <li class="increment-50">50</li>
+      <li class="increment-60">60</li>
+      <li class="increment-70">70</li>
+      <li class="increment-80">80</li>
+      <li class="increment-90">90</li>
+      <li class="increment-100">100</li>
+      <span style="clear:both;display:block;"></span>
+    </ol>
+    </div>
+
+    <!-- end cell 3/6 -->
+    <!-- end cell 3/6 -->
+    <!-- end cell 3/6 -->
+    <!-- end cell 3/6 -->
+    <!-- end cell 3/6 -->
+    <!-- cell 4/6 -->
+    <!-- cell 4/6 -->
+    <!-- cell 4/6 -->
+    <!-- cell 4/6 -->
+    <div class="cell_title">
+      <h3 id="h3_4"><div class="num" id="num_4">4/4</div><span>${_('CAMPAIGN TYPE')}</span></h3>
+    </div>
+    <div class="cell_content" id="cell_4">
+      <div class="date_title particulary">
+        <h5>${_('Specify whether the training campaign is mandatory or optional')}</h5>
+        <span style="clear:both;display:block;"></span>
+      </div>
+      <div class="field campaign">
+        <input type="radio" name="campaign_type" value="mandatory" ${"checked" if course.is_required_atp else "" } class="campaign_type_check"/>
+        <label>${_('mandatory')}</label>
+      </div>
+      <div class="field campaign">
+        <input type="radio" name="campaign_type" value="optional" ${"checked" if not course.is_required_atp else ""} class="campaign_type_check"/>
+        <label>${_('optional')}</label>
+      </div>
+      <span style="display:block;clear:left;"></span>
+    </div>
+
+    <!-- end cell 4/4 -->
+    <!-- end cell 4/4 -->
+    <!-- end cell 4/4 -->
+    <!-- end cell 4/4 -->
+    <!-- end cell 4/4 -->
+
+  </section>
+  <section id="secondary">
+  </section>
+  <span style="display:block;clear:left;"></span>
+</section>
+
+<div class="campaign-link-back"><a href="/home/?campaign=${course_key_cleared}" class="primary_color">< ${_('Back to')} ${_('My campaigns')}</a></div>
+
+<div class="wrapper wrapper-notification wrapper-notification-warning" id="notification-warning" aria-hidden="false" aria-labelledby="notification-warning-title" tabindex="-1" aria-describedby="notification-warning-description" role="dialog">
+  <div class="notification warning has-actions"><span class="feedback-symbol fa fa-warning" aria-hidden="true"></span>
+    <div class="copy">
+      <h2 class="title title-3" id="notification-warning-title">You've made some changes</h2>
+      <p class="message" id="notification-warning-description">Your changes will not take effect until you save your progress.</p>
+    </div>
+    <nav class="nav-actions">
+      <ul>
+        <li class="nav-item">
+          <button class="action-primary action-save">Save Changes</button>
+        </li>
+        <li class="nav-item">
+          <button class="action-secondary action-cancel">Cancel</button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+<link rel="stylesheet" type="text/css" href="${static.url('css/manage_course.css')}">
+<!-- title font-size scale -->
+<script>
+var _h3 = document.getElementsByClassName('course-title');
+var elem;
+for(var i=0;i<_h3.length;i++) {
+  if(i == 0) {
+    elem = _h3[i]
+  }
+}
+var height = 0;
+var default_font = 2.2;
+var incredent = 0.1;
+var lim = 42;
+var actual = elem.clientHeight;
+while(actual > lim) {
+  default_font = default_font - incredent;
+  elem.style.fontSize = default_font+'em';
+  actual = elem.clientHeight;
+}
+console.log('is enroll : ${enroll_start}');
+</script>
+</%block>

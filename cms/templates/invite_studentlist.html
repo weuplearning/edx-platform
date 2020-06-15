@@ -1,0 +1,225 @@
+<%page expression_filter="h"/>
+<%!
+from django.utils.translation import ugettext as _
+
+from openedx.core.djangolib.markup import HTML, Text
+%>
+<%inherit file="base.html" />
+
+<%def name="online_help_token()"><% return "home" %></%def>
+<%block name="title">${_("{studio_name} Home").format(studio_name=settings.STUDIO_SHORT_NAME)}</%block>
+<%block name="bodyclass">is-signedin index view-dashboard</%block>
+
+<%block name="requirejs">
+  require(["js/factories/index"], function (IndexFactory) {
+      IndexFactory();
+  });
+  //require(['${static.url("js/invite.js")}']);
+  //require(['https://demo-atp.themoocagency.com/media/studio/js/atp/invite.js']);
+  require(['${static.url("js/atp/invite.js")}']);
+</%block>
+<%namespace name='static' file='static_content.html'/>
+<%block name="content">
+<link rel="stylesheet" type="text/css" href="${static.url('js/vendor/timepicker/jquery.timepicker.css')}">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+<style>
+.all_dates {
+    width: 100%;
+    height: auto
+}
+
+.all_dates ul {
+    width: 100%;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    list-style-type: none
+}
+
+.all_dates ul li {
+    width: 35%;
+    height: auto;
+    float: left;
+    margin: 0;
+    padding: 0
+}
+
+.all_dates ul li span {
+    font-size: 13px;
+    font-style: italic;
+    font-family: "mywebfont";
+    color: #05144d
+}
+
+.all_dates ul li span:first-child {
+    font-weight: bold
+}
+.pop_up_mail {
+    width: calc(100% - 40px);
+    height: auto;
+    padding-left: 10px;
+    padding-right: 10px;
+    display: none;
+    margin-left: 8px;
+    margin-right: 8px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    border: 2px solid #39B2B6;
+}
+.pop_up_mail p {
+    font-size: 17px;
+    font-weight: bold;
+    font-family: "mywebfont";
+    color: #39B2B6 !important;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    width: 100% !important;
+    text-align: left !important;
+    display: block !important;
+    float: none !important;
+}
+.is_show {
+    display: block !important;
+}
+.is_error {
+  color: #fff !important;
+  background-color: red !important;
+}
+#logo_cms {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+#title p {
+  text-transform: inherit !important;
+}
+#title h1{
+  text-transform: initial!important;
+}
+.language_display{
+  font-size: 13px;
+  font-style: italic;
+  font-family: "mywebfont";
+  color: #05144d;
+  font-weight: 600;
+}
+h1{
+  margin-bottom: 20px;
+}
+table{
+  margin-top: 20px;
+  color: #05144d;
+  margin-bottom: 60px;
+}
+td{
+  padding: 10px;
+  border: 1px solid #05144d;
+}
+th{
+  font-weight: 700;
+}
+.campaign-link-back{
+  width:70%;
+  text-align: center;
+}
+</style>
+<%
+course_key_cleared=str(course_key).replace('+','').replace(':','')
+%>
+<section id="content">
+  <section id="primary">
+    <div id="fil_ariane"></div>
+    <div id="title">
+      <h1 style="text-transform:uppercase!important;"><a href="/home/?campaign=${course_key_cleared}" class="primary_color">< ${_('My campaigns')}</a> | ${_('Participants already invited to the campaign')}</h1>
+    </div>
+    <ul class="list-courses">
+      <!-- suite -->
+      <li class="course-item">
+        <div class="content_img">
+          <span class="img_${course.categ.lower().replace(' ','')}" /></span>
+          <span class="course_module_categ">${_(course.categ)}</span>
+          <img src="${overview.image_urls['raw']}" class="img_course"/>
+        </div>
+        <div class="content_info">
+          <h3 class="course-title">${course.display_name_with_default_escaped}</h3>
+          <div class="all_dates">
+            <ul>
+              <li><span>${_('Starting date')} :</span> <span id="add_course_start">${course.start.strftime('%Y-%m-%d')}</span></li>
+              % if course.end is not None:
+                <li><span>${_('Ending date')} :</span> <span id="add_course_end">${course.end.strftime('%Y-%m-%d')}</span></li>
+              % else:
+                <li><span>${_('Ending date')} :</span> <span id="add_course_end"></span></li>
+              % endif
+              <span style="display:block;clear:left;"></span>
+            </ul>
+          </div>
+          <div class="all_dates">
+            <ul>
+              <li><span id="add_course_org">${course.org}</span></li>
+              <span class="language_display">${_('Language')} : ${_(language_course)} </span>
+
+              <span style="display:block;clear:left;"></span>
+            </ul>
+          </div>
+          <div class="duration_course">
+            <object oa-reusable-svg
+                    data="${static.url('images/duree.svg')}"
+                    type="image/svg+xml"
+                    class="svg-class"
+                    data-class="timer_svg_color"
+                    >
+            </object>
+            <span style="margin-left: 24px;">${details.effort}</span>
+          </div>
+        </div>
+        <span style="clear:left;display:block;"></span>
+      </li>
+    </ul>
+
+
+    <table>
+      <th>Email</th>
+      <th>SEM UUID</th>
+      <th>${_('Invited')}</th>
+      %for student in student_list :
+      <tr>
+        <td>${student['email']}</td>
+        <td>${student['uuid']}</td>
+        % if student['invited']:
+          <td><img src="${settings.LMS_ROOT_URL}/media/checked.png" alt="invited"></td>
+        %else:
+          <td><img src="${settings.LMS_ROOT_URL}/media/cross-remove-sign.png" alt="not invited"></td>
+        %endif
+      </tr>
+      %endfor
+    </table>
+
+
+
+  </section>
+  <div class="campaign-link-back"><a href="/home/?campaign=${course_key_cleared}" class="primary_color">< ${_('Back to')} ${_('My campaigns')}</a></div>
+
+
+<link rel="stylesheet" type="text/css" href="${static.url('css/invite_course.css')}">
+<!-- title font-size scale -->
+<script>
+var _h3 = document.getElementsByClassName('course-title');
+var elem;
+for(var i=0;i<_h3.length;i++) {
+  if(i == 0) {
+    elem = _h3[i]
+  }
+}
+var height = 0;
+var default_font = 2.2;
+var incredent = 0.1;
+var lim = 42;
+var actual = elem.clientHeight;
+while(actual > lim) {
+  default_font = default_font - incredent;
+  elem.style.fontSize = default_font+'em';
+  actual = elem.clientHeight;
+}
+</script>
+</%block>

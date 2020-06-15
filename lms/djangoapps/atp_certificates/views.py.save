@@ -1,0 +1,21 @@
+from opaque_keys import InvalidKeyError
+from opaque_keys.edx.keys import CourseKey
+import json
+from openedx.core.djangolib.markup import HTML, Tex
+from django.contrib.auth.decorators import login_required
+
+from courseware.courses import get_course_by_id
+from opaque_keys.edx.locations import SlashSeparatedCourseKey
+from course_progress.helpers import get_overall_progress
+from lms.djangoapps.grades.new.course_grade import CourseGradeFactory
+from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
+from student.models import User,CourseEnrollment
+
+from utils import generate_certificate
+
+@login_required
+def get_certificate(request,course_id):
+    user = request.user
+    course_key = CourseKey.from_string(course_id)
+    course = get_course_by_id(course_key, depth=0)
+

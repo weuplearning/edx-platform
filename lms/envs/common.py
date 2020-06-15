@@ -2556,6 +2556,8 @@ INSTALLED_APPS = [
     # so sample_task is available to celery workers
     'openedx.core.djangoapps.heartbeat',
 
+    'lms.djangoapps.atp_task',
+    'lms.djangoapps.tma_grade_tracking',
     # signal handlers to capture course dates into edx-when
     'openedx.core.djangoapps.course_date_signals',
 

@@ -1,0 +1,414 @@
+## mako
+<%page expression_filter="h" args="online_help_token"/>
+<%namespace name='static' file='static_content.html'/>
+<%namespace file='main.html' import="login_query"/>
+<%!
+from django.urls import reverse
+from django.utils.translation import ugettext as _
+
+from context_processors import doc_url
+from lms.djangoapps.ccx.overrides import get_current_ccx
+from openedx.core.djangolib.markup import HTML, Text
+
+# App that handles subdomain specific branding
+from branding import api as branding_api
+# app that handles site status messages
+from status.status import get_site_status_msg
+from util.enterprise_helpers import get_enterprise_customer_logo_url
+from student.models import User
+
+%>
+
+## Provide a hook for themes to inject branding on top.
+<%block name="navigation_top" />
+
+## Add UI Toolkit components if using the Pattern Library
+% if uses_pattern_library:
+    <%block name="js_extra">
+    <%static:require_module module_name="js/header_factory" class_name="HeaderFactory">
+    HeaderFactory();
+    </%static:require_module>
+    </%block>
+% endif
+
+<%block>
+<%
+try:
+    course_id = course.id
+except:
+    # can't figure out a better way to get at a possibly-defined course var
+    course_id = None
+site_status_msg = get_site_status_msg(course_id)
+%>
+<%
+_ensure_status = False
+try:
+  #ensure user is staff or instructor
+  _ensure_user_id = request.user.id
+  _ensure_user_status = User.objects.raw('SELECT b.id ,b.role FROM auth_user a,student_courseaccessrole b WHERE a.id=b.user_id AND b.user_id=%s' ,[_ensure_user_id])
+  a = 0
+  _ensure_status = False
+  for n in _ensure_user_status:
+      a = a + 1
+  if a > 0:
+      _ensure_status = True
+except:
+  pass
+%>
+% if site_status_msg:
+<div class="site-status">
+  <div class="inner-wrapper">
+    <span class="white-error-icon"></span>
+    <p>${site_status_msg}</p>
+  </div>
+</div>
+% endif
+<!-- GEOFFREY -->
+
+<%
+from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
+if configuration_helpers.get_value('secondary_color') :
+  secondary_color = configuration_helpers.get_value('secondary_color')
+else:
+  secondary_color='#00B6ED'
+if configuration_helpers.get_value('primary_color') :
+  primary_color = configuration_helpers.get_value('primary_color')
+else:
+  primary_color='#05144d'
+if configuration_helpers.get_value('third_color') :
+  third_color = configuration_helpers.get_value('third_color')
+else:
+  third_color='#05144d'
+%>
+
+
+<style>
+.primary-color-bg{
+  background-color:${primary_color}!important;
+}
+.primary-color-text{
+  color:${primary_color}!important;
+}
+.primary-color-border{
+  border-color:${primary_color}!important;
+}
+.primary-color-fill{
+  fill:${primary_color}!important;
+}
+.hover-primary-text:hover{
+  color: ${primary_color}!important;
+}
+.primary-color-text .course_about_atp span, .primary-color-text .course_about_atp h4{
+  color: ${primary_color}!important;
+}
+.primary-color-text .course_about_atp .arrow_course_about:before{
+  border-color: ${primary_color}!important;
+}
+.arrow_primary{
+  border-bottom: 11px solid ${primary_color}!important;
+}
+.secondary-color-bg{
+  background-color:${secondary_color}!important;
+}
+.secondary-color-text{
+  color:${secondary_color}!important;
+}
+.secondary-color-text{
+  color:${secondary_color}!important;
+}
+.secondary-color-fill{
+  fill:${secondary_color}!important;
+}
+.secondary-color-bg{
+  background-color:${secondary_color}!important;
+}
+.secondary-color-text{
+  color:${secondary_color}!important;
+}
+.secondary-color-text{
+  color:${secondary_color}!important;
+}
+.secondary-color-fill{
+  fill:${secondary_color}!important;
+}
+.third-color-bg{
+  background-color:${third_color}!important;
+}
+.third-color-text{
+  color:${third_color}!important;
+}
+.third-color-text{
+  color:${third_color}!important;
+}
+.third-color-fill{
+  fill:${third_color}!important;
+}
+.third-color-bg{
+  background-color:${third_color}!important;
+}
+.third-color-text{
+  color:${third_color}!important;
+}
+.third-color-text{
+  color:${third_color}!important;
+}
+.third-color-fill{
+  fill:${third_color}!important;
+}
+.course_about_atp ul{
+  color:${secondary_color}!important;
+}
+.white-text{
+  color:white!important;
+}
+.bold-text{
+  font-weight: bold!important;
+}
+.white-bg{
+  background-color: white;
+}
+.gold-text{
+  color: #cf9c49!important;
+}
+.gray-bg{
+  background-color: #F8F8F8;
+}
+img.svg {
+  display: none;
+}
+.pad-10{
+  padding: 10px;
+}
+.pad-20{
+  padding: 20px;
+}
+.pad-30{
+  padding: 30px!important;
+}
+.mt-20{
+  margin-top: 20px;
+}
+.mt-10{
+  margin-top: 10px;
+}
+.m-0{
+  margin: 0!important;
+}
+.p-0{
+  padding: 0!important;
+}
+
+@media(min-width:768px){
+  #user-btn:hover #user-icone{
+    background-color: ${secondary_color};
+  }
+}
+.submenu-item-atp:hover{
+  border-top: 1px solid ${third_color};
+}
+.separation-logos{
+  height: 70px!important;
+}
+#barre-nav-atp{
+  min-height: 70px;
+}
+
+.img_softskills {
+    background-image: url("/static/images/softskills.png")
+}
+.img_expert {
+    background-image: url("/static/images/expert.png")
+}
+.img_expert , .img_softskills{
+  position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 70%;
+    height: 87%;
+    z-index: 2;
+    background-position: right;
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 100%;
+}
+</style>
+
+<!-- import custom css script -->
+<%
+if static.get_value('css_overrides_nav') is not None:
+  nav = static.get_value('css_overrides_nav')
+else :
+  nav = 'css/nav.css'
+
+%>
+<link rel="stylesheet" href="${static.url('css/bootstrap.min.css')}">
+<link rel="stylesheet" type="text/css" href="${static.url('css/nav.css')}" />
+<script src="${static.url('js/navigation_atp.js')}"></script>
+
+
+
+<%
+  if configuration_helpers.get_value('amundi_brand')=="true" or configuration_helpers.get_value('amundi_brand')==True:
+    amundi_brand=True
+    amundi_brand_url='/media/logo-amundiacademy_blanc.png'
+    separation_logos='separation-logos'
+  else :
+    amundi_brand = False
+    separation_logos=''
+%>
+
+
+
+
+<nav id="barre-nav-atp" class="navbar navbar-default third-color-bg third-color-border navbar-fixed-top">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      % if "/dashboard" in request.path:
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      %endif
+      %if configuration_helpers.get_value('logo'):
+      <a class="navbar-brand ${separation_logos}" href="/dashboard" onclick="followClickEvents(this,'home','navigation')">
+        <img id="main_atp_logo" src="${configuration_helpers.get_value('logo')}" />
+      </a>
+      %else :
+      <a class="navbar-brand ${separation_logos}" href="/dashboard" onclick="followClickEvents(this,'home','navigation')">
+        <img id="main_atp_logo" src="${static.url('images/logo.png')}" />
+      </a>
+      %endif
+      % if amundi_brand :
+      <a class="navbar-brand amundibrand_wrapper" href="/dashboard" onclick="followClickEvents(this,'home','navigation')">
+        <img id="amundibrand_logo" src="${amundi_brand_url}" />
+      </a>
+      %endif
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse third-color-bg" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav navbar-right">
+        % if "/dashboard" in request.path:
+        <li class="nav-item dropdown" id="module_btn">
+          <div class="nav-link dropdown-toggle" id="modules_title" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="text-transform:uppercase">
+            ${_('My modules')}
+          </div>
+          <div id="menu_module_apt" class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <div id="scroll-progress" class="submenu-item-atp" onclick="followClickEvents(this,'modules-in_progress','navigation')">${_("In progress")}</div>
+            <div id="scroll-todo" class="submenu-item-atp" data-location="ancre-to-do" onclick="followClickEvents(this,'modules-todo','navigation')">${_("To do")}</div>
+            <div id="scroll-completed" class="submenu-item-atp" onclick="followClickEvents(this,'modules-completed','navigation')">${_("Completed")}</div>
+          </div>
+        </li>
+        <li id="categories_btn" class="nav-item dropdown">
+          <div class="nav-link dropdown-toggle" id="categories_title" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="text-transform:uppercase">
+            ${_('My Categories')}
+          </div>
+          <div id="categories_menu" class="dropdown-menu" aria-labelledby="navbarDropdown2">
+            <div id="cat_fond" class="submenu-item-atp" data-location="fundamental" onclick="followClickEvents(this,'my_categories-fundamentals','navigation')">${_("Fundamentals")}</div>
+            <div id="cat_solu" class="submenu-item-atp" data-location="oursolutions" onclick="followClickEvents(this,my_categories-our_solutions,'navigation')">${_("Our solutions")}</div>
+            <div id="cat_dem_com" class="submenu-item-atp" data-location="salesapproach" onclick="followClickEvents(this,'my_categories-sales_approach','navigation')">${_("Business approach")}</div>
+            <div id="cat_reg" class="submenu-item-atp" data-location="regulatory" onclick="followClickEvents(this,'my_categories-regulatory','navigation')">${_("Regulatory")}</div>
+            <div id="cat_dem_exp" class="submenu-item-atp" data-location="expert" onclick="followClickEvents(this,'my_categories-expert','navigation')">${_("Expert")}</div>
+            <div id="cat_dem_sofskil" class="submenu-item-atp" data-location="softskills" onclick="followClickEvents(this,'my_categories-soft_skills','navigation')">${_("Soft skills")}</div>
+            <div id="cat_all" class="submenu-item-atp" data-location="all" onclick="followClickEvents(this,'my_categories-all','navigation')">${_("All")}</div>
+          </div>
+        </li>
+        % endif
+      </ul>
+    </div><!-- /.navbar-collapse -->
+    % if user.is_authenticated():
+    <div id="user-btn" class="pull-right">
+      <div id="user-icone">
+        <img src=${static.url('images/user.png')} alt="">
+        <div class="profile-menu-dropdown" aria-labelledby="navbarDropdown">
+          <div>
+            <a class="dropdown-item" href="/u/${request.user.username}">
+              <p class="capitalize font-basic bold margin-null pad5">${request.user.first_name} <span class=" uppercase">${request.user.last_name}</span></p>
+              <p class="color-basic font-basic margin-null font-12 pad5">${user.email}</p>
+            </a>
+          </div>
+          % if not "/dashboard" in request.path:
+          <div class="">
+            <a class="dropdown-item" href="/dashboard" onclick="followClickEvents(this,'home','navigation')">
+              <p class="font-basic link-menu-user margin-null pad5">${_("Home")}</p>
+            </a>
+          </div>
+          % endif
+          % if _ensure_status:
+          <div>
+            <a class="dropdown-item" href="https://${settings.CMS_BASE}" onclick="followClickEvents(this,'management_interface','navigation')">
+              <p class="font-basic link-menu-user pad5">${_("Access admin interface")}</p>
+            </a>
+          </div>
+          %endif
+          <div class="gray-btn">
+            <a class="" id="logout-btn" onclick="followClickEvents(this,'logout','exit');window.location.replace('/logout')">
+              <img style="height:20px;"src="${static.url('images/poweroff.png')}" alt="">
+              <span class="font-basic logout-text">${_('logout')}</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    %endif
+  </div><!-- /.container-fluid -->
+</nav>
+<style>
+.display_element{
+  display: block!important;
+}
+</style>
+<script>
+// Animation My Modules
+  $('#scroll-progress').click(function(){
+    $('html, body').animate({
+       scrollTop: $('#ancre-in-progress').offset().top-130
+   }, 800);
+  });
+  $("#scroll-todo").click(function(){
+    $('html, body').animate({
+       scrollTop: $('#ancre-to-do').offset().top-130
+   }, 800);
+  });
+  $("#scroll-completed").click(function(){
+    $('html, body').animate({
+       scrollTop: $('#ancre-finished').offset().top-130
+   }, 800);
+  });
+
+//Responsive menu
+if ( $(window).width() < 768){
+  $('#module_btn').click(function(){
+    $('#menu_module_apt').toggleClass('display_element');
+  });
+  $('#categories_btn').click(function(){
+    $('#categories_menu').toggleClass('display_element');
+  });
+  $('.navbar-toggle').click(function(){
+    if($(this).attr("aria-expanded")){
+      $('#categories_menu').removeClass('display_element');
+      $('#menu_module_apt').removeClass('display_element');
+    }
+    $('.profile-menu-dropdown').removeClass('display_element');
+    $('#user-icone').removeClass("secondary-color-bg");
+  });
+  $('#user-btn').click(function(){
+    $('.profile-menu-dropdown').toggleClass('display_element');
+    $('#user-icone').toggleClass("secondary-color-bg");
+    $('.navbar-collapse').removeClass('in');
+  });
+}
+//on resize close tabs
+$(window).resize(function() {
+    $('.profile-menu-dropdown').removeClass('display_element');
+    $('#user-icone').removeClass("secondary-color-bg");
+    $('.navbar-collapse').removeClass('in');
+});
+
+</script>
+
+</%block>
+<%include file="help_modal.html"/>

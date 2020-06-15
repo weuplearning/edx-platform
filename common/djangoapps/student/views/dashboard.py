@@ -59,6 +59,13 @@ from student.models import (
 from util.milestones_helpers import get_pre_requisite_courses_not_completed
 from xmodule.modulestore.django import modulestore
 
+# TMA ADD
+from courseware.courses import (
+    get_course_by_id,
+)
+from openedx.core.djangoapps.models.course_details import CourseDetails
+from django.contrib.auth.models import User, AnonymousUser
+
 log = logging.getLogger("edx.student")
 
 experiments_namespace = WaffleFlagNamespace(name=u'student.experiments')
@@ -818,6 +825,72 @@ def student_dashboard(request):
     else:
         redirect_message = ''
 
+    #ATP dashboard reorg
+    compteur_progress = 0
+    compteur_finish = 0
+    compteur_start = 0
+    progress_courses = []
+    finish_courses = []
+    start_course = []
+    list_category = []
+    _now = int(datetime.datetime.now().strftime("%s"))
+    if len(course_enrollments) > 0:
+      for dashboard_index, enrollment in enumerate(course_enrollments):
+        course_id = enrollment.course_overview.id
+        user_id = request.user.id
+        course_tma = get_course_by_id(enrollment.course_id)
+        try:
+            course_grade_factory = CourseGradeFactory().create(request.user, course_tma)
+            passed = course_grade_factory.passed
+            percent = course_grade_factory.percent
+        except:
+            passed = False
+            percent = 0
+        try:
+            _end = int(enrollment.course_overview.end.strftime("%s"))
+        except:
+            _end = 0
+        q={}
+        course_open = True
+        if _end > 0 and _end < _now:
+            course_open = False
+        q['passed'] = passed
+        q['percent'] = float(int(percent * 1000)/10)
+        q['course_id'] = str(enrollment.course_id)
+        q['duration'] = CourseDetails.fetch(enrollment.course_id).effort
+        q['required'] = course_tma.is_required_atp
+        q['content_data'] = course_tma.content_data
+        q['category'] = course_tma.categ
+        q['course_img'] = enrollment.course_overview.image_urls['small']
+        q['display_name_with_default'] = enrollment.course_overview.display_name_with_default
+
+        #list category
+        if not course_tma.categ in list_category:
+            list_category.append(course_tma.categ)
+
+        #Add course to right category  ----  Ongoig
+        if course_open :
+            if passed :
+                finish_courses.append(q)
+            else :
+                start_course.append(q)
+        else :
+            finish_courses.append(q)
+    #new user popup
+    is_new_user = False
+    now_datetime = int(datetime.datetime.now(UTC).strftime("%s")) - int(request.user.date_joined.strftime("%s"))
+    if now_datetime <= 30:
+        is_new_user = True
+    first_course_name = ''
+    #ensure user is staff or instructor
+    _ensure_user_id = request.user.id
+    _ensure_user_status = User.objects.raw('SELECT b.id ,b.role FROM auth_user a,student_courseaccessrole b WHERE a.id=b.user_id AND b.user_id=%s' ,[_ensure_user_id])
+    a = 0
+    _ensure_status = False
+    for n in _ensure_user_status:
+        a = a + 1
+    if a > 0:
+        _ensure_status = True
     valid_verification_statuses = ['approved', 'must_reverify', 'pending', 'expired']
     display_sidebar_on_dashboard = verification_status['status'] in valid_verification_statuses and \
         verification_status['should_display']
@@ -837,7 +910,16 @@ def student_dashboard(request):
             if _program.get('type_attrs', {}).get('slug') is not None
         }
     context = {
-        'urls': urls,
+        #ATP add
+        '_ensure_status':_ensure_status,
+        'now_datetime':now_datetime,
+        'first_course_name':first_course_name,
+        'is_new_user':is_new_user,
+        'progress_courses': progress_courses,
+        'finish_courses': finish_courses,
+        'start_course':start_course,
+        'list_category':list_category,
+        #END ATP add
         'programs_data': programs_data,
         'enterprise_message': enterprise_message,
         'consent_required_courses': consent_required_courses,

@@ -62,7 +62,8 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 ################################ END ALWAYS THE SAME ##############################
 
 # A file path to a YAML file from which to load all the configuration for the edx platform
-CONFIG_FILE = get_env_setting('LMS_CFG')
+#CONFIG_FILE = get_env_setting('LMS_CFG')
+CONFIG_FILE = "/edx/etc/lms.yml"
 
 with codecs.open(CONFIG_FILE, encoding='utf-8') as f:
     __config__ = yaml.safe_load(f)
@@ -71,6 +72,10 @@ with codecs.open(CONFIG_FILE, encoding='utf-8') as f:
     # Removing them may break plugins that rely on them.
     ENV_TOKENS = __config__
     AUTH_TOKENS = __config__
+
+    # A file path to a YAML file from which to load all the code revisions currently deployed
+    #REVISION_CONFIG_FILE = get_env_setting('REVISION_CFG')
+    REVISION_CONFIG_FILE = "/edx/etc/revisions.yml"
 
     # Add the key/values from config into the global namespace of this module.
     # But don't override the FEATURES dict because we do that in an additive way.
@@ -90,7 +95,6 @@ with codecs.open(CONFIG_FILE, encoding='utf-8') as f:
             del __config_copy__[key]
 
     vars().update(__config_copy__)
-
 
 try:
     # A file path to a YAML file from which to load all the code revisions currently deployed
