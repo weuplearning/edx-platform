@@ -6,12 +6,13 @@
   from django.utils.translation import ugettext as _
   from contentstore.context_processors import doc_url
   import os.path
+  import logging
   #from microsite_manager.models import MicrositeAdminManager
   #from microsite_configuration.models import Microsite
   from student.models import User
   import six
   from six.moves.urllib.parse import quote
-
+  log = logging.getLogger(__name__)
 %>
 
 
@@ -371,7 +372,7 @@ course_org = ''
     %endif
   </div>
   <div id="nav-commandes">
-    % if user.is_authenticated():
+    %if user.is_authenticated:
     <div id="account-menu">
       <div id="user-icone">
         <img src="${settings.LMS_ROOT_URL}/media/user.png" alt="">
@@ -420,7 +421,7 @@ course_org = ''
     </div>
   </div>
   %endif
-  % else:
+  %else:
     <nav class="nav-not-signedin nav-pitch" aria-label="${_('Account')}">
       <h2 class="sr-only">${_("Account Navigation")}</h2>
       <ol>
@@ -433,7 +434,7 @@ course_org = ''
         </li>
       </ol>
     </nav>
-    %endif
+   %endif
   </div>
   <div style="clear:both"></div>
 </nav>
