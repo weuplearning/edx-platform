@@ -20,7 +20,6 @@ export function markBlocksCompletedOnViewIfNeeded(runtime, containerElement) {
     });
 
     tracker.addHandler((blockElement, event) => {
-      console.log('test')
       const blockKey = blockElement.dataset.usageId;
       if (blockKey && !completedBlocksKeys.has(blockKey)) {
         if (event.elementHasBeenViewed) {

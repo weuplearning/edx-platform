@@ -394,7 +394,7 @@ log.info("timer 7 {}".format(datetime.datetime.now()))
 
           <div class="actions">
             <input type="hidden" value="False" class="allow-unicode-course-id">
-            <input type="submit" value="Create" class="action action-primary new-microsite-save">
+            <input type="submit" value="Create" class="action action-primary new--save">
             <input type="button" value="Cancel" class="action action-secondary action-cancel new-microsite-cancel">
           </div>
         </form>
@@ -638,7 +638,7 @@ log.info("timer 8 {}".format(datetime.datetime.now()))
                         <div class="all_dates">
                           <ul>
                             <li><span>${course_info['org']}</span></li>
-                            <span class="language_display">${_('Language')} : en</span>
+                            <span class="language_display">${_('Language')} : ${_(language_options_dict[courses_stats.language])} </span>
                             <span style="display:block;clear:left;"></span>
                           </ul>
                         </div>
@@ -722,7 +722,7 @@ log.info("timer 8 {}".format(datetime.datetime.now()))
                         <div class="all_dates">
                           <ul>
                             <li><span>${course_info['org']}</span></li>
-                            <span class="language_display">${_('Language')} : en</span>
+                            <span class="language_display">${_('Language')} : ${_(language_options_dict[courses_stats.language])} </span>
                             <span style="display:block;clear:left;"></span>
                           </ul>
                         </div>
@@ -829,7 +829,7 @@ log.info("timer 8 {}".format(datetime.datetime.now()))
                         <div class="all_dates">
                           <ul>
                             <li><span>${course_info['org']}</span></li>
-                            <span class="language_display">${_('Language')} : en</span>
+                            <span class="language_display">${_('Language')} : ${_(language_options_dict[courses_stats.language])} </span>
                             <span style="display:block;clear:left;"></span>
                           </ul>
                         </div>
@@ -961,7 +961,7 @@ log.info("timer 8 {}".format(datetime.datetime.now()))
                           if courses_stat:
                             languagecourse = courses_stat.language
                       %>
-                      <span class="language_display">${_('Language')} : en </span>
+                      <span class="language_display">${_('Language')} : ${_(language_options_dict[languagecourse])} </span>
                     </a>
                     <!--<div class="all_dates">
                       <ul>

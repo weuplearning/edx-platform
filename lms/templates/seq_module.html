@@ -291,7 +291,6 @@
               url: url,
               success: function (response) {
                 console.log(response)
-                console.log("response")
                 console.log($('.tma_tab.active').children('.sequence-bottom').children('.button-next'))
                 if(response.success){
                     $('.tma_tab.active').children('.sequence-bottom').children('.button-next').removeAttr('disabled')
