@@ -40,11 +40,27 @@ from openedx.core.lib.courses import course_image_url
 <%
 user_id = request.user.id
 course_id = course_overview.id
-#course_progression = get_overall_progress(user_id,course_id)
-course_progression = 50
+course_progression = get_overall_progress(user_id,course_id)
 
+"""
 if not duration:
     duration = 0
+
+hour_string = 'hour'
+if int(duration) > 1:
+     hour_string = 'hours'
+"""
+%>
+
+<%
+
+if required:
+    required = "mandatory"
+else:
+    required = "optional"
+
+%>
+
 <li class="course-item">
   % if display_course_modes_on_dashboard:
     <%
@@ -135,13 +151,6 @@ if not duration:
                 endif
             endif
           %>
-
-hour_string = 'hour'
-if int(duration) > 1:
-     hour_string = 'hours'
-"""
-%>
-
 <%
     % else:
         <%include file="_dashboard_course_resume.html" args="resume_button_url=resume_button_url, course_overview=course_overview, enrollment=enrollment, is_unfulfilled_entitlement=is_unfulfilled_entitlement, is_course_blocked=is_course_blocked, course_target=course_target, related_programs=related_programs"/>
@@ -223,57 +232,55 @@ else:
   % else:
   <li class="atp_course_item atp_hide_cards" data-categ="${categ.lower().replace(' ','')}">
   % endif
-   <div class="atp_course_image"><span class="cateogry_text">${_(categ)}</span>
-          <a href="/courses/${course_overview.id}/courseware/">
-                  <img src="${course_overview.image_urls['small']}" />
-                  <div class="img_${categ.lower().replace(' ','')}"></div>
-          </a>
-   </div>
-   <div class="progress_bar_status_up">
+<div class="atp_course_image"><span class="cateogry_text">${_(categ)}</span>
+  <a href="/courses/${course_overview.id}/courseware/">
+          <img src="${course_overview.image_urls['small']}" />
+          <div class="img_${categ.lower().replace(' ','')}"></div>
+  </a>
+</div>
+<div class="progress_bar_status_up">
   <div class="progress_bar_status" style="width:${course_progression}%;"></div>
 </div>
-   <div class="atp_course_info">
-          <div class="atp_course_duration">
-                  <div class="inside_atp_left"><img src="${static.url('images/duree.svg')}" class="svg"/><span>${duration}</span><div style="display:block;clear:left;height:0px;"></div></div>
-          </div>
-          <div class="atp_course_dificulties">
-                  <div class="inside_atp"><span>${_(required)}</span><img src="${static.url('images/obligatoire.svg')}" class="svg"/><div style="display:block;clear:left;height:0px;"></div></div>
-          </div>
-   </div>
-   <div class="atp_course_title">
-          <span class="primary-color-text">${course_overview.display_name_with_default}</span>
-   </div>
-   <div class="atp_course_picto">
-     % if content_data.get('document_pdf'):
-     <img src="${static.url('images/pdf.svg')}" class="svg"/>
-     % endif
-     % if content_data.get('webzine'):
-     <img src="${static.url('images/webzine.svg')}" class="svg"/>
-     % endif
-     % if content_data.get('quiz'):
-     <img src="${static.url('images/quiz.svg')}" class="svg"/>
-     % endif
-     % if content_data.get('video'):
-     <img src="${static.url('images/video.svg')}" class="svg"/>
-     % endif
-     % if content_data.get('serious_game'):
-     <img src="${static.url('images/seriousgame.svg')}" class="svg"/>
-     % endif
-     % if content_data.get('simulation_investissement'):
-     <img src="${static.url('images/simulation_inv.svg')}" class="svg"/>
-     % endif
-     % if content_data.get('text_image'):
-     <img src="${static.url('images/testes&images.svg')}" class="svg"/>
-     % endif
-   </div>
-   <div class="atp_course_link">
-          <a href="/courses/${course_overview.id}/about" class="more_info  primary-color-bg">${_("More information")}</a>
-   </div>
+<div class="atp_course_info">
+      <div class="atp_course_duration">
+              <div class="inside_atp_left"><img src="${static.url('images/duree.svg')}" class="svg"/><span>${duration}</span><div style="display:block;clear:left;height:0px;"></div></div>
+      </div>
+      <div class="atp_course_dificulties">
+              <div class="inside_atp"><span>${_(required)}</span><img src="${static.url('images/obligatoire.svg')}" class="svg"/><div style="display:block;clear:left;height:0px;"></div></div>
+      </div>
+</div>
+<div class="atp_course_title">
+      <span class="primary-color-text">${course_overview.display_name_with_default}</span>
+</div>
+<div class="atp_course_picto">
+ % if content_data.get('document_pdf'):
+ <img src="${static.url('images/pdf.svg')}" class="svg"/>
+ % endif
+ % if content_data.get('webzine'):
+ <img src="${static.url('images/webzine.svg')}" class="svg"/>
+ % endif
+ % if content_data.get('quiz'):
+ <img src="${static.url('images/quiz.svg')}" class="svg"/>
+ % endif
+ % if content_data.get('video'):
+ <img src="${static.url('images/video.svg')}" class="svg"/>
+ % endif
+ % if content_data.get('serious_game'):
+ <img src="${static.url('images/seriousgame.svg')}" class="svg"/>
+ % endif
+ % if content_data.get('simulation_investissement'):
+ <img src="${static.url('images/simulation_inv.svg')}" class="svg"/>
+ % endif
+ % if content_data.get('text_image'):
+ <img src="${static.url('images/testes&images.svg')}" class="svg"/>
+ % endif
+</div>
+<div class="atp_course_link">
+      <a href="/courses/${course_overview.id}/about" class="more_info  primary-color-bg">${_("More information")}</a>
+</div>
   </li>
 
 
-
-<<<<<<< HEAD
 % elif atp_rank == 'finish' and course_about == 0:
   % if compteur < 5:
   <li class="atp_course_item" data-categ="${categ.lower().replace(' ','')}">
@@ -291,8 +298,7 @@ else:
 </div>
    <div class="atp_course_info">
           <div class="atp_course_duration">
-                  <div class="inside_atp_left"><img src="${static.url('images/duree.svg')}" class="svg"/><span>${duration}</span><div style="display:block;clear:left;height:0px;"></div></div>
-=======
+          <div class="inside_atp_left"><img src="${static.url('images/duree.svg')}" class="svg"/><span>${duration}</span><div style="display:block;clear:left;height:0px;"></div></div>
         % if verification_status.get('should_display') and verification_status.get('status') in [VERIFY_STATUS_NEED_TO_VERIFY, VERIFY_STATUS_SUBMITTED, VERIFY_STATUS_RESUBMITTED, VERIFY_STATUS_APPROVED, VERIFY_STATUS_NEED_TO_REVERIFY]:
           <div class="message message-status wrapper-message-primary is-shown">
             % if verification_status['status'] == VERIFY_STATUS_NEED_TO_VERIFY:
@@ -334,10 +340,9 @@ else:
                 )}
               </p>
             % endif
->>>>>>> 8c9c536e82f6098d73c4de634d2c89a6f67aaee0
           </div>
           <div class="atp_course_dificulties">
-                  <div class="inside_atp"><span>${_(required)}</span><img src="${static.url('images/obligatoire.svg')}" class="svg"/><div style="display:block;clear:left;height:0px;"></div></div>
+            <div class="inside_atp"><span>${_(required)}</span><img src="${static.url('images/obligatoire.svg')}" class="svg"/><div style="display:block;clear:left;height:0px;"></div></div>
 	  </div>
    </div>
    <div class="atp_course_title">
@@ -433,9 +438,6 @@ else:
           <a style="cursor:pointer" class="start_module  primary-color-bg">${_("Start")}</a>
    </div>
   </li>
-
-<<<<<<< HEAD
-=======
         % if course_mode_info and course_mode_info['show_upsell'] and not entitlement:
           <div class="message message-upsell has-actions is-shown">
             <div class="wrapper-extended">
@@ -472,9 +474,6 @@ else:
           </div>
         % endif
       % endif
->>>>>>> 8c9c536e82f6098d73c4de634d2c89a6f67aaee0
-
-
 % elif atp_rank == 'cours' and course_about == 1:
   % if compteur < 5:
   <li class="atp_course_item" data-categ="${categ.lower().replace(' ','')}">

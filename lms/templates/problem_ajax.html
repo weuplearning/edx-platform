@@ -1,4 +1,4 @@
-<div id="problem_${element_id}" class="problems-wrapper" role="group"
+<div id="problem_${element_id}" class="problems-wrapper position_atp ${'answered' if student_answsers else ''} ${'finished' if student_answsers else 'not_finished'}  ${'success_quiz_atp' if current_score >= total_possible and student_answsers else ''} ${'fail_quiz_atp' if current_score < total_possible and student_answsers else ''}" role="group"
      aria-labelledby="${element_id}-problem-title"
      data-problem-id="${id}" data-url="${ajax_url}"
      data-problem-score="${current_score}"
@@ -11,3 +11,37 @@
         <span class="sr">Loading&hellip;</span>
     </p>
 </div>
+<script>
+var answered = false;
+$('.position_atp').addClass('is_overflow');
+
+$('.position_atp').each(function(){
+  if(!$(this).hasClass('answered') && !answered){
+    $(this).removeClass('is_overflow');
+    answered = true;
+  }
+})
+</script>
+% if LANGUAGE_CODE == "en":
+<script>
+setInterval(function(){
+  $('.notification-message').each(function(){
+    var text = $(this).text();
+    text = text.replace('Incorrect ','Unfortunately, it is not the right answer. ');
+    text = text.replace('Correct ','Correct! ');
+    $(this).text(text);
+  })
+},300);
+</script>
+% elif LANGUAGE_CODE == "fr":
+  <script>
+  setInterval(function(){
+    $('.notification-message').each(function(){
+      var text = $(this).text();
+      text = text.replace('Incorrect ','Ce n\'est pas la bonne reponse. ');
+      text = text.replace('Correct ','Excellente reponse ! ');
+      $(this).text(text);
+    })
+  },300);
+  </script>
+% endif

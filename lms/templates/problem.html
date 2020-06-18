@@ -5,14 +5,80 @@ from openedx.core.djangolib.markup import HTML
 %>
 
 <%namespace name='static' file='static_content.html'/>
-<h3 class="hd hd-3 problem-header" id="${ short_id }-problem-title" aria-describedby="${ id }-problem-progress" tabindex="-1">
+<div class="dropdown_atp primary-color-text">
+  <span class="arrow_atp"><i class="fa fa-chevron-up"></i></span>
+</div>
+<h3 class="hd hd-2 problem-header" id="${ short_id }-problem-title" aria-describedby="${ id }-problem-progress" tabindex="-1">
   ${ problem['name'] }
+  <div class="picto_sf"></div>
 </h3>
-
 <div class="problem-progress" id="${ id }-problem-progress"></div>
-
 <div class="problem">
-  ${ HTML(problem['html']) }
+  <%
+  try:
+    problems = problem['html'].split('<span class="message"')
+    problem_upper = problems[0]+'</div>'
+    problem_down = '<span class="message"'+problems[1]
+  except:
+    problem_upper = problem['html']
+    problem_down = ""
+  %>
+
+  <!-- quiz block -->
+  ${ HTML( problem_upper ) }
+  <!-- end quiz block -->
+  <!-- start deplacement notif -->
+  <%include file="problem_notifications.html" args="
+    notification_type='warning',
+    notification_icon='fa-exclamation-circle',
+    notification_name='gentle-alert',
+    notification_message=''"
+  />
+  % if answer_notification_type:
+      % if 'correct' == answer_notification_type:
+          <%include file="problem_notifications.html" args="
+              notification_type='success',
+              notification_icon='fa-check',
+              notification_name='submit',
+              is_hidden=False,
+              notification_message=answer_notification_message"
+          />
+      % endif
+      % if 'incorrect' == answer_notification_type:
+          <%include file="problem_notifications.html" args="
+              notification_type='error',
+              notification_icon='fa-close',
+              notification_name='submit',
+              is_hidden=False,
+              notification_message=answer_notification_message"
+          />
+      % endif
+      % if 'partially-correct' == answer_notification_type:
+          <%include file="problem_notifications.html" args="
+              notification_type='success',
+              notification_icon='fa-asterisk',
+              notification_name='submit',
+              is_hidden=False,
+              notification_message=answer_notification_message"
+          />
+      % endif
+  % endif
+  <%include file="problem_notifications.html" args="
+    notification_type='warning',
+    notification_icon='fa-save',
+    notification_name='save',
+    notification_message=save_message,
+    is_hidden=not has_saved_answers"
+  />
+  <!-- end deplacement notif -->
+  <!-- start explication -->
+  ${ HTML(problem_down) }
+  <!-- end explication -->
+  <!-- bouton submit et next -->
+
+
+
+  % if True:
   <div class="action">
     <input type="hidden" name="problem_id" value="${ problem['name'] }" />
     % if demand_hint_possible:
@@ -25,104 +91,161 @@ from openedx.core.djangolib.markup import HTML
        />
       </div>
     % endif
-
+    <div class="problem-action-buttons-wrapper">
+    % if demand_hint_possible:
+    <span class="problem-action-button-wrapper">
+        <button type="button" class="hint-button problem-action-btn btn-default btn-small" data-value="${_('Hint')}" ${'' if should_enable_next_hint else 'disabled'}><span class="icon fa fa-question" aria-hidden="true"></span>${_('Hint')}</button>
+    </span>
+    % endif
+    % if save_button:
+    <span class="problem-action-button-wrapper">
+        <button type="button" class="save problem-action-btn btn-default btn-small" data-value="${_('Save')}">
+            <span class="icon fa fa-floppy-o" aria-hidden="true"></span>
+            <span aria-hidden="true">${_('Save')}</span>
+            <span class="sr">${_("Save your answer")}</span>
+        </button>
+    </span>
+    % endif
+    % if reset_button:
+    <span class="problem-action-button-wrapper">
+        <button type="button" class="reset problem-action-btn btn-default btn-small" data-value="${_('Reset')}"><span class="icon fa fa-refresh" aria-hidden="true"></span><span aria-hidden="true">${_('Reset')}</span><span class="sr">${_("Reset your answer")}</span></button>
+    </span>
+    % endif
+    % if answer_available:
+    <span class="problem-action-button-wrapper">
+        <button type="button" class="show problem-action-btn btn-default btn-small" aria-describedby="${ short_id }-problem-title"><span class="icon fa fa-info-circle" aria-hidden="true"></span><span class="show-label">${_('Show Answer')}</span></button>
+    </span>
+    % endif
+    </div>
+    <div class="final_solution">
+    </div>
     <div class="submit-attempt-container">
       <button type="button" class="submit btn-brand" data-submitting="${ submit_button_submitting }" data-value="${ submit_button }" data-should-enable-submit-button="${ should_enable_submit_button }" aria-describedby="submission_feedback_${short_id}" ${'' if should_enable_submit_button else 'disabled'}>
-          <span class="submit-label">${ submit_button }</span>
+          <span class="submit-label" aria-hidden="true">${ submit_button }</span><span class="sr">${_("Submit your answer")}</span>
       </button>
       <div class="submission-feedback" id="submission_feedback_${short_id}">
-        % if attempts_allowed:
+      % if attempts_allowed:
           ${ungettext("You have used {num_used} of {num_total} attempt", "You have used {num_used} of {num_total} attempts", attempts_allowed).format(num_used=attempts_used, num_total=attempts_allowed)}
-        % endif
-        <span class="sr">${_("Some problems have options such as save, reset, hints, or show answer. These options follow the Submit button.")}</span>
+      % endif
       </div>
     </div>
-    <div class="problem-action-buttons-wrapper">
-      % if demand_hint_possible:
-      <span class="problem-action-button-wrapper">
-          <button type="button" class="hint-button problem-action-btn btn-default btn-small" data-value="${_('Hint')}" ${'' if should_enable_next_hint else 'disabled'}><span class="icon fa fa-question" aria-hidden="true"></span>${_('Hint')}</button>
-      </span>
-      % endif
-      % if save_button:
-      <span class="problem-action-button-wrapper">
-          <button type="button" class="save problem-action-btn btn-default btn-small" data-value="${_('Save')}">
-              <span class="icon fa fa-floppy-o" aria-hidden="true"></span>
-              <span aria-hidden="true">${_('Save')}</span>
-              <span class="sr">${_("Save your answer")}</span>
-          </button>
-      </span>
-      % endif
-      % if reset_button:
-      <span class="problem-action-button-wrapper">
-          <button type="button" class="reset problem-action-btn btn-default btn-small" data-value="${_('Reset')}"><span class="icon fa fa-refresh" aria-hidden="true"></span><span aria-hidden="true">${_('Reset')}</span><span class="sr">${_("Reset your answer")}</span></button>
-      </span>
-      % endif
-      % if answer_available:
-      <span class="problem-action-button-wrapper">
-          <button type="button" class="show problem-action-btn btn-default btn-small" aria-describedby="${ short_id }-problem-title"><span class="icon fa fa-info-circle" aria-hidden="true"></span><span class="show-label">${_('Show Answer')}</span></button>
-      </span>
-      % endif
+    <div class="next">
+      <button class="next_button btn-brand question_next" id="ques_${short_id}">${_("next")}</button>
     </div>
   </div>
-    <%include file="problem_notifications.html" args="
-      notification_type='warning',
-      notification_icon='fa-exclamation-circle',
-      notification_name='gentle-alert',
-      notification_message=''"
-    />
-    % if answer_notification_type:
-        % if 'correct' == answer_notification_type:
-            <%include file="problem_notifications.html" args="
-                notification_type='success',
-                notification_icon='fa-check',
-                notification_name='submit',
-                is_hidden=False,
-                notification_message=answer_notification_message"
-            />
-        % endif
-        % if 'incorrect' == answer_notification_type:
-            <%include file="problem_notifications.html" args="
-                notification_type='error',
-                notification_icon='fa-close',
-                notification_name='submit',
-                is_hidden=False,
-                notification_message=answer_notification_message"
-            />
-        % endif
-        % if 'partially-correct' == answer_notification_type:
-            <%include file="problem_notifications.html" args="
-                notification_type='success',
-                notification_icon='fa-asterisk',
-                notification_name='submit',
-                is_hidden=False,
-                notification_message=answer_notification_message"
-            />
-        % endif
-        % if 'submitted' == answer_notification_type:
-            <%include file="problem_notifications.html" args="
-                notification_type='general',
-                notification_icon='fa-info-circle',
-                notification_name='submit',
-                is_hidden=False,
-                notification_message=answer_notification_message"
-            />
-        % endif
-    % endif
-    <%include file="problem_notifications.html" args="
-      notification_type='warning',
-      notification_icon='fa-save',
-      notification_name='save',
-      notification_message=save_message,
-      is_hidden=not has_saved_answers"
-    />
-    <%
-        notification_message=_('Answers are displayed within the problem')
-    %>
-    <%include file="problem_notifications.html" args="
-      notification_type='general',
-      notification_icon='fa-info-circle',
-      notification_name='show-answer',
-      notification_message=notification_message,
-      is_hidden=True"
-    />
+  % endif
 </div>
+<script>
+$('.vert').first().find('.position_atp').removeClass('not_finished');
+$('.finished').addClass('is_overflow');
+$('.finished').last().addClass('last_finished');
+$('.last_finished').parent().parent().next().find('.position_atp').removeClass('not_finished');
+$('.last_finished').removeClass('.is_overflow');
+
+$('#problem_${short_id}').find('.submit').click(function(){
+  var parent = $(this).parent().parent().parent().parent();
+  parent.addClass('last_finished').removeClass('is_overflow');
+  $('#problem_${short_id}').on('DOMNodeInserted', function(e) {
+    if(typeof $(e.target).find('.notification-message').text() !== "undefined" ) {
+        if($('#problem_${short_id}').find('.notification-message').text() != "None") {
+          if($('#problem_${short_id}').find('.notification.notification-submit').hasClass('success')) {
+            $('#problem_${short_id}').addClass('success_quiz_atp');
+        }else if($('#problem_${short_id}').find('.notification.notification-submit').hasClass('error')) {
+            $('#problem_${short_id}').addClass('fail_quiz_atp');
+          }
+        }
+    }
+});
+})
+
+if($('#problem_${short_id}').find('.notification-message').text() != "None") {
+  if($('#problem_${short_id}').find('.notification.notification-submit').hasClass('success')) {
+    $('#problem_${short_id}').addClass('success_quiz_atp').addClass('finished');
+  }else if($('#problem_${short_id}').find('.notification.notification-submit').hasClass('error')) {
+    $('#problem_${short_id}').addClass('fail_quiz_atp').addClass('finished');
+  }
+};
+
+$('.last_finished').addClass('finished');
+
+$('.finished').find('.field').each(function(){
+  if($(this).find('.finished_voile').length == 0) {
+    $(this).append("<div class='finished_voile'></div>");
+  }
+})
+$('.finished').find('.submit').each(function(){
+  //$(this).css('display','block');
+})
+$('#problem_${short_id}').find('.next_button').click(function(){
+  var parent = $(this).parent().parent().parent();
+  //fix checkboxes without feedback
+  console.log(parent.attr('class'));
+  if(parent.hasClass('problem')) {
+    parent = parent.parent();
+    if(parent.hasClass('finished')) {
+      parent.addClass('is_overflow');
+      $(this).parent().parent().parent().parent().parent().parent().next().find('.position_atp').removeClass('is_overflow').removeClass('not_finished');
+    }
+  }else{
+    if(parent.hasClass('finished')) {
+      parent.addClass('is_overflow');
+      $(this).parent().parent().parent().parent().parent().next().find('.position_atp').removeClass('is_overflow').removeClass('not_finished');
+    }
+  }
+})
+
+$('#problem_${short_id}').find('h3').click(function(){
+  var This = $(this).parent();
+  if(!This.hasClass('not_finished')) {
+    $('.position_atp').addClass('is_overflow');
+    var dropdown = This.find('.dropdown_atp');
+  }
+  if(This.hasClass('is_overflow') && !This.hasClass('not_finished')) {
+    This.removeClass('is_overflow');
+  }else{
+    This.addClass('is_overflow');
+  }
+})
+
+$('#problem_${short_id}').find('.dropdown_atp').click(function(){
+  var This = $(this).parent();
+  if(!This.hasClass('not_finished')) {
+    $('.position_atp').addClass('is_overflow');
+    var dropdown = This.find('.dropdown_atp');
+  }
+  if(This.hasClass('is_overflow') && !This.hasClass('not_finished')) {
+    This.removeClass('is_overflow');
+  }else{
+    This.addClass('is_overflow');
+  }
+})
+var _cur_length = $('#problem_${short_id}').find('.show').length;
+console.log(_cur_length);
+if(_cur_length > 0) {
+ $('#problem_${short_id}').find('.show').show();
+ console.log(_cur_length);
+}
+//detailed solution
+var details = $('#problem_${short_id}').find('.detailed-solution').html();
+$('#problem_${short_id}').find('.detailed-solution').remove();
+if($('#problem_${short_id}').hasClass('finished')){
+ $('#problem_${short_id}').find('.final_solution').html(details);
+ if(details){
+  $('#problem_${short_id}').find('.final_solution').prepend('<div class="tag_container"><i class="fa fa-info-circle info_tag"></i></div>');
+  $('#problem_${short_id}').find('.final_solution').addClass('details-decoration');
+ }
+ // if problem is finished replace its data-content attr with new content with answered questions in case click on other chapter and back on quiz (answers won't be erased)
+  new_problem_content=$('#problem_${short_id}').html();
+  $('#problem_${short_id}').attr('data-content',new_problem_content);
+}
+</script>
+<style>
+.xmodule_display.xmodule_CapaModule div.problem .notification.error,.xmodule_display.xmodule_CapaModule div.problem .notification.success {
+  margin-bottom: 10px;
+  border-top: none;
+  border-bottom: 3px solid #cb0712;
+}
+.xmodule_display.xmodule_CapaModule div.problem .notification.success {
+  border-bottom: 3px solid #009b00;
+}
+</style>

@@ -9,6 +9,15 @@
   .tma_tab>.seq_content{
     display: none;
     }
+  .tma_tab.disabled_unit_tma:not(.active) {
+        pointer-events: none;
+    }
+   .tma_tab.disabled_unit_tma:not(.active) #sequence-list li button.nav-item h3{
+      color : gray!important;
+    }
+  .tma_tab.not-viewable.active{
+        pointer-events: auto!important;
+    }
   .tma_tab.active>.seq_content{
     display: block !important;
     }
@@ -102,6 +111,7 @@
           i+=1
           unit_title = item['page_title'].split(" > ")[1]
           %>
+          ${unit_title}
           % if item['page_title'].split(" > ")[0] != current_suptitle:
             <%
             current_suptitle = item['page_title'].split(" > ")[0]
@@ -115,7 +125,7 @@
           unit_title = item['page_title']
           %>
         % endif
-    <div class="tma_tab">
+    <div class="tma_tab disabled_unit_tma ${"" if not item['complete'] else "completed"}" id="tma_tab_${idx}" disabled='disabled' data-index="${idx}" data-id="${item['id']}" >
 
     <nav class="sequence-list-wrapper" aria-label="${_('Sequence')}" >
       <ol id="sequence-list" role="tablist">
@@ -144,11 +154,11 @@
             % endif
             id="tab_${idx}">
             <i class="fa fa-chevron-right"></i>
-            <span class="icon fa seq_${item['type']}" aria-hidden="true"></span>
+            <span class="icon fa seq_${item['type']}" style="display:none;" aria-hidden="true"></span>
             % if 'complete' in item:
               <span
                 class="fa fa-check-circle check-circle ${"is-hidden" if not item['complete'] else ""}"
-                style="color:green"
+                style="color:green;display:none;"
                 aria-hidden="true"
               ></span>
               % if item['complete']:
@@ -157,7 +167,7 @@
             % endif
             <span class="fa fa-fw fa-bookmark bookmark-icon ${"is-hidden" if not item['bookmarked'] else "bookmarked"}" aria-hidden="true"></span>
             <div class="sequence-tooltip sr"><span class="sr">${item['type']}&nbsp;</span>${item['page_title']}<span class="sr bookmark-icon-sr">&nbsp;${_("Bookmarked") if item['bookmarked'] else ""}</span></div>
-            <h3 class="secondary-color-text hover-primary-text" style="display: inline;">${item['page_title']}</h3>
+            <h3 class="secondary-color-text hover-primary-text" style="display: inline;">${unit_title}</h3>
           </button>
         </li>
         % endif
@@ -220,6 +230,9 @@
   </div>
   <div id="result-content" style="display:block;padding:0;margin: 0 40px;"></div>
   <script>
+    $(document).ready(function(){
+        /* Getting this function from courseware_completion.js, it handle compeltion ajax call*/
+      completion_nav_handler(course_id,'${user}',"${items[0]['id']}")
       var page_test = ${dump_js_escaped_json(items) | n, decode.utf8};
       function button_nav_title() {
         var xblock_id = $('.xblock').find('.xblock').data('usage-id');
@@ -252,15 +265,12 @@
           }
         }
       }
-
       button_nav_title();
       $('#nav_button').find('button').click(function(){
         var data = $(this).data('class');
         $('.sequence-bottom').find('.'+data).click();
         button_nav_title();
       })
-
-
       function toggleClass(input,Class) {
         if($(input).hasClass(Class)){
           $(input).removeClass(Class);
@@ -269,64 +279,6 @@
         }
       }
 
-    $(document).ready(function(){
-        var urlCompletion ="/tma_apps/" + course_id +"/completion/get_course_completion";
-        var url = $(location).attr("href").split('/')[4];
-        if(!$('.tma_tab').children('.sequence-li-wrapper>ol>li>button>.span').hasClass('is_hidden')){
-
-        }
-        if(!$('.tma_tab.active').children('.sequence-li-wrapper>ol>li>button>.span').hasClass('is_hidden')){
-            console.log('ici')
-            $('.tma_tab.active>.sequence-bottom>button').removeClass('disabled');
-            $('.tma_tab.active>.sequence-bottom>button').removeAttr('disabled');
-        }
-        get_completion_status_tma('${user}',url,"${items[0]['id']}")
-
-        $(document).ajaxSuccess(function(event, xhr, settings) {
-            var currentUnit = $(".xblock.xblock-student_view.xblock-student_view-vertical.xblock-initialized").data("usage-id");
-            var  url ="/tma_apps/" + course_id +"/" + currentUnit +"/completion/get_unit_completion";
-            if (settings.url.indexOf('/publish_completion') > -1) {
-            $.ajax({
-              type: "get",
-              url: url,
-              success: function (response) {
-                console.log(response)
-                console.log($('.tma_tab.active').children('.sequence-bottom').children('.button-next'))
-                if(response.success){
-                    $('.tma_tab.active').children('.sequence-bottom').children('.button-next').removeAttr('disabled')
-                    $('.tma_tab.active').children('.sequence-bottom').children('.button-next').removeClass('disabled')
-                    $.ajax({
-                      type: "get",
-                      url: urlCompletion,
-                      success: function (response) {
-                      console.log(response.completion_rate)
-                        if(response.completion_rate === 1){
-                            $('.result-score').removeClass('disabled')
-                            returnScore()
-                        }
-                      },error : function(error){
-                            console.log('error')
-                    }
-                  });
-                }
-              }
-          });
-
-        };
-      });
-      $.ajax({
-        type: "get",
-        url: urlCompletion,
-        success: function (response) {
-        console.log(response.completion_rate)
-          if(response.completion_rate === 1){
-              $('.result-score').removeClass('disabled')
-              returnScore()
-          }
-        },error : function(error){
-              console.log('error')
-      }
-    });
     })
   </script>
 % if not exclude_units:
