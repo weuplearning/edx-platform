@@ -33,7 +33,6 @@ def hex_to_rgb (hex) :
 def generate_html(user,score,course_img_path,template_path,course_title,categorie,certif_img_path,logo_path,amundi_academy,lang,user_name, primary_color, secondary_color):
     font_main = ImageFont.truetype("/edx/var/edxapp/media/certificates/OpenSans-Regular.ttf",12,  encoding="utf-8")
     font_big = ImageFont.truetype("/edx/var/edxapp/media/certificates/OpenSans-Bold.ttf",15,  encoding="utf-8")
-
     marge_haute=30
     marge_laterale=40
     marge_espacement=20
@@ -192,7 +191,7 @@ def generate_html(user,score,course_img_path,template_path,course_title,categori
         second_color=(0, 180, 234)
 
 
-    background = Image.new('RGBA', (595,865), (255, 255, 255, 255))
+    background = Image.new('RGBA', (595,865), (255, 255, 255,1))
     background_largeur, background_hauteur=background.size
 
     logo=Image.open('/edx/var/edxapp'+logo_path).convert("RGBA")
@@ -211,15 +210,15 @@ def generate_html(user,score,course_img_path,template_path,course_title,categori
             pass
         amundi_largeur, amundi_hauteur=amundi.size
         px_logo=(marge_laterale)
-        py_logo=marge_haute
+        py_logo=(marge_haute)
         px_amundi=(background_largeur-amundi_largeur-marge_laterale)
         py_amundi=marge_haute+((logo_hauteur-amundi_hauteur)/2)
-        background.paste(logo, (px_logo,py_logo), mask=logo)
-        background.paste(amundi, (px_amundi,py_amundi))
+        background.paste(logo, int(px_logo,py_logo), mask=logo)
+        background.paste(amundi, int(px_amundi,py_amundi))
     else:
         px_logo=(background_largeur - logo_largeur)/2
         py_logo=marge_haute
-        background.paste(logo, (px_logo,py_logo), mask=logo)
+        background.paste(logo, (int(px_logo),int(py_logo)), mask=logo)
         amundi_hauteur=60
 
 
@@ -250,7 +249,7 @@ def generate_html(user,score,course_img_path,template_path,course_title,categori
     imgc_largeur, imgc_hauteur= image_cours.size
     px_imgc=(background_largeur-imgc_largeur)/2
     py_imgc=(py_logo+30+course1_hauteur+marge_espacement)
-    background.paste(image_cours, (px_imgc,py_imgc))
+    background.paste(image_cours, (int(px_imgc),int(py_imgc)))
 
     #Date
     px_date=marge_laterale
@@ -315,7 +314,7 @@ def generate_html(user,score,course_img_path,template_path,course_title,categori
     tampon_largeur, tampon_hauteur= tampon.size
     px_tampon=(background_largeur-tampon_largeur)/2
     py_tampon=(background_hauteur-tampon_hauteur-marge_espacement)
-    background.paste(tampon, (px_tampon,py_tampon))
+    background.paste(tampon, (int(px_tampon),int(py_tampon)))
 
 
 
