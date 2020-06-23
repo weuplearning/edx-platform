@@ -9,6 +9,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.cache import cache_control
 
 from opaque_keys.edx.locations import SlashSeparatedCourseKey
+from opaque_keys.edx.locator import CourseLocator
 
 from atp_task.course_grade import course_grade
 
@@ -33,7 +34,7 @@ log = logging.getLogger(__name__)
 #@require_level('staff')
 def calculate_grades_xls(request,course_id):
 
-    course_key = SlashSeparatedCourseKey.from_deprecated_string(course_id)
+    course_key = CourseLocator.from_string(course_id)
     try:
         submit_calculate_grades_xls(request, course_key, course_id)
         success_status = _("The grade report is being created."

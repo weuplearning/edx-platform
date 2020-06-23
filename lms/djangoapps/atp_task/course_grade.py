@@ -19,9 +19,11 @@ from lms.djangoapps.courseware.models import StudentModule
 from course_api.blocks.views import BlocksInCourseView,BlocksView
 from lms.djangoapps.course_blocks.api import get_course_blocks
 from opaque_keys.edx.locations import SlashSeparatedCourseKey
+from opaque_keys.edx.locator import CourseLocator
 from courseware.courses import get_course_by_id
 from student.models import *
 from django.contrib.auth.models import User
+from importlib import reload
 
 from student.models import UserPreprofile
 
@@ -51,11 +53,12 @@ class course_grade():
     def get_titles(self):
         log.info("get_titles: Starting to get titles")
         if self.course_key is None:
-            self.course_key = SlashSeparatedCourseKey.from_deprecated_string(self.course_id)
+            self.course_key = CourseLocator.from_string(self.course_id)
 
 
         #get all course structure
         course_usage_key = modulestore().make_course_usage_key(self.course_key)
+        log.info(self.request)
         blocks = get_blocks(self.request,course_usage_key,depth='all',requested_fields=['display_name','children'])
         _root = blocks['root']
         blocks_overviews = []
@@ -121,7 +124,7 @@ class course_grade():
 
     def _user(self,user_id):
         log.info("_user: starting for userid "+pformat(user_id))
-        course_key = SlashSeparatedCourseKey.from_deprecated_string(self.course_id)
+        course_key = CourseLocator.from_string(self.course_id)
         course_block = StudentModule.objects.all().filter(student_id=user_id,course_id=course_key,max_grade__isnull=False)
         course_grade = []
 
@@ -144,8 +147,6 @@ class course_grade():
 
 
     def export(self,sended_email):
-        reload(sys)
-        sys.setdefaultencoding('utf8')
 
         log.warning("export: Start Task grade reports course_id : "+str(self.course_id) )
         course_key = CourseKey.from_string(self.course_id)

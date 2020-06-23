@@ -11,6 +11,10 @@ import re
 import string
 from collections import defaultdict
 import datetime
+import chardet
+import csv
+import io
+import requests
 
 import django.utils
 import six
@@ -104,8 +108,9 @@ from .item import create_xblock_info
 from .library import LIBRARIES_ENABLED, get_library_creator_status
 
 #TMA Custom Import - Importing SiteConfiguration instead of MS config
-from openedx.core.djangoapps.site_configuration.models import SiteConfiguration
 from lms.djangoapps.courseware.courses import get_course_by_id
+from openedx.core.djangoapps.site_configuration.models import SiteConfiguration
+from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 
 #GEOFFREY TMA ATP
 import sys
@@ -113,6 +118,7 @@ from django.core.mail import send_mail
 from importlib import reload
 from pprint import pformat
 from django.views.decorators.csrf import csrf_exempt
+from lms.djangoapps.instructor.enrollment import enroll_email,get_email_params
 #for verbose request
 
 log = logging.getLogger(__name__)
@@ -561,7 +567,7 @@ def course_listing(request):
         }
 
     microsite = SiteConfiguration.objects.all()
-
+   
     #update template tma atp
     user_email = request.user.email
     current_date = int(datetime.datetime.now().strftime("%s"))
@@ -1344,6 +1350,126 @@ def grading_handler(request, course_key_string, grader_index=None):
                 CourseGradingModel.delete_grader(course_key, grader_index, request.user)
                 return JsonResponse()
 
+def session_manager_handler(emails,org,course,specific_msg=None):
+    log.info("session_manager_handler: start")
+    #Gather all needed information
+    lang = course.language
+    if course.language in language_setup :
+        msg = language_setup[course.language]['msg'].format(course.display_name)
+        redirect_language = language_setup[course.language]['sem_lang']
+    else :
+        msg = language_setup['en']['msg'].format(course.display_name)
+        redirect_language='en'
+    # Override msg if specific msg was provided
+    if specific_msg:
+        log.info("specific msg before html unescape: "+pformat(specific_msg))
+        msg = HTMLParser.HTMLParser().unescape(specific_msg)
+        log.info("specific msg after html unescape: "+pformat(msg))
+        msg = html2text.html2text(msg)
+        log.info("specific msg after html2text: "+pformat(msg))
+    log.info("session_manager_handler: course display name {}".format(course.display_name))
+    grant_type = 'client_credentials'
+    sem_org = org.lower()
+    credentials = settings.FEATURES.get('SEM_CREDENTIALS')
+    prod = settings.FEATURES.get('VM_STATUS')
+   
+    """
+    credentials = {
+    }
+    """
+    log.info(configuration_helpers.get_value_for_org(sem_org,"SEM_cient_id"))
+    try:
+        client_id =configuration_helpers.get_value_for_org(sem_org,"SEM_cient_id")
+        client_secret = configuration_helpers.get_value_for_org(sem_org,"SEM_client_secret")
+    except:
+        log.info('session manager handler except')
+    try:
+        #urls = settings.FEATURES.get('SEM_ENDPOINTS')
+        urls = ["https://ppr-session-manager.amundi.com/v2/token","https://ppr-session-manager.amundi.com/v2/api/import","https://ppr-session-manager.amundi.com/v2/api/users/import"] 
+        log.info(urls)
+    except:
+        urls = ["https://ppr-session-manager.amundi.com/v2/token","https://ppr-session-manager.amundi.com/v2/api/import","https://ppr-session-manager.amundi.com/v2/api/users/import"]
+
+    redirect_uri = 'https://'+str(org)+'.'+str(settings.LMS_BASE)+'/auth/login/amundi/?auth_entry=login&next=%2Fdashboard&lang='+redirect_language
+
+    log.info("START SEM TOKEN REQUEST")
+    data = {"grant_type" : grant_type, "client_id" : client_id, "client_secret" : client_secret}
+    log.info("SEM TOKEN REQUEST - DATA : {}".format(str(data)))
+    log.info("SEM TOKEN REQUEST - URL : {}".format(str(urls[0])))
+    request_token = requests.post(urls[0], data=data,headers = {'content-type':'application/x-www-form-urlencoded'},verify=False)
+    log.info("SEM TOKEN REQUEST - STATUS : {}".format(request_token.status_code))
+    log.info("SEM TOKEN REQUEST - RESPONSE DETAIL : {}".format(request_token.__dict__))
+    request_token = request_token.json()
+    log.info("SEM TOKEN REQUEST - RESPONSE JSON : {}".format(request_token))
+    token = request_token.get('access_token')
+    log.info("SEM TOKEN REQUEST - TOKEN VALUE : {}".format(token))
+    log.info("END SEM TOKEN REQUEST")
+
+    q = {}
+    i = 1
+    array_pull = []
+    array_push = []
+    for n in emails:
+        array_push.append(n)
+        if i%200 == 0 or i == len(emails):
+            log.info("START SEM USER IMPORT REQUEST")
+            data_email = {"referer":redirect_uri, "msg":msg, "lang":redirect_language,"users":array_push}
+            log.info("SEM USER IMPORT REQUEST - DATA : {}".format(data_email))
+            log.info("SEM USER IMPORT REQUEST - URL : {}".format(urls[2]))
+            request_email = requests.post(urls[2], json=data_email , headers = {'content-type':'application/json','Authorization':'Bearer '+token},verify=False)
+            log.info("SEM USER IMPORT REQUEST - STATUS : {}".format(request_email.status_code))
+            log.info("SEM USER IMPORT REQUEST - RESPONSE DETAIL : {}".format(request_email.__dict__))
+            json_parse = json.loads(request_email.text)
+            log.info("SEM USER IMPORT REQUEST - RESPONSE JSON : {}".format(json_parse))
+            try:
+                json_parse_success = json_parse.get(u'success')
+                for n in json_parse_success:
+                    q = {}
+                    q['uuid'] = n.get(u'uuid')
+                    q['email'] = str(n.get(u'email')).lower()
+                    q['status'] = 'success'
+                    array_pull.append(q)
+                    log.info("SEM USER IMPORT REQUEST - RESPONSE SUCCESS : {} "+pformat(q))
+            except:
+                pass
+            try:
+                json_parse_error = json_parse.get(u'errors')
+                for n in json_parse_error:
+                    q = {}
+                    q['uuid'] = n.get(u'uuid')
+                    q['email'] = str(n.get(u'user')).lower()
+                    q['status'] = 'error'
+                    array_pull.append(q)
+                    log.info("SEM USER IMPORT REQUEST - RESPONSE ERRORS : {} "+pformat(q))
+            except:
+                pass
+            try:
+                json_parse_error = json_parse.get(u'errors')
+                for n in json_parse_error:
+                    q = {}
+                    q['uuid'] = n.get(u'uuid')
+                    q['email'] = str(n.get(u'user')).lower()
+                    q['status'] = 'error'
+                    array_pull.append(q)
+                    log.info("SEM USER IMPORT REQUEST - RESPONSE ERRORS : {} "+pformat(q))
+            except:
+                pass
+            try:
+                json_parse_list = json_parse.get(u'list')
+                for n in json_parse_list:
+                    q = {}
+                    q['uuid'] = n.get(u'uuid')
+                    q['email'] = str(n.get(u'user')).lower()
+                    q['status'] = 'list'
+                    array_pull.append(q)
+                    log.info("SEM USER IMPORT REQUEST - RESPONSE LIST : {} "+pformat(q))
+            except:
+                pass
+            array_push = []
+        i = i + 1
+    log.info("END SEM USER IMPORT REQUEST")
+    return array_pull
+
 
 def _refresh_course_tabs(request, course_module):
     """
@@ -1923,7 +2049,6 @@ def invite_handler(request, course_key_string):
 
     # POST = SEND INVITATIONS
     if request.method == 'POST':
-        log.info('iciiicicici')
         reload(sys)
 
         files = ''
@@ -1949,7 +2074,6 @@ def invite_handler(request, course_key_string):
             else :
                 obj = language_setup['en']['obj'].format(course.display_name)
                 platform_lang = language_setup['en']['platform_lang']
-
             #Prepare course details
             org = course.org
             course_key = CourseKey.from_string(course_key_string)
@@ -1957,18 +2081,18 @@ def invite_handler(request, course_key_string):
             course_details = CourseDetails.fetch(course_key)
             overview = CourseOverview.get_from_id(course_key)
             module_store = modulestore().get_course(course_key, depth=0)
-
             #Read CSV file
             try:
-                #log.info("invite_handler: finding out encoding...")
+                log.info("invite_handler: finding out encoding...")
                 csv_file_for_detection = copy.deepcopy(csv_file)
                 source_encoding = chardet.detect(csv_file_for_detection.read())['encoding'].lower()
                 log.info("invite_handler: encoding is "+pformat(source_encoding))
-                decoded_csv_file = io.StringIO(unicode(csv_file.read(),source_encoding).decode('utf-8'))
-                #log.info("invite_handler: csv decoded")
+                decoded_csv_file = io.StringIO(str(csv_file.read(),source_encoding))
+                log.info("invite_handler: csv decoded")
                 csv_dict= csv.DictReader(decoded_csv_file)
-                #log.info("invite_handler: csv is in dict now : "+pformat(csv_dict))
+                log.info("invite_handler: csv is in dict now : "+pformat(csv_dict))
             except:
+                log.exception("message")
                 csv_dict={}
 
             log.info("invite_handler: csv is in dict now : "+pformat(csv_dict))

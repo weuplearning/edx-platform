@@ -60,6 +60,8 @@ from util.json_request import JsonResponse
 from xmodule.html_module import HtmlBlock
 from xmodule.modulestore.django import modulestore
 from xmodule.tabs import CourseTab
+from opaque_keys.edx.locator import CourseLocator
+
 
 from .tools import get_units_with_due_date, title_or_url
 from .. import permissions
@@ -877,7 +879,7 @@ def is_ecommerce_course(course_key):
 @login_required
 def stat_dashboard(request, course_id):
     #GET course_key
-    course_key = SlashSeparatedCourseKey.from_string(course_id)
+    course_key = CourseLocator.from_string(course_id)
     course_key_modulestore = CourseKey.from_string(course_id)
     #course_module
     course_module = modulestore().get_course(course_key, depth=0)
@@ -993,7 +995,7 @@ def stat_dashboard(request, course_id):
 @ensure_csrf_cookie
 @login_required
 def get_dashboard_username(request,course_id,email):
-    course_key = SlashSeparatedCourseKey.from_string(course_id)
+    course_key = CourseLocator.from_string(course_id)
     row = User.objects.raw('SELECT a.id,a.email,a.first_name,a.last_name FROM auth_user a,student_courseenrollment b WHERE a.id=b.user_id AND b.course_id=%s' ,[course_id])
     emails = []
     email = str(email).lower()
@@ -1049,7 +1051,7 @@ def stat_dashboard_username(request, course_id, email):
         # get user id
         user_id= users.id
         # get course_key from url's param
-        course_key = SlashSeparatedCourseKey.from_string(course_id)
+        course_key = CourseLocator.from_string(course_id)
         # get course from course_key
         course = get_course_by_id(course_key)
         # get all courses block of the site
@@ -1205,7 +1207,7 @@ def get_course_users(request,course_id):
     CourseEnrollment
     CourseEnrollmentAllowed
     """
-    course_key = SlashSeparatedCourseKey.from_string(course_id)
+    course_key = CourseLocator.from_string(course_id)
     invite = CourseEnrollmentAllowed.objects.all().filter(course_id=course_key)
     enroll = CourseEnrollment.objects.all().filter(course_id=course_key)
     users = []

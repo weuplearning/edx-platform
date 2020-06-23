@@ -17,6 +17,7 @@ import csv
 import json
 import hashlib
 import os.path
+import logging
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -26,6 +27,7 @@ from django.db import models, transaction
 from openedx.core.storage import get_storage
 from openedx.core.djangoapps.xmodule_django.models import CourseKeyField
 
+log = logging.getLogger(__name__)
 
 # define custom states used by InstructorTask
 QUEUING = 'QUEUING'
@@ -80,7 +82,7 @@ class tmaTask(models.Model):
         },)
 
     def __unicode__(self):
-        return unicode(repr(self))
+        return str(repr(self))
 
     @classmethod
     def create(cls, course_id, task_type, task_key, task_input, requester):
@@ -146,7 +148,9 @@ class tmaTask(models.Model):
         Truncation is indicated by adding "..." to the end of the value.
         """
         tag = '...'
-        task_progress = {'exception': type(exception).__name__, 'message': unicode(exception.message)}
+        log.info(exception)
+        task_progress = {'exception': type(exception).__name__, 'message': str(exception.message)}
+        log.info(task_progress)
         if traceback_string is not None:
             # truncate any traceback that goes into the InstructorTask model:
             task_progress['traceback'] = traceback_string
