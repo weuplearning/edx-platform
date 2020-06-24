@@ -973,6 +973,12 @@ def stat_dashboard(request, course_id):
           for component in vertical['children']:
             if 'problem' in str(component):
               problem_components.append(str(component))
+    log.info(course)
+    if course.language:
+       course_language = course.language
+    else:
+       course_language = 'en'
+
     context = {
      "course_id":course_id,
      "course":course,
@@ -986,7 +992,7 @@ def stat_dashboard(request, course_id):
      'user_finished':user_finished,
      'course_structure':course_structure,
      'overview':overview,
-     'language_course':get_course_langue(course.language),
+     'language_course':get_course_langue(course_language),
      'problem_components':problem_components
     }
 
@@ -1434,6 +1440,8 @@ def get_list_lang():
 
 def get_course_langue(lang_code):
     language_options_dict=get_list_lang()
+    log.warning(language_options_dict)
+    log.warning(lang_code)
     course_language=language_options_dict[lang_code]
     return course_language
 
