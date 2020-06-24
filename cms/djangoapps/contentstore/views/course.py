@@ -1379,7 +1379,7 @@ def session_manager_handler(emails,org,course,specific_msg=None):
     """
     log.info(configuration_helpers.get_value_for_org(sem_org,"SEM_cient_id"))
     try:
-        client_id =configuration_helpers.get_value_for_org(sem_org,"SEM_cient_id")
+        client_id =configuration_helpers.get_value_for_org(sem_org,"SEM_client_id")
         client_secret = configuration_helpers.get_value_for_org(sem_org,"SEM_client_secret")
     except:
         log.info('session manager handler except')
@@ -1389,9 +1389,11 @@ def session_manager_handler(emails,org,course,specific_msg=None):
         log.info(urls)
     except:
         urls = ["https://ppr-session-manager.amundi.com/v2/token","https://ppr-session-manager.amundi.com/v2/api/import","https://ppr-session-manager.amundi.com/v2/api/users/import"]
+    
 
+    log.info(client_id)
     redirect_uri = 'https://'+str(org)+'.'+str(settings.LMS_BASE)+'/auth/login/amundi/?auth_entry=login&next=%2Fdashboard&lang='+redirect_language
-
+    log.info(urls[2])
     log.info("START SEM TOKEN REQUEST")
     data = {"grant_type" : grant_type, "client_id" : client_id, "client_secret" : client_secret}
     log.info("SEM TOKEN REQUEST - DATA : {}".format(str(data)))
@@ -1400,6 +1402,7 @@ def session_manager_handler(emails,org,course,specific_msg=None):
     log.info("SEM TOKEN REQUEST - STATUS : {}".format(request_token.status_code))
     log.info("SEM TOKEN REQUEST - RESPONSE DETAIL : {}".format(request_token.__dict__))
     request_token = request_token.json()
+    log.info(request_token)
     log.info("SEM TOKEN REQUEST - RESPONSE JSON : {}".format(request_token))
     token = request_token.get('access_token')
     log.info("SEM TOKEN REQUEST - TOKEN VALUE : {}".format(token))
@@ -1416,6 +1419,7 @@ def session_manager_handler(emails,org,course,specific_msg=None):
             data_email = {"referer":redirect_uri, "msg":msg, "lang":redirect_language,"users":array_push}
             log.info("SEM USER IMPORT REQUEST - DATA : {}".format(data_email))
             log.info("SEM USER IMPORT REQUEST - URL : {}".format(urls[2]))
+            log.info(token)
             request_email = requests.post(urls[2], json=data_email , headers = {'content-type':'application/json','Authorization':'Bearer '+token},verify=False)
             log.info("SEM USER IMPORT REQUEST - STATUS : {}".format(request_email.status_code))
             log.info("SEM USER IMPORT REQUEST - RESPONSE DETAIL : {}".format(request_email.__dict__))
