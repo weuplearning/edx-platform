@@ -160,4 +160,7 @@ XBlock                              # Courseware component architecture
 xblock-utils                        # Provides utilities used by the Discussion XBlock
 xss-utils                           # https://github.com/edx/edx-platform/pull/20633 Fix XSS via Translations
 enmerkar-underscore                 # Implements a underscore extractor for django-babel.
+xlwt==1.3.0			    # TMA custom import
+img2pdf==0.2.4                      # TMA custom import
+python-resize-image==1.1.19         # TMA custom import
 
