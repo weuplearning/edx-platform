@@ -89,8 +89,8 @@ def get_blocks(
         transformers += [AccessDeniedMessageFilterTransformer()]
 
     # TODO: Remove this after REVE-52 lands and old-mobile-app traffic falls to < 5% of mobile traffic
-    if is_request_from_mobile_app(request):
-        transformers += [HideEmptyTransformer()]
+    #if is_request_from_mobile_app(request):
+    #    transformers += [HideEmptyTransformer()]
 
     transformers += [
         BlocksAPITransformer(

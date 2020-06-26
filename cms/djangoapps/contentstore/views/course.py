@@ -567,7 +567,7 @@ def course_listing(request):
         }
 
     microsite = SiteConfiguration.objects.all()
-   
+
     #update template tma atp
     user_email = request.user.email
     current_date = int(datetime.datetime.now().strftime("%s"))
@@ -1372,7 +1372,7 @@ def session_manager_handler(emails,org,course,specific_msg=None):
     sem_org = org.lower()
     credentials = settings.FEATURES.get('SEM_CREDENTIALS')
     prod = settings.FEATURES.get('VM_STATUS')
-   
+
     """
     credentials = {
     }
@@ -1386,12 +1386,12 @@ def session_manager_handler(emails,org,course,specific_msg=None):
         log.exception("message")
     try:
         #urls = settings.FEATURES.get('SEM_ENDPOINTS')
-        urls = ["https://ppr-session-manager.amundi.com/v2/token","https://ppr-session-manager.amundi.com/v2/api/import","https://ppr-session-manager.amundi.com/v2/api/users/import"] 
+        urls = ["https://ppr-session-manager.amundi.com/v2/token","https://ppr-session-manager.amundi.com/v2/api/import","https://ppr-session-manager.amundi.com/v2/api/users/import"]
         log.info(urls)
     except:
         urls = ["https://ppr-session-manager.amundi.com/v2/token","https://ppr-session-manager.amundi.com/v2/api/import","https://ppr-session-manager.amundi.com/v2/api/users/import"]
         log.exception("message")
-    
+
 
     redirect_uri = 'https://'+str(org)+'.'+str(settings.LMS_BASE)+'/auth/login/amundi/?auth_entry=login&next=%2Fdashboard&lang='+redirect_language
     log.info("START SEM TOKEN REQUEST")
@@ -2265,8 +2265,6 @@ def invitelist_handler(request, course_key_string):
 @require_http_methods(("GET", "PUT", "POST"))
 @expect_json
 def email_dashboard_handler(request, course_key_string):
-    reload(sys)
-    sys.setdefaultencoding('utf8')
     list_sem=[]
     mail_send= False
     if request.method == "GET":

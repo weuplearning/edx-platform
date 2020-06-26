@@ -58,7 +58,7 @@ class course_grade():
 
         #get all course structure
         course_usage_key = modulestore().make_course_usage_key(self.course_key)
-        log.info(self.request)
+        log.info(self)
         blocks = get_blocks(self.request,course_usage_key,depth='all',requested_fields=['display_name','children'])
         _root = blocks['root']
         blocks_overviews = []
@@ -147,7 +147,6 @@ class course_grade():
 
 
     def export(self,sended_email):
-
         log.warning("export: Start Task grade reports course_id : "+str(self.course_id) )
         course_key = CourseKey.from_string(self.course_id)
         course = get_course_by_id(course_key)
@@ -181,7 +180,7 @@ class course_grade():
 
         wb = Workbook(encoding='utf-8')
         sheet = wb.add_sheet('Users')
-
+        log.info(sheet)
         for i, head in enumerate(header):
             sheet.write(0,i,head)
 
@@ -192,7 +191,7 @@ class course_grade():
             j = j + 1
 
             user=course_enrollement[i].user
-            course_grade = CourseGradeFactory().create(user, course)
+            course_grade = CourseGradeFactory().read(user, course)
 
             user_id = user.id
             email = user.email
@@ -286,6 +285,7 @@ class course_grade():
         _data = _files_values
         #_encoded = base64.b64encode(wb)
         log.warning("end send grade : right before email is sent out")
+        log.warning(settings.DEFAULT_FROM_EMAIL)
         _email = EmailMessage(subject, text_content, from_email, [to])
         _email.attach(filename, _data, mimetype=mimetype)
         _email.send(fail_silently=fail_silently)
@@ -315,6 +315,7 @@ class course_grade():
             context['filepath'] = filepath
             context['time'] = time.ctime(os.path.getmtime(filepath))
             log.info("get_xls: done")
+        log.info("get_xls")
         return context
 
     def download_xls(self,filename):

@@ -70,6 +70,7 @@ $( document ).ready(function() {
   $('.problems-wrapper').each(function() {
     problem_ids_list.push($(this).attr('id'));
   });
+
 });
 function scroll_to_ques(question_id){
     console.log('scroll to question '+question_id);
@@ -226,6 +227,20 @@ function open_result_panel(){
 }
 
 function get_completion_status_tma(username,course_key,subsection_id){
+  console.log('entering ajax call')
+  $.ajax({
+      url:"/api/completion/v1/subsection-completion/"+username+"/"+ course_key +"/"+subsection_id+'/',
+      type:'GET',
+      dataType:'json',
+      success:function(data){
+
+      },
+      error: function(error){
+        console.log(error)
+      }
+    });
+}
+function get_completion_status_tma_for_quiz(username,course_key,subsection_id){
   console.log('entering ajax call')
   $.ajax({
       url:"/api/completion/v1/subsection-completion/"+username+"/"+ course_key +"/"+subsection_id+'/',

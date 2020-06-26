@@ -104,7 +104,7 @@ urlpatterns = [
     url(r'^settings/invite/{}$'.format(settings.COURSE_KEY_PATTERN), contentstore.views.course.invite_handler),
     url(r'^settings/invite/{}/list$'.format(settings.COURSE_KEY_PATTERN), contentstore.views.course.invitelist_handler),
     url(r'^settings/manage/{}$'.format(settings.COURSE_KEY_PATTERN), contentstore.views.course.manage_handler),
-
+    url(r'^settings/email_dashboard/{}$'.format(settings.COURSE_KEY_PATTERN), contentstore.views.email_dashboard_handler),
 
     url(r'^checklists/{}?$'.format(settings.COURSE_KEY_PATTERN),
         contentstore.views.checklists_handler,

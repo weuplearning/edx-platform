@@ -211,4 +211,5 @@ def upload_grades_xls(_xmodule_instance_args, _entry_id, course_id, _task_input,
     log.warning("email3 : "+str(email))
     log.warning("email4 : "+str(email))
     grade_path = course_grade(course_id).export(email)
+
     tracker.emit(REPORT_REQUESTED_EVENT_NAME, {"report_type": grade_path, })

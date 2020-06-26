@@ -12,6 +12,8 @@ from openedx.core.djangolib.markup import clean_dangerous_html, HTML, Text
 from openedx.core.lib.courses import course_image_url
 from lms.djangoapps.grades.course_grade_factory import CourseGradeFactory
 from opaque_keys.edx.locations import SlashSeparatedCourseKey
+from openedx.core.djangolib.js_utils import js_escaped_string, dump_js_escaped_json
+
 
 from courseware.courses import (
     get_course_by_id,

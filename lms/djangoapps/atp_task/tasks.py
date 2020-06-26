@@ -26,5 +26,10 @@ def calculate_grades_xls(entry_id, xmodule_instance_args):
         xmodule_instance_args.get('task_id'), entry_id, action_name
     )
 
+    TASK_LOG.info(entry_id)
+    TASK_LOG.info(action_name)
+    TASK_LOG.info(xmodule_instance_args)
+
     task_fn = partial(upload_grades_xls, xmodule_instance_args)
+    TASK_LOG.info(task_fn)
     return run_main_task(entry_id, task_fn, action_name)

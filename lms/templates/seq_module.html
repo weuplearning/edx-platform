@@ -111,13 +111,12 @@
           i+=1
           unit_title = item['page_title'].split(" > ")[1]
           %>
-          ${unit_title}
           % if item['page_title'].split(" > ")[0] != current_suptitle:
             <%
             current_suptitle = item['page_title'].split(" > ")[0]
             %>
             <div class="sequence-suptitle tma_chapters" id="chapter_tma_${i}">
-                <h3>${current_suptitle}</h3>
+                <h3 class="primary-color-text">${current_suptitle}</h3>
             </div>
           % endif
         % else:

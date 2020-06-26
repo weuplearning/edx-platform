@@ -7,6 +7,7 @@ import datetime
 import logging
 import uuid
 from functools import reduce
+import json
 
 import pytz
 import six
@@ -74,7 +75,7 @@ from django.db import connection,connections
 from opaque_keys.edx.locations import SlashSeparatedCourseKey
 from lms.djangoapps.grades.course_grade_factory import CourseGradeFactory
 #GEOFFREY 2
-#from courseware.models import StudentModule
+from lms.djangoapps.courseware.models import StudentModule
 from course_api.blocks.api import get_blocks
 from course_api.blocks.views import BlocksInCourseView,BlocksView
 
@@ -1056,6 +1057,8 @@ def stat_dashboard_username(request, course_id, email):
 
         # get user id
         user_id= users.id
+        # get username
+        username= users.username
         # get course_key from url's param
         course_key = CourseLocator.from_string(course_id)
         # get course from course_key
@@ -1167,7 +1170,7 @@ def get_course_structure(request, course_id):
 @require_POST
 def get_course_blocks_grade(request,course_id):
 
-    data = json.loads(request.body)
+    data = json.loads(request.body.decode('utf-8'))
     data_id = data.get('data_id')
     course_block = StudentModule.objects.raw("SELECT id,AVG(grade) AS moyenne,count(id) AS total,MAX(max_grade) AS max_grade,course_id,module_id FROM courseware_studentmodule WHERE course_id = %s AND max_grade IS NOT NULL AND grade <= max_grade GROUP BY module_id", [course_id])
     course_grade = {}
@@ -1440,8 +1443,6 @@ def get_list_lang():
 
 def get_course_langue(lang_code):
     language_options_dict=get_list_lang()
-    log.warning(language_options_dict)
-    log.warning(lang_code)
     course_language=language_options_dict[lang_code]
     return course_language
 
