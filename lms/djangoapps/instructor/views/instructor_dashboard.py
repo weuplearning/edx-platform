@@ -1330,6 +1330,17 @@ def download_xls(request,filename):
     os.remove(full_path)
     return response
 
+def download_xls_files(request,filename):
+    log.info('downloading xls file')
+    full_path = '/edx/var/edxapp/'+filename
+    with open(full_path, "r") as excel:
+        _content = excel.read()
+    response = HttpResponse(_content, content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response['Content-Disposition'] = "attachment; filename="+filename
+    os.remove(full_path)
+    return response
+
+
 #generate current_course grade reports
 
 def get_course_users_grades(request,course_id):

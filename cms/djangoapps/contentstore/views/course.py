@@ -111,6 +111,7 @@ from .library import LIBRARIES_ENABLED, get_library_creator_status
 from lms.djangoapps.courseware.courses import get_course_by_id
 from openedx.core.djangoapps.site_configuration.models import SiteConfiguration
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
+from django.template.loader import render_to_string
 
 #GEOFFREY TMA ATP
 import sys
@@ -2260,6 +2261,154 @@ def invitelist_handler(request, course_key_string):
         retour = {'course-key_string':context}
         #  RETURN VALUE AND RENDER INVITE PAGE
         return render_to_response('invite_studentlist.html', context)
+
+
+def send_enroll_mail(obj,course,overview,course_details, list_email,module_store, body=None):
+    if not body :
+        body=''
+
+    log.info("send_enroll_mail start_sending")
+    #try:
+    #MAIL 2 le retour
+    domain_override = ''
+    if not domain_override:
+        site_name = configuration_helpers.get_value(
+            'SITE_NAME',
+            settings.SITE_NAME
+        )
+    else:
+        site_name = domain_override
+
+
+    subject = obj
+    subject = subject.replace('\n', '')
+    log.info("send_enroll_mail start_sending")
+    # LIST OF VARS
+    course_org = course.org.lower()
+    site_name = settings.LMS_BASE
+    microsite_link = 'https://'+course_org+'.'+site_name
+    course_title = course.display_name
+    category = course.categ
+    duration = course_details.effort
+    mode_required = course.is_required_atp
+
+
+    microsite_value = configuration_helpers.get_value_for_org(course_org,"language_code")
+    primary_color_key = 0
+    secondary_color_key = 0
+    logo_key = 0
+    amundi_brand=0
+    i = 0
+
+    if configuration_helpers.get_value_for_org(course_org,"language_code"):
+        lang_key = configuration_helpers.get_value_for_org(course_org,"language_code")
+    if configuration_helpers.get_value_for_org(course_org,"logo_couleur"):
+        logo_key = configuration_helpers.get_value_for_org(course_org,"logo_couleur")
+    if configuration_helpers.get_value_for_org(course_org,"primary_color"):
+        primary_color_key = configuration_helpers.get_value_for_org(course_org,"primary_color")
+    if configuration_helpers.get_value_for_org(course_org,"secondary_color"):
+        secondary_color_key = configuration_helpers.get_value_for_org(course_org,"secondary_color")
+    if configuration_helpers.get_value_for_org(course_org,"amundi_brand"):
+        amundi_brand = configuration_helpers.get_value_for_org(course_org,"amundi_brand")
+
+    link = microsite_link+'/courses/'+str(course.id)+'/about'
+    atp_primary_color = "#0C1C49"
+    atp_secondary_color = "ffffff"
+    microsite_logo = "https://qualif-atp.themoocagency.com/media/logo-amundi.png"
+    #log.info('AMUNDI BRAND {}'.format(str(microsite_value.values()[amundi_brand])))
+    #if str(microsite_value.values()[amundi_brand]) =="true" or str(microsite_value.values()[amundi_brand])=="True":
+        #platform_image = '<img src="https://'+site_name+'/media/certificates/images/logo-amundi-academy.jpg" alt="Amundi Academy" width="300" height="68" style="display:block;">'
+    #else :
+        #platform_image=''
+
+    platform_image=''
+    log.info('send enroll email after microsites values')
+
+    course_image = overview.image_urls['raw']
+    #course_link_img = 'https://'+site_name+course_image
+    end_date = ''
+
+    try:
+        end_date = overview.end.strftime("%Y-%m-%d")
+
+    except:
+        pass
+    from_email=configuration_helpers.get_value('email_from_address', settings.DEFAULT_FROM_EMAIL)
+
+    #wording mail
+    if course.language in language_setup :
+        language_data=language_setup[course.language]
+        template_name = 'microsite_manager/invite_mail_template_'+course.language+'.txt'
+    else :
+        language_data=language_setup['en']
+        template_name = 'microsite_manager/invite_mail_template_en.txt'
+
+    log.info('send enroll email language data {}'.format(language_data))
+
+    title_mail = language_data['title_mail']
+    if category.lower() in language_data['categories']:
+        category = language_data['categories'][category.lower()]
+    else :
+        category = 'None'
+
+    ## MODE IN TEXT USED AND IMPLEMENTED IN CZECH EMAIL ONLY !!
+    ## mode in text is used for required only...
+    mode_in_text = ''
+    if mode_required:
+        mode = language_data['required']
+        mode_in_text = language_data['required']
+
+        if "required_in_text" in language_data.keys():
+            mode_in_text = language_data['required_in_text']
+    else:
+        mode_in_text = language_data['optional']
+        mode = language_data['optional']
+
+    log.info('send enroll email mode {} category {}'.format(mode,category))
+    html_content = render_to_string(
+        template_name,
+        {
+           'org_image':microsite_logo,
+           'platform_image':platform_image,
+           'course_title': course_title,
+           'category': category,
+           'duration': duration,
+           'mode': mode,
+           'mode_in_text': mode_in_text,
+           'content': body,
+           'link': link,
+           'atp_primary_color': atp_primary_color,
+           'atp_secondary_color': atp_secondary_color,
+           'course_link_img': "",
+           'end_date': end_date,
+           'grade_cutoff':str(module_store.grade_cutoffs['Pass'] * 100)+' %'
+        }
+    )
+
+    log.info('send enroll ok render to string')
+    for i in range(len(list_email)):
+        if not domain_override:
+            site_name = configuration_helpers.get_value(
+                'SITE_NAME',
+                settings.SITE_NAME
+            )
+        else:
+            site_name = domain_override
+        log.info("replacing content of email for: "+pformat(list_email[i]['email']))
+        email = html_content.replace('$first_name',list_email[i]['first_name']).replace('$last_name',list_email[i]['last_name'])
+        info_email = {
+            'email':list_email[i]
+        }
+        log.info("before send_mail: "+pformat(list_email[i]['email']))
+        send_mail(subject, email, from_email, [list_email[i]['email']],html_message=email)
+        log.info("email sent to: "+pformat(list_email[i]))
+        #END %MAIL SEND
+    return True
+    """
+    except:
+        return False
+    """
+
 
 @login_required
 @require_http_methods(("GET", "PUT", "POST"))

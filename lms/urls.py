@@ -61,8 +61,10 @@ from atp_certificates.views import atp_generate_certificate
 
 # ATP CUSTOM IMPORT Grades
 from lms.djangoapps.instructor.views.instructor_dashboard import (
-stat_dashboard, stat_dashboard_username,get_course_blocks_grade,get_dashboard_username,get_course_users,download_xls,get_course_users_grades,download_grades
+stat_dashboard, stat_dashboard_username,get_course_blocks_grade,get_dashboard_username,get_course_users,get_course_users_grades,download_grades
 )
+from lms.djangoapps.instructor.views.instructor_dashboard import download_xls_files
+
 
 
 
@@ -565,7 +567,7 @@ urlpatterns += [
         r'^atp/download_xls/(?P<filename>[^/]*)/$'.format(
             settings.COURSE_ID_PATTERN,
         ),
-        download_xls,
+        download_xls_files,
         name='download xls',
     ),
     #grades reports

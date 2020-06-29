@@ -139,11 +139,10 @@ define(['domReady', 'jquery', 'underscore','jquery.ui','tinymce','jquery.tinymce
     /* init tinymce */
     tinymce.init({
       selector: '#mytextarea',
-      plugins: "textcolor colorpicker link",
+      plugins: "textcolor link",
       //menubar: "insert",
       toolbar: "|forecolor backcolor link alignleft aligncenter alignright alignjustify |",
-      target_list: false,
-      init_instance_callback: insert_contents,
+      target_list: false
     });
     var lang_code = $('#fil_ariane').data('lang');
     var atp_mail = "";
@@ -152,11 +151,7 @@ define(['domReady', 'jquery', 'underscore','jquery.ui','tinymce','jquery.tinymce
     }else if(lang_code == 'en') {
       atp_mail = "";
     }
-    /*
-    function insert_contents(inst) {
-      inst.setContent('<p style="margin: 10px 0;"> </p><p style="margin: 10px 0;"><span style="color:#06144d"><span style="font-size:14px"> </span></span><span style="color:#06144d"><span style="font-size:14px">Vous êtes invité à participer au module de formation<b> GLOBAL DISRUPTIVE OPPORTUNITIES.</b></span></span></p><p style="margin: 10px 0;"><span style="color:#06144d"><span style="font-size:14px"> </span></span></p><p style="margin: 10px 0;"><span style="color:#06144d"><span style="font-size:14px"><b>Vous avez jusqu’au 15 octobre 2017 </b>pour compléter le module de formation.</span></span></p><p style="margin: 10px 0;"><span style="color:#06144d"><span style="font-size:14px">Ce module de formation est<b> obligatoire.</b></span></span></p><p style="margin: 10px 0;"><span style="color:#06144d"><span style="font-size:14px"> </span></span></p><p style="margin: 10px 0;"><span style="color:#06144d"><span style="font-size:14px">Un score de<b> 80% </b>minimum est requis pour valider le module de formation.</span></span></p><p style="margin: 10px 0;"><span style="color:#06144d"><span style="font-size:14px"> </span></span></p><p style="margin: 10px 0;"><span style="color:#06144d"><span style="font-size:14px">Pour accédez au module de formation GLOBAL DISRUPTIVE OPPORTUNITIES, veuillez cliquer sur le lien suivant : <a href="">Ligne Métier Marketing Retail</a></span></span></p>');
-    }
-    */
+
     function insert_contents(inst) {
       inst.setContent(atp_mail);
     }
