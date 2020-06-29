@@ -494,8 +494,8 @@ FEATURES = {
 }
 
 # Settings for the course reviews tool template and identification key, set either to None to disable course reviews
-COURSE_REVIEWS_TOOL_PROVIDER_FRAGMENT_NAME = 'coursetalk-reviews-fragment.html'
-COURSE_REVIEWS_TOOL_PROVIDER_PLATFORM_KEY = 'edx'
+COURSE_REVIEWS_TOOL_PROVIDER_FRAGMENT_NAME = None
+COURSE_REVIEWS_TOOL_PROVIDER_PLATFORM_KEY = None
 
 # CDN links to CourseTalk scripts to load read and write widgets
 COURSE_TALK_READ_ONLY_SOURCE = '//d3q6qq2zt8nhwv.cloudfront.net/s/js/widgets/coursetalk-read-reviews.js'

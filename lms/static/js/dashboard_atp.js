@@ -95,6 +95,7 @@ $(window).resize(function(){
 
 
 function add_class() {
+  console.log('test atp card')
   var Width = window.screen.width;
   if(Width <= 1600) {
     $( ".atp_course_item:nth-child(4)" ).addClass('atp_hide_cards');
