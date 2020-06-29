@@ -438,6 +438,9 @@ class CapaMixin(ScorableXBlockMixin, CapaFields):
             'attempts_used': self.attempts,
             'content': self.get_problem_html(encapsulate=False),
             'graded': self.graded,
+            'max_attempts':self.max_attempts,
+            'saved_answers': self.has_saved_answers,
+            'student_answsers':self.student_answers,
         })
 
     def handle_fatal_lcp_error(self, error):

@@ -39,7 +39,6 @@ function ajax_problem_show(url_show_pb){
             $('#'+key+'-'+value[i]+'-label').addClass('choicegroup_correct');
            }
          });
-
       }
     });
 }
@@ -327,6 +326,7 @@ function all_questions_answered(){
   // All questions answered only if all have class finished and quiz is accessible
   if($('.problems-wrapper.finished').length==$('.problems-wrapper').length && $('.problems-wrapper').length!=0){
     all_answered=true;
+    console.log(all_answered)
   }
   return all_answered;
 }

@@ -12,7 +12,7 @@ from openedx.core.djangolib.markup import HTML
   ${ problem['name'] }
   <div class="picto_sf"></div>
 </h3>
-<div class="problem-progress" id="${ id }-problem-progress" data-id="${ id }"></div>
+<div class="problem-progress" id="${ id }-problem-progress"></div>
 <div class="problem">
   <%
   try:
@@ -135,27 +135,25 @@ from openedx.core.djangolib.markup import HTML
   </div>
   % endif
 </div>
+<style>
+.xmodule_display.xmodule_ProblemBlock div.problem .action .submit-attempt-container .submit {
+    margin-right: 10px;
+    float: left;
+    white-space: nowrap;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    border-radius: 11px;
+}
+.xmodule_display.xmodule_ProblemBlock div.problem .action {
+    flex-direction: column;
+}
+</style>
 <script>
 $('.vert').first().find('.position_atp').removeClass('not_finished');
 $('.finished').addClass('is_overflow');
 $('.finished').last().addClass('last_finished');
 $('.last_finished').parent().parent().next().find('.position_atp').removeClass('not_finished');
 $('.last_finished').removeClass('.is_overflow');
-
-
-$('.vert').find('.position_atp').each(function(){
-    $(this).removeClass('last_finished')
-    if($(this).attr('data-attempts-used')> 0){
-        $(this).addClass('finished')
-        $(this).addClass('last_finished')
-        $('.last_finished').parent().parent().next().find('.position_atp').removeClass('not_finished');
-        $('.last_finished').removeClass('.is_overflow');
-    }
-})
-$('.vert').find('.last_finished').last().parent().parent().trigger('click')
-
-
-
 
 $('#problem_${short_id}').find('.submit').click(function(){
   var parent = $(this).parent().parent().parent().parent();
