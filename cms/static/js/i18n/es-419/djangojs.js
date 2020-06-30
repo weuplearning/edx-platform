@@ -1274,7 +1274,7 @@
     "Once your account is deleted, you cannot use it to take courses on the {platformName} app, {siteName}, or any other site hosted by {platformName}.": "Una vez tu cuenta es borrada, no podr\u00e1s usarla ni tomar cursos en la app {platformName}, {siteName}, ni en cualquier otro sitio de {platformName}.",
     "One or more rescheduling tasks failed.": "Una o m\u00e1s tareas de re-programaci\u00f3n fall\u00f3.",
     "Only ": "Solo",
-    "Only <%= fileTypes %> files can be uploaded. Please select a file ending in <%= fileExtensions %> to upload.": "S\u00f3lo pueden cargarse archivos de tipo <%= fileTypes %>. Por favor selecciona un archivo que termine en <%= fileExtensions %> para ser cargado.",
+    "Only <%- fileTypes %> files can be uploaded. Please select a file ending in <%- (fileExtensions) %> to upload.": "Solo archivos <%- fileTypes %> pueden ser cargados. Por favor seleccione un archivo que finalice en <%- (fileExtensions) %> para cargarlo.",
     "Only properly formatted .csv files will be accepted.": "Solo archivos .csv correctamente formateados pueden ser utilizados.",
     "Only the parent course staff of a CCX can create content groups.": "S\u00f3lo el personal del curso principal de un CCX puede crear grupos de contenido.",
     "Open": "Abrir",
