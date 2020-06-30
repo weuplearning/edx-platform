@@ -3083,6 +3083,7 @@ class DatesTabTestCase(ModuleStoreTestCase):
         self.course = CourseFactory.create(start=now + timedelta(days=-1), self_paced=True)
         self.course.end = now + timedelta(days=3)
 
+        ContentTypeGatingConfig.objects.create(enabled=True, enabled_as_of=datetime(2018, 1, 1))
         CourseModeFactory(course_id=self.course.id, mode_slug=CourseMode.AUDIT)
         CourseModeFactory(
             course_id=self.course.id,
@@ -3096,6 +3097,7 @@ class DatesTabTestCase(ModuleStoreTestCase):
 
         self.user = UserFactory()
         self.client.login(username=self.user.username, password=TEST_PASSWORD)
+        ContentTypeGatingConfig.objects.create(enabled=True, enabled_as_of=datetime(2017, 1, 1))
 
     def _get_response(self, course):
         """ Returns the HTML for the progress page """
@@ -3115,7 +3117,10 @@ class DatesTabTestCase(ModuleStoreTestCase):
                 start=now - timedelta(days=1),
                 due=now + timedelta(days=1),  # Setting this to tomorrow so it'll show the 'Due Next' pill
                 graded=True,
+                format='Homework',
             )
+            vertical = ItemFactory.create(category='vertical', parent_location=subsection.location)
+            ItemFactory.create(category='problem', parent_location=vertical.location)
 
         with patch('lms.djangoapps.courseware.views.views.get_enrollment') as mock_get_enrollment:
             mock_get_enrollment.return_value = {
@@ -3123,7 +3128,7 @@ class DatesTabTestCase(ModuleStoreTestCase):
             }
             response = self._get_response(self.course)
             self.assertContains(response, subsection.display_name)
-            # Show the Verification Deadline for everyone
+            # Show the Verification Deadline for verified only
             self.assertContains(response, 'Verification Deadline')
             # Make sure pill exists for today's date
             self.assertContains(response, '<div class="pill today">')
@@ -3131,6 +3136,8 @@ class DatesTabTestCase(ModuleStoreTestCase):
             self.assertContains(response, '<div class="pill due-next">')
             # No pills for verified enrollments
             self.assertNotContains(response, '<div class="pill verified">')
+            # Make sure the assignment type is rendered
+            self.assertContains(response, 'Homework:')
 
             enrollment.delete()
             enrollment = CourseEnrollmentFactory(course_id=self.course.id, user=self.user, mode=CourseMode.AUDIT)
@@ -3148,12 +3155,14 @@ class DatesTabTestCase(ModuleStoreTestCase):
 
             mock_set_custom_metric.assert_has_calls(expected_calls, any_order=True)
             self.assertContains(response, subsection.display_name)
-            # Show the Verification Deadline for everyone
-            self.assertContains(response, 'Verification Deadline')
+            # Don't show the Verification Deadline for audit
+            self.assertNotContains(response, 'Verification Deadline')
             # Pill doesn't exist for assignment due tomorrow
             self.assertNotContains(response, '<div class="pill due-next">')
             # Should have verified pills for audit enrollments
             self.assertContains(response, '<div class="pill verified">')
+            # Make sure the assignment type is rendered
+            self.assertContains(response, 'Homework:')
 
     @RELATIVE_DATES_FLAG.override(active=True)
     def test_reset_deadlines_banner_displays(self):

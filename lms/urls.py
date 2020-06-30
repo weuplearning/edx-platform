@@ -27,9 +27,7 @@ from lms.djangoapps.courseware.views.index import CoursewareIndex
 from lms.djangoapps.courseware.views.views import CourseTabView, EnrollStaffView, StaticCourseTabView
 from lms.djangoapps.discussion import views as discussion_views
 from lms.djangoapps.discussion.notification_prefs import views as notification_prefs_views
-from lms.djangoapps.instructor.views import coupons as instructor_coupons_views
 from lms.djangoapps.instructor.views import instructor_dashboard as instructor_dashboard_views
-from lms.djangoapps.instructor.views import registration_codes as instructor_registration_codes_views
 from lms.djangoapps.instructor_task import views as instructor_task_views
 from openedx.core.apidocs import api_info
 from openedx.core.djangoapps.auth_exchange.views import LoginWithAccessTokenView
@@ -55,6 +53,22 @@ from staticbook import views as staticbook_views
 from student import views as student_views
 from util import views as util_views
 
+# ATP CUSTOM IMPORT
+from atp_lang.views import change_lang
+from lms.djangoapps.end_courses_atp.views import ensure_certif
+from atp_certificates.views import atp_check_certificate
+from atp_certificates.views import atp_generate_certificate
+
+# ATP CUSTOM IMPORT Grades
+from lms.djangoapps.instructor.views.instructor_dashboard import (
+stat_dashboard, stat_dashboard_username,get_course_blocks_grade,get_dashboard_username,get_course_users,get_course_users_grades,download_grades
+)
+from lms.djangoapps.instructor.views.instructor_dashboard import download_xls_files
+
+
+
+
+from lms.djangoapps.atp_task.views import calculate_grades_xls,get_xls,download_xls
 RESET_COURSE_DEADLINES_NAME = 'reset_course_deadlines'
 RENDER_XBLOCK_NAME = 'render_xblock'
 COURSE_DATES_NAME = 'dates'
@@ -118,7 +132,7 @@ urlpatterns = [
     url(r'^api/enrollment/v1/', include('openedx.core.djangoapps.enrollments.urls')),
 
     # Entitlement API RESTful endpoints
-    url(r'^api/entitlements/', include(('entitlements.api.urls', 'common.djangoapps.entitlements'),
+    url(r'^api/entitlements/', include(('entitlements.rest_api.urls', 'common.djangoapps.entitlements'),
                                        namespace='entitlements_api')),
 
     # Courseware search endpoints
@@ -126,6 +140,9 @@ urlpatterns = [
 
     # Course API
     url(r'^api/courses/', include('course_api.urls')),
+
+    # Completion API
+    url(r'^api/completion/', include('completion.api.urls', namespace='completion_api')),
 
     # User API endpoints
     url(r'^api/user/', include('openedx.core.djangoapps.user_api.urls')),
@@ -228,19 +245,6 @@ if settings.WIKI_ENABLED:
         url(r'^courses/{}/wiki/'.format(settings.COURSE_KEY_REGEX),
             include((wiki_url_patterns, 'course_wiki_do_not_reverse'), namespace='course_wiki_do_not_reverse')),
     ]
-
-COURSE_URLS = [
-    url(
-        r'^look_up_registration_code$',
-        instructor_registration_codes_views.look_up_registration_code,
-        name='look_up_registration_code',
-    ),
-    url(
-        r'^registration_code_details$',
-        instructor_registration_codes_views.registration_code_details,
-        name='registration_code_details',
-    ),
-]
 
 urlpatterns += [
     # jump_to URLs for direct access to a location in the course
@@ -516,47 +520,82 @@ urlpatterns += [
         name='instructor_dashboard',
     ),
 
+    # Geoffrey Stats
+    # stat_dashboard render url
+    url(
+        r'^courses/{}/stat_dashboard$'.format(
+            settings.COURSE_ID_PATTERN,
+        ),
+        stat_dashboard,
+        name='stat_dashboard',
+    ),
+    # return the score per users
+    url(
+        r'^courses/{}/stat_dashboard/get_grade/(?P<email>[^/]*)/$'.format(
+            settings.COURSE_ID_PATTERN,
+        ),
+        stat_dashboard_username,
+        name='stat_dashboard_username',
+    ),
+    # return average grades of differents blocks
+    url(
+        r'^courses/{}/stat_dashboard/get_course_blocks_grade/$'.format(
+            settings.COURSE_ID_PATTERN,
+        ),
+        get_course_blocks_grade,
+        name='get_course_blocks_grade',
+    ),
+    # return list of username for search input of stat_dashboard page
+    url(
+        r'^courses/{}/stat_dashboard/get_user/(?P<email>[^/]*)/$'.format(
+            settings.COURSE_ID_PATTERN,
+        ),
+        get_dashboard_username,
+        name='stat_dashboard_username_search',
+    ),
+    # stat_dashboard_average_test
+    # return list of username for search input of stat_dashboard page
+    url(
+        r'^courses/{}/stat_dashboard/generate_xls/'.format(
+            settings.COURSE_ID_PATTERN,
+        ),
+        get_course_users,
+        name='generate xls',
+    ),
+    # return list of username for search input of stat_dashboard page
+    url(
+        r'^atp/download_xls/(?P<filename>[^/]*)/$'.format(
+            settings.COURSE_ID_PATTERN,
+        ),
+        download_xls_files,
+        name='download xls',
+    ),
+    #grades reports
+    # generate grades reports
+    url(
+        r'^courses/{}/stat_dashboard/generate_grades/'.format(
+            settings.COURSE_ID_PATTERN,
+        ),
+        get_course_users_grades,
+        name='generate grades',
+    ),
+    # return grades reports
+    url(
+        r'^atp/download_grades/(?P<filename>[^/]*)/$'.format(
+            settings.COURSE_ID_PATTERN,
+        ),
+        download_grades,
+        name='download grades',
+    ),
+
+    #END STAT
+
     url(
         r'^courses/{}/set_course_mode_price$'.format(
             settings.COURSE_ID_PATTERN,
         ),
         instructor_dashboard_views.set_course_mode_price,
         name='set_course_mode_price',
-    ),
-    url(
-        r'^courses/{}/remove_coupon$'.format(
-            settings.COURSE_ID_PATTERN,
-        ),
-        instructor_coupons_views.remove_coupon,
-        name='remove_coupon',
-    ),
-    url(
-        r'^courses/{}/add_coupon$'.format(
-            settings.COURSE_ID_PATTERN,
-        ),
-        instructor_coupons_views.add_coupon,
-        name='add_coupon',
-    ),
-    url(
-        r'^courses/{}/update_coupon$'.format(
-            settings.COURSE_ID_PATTERN,
-        ),
-        instructor_coupons_views.update_coupon,
-        name='update_coupon',
-    ),
-    url(
-        r'^courses/{}/get_coupon_info$'.format(
-            settings.COURSE_ID_PATTERN,
-        ),
-        instructor_coupons_views.get_coupon_info,
-        name='get_coupon_info',
-    ),
-
-    url(
-        r'^courses/{}/'.format(
-            settings.COURSE_ID_PATTERN,
-        ),
-        include(COURSE_URLS)
     ),
 
     # Discussions Management
@@ -817,7 +856,6 @@ if configuration_helpers.get_value('ENABLE_BULK_ENROLLMENT_VIEW', settings.FEATU
 # Shopping cart
 urlpatterns += [
     url(r'^shoppingcart/', include('shoppingcart.urls')),
-    url(r'^commerce/', include(('lms.djangoapps.commerce.urls', 'lms.djangoapps.commerce'), namespace='commerce')),
 ]
 
 # Course goals
@@ -998,9 +1036,115 @@ if 'openedx.testing.coverage_context_listener' in settings.INSTALLED_APPS:
         url(r'coverage_context', include('openedx.testing.coverage_context_listener.urls'))
     ]
 
+urlpatterns.append(
+    url(
+        r'^api/learning_sequences/',
+        include(
+            ('openedx.core.djangoapps.content.learning_sequences.urls', 'learning_sequences'),
+            namespace='learning_sequences'
+        ),
+    ),
+)
+
 urlpatterns.extend(plugin_urls.get_patterns(plugin_constants.ProjectType.LMS))
 
-# Course Home API urls
+
+
+
+# TMA CUSTOM
+
+# Whether to track the html components for completion
+if settings.FEATURES.get('TMA_ENABLE_COMPLETION_TRACKING'):
+    urlpatterns += (
+        url(
+            r'^track_html_component/$',
+            'course_progress.custom_track.track_html_component',
+            name='track_html_component'
+        ),
+    )
+
+# Whether to show green dots on course nav
+if settings.FEATURES.get('TMA_SHOW_COMPLETION_ON_COURSEWARE_NAVIGATION'):
+    urlpatterns += (
+        url(
+            r'^completion_status/',
+            'course_progress.views.get_completion_status',
+            name='completion_status'
+        ),
+    )
+
+
+#Reset unit progress for quiz reset_bouton
+if settings.FEATURES.get('TMA_SHOW_COMPLETION_ON_COURSEWARE_NAVIGATION'):
+    urlpatterns += (
+        url(
+            r'^completion_status/reset_unit',
+            'course_progress.views.reset_unit_completion',
+            name='completion_status'
+        ),
+    )
+
+
+#changer la langue
+urlpatterns += (
+    url(
+        r'^api/atp/lang/(?P<langue>[^/]*)/$',
+        change_lang,
+        name='atp_change_lang'
+    ),
+)
+
+
+#generate certificates
+
+urlpatterns += (
+    url(
+        r'^api/atp/couseware_certif/(?P<course_id>[^/]*)/$',
+        ensure_certif,
+        name='courseware_certif',
+    ),
+    url(
+        r'^api/atp/check/certificate/(?P<course_id>[^/]*)/$',
+        atp_check_certificate,
+        name='atp_check_certiticate'
+    ),
+    url(
+        r'^api/atp/generate/certificate/(?P<course_id>[^/]*)/$',
+        atp_generate_certificate,
+        name='atp_generate_certiticate'
+    ),
+)
+
+#task genereta grades reports
+
+urlpatterns += (
+    url(
+        r'api/atp/task/grades/(?P<course_id>[^/]*)/$',
+        calculate_grades_xls,
+        name='calculate_grades_xls',
+    ),
+    url(
+        r'api/atp/check/grades/(?P<course_id>[^/]*)/$',
+        get_xls,
+        name='check_grades_xls',
+    ),
+    url(
+        r'api/atp/download/grades/(?P<course_id>[^/]*)/(?P<filename>[^/]*)/$',
+        download_xls,
+        name='download_grades_xls',
+    ),
+)
+
+#TMA APPS
+urlpatterns += [
+    url(r'tma_apps/', include('tma_apps.urls')),
+
+]
 urlpatterns += [
     url(r'^api/course_home/', include('lms.djangoapps.course_home_api.urls')),
+]
+
+# Course Experience API urls
+urlpatterns += [
+    url(r'^api/course_experience/', include('openedx.features.course_experience.api.v1.urls')),
 ]

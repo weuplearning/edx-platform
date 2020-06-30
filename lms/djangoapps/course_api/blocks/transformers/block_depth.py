@@ -2,10 +2,10 @@
 Block Depth Transformer
 """
 
-
+import logging
 from openedx.core.djangoapps.content.block_structure.transformer import BlockStructureTransformer
 
-
+log = logging.getLogger(__name__)
 class BlockDepthTransformer(BlockStructureTransformer):
     """
     Keep track of the depth of each block within the block structure.  In case
@@ -59,8 +59,12 @@ class BlockDepthTransformer(BlockStructureTransformer):
                 self.BLOCK_DEPTH,
                 block_depth
             )
-
         if self.requested_depth is not None:
+            if self.requested_depth == "all":
+                requested_depth_handler = float('inf')
+            else:
+                requested_depth_handler = self.requested_depth
+            log.info(self.get_block_depth(block_structure, block_key))
             block_structure.remove_block_traversal(
-                lambda block_key: self.get_block_depth(block_structure, block_key) > self.requested_depth
+                lambda block_key: self.get_block_depth(block_structure, block_key) > requested_depth_handler
             )

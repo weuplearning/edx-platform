@@ -3,24 +3,32 @@
 <%namespace name='static' file='/static_content.html'/>
 <%def name="online_help_token()"><% return "courseware" %></%def>
 <%!
-import six
-import waffle
-
-from django.conf import settings
-from django.urls import reverse
 from django.utils.translation import ugettext as _
+from django.conf import settings
 
 from edxnotes.helpers import is_feature_enabled as is_edxnotes_enabled
-from openedx.core.djangolib.js_utils import js_escaped_string
 from openedx.core.djangolib.markup import HTML
-from openedx.features.course_experience import course_home_page_title, COURSE_OUTLINE_PAGE_FLAG
+from openedx.core.djangolib.js_utils import js_escaped_string
+from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
+#geoffrey
+from courseware.courses import get_course_by_id
+
 %>
 <%
-   include_special_exams = (
-   request.user.is_authenticated and
-   settings.FEATURES.get('ENABLE_SPECIAL_EXAMS', False) and
-   (course.enable_proctored_exams or course.enable_timed_exams)
-   )
+  include_special_exams = settings.FEATURES.get('ENABLE_SPECIAL_EXAMS', False) and (course.enable_proctored_exams or course.enable_timed_exams)
+  try:
+    primary_color=configuration_helpers.get_value('primary_color')
+  except :
+    primary_color="#05144d"
+  if primary_color is None:
+    primary_color="#05144d"
+
+  try:
+    secondary_color=configuration_helpers.get_value('secondary_color')
+  except :
+    secondary_color="#27ABEA"
+  if secondary_color is None:
+    secondary_color="#27ABEA"
 %>
 
 % if display_reset_dates_banner:
@@ -33,14 +41,64 @@ from openedx.features.course_experience import course_home_page_title, COURSE_OU
 </%def>
 
 <%block name="bodyclass">view-in-course view-courseware courseware ${course.css_class or ''}</%block>
-
-<%block name="title">
-<title data-base-title="${static.get_page_title_breadcrumbs(section_title, course_name())}">
-  ${static.get_page_title_breadcrumbs(sequence_title, section_title, course_name())}
-</title>
-</%block>
+<style>
+.seq_content_next a{
+width:auto!important;
+}
+#tma_course_top{
+  width:100%!important;
+  box-sizing: border-box!important;
+}
+#reset_bouton{
+  font-size: 26px;
+  border-radius: 26px;
+}
+.xmodule_display.xmodule_CapaModule div.problem .notification .notification-btn-wrapper{
+  display: none!important;
+}
+div.xblock-student_view-scormxblock>div.scormxblock_block>p{
+  display: none!important;
+}
+.main-container{
+    padding : 0px !important;
+}
+</style>
+<%block name="title"><title>
+    % if section_title:
+${static.get_page_title_breadcrumbs(section_title, course_name())}
+    % else:
+${static.get_page_title_breadcrumbs(course_name())}
+    %endif
+</title></%block>
 
 <%block name="header_extras">
+
+<!-- TMA FEATURES -->
+<%
+  completion_enabled = settings.FEATURES.get('TMA_ENABLE_COMPLETION_TRACKING')
+  accordian_dots_enabled = settings.FEATURES.get('TMA_SHOW_COMPLETION_ON_COURSEWARE_NAVIGATION')
+  course_id = str(course.id)
+  #custom_track_url = reverse('track_html_component', args=[str(course_id)]) if completion_enabled else ''
+  #completion_status_url = reverse('completion_status', args=[str(course_id)]) if accordian_dots_enabled else ''
+  floating_button_enabled = settings.FEATURES.get('TMA_ENABLE_FORUM_FLOATING_BUTTON')
+  custom_units_enabled = settings.FEATURES.get('TMA_ENABLE_CUSTOM_UNIT_LISTING')
+%>
+<script type="text/javascript">
+  var customTrackUrl = "/track_html_component/";
+  var completionStatusUrl = "/completion_status/?course_id=${course_id}";
+  completionStatusUrl = '';
+  var completionEnabled = "${completion_enabled}";
+  var accordianDotsEnabled = "${accordian_dots_enabled}";
+  var graduateicon_url = "${static.url('images/floating_button/graduateicon.png')}";
+  var discussionicon_url = "${static.url('images/floating_button/discussionicon.png')}";
+  var blue_red_img = "${static.url('images/nav/blue-red.png')}";
+  var filled_img = "${static.url('images/nav/filled.png')}";
+  var empty_img = "${static.url('images/nav/empty.png')}";
+  var previous_button = "${static.url('images/nav/previous-button.png')}";
+  var next_button = "${static.url('images/nav/next-button.png')}";
+  var course_id = "${str(course.id)}";
+</script>
+<!-- //TMA FEATURES-->
 
 % for template_name in ["image-modal"]:
 <script type="text/template" id="${template_name}-tpl">
@@ -48,7 +106,15 @@ from openedx.features.course_experience import course_home_page_title, COURSE_OU
 </script>
 % endfor
 
-% if include_special_exams is not UNDEFINED and include_special_exams:
+% if settings.FEATURES.get('ENABLE_COURSEWARE_SEARCH'):
+    % for template_name in ["course_search_item", "course_search_results", "search_loading", "search_error"]:
+        <script type="text/template" id="${template_name}-tpl">
+            <%static:include path="search/${template_name}.underscore" />
+        </script>
+    % endfor
+% endif
+
+% if include_special_exams:
   % for template_name in ["proctored-exam-status"]:
     <script type="text/template" id="${template_name}-tpl">
         <%static:include path="courseware/${template_name}.underscore" />
@@ -62,9 +128,7 @@ from openedx.features.course_experience import course_home_page_title, COURSE_OU
 <%static:css group='style-course-vendor'/>
 <%static:css group='style-course'/>
 ## Utility: Notes
-% if is_edxnotes_enabled(course, request.user):
-<%static:css group='style-student-notes'/>
-% endif
+
 
 <script type="text/javascript" src="${static.url('js/jquery.autocomplete.js')}"></script>
 <script type="text/javascript" src="${static.url('js/src/tooltip_manager.js')}"></script>
@@ -77,16 +141,16 @@ from openedx.features.course_experience import course_home_page_title, COURSE_OU
   <script type="text/javascript" src="${static.url('common/js/vendor/jquery.scrollTo.js')}"></script>
   <script type="text/javascript" src="${static.url('js/vendor/flot/jquery.flot.js')}"></script>
 
+  ## codemirror
+  <script type="text/javascript" src="${static.url('js/vendor/codemirror-compressed.js')}"></script>
+
   <%static:js group='courseware'/>
   <%include file="/mathjax_include.html" args="disable_fast_preview=True"/>
 
-  % if show_search:
-    <%static:require_module module_name="course_search/js/course_search_factory" class_name="CourseSearchFactory">
+  % if settings.FEATURES.get('ENABLE_COURSEWARE_SEARCH'):
+    <%static:require_module module_name="js/search/course/course_search_factory" class_name="CourseSearchFactory">
         var courseId = $('.courseware-results').data('courseId');
-        CourseSearchFactory({
-            courseId: courseId,
-            searchHeader: $('.search-bar')
-        });
+        CourseSearchFactory(courseId);
     </%static:require_module>
   % endif
 
@@ -102,49 +166,75 @@ from openedx.features.course_experience import course_home_page_title, COURSE_OU
     var $$course_id = "${course.id | n, js_escaped_string}";
   </script>
 
-  % if not request.user.is_authenticated:
-      <script type="text/javascript">
-        // Disable discussions
-        $('.xblock-student_view-discussion button.discussion-show').attr('disabled', true);
-
-        // Insert message informing user discussions are only available to logged in users.
-        $('.discussion-module')
-      </script>
-  % endif
-
 ${HTML(fragment.foot_html())}
 
 </%block>
 
 <div class="message-banner" aria-live="polite"></div>
 
-% if default_tab:
-  <%include file="/courseware/course_navigation.html" />
+
+
+<%
+courseware = static.get_value('css_overrides_courseware')
+%>
+% if not courseware:
+  <link rel="stylesheet" type="text/css" href="${static.url('css/courseware.css')}">
 % else:
-  <%include file="/courseware/course_navigation.html" args="active_page='courseware'" />
+  <link rel="stylesheet" type="text/css" href="${static.url(courseware)}" />
 % endif
+<style>
 
-<div class="container"
-  % if getattr(course, 'language'):
-    lang="${course.language}"
-  % endif
-  >
+  /* Modification couleur bouton soumettre */
+  .xmodule_display.xmodule_CapaModule div.problem .action .submit-attempt-container button:not(:disabled), .xmodule_display.xmodule_CapaModule div.problem .action .submit-attempt-container button:not(:disabled):hover{
+    background-color:${primary_color}!important;
+    border-color:${primary_color}!important;
+  }
+  .finished .next_button {
+    background-color: ${primary_color}!important;
+    border-color: ${primary_color}!important;
+    display:inline-block;
+  }
+  .group-heading.active{
+    color:${secondary_color}!important;
+  }
+
+  i.fa-chevron-right,i.fa-chevron-up{
+    transition: transform 0.3s;
+  }
+</style>
+
+
+<div id="tma_course_top" class="secondary-color-bg">
+    <div id="tma_course_ariane">
+      <a href="/courses/${course.id}/about">< ${_("Back to training module description")}</a>
+      % if staff_access and studio_url is not None:
+      <br>
+      <!--<a class="instructor-info-action studio-view" href="https://${settings.CMS_BASE}/settings/manage/${course.id}">< ${_("Access Admin interface")}</a>-->
+      % endif
+    </div>
+  <div id="tma_title_wrapper">
+    <h1>${course.display_name_with_default}</h1>
+  </div>
+
+</div>
+
+<div class="container">
   <div class="course-wrapper" role="presentation">
-
-% if disable_accordion is UNDEFINED or not disable_accordion:
+<!--if disable_accordion is UNDEFINED or not disable_accordion:-->
+%if false:
     <div class="course-index">
 
       <div class="wrapper-course-modes">
 
-          <div class="courseware-bookmarks-button">
-              <a class="bookmarks-list-button" href="${reverse('openedx.course_bookmarks.home', args=[course.id])}">
+          <div class="courseware-bookmarks-button" data-bookmarks-api-url="${bookmarks_api_url}">
+              <button type="button" class="bookmarks-list-button is-inactive" aria-pressed="false">
                   ${_('Bookmarks')}
-              </a>
+              </button>
           </div>
 
-          % if show_search:
+          % if settings.FEATURES.get('ENABLE_COURSEWARE_SEARCH'):
             <div id="courseware-search-bar" class="search-bar courseware-search-bar" role="search" aria-label="Course">
-              <form class="search-form">
+              <form>
                 <label for="course-search-input" class="sr">${_('Course Search')}</label>
                 <div class="search-field-wrapper">
                   <input id="course-search-input" type="text" class="search-field"/>
@@ -168,72 +258,45 @@ ${HTML(fragment.foot_html())}
           % endif
         </nav>
       </div>
+      <div style="clear:both;"></div>
 
     </div>
+
 % endif
-    <section class="course-content" id="course-content">
-        <header class="page-header has-secondary">
-            <div class="page-header-main">
-                <nav aria-label="${_('Course')}" class="sr-is-focusable" tabindex="-1">
-                    <div class="has-breadcrumbs">
-                        <div class="breadcrumbs">
-                            % if COURSE_OUTLINE_PAGE_FLAG.is_enabled(course.id):
-                                <span class="nav-item nav-item-course">
-                                    <a href="${course_url}">${course_home_page_title(course)}</a>
-                                </span>
-                                <span class="icon fa fa-angle-right" aria-hidden="true"></span>
-                            % endif
-                            % if chapter:
-                                <span class="nav-item nav-item-chapter" data-course-position="${course.position}" data-chapter-position="${chapter.position}">
-                                    <a href="${course_url}#${six.text_type(chapter.location)}">${chapter.display_name_with_default}</a>
-                                </span>
-                                <span class="icon fa fa-angle-right" aria-hidden="true"></span>
-                            % endif
-                            % if section:
-                                <span class="nav-item nav-item-section">
-                                    <a href="${course_url}#${six.text_type(section.location)}">${section.display_name_with_default}</a>
-                                </span>
-                                <span class="icon fa fa-angle-right" aria-hidden="true"></span>
-                            % endif
-                            <span class="nav-item nav-item-sequence">${sequence_title}</span>
-                        </div>
-                    </div>
-                </nav>
-            </div>
-        </header>
-
-        <main id="main" tabindex="-1" aria-label="Content">
-            % if getattr(course, 'entrance_exam_enabled') and \
-               getattr(course, 'entrance_exam_minimum_score_pct') and \
-               entrance_exam_current_score is not UNDEFINED:
-                % if not entrance_exam_passed:
-                <p class="sequential-status-message">
-                    ${_('To access course materials, you must score {required_score}% or higher on this \
-                    exam. Your current score is {current_score}%.').format(
-                        required_score=int(round(course.entrance_exam_minimum_score_pct * 100)),
-                        current_score=int(round(entrance_exam_current_score * 100))
-                    )}
-                </p>
-                <script type="text/javascript">
-                $(document).ajaxSuccess(function(event, xhr, settings) {
-                    if (settings.url.indexOf("xmodule_handler/problem_check") > -1) {
-                        var data = JSON.parse(xhr.responseText);
-                        if (data.entrance_exam_passed){
-                            location.reload();
-                        }
+        <section class="course-content" id="course-content">
+        <div class="path"></div>
+        <main id="main" aria-label="Content" tabindex="-1">
+        % if getattr(course, 'entrance_exam_enabled') and \
+           getattr(course, 'entrance_exam_minimum_score_pct') and \
+           entrance_exam_current_score is not UNDEFINED:
+            % if not entrance_exam_passed:
+            <p class="sequential-status-message">
+                ${_('To access course materials, you must score {required_score}% or higher on this \
+                exam. Your current score is {current_score}%.').format(
+                    required_score=int(round(course.entrance_exam_minimum_score_pct * 100)),
+                    current_score=int(round(entrance_exam_current_score * 100))
+                )}
+            </p>
+            <script type="text/javascript">
+            $(document).ajaxSuccess(function(event, xhr, settings) {
+                if (settings.url.indexOf("xmodule_handler/problem_check") > -1) {
+                    var data = JSON.parse(xhr.responseText);
+                    if (data.entrance_exam_passed){
+                        location.reload();
                     }
-                });
-                </script>
-                % else:
-                  <p class="sequential-status-message">
-                    ${_('Your score is {current_score}%. You have passed the entrance exam.').format(
-                        current_score=int(round(entrance_exam_current_score * 100))
-                    )}
-                </p>
-                % endif
+                }
+            });
+            </script>
+            % else:
+              <p class="sequential-status-message">
+                ${_('Your score is {current_score}%. You have passed the entrance exam.').format(
+                    current_score=int(round(entrance_exam_current_score * 100))
+                )}
+            </p>
             % endif
+        % endif
 
-              ${HTML(fragment.body_html())}
+          ${HTML(fragment.body_html())}
         </main>
     </section>
 
@@ -244,7 +307,6 @@ ${HTML(fragment.foot_html())}
     </section>
 
   </div>
-  ${HTML(course_sock_fragment.body_html())}
 </div>
 <div class="container-footer">
   % if settings.FEATURES.get("LICENSING", False):
@@ -257,17 +319,71 @@ ${HTML(fragment.foot_html())}
     % endif
     </div>
   % endif
-</div>
-% if course.show_calculator or is_edxnotes_enabled(course, request.user):
-    <nav class="nav-utilities ${"has-utility-calculator" if course.show_calculator else ""}" aria-label="${_('Course Utilities')}">
-      ## Utility: Notes
-      % if is_edxnotes_enabled(course, request.user):
-        <%include file="/edxnotes/toggle_notes.html" args="course=course"/>
-      % endif
 
-      ## Utility: Calc
-      % if course.show_calculator:
-        <%include file="/calculator/toggle_calculator.html" />
-      % endif
-    </nav>
-% endif
+</div>
+
+<nav class="nav-utilities ${"has-utility-calculator" if course.show_calculator else ""}" aria-label="${_('Course Utilities')}">
+  ## Utility: Notes
+
+  ## Utility: Calc
+  % if course.show_calculator:
+    <%include file="/calculator/toggle_calculator.html" />
+  % endif
+</nav>
+
+<%include file="../modal/accessible_confirm.html" />
+<script>
+  // definition des variables utiles
+  var incorrect_wording = '${_("Incorrect")}';
+  var correct_wording = '${_("Correct")}';
+  var results_wording = '${_("Results")}';
+  var completed_wording='${_("You have completed the training module")}';
+  var course_end='${course.end}';
+  var course_id='${course.id}';
+  var course_language='${course.language}';
+  var trophy_img="${static.url('images/trophy.svg')}";
+  var failed_img="${static.url('images/refresh.svg')}";
+  var congratulation_wording ="${_('Congratulations')}";
+  var course_default_name="${course.display_name_with_default}";
+  var started_wording='${_("You started the training module ")}';
+  var training_over_wording='${_("The training campaign is over. You can access the training module content. However, you can\'t do the test to validate your knowledge.")}';
+  var start_again_wording='${_("Start again")}';
+  var certificate_wording='${_("Download the certificate")}';
+  var unfortunately_wording = '${_("Unfortunately, you haven\'t achieved the minimum score ({score}%) required to validate the training module.").format(score=int(course.grading_policy.get('GRADE_CUTOFFS').get('Pass')*100))}';
+  var score_wording = '${_("Your total score :")}';
+  var to_end_wording = '${_("To end this training module, you have to access every chapters and finish the validation knowledge test.")}';
+
+
+</script>
+
+<script src="${static.url('js/courseware_completion.js')}"></script>
+<!--<script src="/media/jswork/courseware/courseware_completion.js"></script>-->
+<script src="${static.url('js/tma_custom_quiz_display.js')}"></script>
+<!--<script src="/media/jswork/courseware/tma_custom_quiz_display.js"></script>-->
+<%
+user_id = user.id
+username = user.username
+course_id = course.id
+%>
+
+
+<script>
+  function ariane_height() {
+    var width = $(window).width();
+    if(width > 899) {
+
+      var h1_h = $('#tma_course_top').find('h1').height();
+      $('#tma_course_top').css('height',h1_h+'px');
+      $('#tma_course_top').find('h1').css('margin-top','-'+(h1_h/2)+'px');
+    }else{
+      $('#tma_course_top').attr('style','');
+      $('#tma_course_top').find('h1').attr('style','');
+    }
+  }
+  ariane_height();
+  $(window).resize(function(){
+    ariane_height();
+  })
+  ////////////////////////////////////// XITI ///////////////////
+  page_name = 'page_courseware';
+</script>

@@ -3,37 +3,105 @@
 <%def name="online_help_token()"><% return "learnerdashboard" %></%def>
 <%namespace name='static' file='static_content.html'/>
 <%!
-import pytz
-import six
-from datetime import datetime, timedelta
 from django.urls import reverse
 from django.utils.translation import ugettext as _
 from django.template import RequestContext
-from entitlements.models import CourseEntitlement
+import third_party_auth
 from third_party_auth import pipeline
-from util.date_utils import strftime_localized
-from opaque_keys.edx.keys import CourseKey
-from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
-from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 from openedx.core.djangolib.js_utils import dump_js_escaped_json, js_escaped_string
 from openedx.core.djangolib.markup import HTML, Text
 
-from student.models import CourseEnrollment
+from opaque_keys.edx.keys import CourseKey
+from openedx.core.djangoapps.models.course_details import CourseDetails
+#from course_progress.helpers import get_overall_progress
+#from lms.djangoapps.grades.new.course_grade import CourseGradeFactory
+from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
+import random
+
+from django.utils.translation import LANGUAGE_SESSION_KEY
+
+from courseware.courses import (
+    get_course_by_id,
+)
+first_course_name = ''
 %>
 
 <%
-  cert_name_short = settings.CERT_NAME_SHORT
-  cert_name_long = settings.CERT_NAME_LONG
+cert_name_short = settings.CERT_NAME_SHORT
+cert_name_long = settings.CERT_NAME_LONG
+
+url_array = []
+url_array.append('images/1collaboration.jpg')
+url_array.append('images/2centrefinancier.jpg')
+url_array.append('images/3connaissance.jpg')
+url_array.append('images/4environement.jpg')
+url_image = random.choice(url_array)
+
+if configuration_helpers.get_value('primary_color') :
+  primary_color=configuration_helpers.get_value('primary_color')
+else:
+  primary_color='#05144d'
 %>
 
 
+<style>
+#dashboard_header_atp {
+  background-image: url('${static.url(url_image)}');
+}
+</style>
+
+<script>
+// load courses values
+var courses_atp = {
+   start_courses:${dump_js_escaped_json(start_course) | n, decode.utf8},
+   progress_courses:${dump_js_escaped_json(progress_courses) | n, decode.utf8},
+   end_courses:${dump_js_escaped_json(finish_courses) | n, decode.utf8}
+}
+
+//load pictos
+var picto_dure = "${static.url('images/duree.svg')}";
+var picto_obiligatoire = "${static.url('images/obligatoire.svg')}";
+var picto_pdf = "${static.url('images/pdf.svg')}";
+var picto_webzine = "${static.url('images/webzine.svg')}";
+var picto_quiz = "${static.url('images/quiz.svg')}";
+var picto_video = "${static.url('images/video.svg')}";
+var picto_serious_game = "${static.url('images/seriousgame.svg')}";
+var picto_teste_images = "${static.url('images/testes&images.svg')}";
+var picto_success = "${static.url('images/success.png')}";
+var picto_error = "${static.url('images/error.png')}";
+var picto_simulation_inv = "${static.url('images/simulation_inv.svg')}";
+
+//load wording
+var wording_fundamental = "${_('Fundamentals')}";
+var wording_oursolutions = "${_('Our solutions')}";
+var wording_businessapproach = "${_('Business approach')}";
+var wording_expert = "${_('expert')}";
+var wording_softskills = "${_('soft skills')}";
+var wording_regulatory = "${_('Regulatory')}";
+var wording_mandatory = '${_("mandatory")}';
+var wording_optional ='${_("optional")}';
+var wording_proceed = '${_("Proceed")}';
+var wording_morinfo='${_("More information")}';
+var wording_notvalidated='${_("Not validated")}';
+var wording_validated='${_("Validated")}';
+</script>
+
+
+<!-- styles more modules -->
 <%block name="pagetitle">${_("Dashboard")}</%block>
 <%block name="bodyclass">view-dashboard is-authenticated</%block>
 
 <%block name="header_extras">
+
 % for template_name in ["donation"]:
 <script type="text/template" id="${template_name}-tpl">
   <%static:include path="dashboard/${template_name}.underscore" />
+</script>
+% endfor
+
+% for template_name in ["dashboard_search_item", "dashboard_search_results", "search_loading", "search_error"]:
+<script type="text/template" id="${template_name}-tpl">
+    <%static:include path="search/${template_name}.underscore" />
 </script>
 % endfor
 </%block>
@@ -50,31 +118,8 @@ from student.models import CourseEnrollment
       });
     });
   </script>
-  <%static:webpack entry="UnenrollmentFactory">
-    UnenrollmentFactory({
-      urls: {
-        dashboard: "${reverse('dashboard') | n, js_escaped_string}",
-        signInUser: "${reverse('signin_user') | n, js_escaped_string}",
-        changeEmailSettings: "${reverse('change_email_settings') | n, js_escaped_string}",
-        browseCourses: "${marketing_link('COURSES') | n, js_escaped_string}"
-      },
-      isEdx: false
-    });
-  </%static:webpack>
-  <%static:webpack entry="EntitlementUnenrollmentFactory">
-    ## Wait until the document is fully loaded before initializing the EntitlementUnenrollmentView
-    ## to ensure events are setup correctly.
-    $(document).ready(function() {
-      EntitlementUnenrollmentFactory({
-        dashboardPath: "${reverse('dashboard') | n, js_escaped_string}",
-        signInPath: "${reverse('signin_user') | n, js_escaped_string}",
-        browseCourses: "${marketing_link('COURSES') | n, js_escaped_string}",
-        isEdx: false
-      });
-    });
-  </%static:webpack>
   % if settings.FEATURES.get('ENABLE_DASHBOARD_SEARCH'):
-    <%static:require_module module_name="course_search/js/dashboard_search_factory" class_name="DashboardSearchFactory">
+    <%static:require_module module_name="js/search/dashboard/dashboard_search_factory" class_name="DashboardSearchFactory">
         DashboardSearchFactory();
     </%static:require_module>
   % endif
@@ -85,27 +130,27 @@ from student.models import CourseEnrollment
         banner.showMessage(${redirect_message | n, dump_js_escaped_json})
     </%static:require_module>
   % endif
-  % if recovery_email_message:
-      <%static:require_module module_name="js/views/message_banner" class_name="MessageBannerView">
-        var banner = new MessageBannerView({urgency: 'low', type: 'warning', hideCloseBtn: false, isRecoveryEmailMsg: true});
-        $('#content').prepend(banner.$el);
-        banner.showMessage(${recovery_email_message | n, dump_js_escaped_json})
-      </%static:require_module>
-  % endif
-  % if recovery_email_activation_message:
-      <%static:require_module module_name="js/views/message_banner" class_name="MessageBannerView">
-        var banner = new MessageBannerView({urgency: 'low', type: 'warning', isRecoveryEmailMsg: true});
-        $('#content').prepend(banner.$el);
-        banner.showMessage(${recovery_email_activation_message | n, dump_js_escaped_json})
-      </%static:require_module>
-  % endif
 </%block>
+<!-- GEOFFREY -->
+<!-- import custom css script -->
+<%
+dashboard = static.get_value('css_overrides_dashboard')
+%>
+% if not dashboard:
+  <link rel="stylesheet" type="text/css" href="${static.url('css/dashboard.css')}">
+% else:
+  <link rel="stylesheet" type="text/css" href="${static.url(dashboard)}" />
+% endif
+<!-- import custom js script -->
 
+
+<!--<script src="/media/jswork/dashboard_atp.js"></script>-->
+<script src="${static.url('js/dashboard_atp.js')}"></script>
+<!-- platform messages html script -->
 <div class="dashboard-notifications" tabindex="-1">
-
-    %if banner_account_activation_message:
+    %if message:
         <div class="dashboard-banner">
-            ${banner_account_activation_message | n, decode.utf8}
+            ${message | n, decode.utf8}
         </div>
     %endif
 
@@ -114,260 +159,187 @@ from student.models import CourseEnrollment
             ${enrollment_message | n,  decode.utf8}
         </div>
     %endif
-
-    %if enterprise_message:
-        <div class="dashboard-banner">
-            ${ enterprise_message | n, decode.utf8 }
-        </div>
-    %endif
-
-    %if account_activation_messages:
-      <div class="activation-message-container">
-        % for account_activation_message in account_activation_messages:
-          <div class="account-activation ${account_activation_message.tags}" role="alert" aria-label="Account Activation Message" tabindex="-1">
-            <div class="message-copy" >
-              ${ account_activation_message | n, decode.utf8 }
-            </div>
-          </div>
-        % endfor
-      </div>
-    %endif
-
 </div>
 
-<main id="main" aria-label="Content" tabindex="-1">
-    <div class="dashboard" id="dashboard-main">
-      <div class="main-container">
-        <div class="my-courses" id="my-courses">
-          % if display_dashboard_courses:
-          <%include file="learner_dashboard/_dashboard_navigation_courses.html"/>
-          % endif
 
-          % if len(course_entitlements + course_enrollments) > 0:
-            <ul class="listing-courses">
-            <%
-                share_settings = configuration_helpers.get_value(
-                    'SOCIAL_SHARING_SETTINGS',
-                    getattr(settings, 'SOCIAL_SHARING_SETTINGS', {})
-                )
-            %>
-            % for dashboard_index, enrollment in enumerate(course_entitlements + course_enrollments):
-              <%
-                # Check if the course run is an entitlement and if it has an associated session
-                entitlement = enrollment if isinstance(enrollment, CourseEntitlement) else None
-                entitlement_session = entitlement.enrollment_course_run if entitlement else None
-                entitlement_days_until_expiration = entitlement.get_days_until_expiration() if entitlement else None
-                entitlement_expiration = datetime.now(tz=pytz.UTC) + timedelta(days=entitlement_days_until_expiration) if (entitlement and entitlement_days_until_expiration < settings.ENTITLEMENT_EXPIRED_ALERT_PERIOD) else None
-                entitlement_expiration_date = strftime_localized(entitlement_expiration, 'SHORT_DATE') if entitlement and entitlement_expiration else None
-                entitlement_expired_at = strftime_localized(entitlement.expired_at_datetime, 'SHORT_DATE') if entitlement and entitlement.expired_at_datetime else None
 
-                is_fulfilled_entitlement = True if entitlement and entitlement_session else False
-                is_unfulfilled_entitlement = True if entitlement and not entitlement_session else False
+<!--
+<link rel="stylesheet" type="text/css" href="/media/studio/course_cards.css" />
+-->
+<link rel="stylesheet" type="text/css" href="${static.url('css/course_cards.css')}" />
+% for category in list_category :
+  %if category.lower() =="fundamentals":
+    <style>
+      #cat_fond{
+        display: block;
+      }
+    </style>
+  %elif category.lower() =="soft skills ":
+    <style>
+      #cat_softskills{
+        display: block;
+      }
+    </style>
+  %elif category.lower() =="expert ":
+    <style>
+      #cat_expert{
+        display: block;
+      }
+    </style>
+  %elif category.lower() =="our solutions" :
+    <style>
+      #cat_solu{
+        display: block;
+      }
+    </style>
+ %elif category.lower() =="sales approach" :
+   <style>
+     #cat_dem_com{
+       display: block;
+     }
+   </style>
+ %elif category.lower() =="soft skills" :
+   <style>
+     #cat_dem_sofskil{
+       display: block;
+       border-left:8px solid #30B0B4!important;
+     }
+   </style>
+ %elif category.lower() =="expert" :
+   <style>
+     #cat_dem_exp{
+       display: block;
+       border-left:8px solid #004f9f!important;
+     }
+   </style>
+ %elif category.lower() =="regulatory" :
+   <style>
+     #cat_reg{
+       display: block;
+     }
+   </style>
+  %endif
+%endfor
 
-                entitlement_available_sessions = []
-                if entitlement:
-                  # Grab the available, enrollable sessions for a given entitlement and scrape them for relevant attributes
-                  entitlement_available_sessions = [{
-                    'session_id': course['key'],
-                    'enrollment_end': course['enrollment_end'],
-                    'pacing_type': course['pacing_type'],
-                    'advertised_start': CourseOverview.get_from_id(CourseKey.from_string(course['key'])).advertised_start,
-                    'start': CourseOverview.get_from_id(CourseKey.from_string(course['key'])).start,
-                    'end': CourseOverview.get_from_id(CourseKey.from_string(course['key'])).end,
-                    } for course in course_entitlement_available_sessions[str(entitlement.uuid)]]
-                  if is_fulfilled_entitlement:
-                    # If the user has a fulfilled entitlement, pass through the entitlements CourseEnrollment object
-                    enrollment = entitlement_session
-                  else:
-                    # If the user has an unfulfilled entitlement, pass through a bare CourseEnrollment object to populate card with metadata
-                    pseudo_session = unfulfilled_entitlement_pseudo_sessions[str(entitlement.uuid)]
-                    if not pseudo_session:
-                        continue
-                    pseudo_key = pseudo_session['key']
-                    if not isinstance(pseudo_key, CourseKey):
-                      pseudo_key = CourseKey.from_string(pseudo_session['key'])
-                    enrollment = CourseEnrollment(user=user, course=CourseOverview.get_from_id(pseudo_key), mode=pseudo_session['type'])
-                  # We only show email settings for entitlement cards if the entitlement has an associated enrollment
-                  show_email_settings = is_fulfilled_entitlement and (entitlement_session.course_id in show_email_settings_for)
-                else:
-                  show_email_settings = (enrollment.course_id in show_email_settings_for)
+<section id="dashboard_tma">
+	<!-- baniere  -->
+% if LANGUAGE_CODE == 'fr':
+  <%include file='/home-intros/fr-home-intro.html' args="static=static, url_image=url_image" />
+% elif LANGUAGE_CODE == 'it-it':
+  <%include file='/home-intros/it-home-intro.html' args="static=static, url_image=url_image" />
+% elif LANGUAGE_CODE == 'cs':
+  <%include file='/home-intros/cs-home-intro.html' args="static=static, url_image=url_image" />
+% elif LANGUAGE_CODE == 'de-de':
+  <%include file='/home-intros/de-home-intro.html' args="static=static, url_image=url_image" />
+% elif LANGUAGE_CODE == 'nl-nl':
+  <%include file='/home-intros/nl-home-intro.html' args="static=static, url_image=url_image" />
+% elif LANGUAGE_CODE == 'ro':
+  <%include file='/home-intros/ro-home-intro.html' args="static=static, url_image=url_image" />
+% elif LANGUAGE_CODE == 'hu':
+  <%include file='/home-intros/hu-home-intro.html' args="static=static, url_image=url_image" />
+% elif LANGUAGE_CODE == 'sk':
+  <%include file='/home-intros/sk-home-intro.html' args="static=static, url_image=url_image" />
+%else :
+  <%include file='/home-intros/en-home-intro.html' args="static=static, url_image=url_image" />
+% endif
 
-                session_id = enrollment.course_id
-                show_courseware_link = show_courseware_links_for.get(session_id, False)
-                cert_status = cert_statuses.get(session_id)
-                can_refund_entitlement = entitlement and entitlement.is_entitlement_refundable()
-                can_unenroll = (not cert_status) or cert_status.get('can_unenroll') if not unfulfilled_entitlement else False
-                credit_status = credit_statuses.get(session_id)
-                course_mode_info = all_course_modes.get(session_id)
-                is_paid_course = True if entitlement else (session_id in enrolled_courses_either_paid)
-                is_course_blocked = (session_id in block_courses)
-                course_verification_status = verification_status_by_course.get(session_id, {})
-                course_requirements = courses_requirements_not_met.get(session_id)
-                related_programs = inverted_programs.get(six.text_type(entitlement.course_uuid if is_unfulfilled_entitlement else session_id))
-                show_consent_link = (session_id in consent_required_courses)
-                course_overview = enrollment.course_overview
-                resume_button_url = resume_button_urls[dashboard_index]
-              %>
-              <%include file='dashboard/_dashboard_course_listing.html' args='course_overview=course_overview, course_card_index=dashboard_index, enrollment=enrollment, is_unfulfilled_entitlement=is_unfulfilled_entitlement, is_fulfilled_entitlement=is_fulfilled_entitlement, entitlement=entitlement, entitlement_session=entitlement_session, entitlement_available_sessions=entitlement_available_sessions, entitlement_expiration_date=entitlement_expiration_date, entitlement_expired_at=entitlement_expired_at, show_courseware_link=show_courseware_link, cert_status=cert_status, can_refund_entitlement=can_refund_entitlement, can_unenroll=can_unenroll, credit_status=credit_status, show_email_settings=show_email_settings, course_mode_info=course_mode_info, is_paid_course=is_paid_course, is_course_blocked=is_course_blocked, verification_status=course_verification_status, course_requirements=course_requirements, dashboard_index=dashboard_index, share_settings=share_settings, user=user, related_programs=related_programs, display_course_modes_on_dashboard=display_course_modes_on_dashboard, show_consent_link=show_consent_link, enterprise_customer_name=enterprise_customer_name, resume_button_url=resume_button_url' />
-            % endfor
-            % if show_load_all_courses_link:
-                <br/>
-                 ${len(course_enrollments)} ${_("results successfully populated,")}
-                 <a href="${reverse('dashboard')}?course_limit=None">
-                     ${_("Click to load all enrolled courses")}
-                </a>
-            % endif
-            </ul>
-          % else:
-            <div class="empty-dashboard-message">
-              % if display_dashboard_courses:
-                <p>${_("You are not enrolled in any courses yet.")}</p>
-                % if empty_dashboard_message:
-                  <p class="custom-message">${empty_dashboard_message | n, decode.utf8}</p>
-                %endif
-                % if settings.FEATURES.get('COURSES_ARE_BROWSABLE'):
-                  <a class="btn btn-primary" href="${marketing_link('COURSES')}">
-                    ${_("Explore courses")}
-                  </a>
-                %endif
-              % else:
-              <p>${_("Activate your account!")}</p>
-              <p class="custom-message">${ activate_account_message | n, decode.utf8 }</p>
-              % endif
-          </div>
-          % endif
+	<!-- module en cours -->
+	<section  id="dashboard_course_in_progress_atp">
+        	<h2 style="margin-bottom:0px;"><img style="height:50px;width:50px;" src="${static.url('images/encours.svg')}" class="svg primary-color-fill"/><span class="primary-color-text">${_("In progress")}</span></h2>
+          <div id="ancre-in-progress"></div>
+		<p class="first_p primary-color-text">${_('Below are training modules you have started but not yet completed. Click \"Proceed\" to continue.')}</p>
+        <!-- course listing -->
+<% compteur = 0 %>
+<% first_course_name = '' %>
+% if len(progress_courses) > 0:
+  <ul class="atp_course_listing" id="progress_courses_atp">
 
-          % if staff_access and len(errored_courses) > 0:
-            <div id="course-errors">
-              <h2>${_("Course-loading errors")}</h2>
-
-            % for course_dir, errors in errored_courses.items():
-               <h3>${course_dir}</h3>
-                   <ul>
-                 % for (msg, err) in errors:
-                     <li>${msg}
-                       <ul><li><pre>${err}</pre></li></ul>
-                     </li>
-                 % endfor
-                   </ul>
-            % endfor
-            </div>
-          % endif
-        </div>
-      </div>
-      <div class="side-container" role="complementary" aria-label="messages">
-        %if display_sidebar_account_activation_message:
-          <div class="sidebar-notification">
-            <%include file="${static.get_template_path('registration/account_activation_sidebar_notice.html')}" />
-          </div>
-        %endif
-
-        % if settings.FEATURES.get('ENABLE_DASHBOARD_SEARCH'):
-          <div id="dashboard-search-bar" class="search-bar dashboard-search-bar" role="search" aria-label="Dashboard">
-            <form class="search-form">
-              <label for="dashboard-search-input">${_('Search Your Courses')}</label>
-              <div class="search-field-wrapper">
-                <input id="dashboard-search-input" type="text" class="search-field"/>
-                <button type="submit" class="search-button" title="${_('Search')}">
-                  <span class="icon fa fa-search" aria-hidden="true"></span>
-                </button>
-                <button type="button" class="cancel-button" title="${_('Clear search')}">
-                  <span class="icon fa fa-remove" aria-hidden="true"></span>
-                </button>
-              </div>
-            </form>
-          </div>
-          <div id="dashboard-search-results" class="search-results dashboard-search-results"></div>
-        % endif
-
-        <%block name="skip_links">
-          % if settings.FEATURES.get('ENABLE_ANNOUNCEMENTS'):
-            <a id="announcements-skip" class="nav-skip sr-only sr-only-focusable" href="#announcements">${_("Skip to list of announcements")}</a>
-          % endif
-        </%block>
-        % if settings.FEATURES.get('ENABLE_ANNOUNCEMENTS'):
-          <%include file='dashboard/_dashboard_announcements.html' />
-        % endif
-
-        % if display_sidebar_on_dashboard:
-          <div class="profile-sidebar" id="profile-sidebar" role="region" aria-label="Account Status Info">
-            <header class="profile">
-              <h2 class="account-status-title sr">${_("Account Status Info")}: </h2>
-            </header>
-            <div class="user-info">
-              <ul>
-
-                <%include file="${static.get_template_path('dashboard/_dashboard_status_verification.html')}" />
-
-              </ul>
-            </div>
-          </div>
-        % endif
-      </div>
-    </div>
-</main>
-
-<div id="email-settings-modal" class="modal" aria-hidden="true">
-  <div class="inner-wrapper" role="dialog" aria-labelledby="email-settings-title">
-    <button class="close-modal">
-      <span class="icon fa fa-remove" aria-hidden="true"></span>
-      <span class="sr">
-        ## Translators: this is a control to allow users to exit out of this modal interface (a menu or piece of UI that takes the full focus of the screen)
-        ${_("Close")}
-      </span>
-    </button>
-
-    <header>
-      <h2 id="email-settings-title">
-        ${Text(_("Email Settings for {course_number}")).format(course_number=HTML('<span id="email_settings_course_number"></span>'))}
-        <span class="sr">,
-          ## Translators: this text gives status on if the modal interface (a menu or piece of UI that takes the full focus of the screen) is open or not
-          ${_("window open")}
-        </span>
-      </h2>
-      <hr/>
-    </header>
-
-    <form id="email_settings_form" method="post">
-      <input name="course_id" id="email_settings_course_id" type="hidden" />
-      <label><input type="checkbox" id="receive_emails" name="receive_emails" />${_("Receive course emails")} </label>
-      <div class="submit">
-        <input type="submit" id="submit" value="${_("Save Settings")}" />
-      </div>
-    </form>
-  </div>
+  </ul>
+% else:
+  <div class="empty-dashboard-message">
+    <p class="primary-color-text">${_("No training modules available in this section.")}</p>
 </div>
+% endif
+		<a class="atp_dashboard_active_course is_none_more primary-color-text" data-number="${compteur}" id="more_1" data-cible="progress_courses_atp" data-status="cours">+ ${_("More modules")}</a>
+	</section>
+	<!-- module a realiser -->
+	<section id="dashboard_course_to_do">
+        	<h2 style="margin-bottom:0px;"><img style="height:50px;width:50px;" src="${static.url('images/arealiser.svg')}" class="svg primary-color-fill"/><span class="primary-color-text">${_("To do")}</span></h2>
+          <div id="ancre-to-do"></div>
+		<p class="first_p primary-color-text" style="margin-top:35px;">${_("Below, access training modules you have yet to complete. Click")} &laquo; ${_("More information")} &raquo; ${_("to continue")}.</p>
+	<!-- course listing -->
+<% compteur = 0 %>
+% if len(start_course) > 0:
+  <ul class="atp_course_listing primary-color-text" id="start_courses_atp">
 
-<div id="unenroll-modal" class="modal unenroll-modal" aria-hidden="true">
-  <div class="inner-wrapper" role="dialog" aria-labelledby="unenrollment-modal-title" aria-live="polite">
-    <button class="close-modal">
-      <span class="icon fa fa-remove" aria-hidden="true"></span>
-      <span class="sr">
-        ## Translators: this is a control to allow users to exit out of this modal interface (a menu or piece of UI that takes the full focus of the screen)
-        ${_("Close")}
-      </span>
-    </button>
-
-    <header class="unenroll-header">
-      <h2 id="unenrollment-modal-title">
-        <span id='track-info'></span>
-        <span id='refund-info'></span>
-        <span class="sr">,
-          ## Translators: this text gives status on if the modal interface (a menu or piece of UI that takes the full focus of the screen) is open or not
-          ${_("window open")}
-        </span>
-      </h2>
-      <hr/>
-    </header>
-    <div id="unenroll_error" class="modal-form-error"></div>
-    <form id="unenroll_form" method="post" data-remote="true" action="${reverse('change_enrollment')}">
-      <input name="course_id" id="unenroll_course_id" type="hidden" />
-      <input name="enrollment_action" type="hidden" value="unenroll" />
-      <div class="submit">
-        <input class="submit-button" name="submit" type="submit" value="${_("Unenroll")}" />
-      </div>
-    </form>
-  </div>
+  </ul>
+% else:
+  <div class="empty-dashboard-message">
+    <p class="primary-color-text">${_("No training modules available in this section.")}</p>
 </div>
+% endif
+<a class="atp_dashboard_active_course is_none_more primary-color-text" data-number="${compteur}" id="more_2" data-cible="start_courses_atp" data-status="invite">+ ${_("More modules")}</a>
+	</section>
+	<!-- module termine -->
+	<section id="dashboard_course_finished">
+		<h2 style="margin-bottom:0px;"><img style="height:50px;width:50px;" src="${static.url('images/termine.svg')}" class="svg gradient primary-color-fill"/><span class="primary-color-text">${_("Completed")}</span></h2>
+      <div id="ancre-finished"></div>
+		<p class="first_p primary-color-text" style="margin-top:35px;">${_("Click")} &laquo; ${_("More information")} &raquo; ${_("to access the result of modules you passed. Below you can also find training modules you have not passed, and are no longer accessible")}.</p>
+	<!-- course listing -->
+<% compteur = 0 %>
+% if len(finish_courses) > 0:
+  <ul class="atp_course_listing" id="end_courses_atp">
 
-<%include file="dashboard/_dashboard_entitlement_unenrollment_modal.html"/>
+  </ul>
+% else:
+  <div class="empty-dashboard-message">
+    <p>${_("No training modules available in this section.")}</p>
+</div>
+% endif
+<a class="atp_dashboard_active_course is_none_more" data-number="${compteur}" id="more_3" data-cible="end_courses_atp" data-status="finish">+ ${_("More modules")}</a>
+	</section>
+
+
+</section>
+
+% if is_new_user:
+<div id="pop_up">
+  %if request.LANGUAGE_CODE=="en":
+    <p>
+      Welcome to the Academy platform! Your registration has been successful. The training modules are available in the "To Do" section.
+    </p>
+  %else:
+  <p class="primary-color-text">${_("Welcome to the Academy platform")}!
+    ${_("Your registration has been successful")}.
+    ${_("The training module")} ${first_course_name} ${_("is available in the section")}
+    ${_("To do")}.
+  </p>
+  %endif
+  <button id="close_pop_up" class="primary-color-bg primary-color-border">${_("Close")}</button>
+</div>
+<script>
+$('#close_pop_up').click(function(){
+  $('#pop_up').addClass('is_hidden_tma');
+})
+</script>
+% endif
+
+
+
+
+<!--<script src="/media/jswork/course_cards.js"></script>-->
+<script src="${static.url('js/course_cards.js')}"></script>
+
+<script>
+  ////////////////////////////////////// XITI ///////////////////
+  page_name = 'home_dashboard_apprenant';
+  $(document).ready(function(){
+    $('.proceed').parent('a.primary-color-bg').each(function(){
+      $(this).attr('onclick','followClickEvents(this,\'courseware\',\'action\')');
+    });
+    $('.more_info').parent('a.primary-color-bg').each(function(){
+      $(this).attr('onclick','followClickEvents(this,\'course_about\',\'action\')');
+    });
+  })
+
+</script>

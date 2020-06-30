@@ -1,0 +1,342 @@
+<%page expression_filter="h"/>
+<%!
+from django.utils.translation import ugettext as _
+
+from openedx.core.djangolib.markup import HTML, Text
+
+from student.models import User
+%>
+<%inherit file="base.html" />
+
+<%def name="online_help_token()"><% return "home" %></%def>
+<%block name="title">${_("{studio_name} Home").format(studio_name=settings.STUDIO_SHORT_NAME)}</%block>
+<%block name="bodyclass">is-signedin index view-dashboard</%block>
+<%!
+mail_corp = "WARNING : Before clicking on 'Send', please read your text carefully and send an email to yourself. This will allow you to validate text and links are correct."
+%>
+<%block name="requirejs">
+  var corp_email = '${_(mail_corp)}';
+  require(["js/factories/index"], function (IndexFactory) {
+      IndexFactory();
+  });
+  //require(['${static.url("js/invite.js")}']);
+  //require(['https://demo-atp.themoocagency.com/media/studio/js/atp/mail.js']);
+  require(['${static.url("js/atp/mail.js")}']);
+</%block>
+<%namespace name='static' file='static_content.html'/>
+<%block name="content">
+
+
+<link rel="stylesheet" type="text/css" href="${static.url('js/vendor/timepicker/jquery.timepicker.css')}">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+<style>
+.all_dates {
+    width: 100%;
+    height: auto
+}
+
+.all_dates ul {
+    width: 100%;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    list-style-type: none
+}
+
+.all_dates ul li {
+    width: 35%;
+    height: auto;
+    float: left;
+    margin: 0;
+    padding: 0
+}
+
+.all_dates ul li span {
+    font-size: 13px;
+    font-style: italic;
+    font-family: "mywebfont";
+    color: #05144d
+}
+
+.all_dates ul li span:first-child {
+    font-weight: bold
+}
+.img_fundamentals {
+  background-image: url('/static/images/fondamentaux.png');
+}
+.pop_up_mail {
+    width: calc(100% - 40px);
+    height: auto;
+    padding-left: 10px;
+    padding-right: 10px;
+    display: none;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    border: 2px solid #39B2B6;
+}
+.pop_up_mail p {
+    font-size: 17px;
+    font-weight: bold;
+    font-family: "mywebfont";
+    color: #39B2B6 !important;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    width: 100% !important;
+    text-align: left !important;
+    display: block !important;
+    float: none !important;
+}
+
+#logo_cms {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+#title p {
+  text-transform: inherit !important;
+}
+.email_send button{
+  display: block!important;
+  height: auto!important;
+  margin-top: 15px!important;
+  margin-bottom: auto!important;
+  text-decoration: none!important;
+  color: #fff!important;
+  border-radius: 30px!important;
+  font-weight: bold!important;
+  line-height: 60px!important;
+  vertical-align: middle!important;
+  text-align: center!important;
+  font-size: 20px!important;
+  background-color: #0C1C49!important;
+}
+#title h1{
+  text-transform: inherit!important;
+}
+#mceu_6 div#mceu_17{
+  display: none;
+}
+#email_2{
+  margin-top:0;
+}
+.last_block_compteur{
+  color:#70767A!important;
+}
+.ending_page{
+  padding-top:15px!important;
+}
+#error-field{
+  border:1px solid #CB5744;
+  display: none;
+  padding:20px;
+  color:#05144d;
+}
+#send_email{
+  line-height: 45px !important;
+    font-size: 16px!important;
+}
+.language_display{
+  font-size: 13px;
+  font-style: italic;
+  font-family: "mywebfont";
+  color: #05144d;
+  font-weight: 600;
+}
+.campaign-link-back{
+  width:70%;
+  text-align: center;
+}
+</style>
+<%
+course_key_cleared=str(course_key).replace('+','').replace(':','')
+%>
+<section id="content">
+  <section id="primary">
+    <div id="fil_ariane" data-lang="${LANGUAGE_CODE}"></div>
+    <div id="title">
+      <h1  style="text-transform:uppercase!important;"><a href="/home/?campaign=${course_key_cleared}" class="primary_color">< ${_('My campaigns')}</a> | ${_('Send email to participants')}</h1>
+      <p style="padding-bottom:0;">
+        ${_('During the training campaign, you can send a personalized e-mail to your participants or to targeted receivers.')}
+      </p>
+      <p style="padding-top:0;">${_("It can be an email to remind them the training campaign will end soon, the training campaign is mandatory, etc")}.</p>
+    </div>
+    <ul class="list-courses">
+      <!-- suite -->
+      <li class="course-item">
+        <div class="content_img">
+          <span class="img_${course.categ.lower().replace(' ','')}" /></span>
+          <span class="course_module_categ">${_(course.categ)}</span>
+          <img src="${overview.image_urls['raw']}" class="img_course"/>
+        </div>
+        <div class="content_info">
+          <h3 class="course-title">${course.display_name_with_default_escaped}</h3>
+          <div class="all_dates">
+            <ul>
+              <li><span>${_('Starting date')} :</span> <span id="add_course_start">${course.start.strftime('%Y-%m-%d')}</span></li>
+              % if course.end is not None:
+                <li><span>${_('Ending date')} :</span> <span id="add_course_end">${course.end.strftime('%Y-%m-%d')}</span></li>
+              % else:
+                <li><span>${_('Ending date')} :</span> <span id="add_course_end"></span></li>
+              % endif
+              <span style="display:block;clear:left;"></span>
+            </ul>
+          </div>
+          <div class="all_dates">
+            <ul>
+              <li><span id="add_course_org">${course.org}</span></li>
+              <span class="language_display">${_('Language')} : ${_(language_course)} </span>
+              <span style="display:block;clear:left;"></span>
+            </ul>
+          </div>
+          <div class="duration_course">
+            <object oa-reusable-svg
+                    data="${static.url('images/duree.svg')}"
+                    type="image/svg+xml"
+                    class="svg-class"
+                    data-class="timer_svg_color"
+                    >
+            </object>
+            <span style="margin-left: 24px;">${details.effort}</span>
+          </div>
+        </div>
+        <span style="clear:left;display:block;"></span>
+      </li>
+    </ul>
+    <!-- end cell 1/2 -->
+    <!-- end cell 1/2 -->
+    <!-- end cell 1/2 -->
+    <!-- end cell 1/2 -->
+    <!-- end cell 1/2 -->
+    <!-- cell 2/2 -->
+    <!-- cell 2/2 -->
+    <!-- cell 2/2 -->
+    <!-- cell 2/2 -->
+    <!-- cell 2/2 -->
+    <div class="pop_up_mail">
+      <p>${_("Your email was sent")}.</p>
+      <p>${_("You can send a new email or go back to the page MY CAMPAIGNS")}.</p>
+    </div>
+    <div class="cell_title">
+      <h3 id="h3_6"><div class="num" id="num_6">1/1</div><span>${_("EMAIL TO PARTICIPANTS")}</span></h3>
+    </div>
+    <div class="cell_content" id="cell_6">
+      <!--<div class="date_title particulary">
+        <h5>${_('Edit and send the invitation email to participants of your choice.')}</h5>
+        <span style="clear:both;display:block;"></span>
+      </div>-->
+      <div id="send_it">
+        <h6>${_('Send email to:')}</h6>
+        <!-- checkbox 1 -->
+        <div class="check_box_field">
+          <input type="checkbox" class="checkbox_mail_field" name="checkbox_mail_field" id="checkbox_myself" value="myself">
+          <label>${_('Myself')}</label>
+        </div>
+        <!-- checkbox 2 -->
+        <div class="check_box_field">
+          <input type="checkbox" class="checkbox_mail_field" name="checkbox_mail_field" id="checkbox_staff" value="staff">
+          <label>${_('Team and administrator')}</label>
+        </div>
+        <!-- checkbox 4 -->
+        <div class="check_box_field">
+          <input type="checkbox" class="checkbox_mail_field" name="checkbox_mail_field" id="checkbox_all" value="all">
+          <label>${_('All participants (invited and accepted)')}</label>
+        </div>
+        <!-- checkbox 5 -->
+        <div class="check_box_field">
+          <input type="checkbox" class="checkbox_mail_field" name="checkbox_mail_field" id="checkbox_custom" value="custom">
+          <label>${_('Customized mailing list')}</label>
+        </div>
+      </div>
+      <div class="field input_text" id="custom_mail_box">
+        <!--
+        <input type="text" id="email_1" name="email_1" value="">
+        -->
+        <textarea id="email_1"></textarea>
+      </div>
+      <div class="sub_input last_sub_input last_block">
+        ${_("If you want to send an email to a customized mailing list, please copy/paste email addresses above. Emails will only be sent to receivers that have been invited to participate to the training campaign in the section 'Invite participants'.")}
+      </div>
+      <h6>${_('Object of the email')} :</h6>
+      <div class="field input_text">
+        <input type="text" id="email_2" name="email_2" value="">
+      </div>
+      <div class="sub_input last_sub_input last_block_compteur">
+       ${_("128 characters maximum")}
+      </div>
+      <h6>${_('Body of the email')} :</h6>
+      <div class="field textarea">
+        <textarea id="mytextarea"></textarea>
+      </div>
+      <!--
+      <div class="sub_input last_sub_input last_block">
+        <!--
+        ${_("We recommend sending only one message per week to learners. Before sending your e-mail, read your text carefully and send it to your email address. You will be able to verify that all the links work and that the content is good.")}
+
+    </div>-->
+
+      <div class="sub_input last_sub_input last_block ending_page">
+        <span>${_('WARNING')} : </span>${_("Don't hesitate to validate the email invitation by sending a test invitation to yourself. It will allow you to validate content and links included in the email invitation.")}
+      </div>
+      <div id="error-field">
+
+      </div>
+      <div class="field email_send">
+        <button id="send_email">${_('Send')}</button>
+      </div>
+      <span style="display:block;clear:left;"></span>
+    </div>
+
+  </section>
+  <section id="secondary">
+  </section>
+  <span style="display:block;clear:left;"></span>
+</section>
+
+<div class="campaign-link-back"><a href="/home/?campaign=${course_key_cleared}" class="primary_color">< ${_('Back to')} ${_('My campaigns')}</a></div>
+
+<div class="wrapper wrapper-notification wrapper-notification-warning" id="notification-warning" aria-hidden="false" aria-labelledby="notification-warning-title" tabindex="-1" aria-describedby="notification-warning-description" role="dialog">
+  <div class="notification warning has-actions"><span class="feedback-symbol fa fa-warning" aria-hidden="true"></span>
+    <div class="copy">
+      <h2 class="title title-3" id="notification-warning-title">You've made some changes</h2>
+      <p class="message" id="notification-warning-description">Your changes will not take effect until you save your progress.</p>
+    </div>
+    <nav class="nav-actions">
+      <ul>
+        <li class="nav-item">
+          <button class="action-primary action-save">Save Changes</button>
+        </li>
+        <li class="nav-item">
+          <button class="action-secondary action-cancel">Cancel</button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+<link rel="stylesheet" type="text/css" href="${static.url('css/mail_course.css')}">
+<!-- title font-size scale -->
+<script>
+var _h3 = document.getElementsByClassName('course-title');
+var elem;
+for(var i=0;i<_h3.length;i++) {
+  if(i == 0) {
+    elem = _h3[i]
+  }
+}
+var height = 0;
+var default_font = 2.2;
+var incredent = 0.1;
+var lim = 42;
+var actual = elem.clientHeight;
+while(actual > lim) {
+  default_font = default_font - incredent;
+  elem.style.fontSize = default_font+'em';
+  actual = elem.clientHeight;
+}
+
+
+
+</script>
+</%block>

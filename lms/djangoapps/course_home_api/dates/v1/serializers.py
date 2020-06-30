@@ -1,3 +1,4 @@
+# pylint: disable=abstract-method
 """
 Dates Tab Serializers. Represents the relevant dates for a Course.
 """
@@ -6,6 +7,7 @@ Dates Tab Serializers. Represents the relevant dates for a Course.
 from rest_framework import serializers
 
 from lms.djangoapps.courseware.date_summary import VerificationDeadlineDate
+from lms.djangoapps.course_home_api.mixins import DatesBannerSerializerMixin
 
 
 class DateSummarySerializer(serializers.Serializer):
@@ -20,10 +22,10 @@ class DateSummarySerializer(serializers.Serializer):
     title = serializers.CharField()
 
     def get_learner_has_access(self, block):
-        learner_is_verified = self.context.get('learner_is_verified', False)
+        learner_is_full_access = self.context.get('learner_is_full_access', False)
         block_is_verified = (getattr(block, 'contains_gated_content', False) or
                              isinstance(block, VerificationDeadlineDate))
-        return (not block_is_verified) or learner_is_verified
+        return (not block_is_verified) or learner_is_full_access
 
     def get_link(self, block):
         if block.link:
@@ -32,12 +34,13 @@ class DateSummarySerializer(serializers.Serializer):
         return ''
 
 
-class DatesTabSerializer(serializers.Serializer):
+class DatesTabSerializer(DatesBannerSerializerMixin, serializers.Serializer):
     """
     Serializer for the Dates Tab
     """
     course_date_blocks = DateSummarySerializer(many=True)
-    display_reset_dates_text = serializers.BooleanField()
-    learner_is_verified = serializers.BooleanField()
+    missed_deadlines = serializers.BooleanField()
+    missed_gated_content = serializers.BooleanField()
+    learner_is_full_access = serializers.BooleanField()
     user_timezone = serializers.CharField()
     verified_upgrade_link = serializers.URLField()

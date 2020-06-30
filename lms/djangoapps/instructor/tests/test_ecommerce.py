@@ -11,7 +11,6 @@ from django.urls import reverse
 from six import text_type
 
 from course_modes.models import CourseMode
-from course_modes.tests.factories import CourseModeFactory
 from openedx.core.djangoapps.site_configuration.tests.mixins import SiteMixin
 from shoppingcart.models import Coupon, CourseRegistrationCode
 from student.roles import CourseFinanceAdminRole
@@ -40,7 +39,7 @@ class TestECommerceDashboardViews(SiteMixin, SharedModuleStoreTestCase):
         # Create instructor account
         self.instructor = AdminFactory.create()
         self.client.login(username=self.instructor.username, password="test")
-        mode = CourseModeFactory(
+        mode = CourseMode(
             course_id=text_type(self.course.id), mode_slug='honor',
             mode_display_name='honor', min_price=10, currency='usd'
         )
@@ -119,7 +118,7 @@ class TestECommerceDashboardViews(SiteMixin, SharedModuleStoreTestCase):
         price = 200
         # course B
         course2 = CourseFactory.create(org='EDX', display_name='test_course', number='100')
-        mode = CourseModeFactory(
+        mode = CourseMode(
             course_id=text_type(course2.id), mode_slug='honor',
             mode_display_name='honor', min_price=30, currency='usd'
         )
@@ -366,7 +365,7 @@ class TestECommerceDashboardViews(SiteMixin, SharedModuleStoreTestCase):
         # Change honor mode to verified.
         original_mode = CourseMode.objects.get(course_id=self.course.id, mode_slug='honor')
         original_mode.delete()
-        new_mode = CourseModeFactory(
+        new_mode = CourseMode(
             course_id=six.text_type(self.course.id), mode_slug='verified',
             mode_display_name='verified', min_price=10, currency='usd'
         )

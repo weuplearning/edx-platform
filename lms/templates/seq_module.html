@@ -1,5 +1,80 @@
 <%page expression_filter="h"/>
 <%! from django.utils.translation import pgettext, ugettext as _ %>
+<%! from openedx.core.djangolib.js_utils import js_escaped_string, dump_js_escaped_json %>
+<style>
+    .wrap-instructor-info{
+        float: right;
+        margin-right: 20px;
+    }
+  .tma_tab>.seq_content{
+    display: none;
+    }
+  .tma_tab.disabled_unit_tma:not(.active) {
+        pointer-events: none;
+    }
+   .tma_tab.disabled_unit_tma:not(.active) #sequence-list li button.nav-item h3{
+      color : gray!important;
+    }
+  .tma_tab.not-viewable.active{
+        pointer-events: auto!important;
+    }
+  .tma_tab.active>.seq_content{
+    display: block !important;
+    }
+   .tma_tab:last-child .sequence-bottom button{
+        display: none!important;
+    }
+  .tma_tab>.sequence-bottom{
+    display: none;
+    }
+  .tma_tab>.sequence-bottom>button>span{
+    display: inline-block !important;
+    }
+  .tma_tab>.sequence-bottom>button.disabledtma{
+        display: none!important;
+    }
+  .tma_tab.active>.sequence-bottom{
+    display: block !important;
+    visibility: visible!important;
+    position: inherit !important;
+    }
+  .sequence-bottom button{
+    display: block !important;
+    position: inherit!important;
+    margin: 0 auto;
+    border: none!important;
+  }
+  .notcompletedborders .sequence-bottom{
+    visibility: hidden!important;
+  }
+  .vert.notcompletedborders{
+    border: #00A0E3 solid 3px;
+    border-bottom: #00A0E3 solid 3px !important;
+  }
+  .nav-item.active i {
+    transform: rotate(90deg)!important;
+  }
+  .sequence-nav{
+    display : flex;
+    flex-direction: column;
+  }
+  .sequence-list-wrapper{
+    padding: 20px 10px;
+  }
+  .sequence-list-wrapper>ol>li>button{
+    text-align: left !important;
+  }
+  .window-wrap{
+    background-color: #f5f5f5 !important;
+  }
+  .tma_tab{
+    margin : 15px 0px;
+    background-color: #fff !important;
+  }
+  .sequence-nav{
+    background : transparent !important;
+  }
+</style>
 
 <div id="sequence_${element_id}" class="sequence" data-id="${item_id}"
      data-position="${position}" data-ajax-url="${ajax_url}"
@@ -21,18 +96,40 @@
     </div>
   % endif
   % endif
+    <%
+    current_suptitle = ""
+    item_iterator = 1
+    i = 0
+    %>
   <div class="sequence-nav">
-    <button class="sequence-nav-button button-previous">
-      <span class="icon fa fa-chevron-prev" aria-hidden="true"></span>
-      ## Translators: A button for showing the Previous Unit
-      <span class="sequence-nav-button-label">${pgettext('unit', 'Previous')}</span>
-    </button>
-    <button class="sequence-nav-button button-next">
-      ## Translators: A button for showing the Next Unit
-      <span class="sequence-nav-button-label">${pgettext('unit', 'Next')}</span>
-      <span class="icon fa fa-chevron-next" aria-hidden="true"></span>
-    </button>
-    <nav class="sequence-list-wrapper" aria-label="${_('Sequence')}">
+    % if not exclude_units:
+    % if gated_content['gated']:
+      <%include file="_gated_content.html" args="prereq_url=gated_content['prereq_url'], prereq_section_name=gated_content['prereq_section_name'], gated_section_name=gated_content['gated_section_name']"/>
+    % else:
+    <div class="sr-is-focusable" tabindex="-1"></div>
+
+    % for idx, item in enumerate(items):
+        % if ">" in item['page_title']:
+          <%
+          i+=1
+          unit_title = item['page_title'].split(" > ")[1]
+          %>
+          % if item['page_title'].split(" > ")[0] != current_suptitle:
+            <%
+            current_suptitle = item['page_title'].split(" > ")[0]
+            %>
+            <div class="sequence-suptitle tma_chapters" id="chapter_tma_${i}">
+                <h3 class="primary-color-text">${current_suptitle}</h3>
+            </div>
+          % endif
+        % else:
+          <%
+          unit_title = item['page_title']
+          %>
+        % endif
+    <div class="tma_tab disabled_unit_tma ${"" if not item['complete'] else "completed"}" id="tma_tab_${idx}" disabled='disabled' data-index="${idx}" data-id="${item['id']}" >
+
+    <nav class="sequence-list-wrapper" aria-label="${_('Sequence')}" >
       <ol id="sequence-list" role="tablist">
         % if gated_content['gated']:
         <li>
@@ -41,7 +138,6 @@
           </button>
         </li>
         % else:
-        % for idx, item in enumerate(items):
         <li role="presentation">
           <button class="seq_${item['type']} inactive nav-item tab"
             role="tab"
@@ -59,11 +155,12 @@
             data-href="${item['href']}"
             % endif
             id="tab_${idx}">
-            <span class="icon fa seq_${item['type']}" aria-hidden="true"></span>
+            <i class="fa fa-chevron-right"></i>
+            <span class="icon fa seq_${item['type']}" style="display:none;" aria-hidden="true"></span>
             % if 'complete' in item:
               <span
                 class="fa fa-check-circle check-circle ${"is-hidden" if not item['complete'] else ""}"
-                style="color:green"
+                style="color:green;display:none;"
                 aria-hidden="true"
               ></span>
               % if item['complete']:
@@ -72,9 +169,9 @@
             % endif
             <span class="fa fa-fw fa-bookmark bookmark-icon ${"is-hidden" if not item['bookmarked'] else "bookmarked"}" aria-hidden="true"></span>
             <div class="sequence-tooltip sr"><span class="sr">${item['type']}&nbsp;</span>${item['page_title']}<span class="sr bookmark-icon-sr">&nbsp;${_("Bookmarked") if item['bookmarked'] else ""}</span></div>
+            <h3 class="secondary-color-text hover-primary-text" style="display: inline;">${unit_title}</h3>
           </button>
         </li>
-        % endfor
         % endif
         % if exclude_units:
         <li role="presentation">
@@ -97,39 +194,95 @@
         % endif
       </ol>
     </nav>
-  </div>
-  % if not exclude_units:
-  % if gated_content['gated']:
-    <%include file="_gated_content.html" args="prereq_url=gated_content['prereq_url'], prereq_section_name=gated_content['prereq_section_name'], gated_section_name=gated_content['gated_section_name']"/>
+    <div id="seq_contents_${idx}"
+      aria-labelledby="tab_${idx}"
+      aria-hidden="true"
+      class="seq_contents tex2jax_ignore asciimath2jax_ignore">
+      ${item['content']}
+    </div>
+     <div class="seq_content" role="tabpanel"></div>
+     <nav class="sequence-bottom" style="margin: 30px 0px"aria-label="${_('Section')}">
+       <button class="sequence-nav-button button-next disabled " disabled="disabled" style="width: 100px;border: 1px solid #0c1c48!important;border-radius: 15px;height: 30px;color: #fff;background-color: #0c1c48;font-weight: 600">
+         ## Translators: A button for showing the Next Unit
+         <span style="font-family: mywebfont;">${pgettext('unit', 'Next')}</span>
+
+       </button>
+     </nav>
+    </div>
+    % endfor
+    <!--<div id="seq_content" role="tabpanel"></div>-->
+    % endif
   % else:
-  <div class="sr-is-focusable" tabindex="-1"></div>
-
-  % for idx, item in enumerate(items):
-  <div id="seq_contents_${idx}"
-    aria-labelledby="tab_${idx}"
-    aria-hidden="true"
-    class="seq_contents tex2jax_ignore asciimath2jax_ignore">
-    ${item['content']}
-  </div>
-  % endfor
-  <div id="seq_content" role="tabpanel"></div>
+    <div id="seq_content" role="tabpanel"></div>
   % endif
-% else:
-  <div id="seq_content" role="tabpanel"></div>
-% endif
+  </div>
+  <div class="sequence-suptitle result-score-title">
+     <h3 class="">${_("Results")}</h3>
+  </div>
+  <div class="sequence-nav">
+    <nav class="sequence-list-wrapper" style="    background-color: #fff;" aria-label="${_('Unit')}">
+      <ol id="sequence-list">
+        <li>
+        <button class="result-score disabled" id="holding-section-result" disabled="disabled">
+              <h3 class="disabled_score"><i class="fa fa-chevron-right" style='padding:5px;transform: rotate(90deg)!important;'></i>${_("Score")}</h3>
+          </button>
+        </li>
+      </ol>
+    </nav>
+  </div>
+  <div id="result-content" style="display:block;padding:0;margin: 0 40px;"></div>
+  <script>
+    $(document).ready(function(){
+        /* Getting this function from courseware_completion.js, it handle compeltion ajax call*/
+      completion_nav_handler(course_id,'${user}',"${items[0]['id']}")
+      var page_test = ${dump_js_escaped_json(items) | n, decode.utf8};
+      function button_nav_title() {
+        var xblock_id = $('.xblock').find('.xblock').data('usage-id');
+        for(var i=0;i<page_test.length;i++) {
 
+          var _cur_id = page_test[i].id;
+          if(_cur_id == xblock_id) {
+              //get previous unit title
+              try {
+                var previous = page_test[i-1];
+                var previous_title = previous.page_title;
+                $('.previous_title_nav').find('span').text(previous_title);
+              }
+              catch(error) {
+                if(error instanceof TypeError) {
+                  $('.previous_title_nav').find('span').text("");
+                }
+              }
+              //get nex unit title
+              try {
+                var next = page_test[i+1];
+                var next_title = next.page_title;
+                $('.next_title_nav').find('span').text(next_title);
+              }
+              catch(error) {
+                if(error instanceof TypeError) {
+                  $('.next_title_nav').find('span').text("");
+                }
+              }
+          }
+        }
+      }
+      button_nav_title();
+      $('#nav_button').find('button').click(function(){
+        var data = $(this).data('class');
+        $('.sequence-bottom').find('.'+data).click();
+        button_nav_title();
+      })
+      function toggleClass(input,Class) {
+        if($(input).hasClass(Class)){
+          $(input).removeClass(Class);
+        }else{
+          $(input).addClass(Class);
+        }
+      }
+
+    })
+  </script>
 % if not exclude_units:
-  <nav class="sequence-bottom" aria-label="${_('Section')}">
-    <button class="sequence-nav-button button-previous">
-      <span class="icon fa fa-chevron-prev" aria-hidden="true"></span>
-      ## Translators: A button for showing the Previous Unit
-      <span>${pgettext('unit', 'Previous')}</span>
-    </button>
-    <button class="sequence-nav-button button-next">
-      ## Translators: A button for showing the Next Unit
-      <span>${pgettext('unit', 'Next')}</span>
-      <span class="icon fa fa-chevron-next" aria-hidden="true"></span>
-    </button>
-  </nav>
 </div>
 % endif

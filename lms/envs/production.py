@@ -62,7 +62,8 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 ################################ END ALWAYS THE SAME ##############################
 
 # A file path to a YAML file from which to load all the configuration for the edx platform
-CONFIG_FILE = get_env_setting('LMS_CFG')
+#CONFIG_FILE = get_env_setting('LMS_CFG')
+CONFIG_FILE = "/edx/etc/lms.yml"
 
 with codecs.open(CONFIG_FILE, encoding='utf-8') as f:
     __config__ = yaml.safe_load(f)
@@ -71,6 +72,10 @@ with codecs.open(CONFIG_FILE, encoding='utf-8') as f:
     # Removing them may break plugins that rely on them.
     ENV_TOKENS = __config__
     AUTH_TOKENS = __config__
+
+    # A file path to a YAML file from which to load all the code revisions currently deployed
+    #REVISION_CONFIG_FILE = get_env_setting('REVISION_CFG')
+    REVISION_CONFIG_FILE = "/edx/etc/revisions.yml"
 
     # Add the key/values from config into the global namespace of this module.
     # But don't override the FEATURES dict because we do that in an additive way.
@@ -91,11 +96,10 @@ with codecs.open(CONFIG_FILE, encoding='utf-8') as f:
 
     vars().update(__config_copy__)
 
-
-# A file path to a YAML file from which to load all the code revisions currently deployed
-REVISION_CONFIG_FILE = get_env_setting('REVISION_CFG')
-
 try:
+    # A file path to a YAML file from which to load all the code revisions currently deployed
+    REVISION_CONFIG_FILE = get_env_setting('REVISION_CFG')
+
     with codecs.open(REVISION_CONFIG_FILE, encoding='utf-8') as f:
         REVISION_CONFIG = yaml.safe_load(f)
 except Exception:  # pylint: disable=broad-except
@@ -173,6 +177,9 @@ if STATIC_URL_BASE:
     if not STATIC_URL.endswith("/"):
         STATIC_URL += "/"
 
+# Allow overriding build profile used by RequireJS with one
+# contained on a custom theme
+REQUIRE_BUILD_PROFILE = ENV_TOKENS.get('REQUIRE_BUILD_PROFILE', REQUIRE_BUILD_PROFILE)
 
 # The following variables use (or) instead of the default value inside (get). This is to enforce using the Lazy Text
 # values when the varibale is an empty string. Therefore, setting these variable as empty text in related
@@ -596,6 +603,9 @@ MAX_FAILED_LOGIN_ATTEMPTS_LOCKOUT_PERIOD_SECS = ENV_TOKENS.get(
     "MAX_FAILED_LOGIN_ATTEMPTS_LOCKOUT_PERIOD_SECS", MAX_FAILED_LOGIN_ATTEMPTS_LOCKOUT_PERIOD_SECS
 )
 
+##### LOGISTRATION RATE LIMIT SETTINGS #####
+LOGISTRATION_RATELIMIT_RATE = ENV_TOKENS.get('LOGISTRATION_RATELIMIT_RATE', LOGISTRATION_RATELIMIT_RATE)
+
 #### PASSWORD POLICY SETTINGS #####
 AUTH_PASSWORD_VALIDATORS = ENV_TOKENS.get("AUTH_PASSWORD_VALIDATORS", AUTH_PASSWORD_VALIDATORS)
 
@@ -923,11 +933,6 @@ PARENTAL_CONSENT_AGE_LIMIT = ENV_TOKENS.get(
 # Allow extra middleware classes to be added to the app through configuration.
 MIDDLEWARE.extend(ENV_TOKENS.get('EXTRA_MIDDLEWARE_CLASSES', []))
 
-############### Settings for django-fernet-fields ##################
-VEDA_FERNET_KEYS = AUTH_TOKENS.get('VEDA_FERNET_KEYS', [])
-FERNET_KEYS = AUTH_TOKENS.get('FERNET_KEYS', FERNET_KEYS)
-FERNET_KEYS += VEDA_FERNET_KEYS
-
 ################# Settings for the maintenance banner #################
 MAINTENANCE_BANNER_TEXT = ENV_TOKENS.get('MAINTENANCE_BANNER_TEXT', None)
 
@@ -944,3 +949,12 @@ plugin_settings.add_plugins(__name__, plugin_constants.ProjectType.LMS, plugin_c
 ########################## Derive Any Derived Settings  #######################
 
 derive_settings(__name__)
+
+############## Settings for Completion API #########################
+
+# Once a user has watched this percentage of a video, mark it as complete:
+# (0.0 = 0%, 1.0 = 100%)
+COMPLETION_VIDEO_COMPLETE_PERCENTAGE = ENV_TOKENS.get('COMPLETION_VIDEO_COMPLETE_PERCENTAGE',
+                                                      COMPLETION_VIDEO_COMPLETE_PERCENTAGE)
+COMPLETION_VIDEO_COMPLETE_PERCENTAGE = ENV_TOKENS.get('COMPLETION_BY_VIEWING_DELAY_MS',
+                                                      COMPLETION_BY_VIEWING_DELAY_MS)

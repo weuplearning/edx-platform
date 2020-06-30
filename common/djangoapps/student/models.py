@@ -971,6 +971,16 @@ class LoginFailures(models.Model):
         record.save()
 
     @classmethod
+    def check_user_reset_password_threshold(cls, user):
+        """
+        Checks if the user is above threshold for reset password message.
+        """
+        record, _ = LoginFailures.objects.get_or_create(user=user)
+        max_failures_allowed = settings.MAX_FAILED_LOGIN_ATTEMPTS_ALLOWED
+
+        return record.failure_count >= max_failures_allowed / 2, record.failure_count
+
+    @classmethod
     def clear_lockout_counter(cls, user):
         """
         Removes the lockout counters (normally called after a successful login)
@@ -3027,6 +3037,23 @@ class AllowedAuthUser(TimeStampedModel):
         unique=True,
     )
 
+#CLASS auth_user_preprofile
+
+class UserPreprofile(models.Model):
+
+    class Meta(object):
+        db_table = "auth_user_preprofile"
+
+    email = models.CharField(blank=True, max_length=255, db_index=True)
+    first_name = models.CharField(blank=True, max_length=255, db_index=True)
+    last_name = models.CharField(blank=True, max_length=255, db_index=True)
+    language = models.CharField(blank=True, max_length=255, db_index=True)
+    uuid = models.CharField(blank=True, max_length=255, db_index=True)
+    level_1 = models.CharField(blank=True, max_length=255, db_index=True)
+    level_2 = models.CharField(blank=True, max_length=255, db_index=True)
+    level_3 = models.CharField(blank=True, max_length=255, db_index=True)
+    level_4 = models.CharField(blank=True, max_length=255, db_index=True)
+    last_invite = models.DateTimeField(null=True, blank=True)
 
 class AccountRecoveryConfiguration(ConfigurationModel):
     """

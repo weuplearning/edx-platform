@@ -22,7 +22,7 @@ log = logging.getLogger(__name__)
 
 @require_POST
 @login_required
-def remove_coupon(request, course_id):
+def remove_coupon(request, course_id):  # pylint: disable=unused-argument
     """
     remove the coupon against the coupon id
     set the coupon is_active flag to false
@@ -113,7 +113,7 @@ def add_coupon(request, course_id):
 
 @require_POST
 @login_required
-def update_coupon(request, course_id):
+def update_coupon(request, course_id):  # pylint: disable=unused-argument
     """
     update the coupon object in the database
     """
@@ -138,7 +138,7 @@ def update_coupon(request, course_id):
 
 @require_POST
 @login_required
-def get_coupon_info(request, course_id):
+def get_coupon_info(request, course_id):  # pylint: disable=unused-argument
     """
     get the coupon information to display in the pop up form
     """

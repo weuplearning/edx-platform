@@ -100,6 +100,11 @@ urlpatterns = [
         name='course_search_index_handler'
         ),
     url(r'^course/{}?$'.format(settings.COURSE_KEY_PATTERN), contentstore.views.course_handler, name='course_handler'),
+    #GEOFFREY
+    url(r'^settings/invite/{}$'.format(settings.COURSE_KEY_PATTERN), contentstore.views.course.invite_handler),
+    url(r'^settings/invite/{}/list$'.format(settings.COURSE_KEY_PATTERN), contentstore.views.course.invitelist_handler),
+    url(r'^settings/manage/{}$'.format(settings.COURSE_KEY_PATTERN), contentstore.views.course.manage_handler),
+    url(r'^settings/email_dashboard/{}$'.format(settings.COURSE_KEY_PATTERN), contentstore.views.email_dashboard_handler),
 
     url(r'^checklists/{}?$'.format(settings.COURSE_KEY_PATTERN),
         contentstore.views.checklists_handler,
@@ -273,6 +278,16 @@ if 'debug_toolbar' in settings.INSTALLED_APPS:
 # UX reference templates
 urlpatterns.append(url(r'^template/(?P<template>.+)$', openedx.core.djangoapps.debug.views.show_reference_template,
                        name='openedx.core.djangoapps.debug.views.show_reference_template'))
+
+urlpatterns.append(
+    url(
+        r'^api/learning_sequences/',
+        include(
+            ('openedx.core.djangoapps.content.learning_sequences.urls', 'learning_sequences'),
+            namespace='learning_sequences'
+        ),
+    ),
+)
 
 # display error page templates, for testing purposes
 urlpatterns += [

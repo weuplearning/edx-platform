@@ -5,6 +5,7 @@ E-commerce Tab Instructor Dashboard Query Registration Code Status.
 
 import logging
 
+import six
 from django.urls import reverse
 from django.utils.translation import ugettext as _
 from django.views.decorators.cache import cache_control
@@ -13,18 +14,16 @@ from opaque_keys.edx.locator import CourseKey
 
 from lms.djangoapps.courseware.courses import get_course_by_id
 from lms.djangoapps.instructor.enrollment import get_email_params, send_mail_to_student
-from lms.djangoapps.instructor.views.api import require_course_permission
+from lms.djangoapps.instructor.views.api import require_level
 from shoppingcart.models import CourseRegistrationCode, RegistrationCodeRedemption
 from student.models import CourseEnrollment
 from util.json_request import JsonResponse
-
-from .. import permissions
 
 log = logging.getLogger(__name__)
 
 
 @cache_control(no_cache=True, no_store=True, must_revalidate=True)
-@require_course_permission(permissions.VIEW_REGISTRATION)
+@require_level('staff')
 @require_GET
 def look_up_registration_code(request, course_id):
     """
@@ -48,7 +47,7 @@ def look_up_registration_code(request, course_id):
 
     reg_code_already_redeemed = RegistrationCodeRedemption.is_registration_code_redeemed(code)
 
-    registration_code_detail_url = reverse('registration_code_details', kwargs={'course_id': str(course_id)})
+    registration_code_detail_url = reverse('registration_code_details', kwargs={'course_id': six.text_type(course_id)})
 
     return JsonResponse({
         'is_registration_code_exists': True,
@@ -59,7 +58,7 @@ def look_up_registration_code(request, course_id):
 
 
 @cache_control(no_cache=True, no_store=True, must_revalidate=True)
-@require_course_permission(permissions.VIEW_REGISTRATION)
+@require_level('staff')
 @require_POST
 def registration_code_details(request, course_id):
     """

@@ -40,6 +40,9 @@ from openedx.core.release import RELEASE_LINE
     <%
       jsi18n_path = "js/i18n/{language}/djangojs.js".format(language=LANGUAGE_CODE)
     %>
+    <script type="text/javascript" src="${static.url(jsi18n_path)}"></script>
+    <script type="text/javascript" src="${static.url("js/blazy.js")}"></script>
+
 
     % if getattr(settings, 'CAPTURE_CONSOLE_LOG', False):
         <script type="text/javascript">
@@ -97,8 +100,16 @@ from openedx.core.release import RELEASE_LINE
 
     <!-- view -->
     <div class="wrapper wrapper-view" dir="${static.dir_rtl()}">
+
+      <%!
+      _user = ''
+      try:
+        _user = request.user
+      except:
+        pass
+      %>
       <% online_help_token = self.online_help_token() if hasattr(self, 'online_help_token') else None %>
-      <%include file="widgets/header.html" args="online_help_token=online_help_token" />
+      <%include file="widgets/header.html" args="_user=_user,online_help_token=online_help_token" />
 
       <%
       banner_messages = list(PageLevelMessages.user_messages(request))
@@ -156,11 +167,14 @@ from openedx.core.release import RELEASE_LINE
         });
       </script>
     % endif
+
     % if user.is_authenticated:
       <%static:webpack entry='js/sock'/>
+      <script>require(['${static.url("js/custo.js")}']);</script>
     % endif
     <%block name='page_bundle'>
       <script type="text/javascript">
+      require(['${static.url("js/custo.js")}']);
       require(['js/factories/base'], function () {
         <%block name='requirejs'></%block>
       });
