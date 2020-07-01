@@ -253,3 +253,8 @@ zipp==1.0.0               # via -c requirements/edx/../constraints.txt, -r requi
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
+
+xlwt==1.3.0                         # TMA custom import
+img2pdf==0.2.4                      # TMA custom import
+python-resize-image==1.1.19         # TMA custom import
+
