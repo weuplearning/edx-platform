@@ -139,6 +139,9 @@ from ..context_processor import user_timezone_locale_prefs
 from ..entrance_exams import user_can_skip_entrance_exam
 from ..module_render import get_module, get_module_by_usage_id, get_module_for_descriptor
 
+
+from lms.djangoapps.course_blocks.api import get_course_blocks
+
 log = logging.getLogger("edx.courseware")
 
 
@@ -968,8 +971,25 @@ def course_about(request, course_id):
         user_id = request.user.id
         course_id = course.id
         ### Have to update for is_graded and get_overall_progress
-        status = {}
-        is_graded = False
+
+
+        from course_progress.helpers import get_overall_progress
+
+        store = modulestore()
+        course_usage_key = store.make_course_usage_key(course_key)
+        block_data = get_course_blocks(request.user, course_usage_key, allow_start_dates_in_future=True, include_completion=True)
+        log.info(block_data)
+        subsection_key_list = []
+        for section_key in block_data.get_children(course_usage_key):
+            for subsection_key in block_data.get_children(section_key):
+
+                log.info(block_data.get_xblock_field(subsection_key, 'id'))
+                log.info(subsection_key)
+                subsection_key_list.append(subsection_key.block_id)
+        log.info(request.user.username)
+        log.info(subsection_key_list[0])
+        status = get_overall_progress(request.user.username,request,course_id,course_usage_key)
+        is_graded = get_course_by_id(course_id).is_graded
         categ = get_course_by_id(course_id).categ
         #End TMA custom #############################################
         context = {
