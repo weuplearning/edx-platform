@@ -139,6 +139,9 @@ from ..context_processor import user_timezone_locale_prefs
 from ..entrance_exams import user_can_skip_entrance_exam
 from ..module_render import get_module, get_module_by_usage_id, get_module_for_descriptor
 
+
+from lms.djangoapps.course_blocks.api import get_course_blocks
+
 log = logging.getLogger("edx.courseware")
 
 
@@ -960,7 +963,7 @@ def course_about(request, course_id):
         # This may be resolved by using stevedore to allow web fragments to be used
         # as plugins, and to avoid the direct import.
         from openedx.features.course_experience.views.course_reviews import CourseReviewsModuleFragmentView
-
+        from completion.api.v1.views import SubsectionCompletionView
         # Embed the course reviews tool
         reviews_fragment_view = CourseReviewsModuleFragmentView().render_to_fragment(request, course=course)
 
@@ -968,9 +971,69 @@ def course_about(request, course_id):
         user_id = request.user.id
         course_id = course.id
         ### Have to update for is_graded and get_overall_progress
-        status = {}
-        is_graded = False
+
+
+        from course_progress.helpers import get_overall_progress
+        #from lms.djangoapps.tma_apps.completion.completion import get_course_completion
+        from openedx.features.course_experience.utils import get_course_outline_block_tree
+
+        #store = modulestore()
+        #course_usage_key = store.make_course_usage_key(course_key)
+        #block_data = get_course_blocks(request.user, course_usage_key, allow_start_dates_in_future=True, include_completion=True)
+        #log.info(block_data)
+        #subsection_key_list = []
+        #for section_key in block_data.get_children(course_usage_key):
+        #    for subsection_key in block_data.get_children(section_key):
+
+        #        log.info(block_data.get_xblock_field(subsection_key, 'id'))
+        #        log.info(subsection_key)
+        #        subsection_key_list.append(subsection_key.block_id)
+        #log.info(request.user.username)
+        #log.info(subsection_key_list[0])
+        #status = get_overall_progress(request.user.username,request,course_id,course_usage_key)
+   
+
+        total_blocks=0
+        total_blockstma=0
+        completed_blockstma=0
+        completed_blocks=0
+        completion_rate=0
+        quiz_completion=0
+        quiz_total_components=0
+        quiz_completed_components=0
+        quiz_completion_rate=0
+        
+        course_sections = get_course_outline_block_tree(request,str(course_id)).get('children')
+        for section in course_sections :
+          total_blockstma+=1
+          section_completion = SubsectionCompletionView().get(request,request.user,str(course_id),section.get('id')).data
+          for subsection in section.get('children') :
+            if subsection.get('children'):
+                for unit in subsection.get('children'):
+                    total_blocks+=1
+                    unit_completion = SubsectionCompletionView().get(request,request.user,str(course_id),unit.get('id')).data
+                    log.info(unit_completion)
+                    if unit_completion.get('completion'):
+                        completed_blocks+=1
+                    if unit.get('graded'):
+                        for component in unit.get('children') :
+                            quiz_total_components+=1
+                            if component.get('complete'):
+                                quiz_completed_components+=1
+                if completed_blocks == total_blocks:
+                    completed_blockstma+=1
+        log.info(completed_blocks)
+        log.info(total_blocks)
+        if quiz_total_components!=0:
+            quiz_completion_rate =float(quiz_completed_components)/quiz_total_components
+        if total_blocks != 0:
+            completion_rate = float(completed_blocks)/total_blocks
+        status ={}
+
+        status = completion_rate * 10;
+        is_graded = True
         categ = get_course_by_id(course_id).categ
+        log.info(status)
         #End TMA custom #############################################
         context = {
             'status':status,

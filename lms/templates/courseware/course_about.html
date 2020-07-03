@@ -27,8 +27,6 @@ from openedx.core.djangoapps.site_configuration import helpers as configuration_
 
 dashboard = static.get_value('css_overrides_dashboard')
 
-status = 20
-
 %>
 % if not dashboard:
   <link rel="stylesheet" type="text/css" href="${static.url('css/dashboard.css')}">

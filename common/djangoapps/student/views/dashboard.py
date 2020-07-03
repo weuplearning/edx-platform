@@ -846,6 +846,65 @@ def student_dashboard(request):
         except:
             passed = False
             percent = 0
+        ##MODIFcourse_progression = get_overall_progress(user_id,course_id)
+        from course_progress.helpers import get_overall_progress
+        #from lms.djangoapps.tma_apps.completion.completion import get_course_completion
+        from openedx.features.course_experience.utils import get_course_outline_block_tree
+        from completion.api.v1.views import SubsectionCompletionView
+        #store = modulestore()
+        #course_usage_key = store.make_course_usage_key(course_key)
+        #block_data = get_course_blocks(request.user, course_usage_key, allow_start_dates_in_future=True, include_completion=True)
+        #log.info(block_data)
+        #subsection_key_list = []
+        #for section_key in block_data.get_children(course_usage_key):
+        #    for subsection_key in block_data.get_children(section_key):
+
+        #        log.info(block_data.get_xblock_field(subsection_key, 'id'))
+        #        log.info(subsection_key)
+        #        subsection_key_list.append(subsection_key.block_id)
+        #log.info(request.user.username)
+        #log.info(subsection_key_list[0])
+        #status = get_overall_progress(request.user.username,request,course_id,course_usage_key)
+   
+
+        total_blocks=0
+        total_blockstma=0
+        completed_blockstma=0
+        completed_blocks=0
+        completion_rate=0
+        quiz_completion=0
+        quiz_total_components=0
+        quiz_completed_components=0
+        quiz_completion_rate=0
+        
+        course_sections = get_course_outline_block_tree(request,str(course_id)).get('children')
+        for section in course_sections :
+          total_blockstma+=1
+          section_completion = SubsectionCompletionView().get(request,request.user,str(course_id),section.get('id')).data
+          for subsection in section.get('children') :
+            if subsection.get('children'):
+                for unit in subsection.get('children'):
+                    total_blocks+=1
+                    unit_completion = SubsectionCompletionView().get(request,request.user,str(course_id),unit.get('id')).data
+                    log.info(unit_completion)
+                    if unit_completion.get('completion'):
+                        completed_blocks+=1
+                    if unit.get('graded'):
+                        for component in unit.get('children') :
+                            quiz_total_components+=1
+                            if component.get('complete'):
+                                quiz_completed_components+=1
+                if completed_blocks == total_blocks:
+                    completed_blockstma+=1
+
+        if quiz_total_components!=0:
+            quiz_completion_rate =float(quiz_completed_components)/quiz_total_components
+        if total_blocks != 0:
+            completion_rate = float(completed_blocks)/total_blocks
+        status ={}
+
+        course_progression = int(completion_rate * 10);
+        log.info(course_progression)
         try:
             _end = int(enrollment.course_overview.end.strftime("%s"))
         except:
@@ -873,7 +932,10 @@ def student_dashboard(request):
             if passed :
                 finish_courses.append(q)
             else :
-                start_course.append(q)
+                if course_progression == 0:
+                    start_course.append(q)
+                else:
+                    progress_courses.append(q)
         else :
             finish_courses.append(q)
     #new user popup
