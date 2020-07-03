@@ -116,6 +116,7 @@ from django.template.loader import render_to_string
 #GEOFFREY TMA ATP
 import sys
 from django.core.mail import send_mail
+from django.utils.timezone import localtime, now
 from importlib import reload
 from pprint import pformat
 from django.views.decorators.csrf import csrf_exempt
