@@ -19,7 +19,6 @@ log = logging.getLogger()
 @require_GET
 @login_required
 def ensure_certif(request,course_id):
-    log.info('ensure certidddddddddddddddd')
     user_id = request.user.id
     username = request.user.username
     course_key = SlashSeparatedCourseKey.from_string(course_id)
@@ -31,14 +30,17 @@ def ensure_certif(request,course_id):
 
     #TMA GRADE TRACKING UPDATE
     mongo_persist = dashboardStats()
-    collection = mongo_persist.connect()
-    add_user = {}
-    add_user['user_id'] = request.user.id
-    add_user['username'] = request.user.username
-    add_user['passed'] = grading_note.passed
-    add_user['percent'] = grading_note.percent
-    add_user['summary'] = grading_note.summary
-    mongo_persist.add_user_grade_info(collection,str(course_id),add_user)
+    try:
+        collection = mongo_persist.connect()
+        add_user = {}
+        add_user['user_id'] = request.user.id
+        add_user['username'] = request.user.username
+        add_user['passed'] = grading_note.passed
+        add_user['percent'] = grading_note.percent
+        add_user['summary'] = grading_note.summary
+        mongo_persist.add_user_grade_info(collection,str(course_id),add_user)
+    except:
+        raise Exception("error with database")
     # END TMA GRADE TRACKING UPDATE
 
 
