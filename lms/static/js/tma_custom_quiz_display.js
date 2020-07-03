@@ -97,7 +97,9 @@ $('.hd.hd-2.problem-header').live("click", function(){
 function get_all_questions(){
   problem_xblock_list=[];
   $('div.vert').each(function(){
+   if($(this).attr('data-id').split('@')[1]=="problem+block"){
     problem_xblock_list.push($(this).attr('data-id'));
+   }
   })
   return problem_xblock_list;
 };
