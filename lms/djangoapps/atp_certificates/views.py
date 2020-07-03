@@ -18,7 +18,7 @@ from django.http import JsonResponse,HttpResponse
 from lms.djangoapps.atp_certificates.utils import generate_html
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 import datetime
-
+from django.conf import settings
 import logging
 log = logging.getLogger(__name__)
 
@@ -68,8 +68,9 @@ def atp_generate_certificate(request,course_id):
     course_title = courseoverview.display_name_with_default
     _temp_score = int(course_factory.percent * 1000)
     score = str(float(_temp_score / 10))+'%'
-    #url = 'https://'+ENV_TOKENS.get('LMS_BASE')
-    url = 'http://edx.devstack.lms:18000'
+
+    url = "https://"+settings.LMS_BASE
+
     if configuration_helpers.get_value('logo_couleur') :
         logo_path = configuration_helpers.get_value('logo_couleur')
     else:
