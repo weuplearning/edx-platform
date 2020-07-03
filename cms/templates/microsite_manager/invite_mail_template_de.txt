@@ -1,0 +1,100 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+
+<head>
+	<!--[if !mso]><!-- -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!--<![endif]-->
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Titre invitation - Amundi Academy</title>
+</head>
+
+<body>
+
+	<table border="0" cellspacing="0" cellpadding="0" width="100%" height="100%" bgcolor="#F7F7F7">
+		<tr><td>
+<table width="600" border="0" cellspacing="0" cellpadding="0" align="center" style="font-family: arial;">
+	<tr><td>
+		<!--HEADER LOGOS-->
+<table width="600" border="0" cellspacing="0" cellpadding="0" align="center" style="font-family: arial;background-color:#fff;">
+    <tr>
+      <td><img src="${org_image}" alt="Amundi" width="150" style="display:block;padding:10px;"></td>
+		<td width="150" height="68"></td>
+		<td>${platform_image}</td>
+    </tr>
+	</table>
+	<!--IMAGE FORMATION-->
+	<table width="600" border="0" cellspacing="0" cellpadding="0" align="center" style="font-family: arial;">
+    <tr>
+			<td>
+				<img src="${course_link_img}" alt ="${course_title}" width="600" style="display:block;">
+			</td>
+  </tr>
+	</table>
+	<!--TITRE-->
+	<table width="600" border="0" cellspacing="0" cellpadding="0" style="font-family: arial; background-color:#fff; font-family:arial;" align="center">
+	<tr>
+  		<td style="text-align:center; font-size:20px; padding:20px; font-weight:bold; color:${atp_secondary_color}; display:block;">
+		${course_title}
+		</td>
+    </tr>
+	</table>
+
+		<!--DETAILS-->
+	<table width="600" border="0" cellspacing="0" cellpadding="0" style="background-color:#fff; font-family:arial;" align="center">
+		<tr>
+          <td style="padding:0 5px; text-align:center; font-weight:bold; text-align:center; font-size:14px; color:#d2840a;">Kategorie:</td>
+			 <td style="padding:0 5px; text-align:center; font-weight:bold; text-align:center; font-size:14px; color:#d2840a;">Dauer:</td>
+			 <td style="padding:0 5px; text-align:center; font-weight:bold; text-align:center; font-size:14px; color:#d2840a;">Modus:</td>
+			 <td style="padding:0 5px; text-align:center; font-weight:bold; text-align:center; font-size:14px; color:#d2840a;">Enddaten:</td>
+        </tr>
+        <tr>
+          <td style="padding:0 5px 15px; text-align:center; font-weight:bold; text-align:center; font-size:14px; color:#040b31;">${category}</td>
+          <td style="padding:0 5px 15px; text-align:center; font-weight:bold; text-align:center; font-size:14px; color:#040b31;">${duration}</td>
+		  <td style="padding:0 5px 15px; text-align:center; font-weight:bold; text-align:center; font-size:14px; color:#040b31;">${mode}</td>
+		  <td style="padding:0 5px 15px; text-align:center; font-weight:bold; text-align:center; font-size:14px; color:#040b31;">${end_date}</td>
+        </tr>
+	</table>
+		<!--BOUTON-->
+	<table width="600" border="0" cellspacing="30" cellpadding="0" align="center" style="font-family:arial; color:#fff; font-size:14px;">
+		<tr>
+			<td width="200"></td>
+			<td width="200" style="background-color:${atp_primary_color}; font-weight:bold; color:#fff; font-size:16px; text-align:center; display:block; width:200px; border-radius:30px; display:block; padding:20px;"><a target="_blank" href="${link}" style="text-decoration:none; color:#fff;">Zugang zu Ihren Trainingsmodulen</a></td>
+			<td width="200"></td>
+		</tr>
+	</table>
+
+<!--TEXTE-->
+    <table width="600" border="0" cellspacing="30" cellpadding="0" align="center" style="font-family:arial; color:#040b31;; font-size:14px;;">
+	<tr>
+		<td style="font-weight:bold; color:#040b31;">$first_name $last_name,</td>
+		</tr>
+		<tr>
+		<td style="color:#040b31;">Sie sind eingeladen, am Trainingsmodul teilzunehmen <strong>${course_title}.</strong></td>
+		</tr>
+		<tr>
+		<td style="color:#040b31;"><strong>Sie müssen bis ${end_date}</strong> zum Abschluss des Trainingsmoduls. <br>
+		  Dieses Trainingsmodul ist <strong>${mode}.</strong></td>
+		</tr>
+			<tr>
+				<td style="color:#040b31;">Eine Mindestwert von <span style="font-weight:bold;">${grade_cutoff}</span>  ist erforderlich, für die Bestätigung des Schulungsmoduls.</td>
+		</tr>
+		<tr>
+		<td style="color:#040b31;">${content}</td>
+		</tr>
+		<tr>
+		<td style="padding:0 0 10px; color:#040b31;">Um auf das Trainingsmodul zuzugreifen <span style="font-weight:bold;">${course_title}</span>, klicken Sie bitte auf den folgenden Link: <a href="${link}">${link}</a></td>
+		</tr>
+
+	</table>
+	</td></tr>
+	</table>
+			</td></tr>
+	</table>
+
+
+
+</body>
+</html>
