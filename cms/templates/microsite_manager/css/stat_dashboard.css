@@ -1,0 +1,1085 @@
+@font-face {
+    font-family: 'mywebfont';
+    src: url("../fonts/arial.otf") format("otf"), url("../fonts/arial.ttf") format("truetype");
+}
+html, body, span, h1, h2, h3, h4, h5, h6, div, a, button, input, p, section {
+    font-family: "mywebfont"}
+.content-wrapper {
+    background-color: transparent;
+}
+body {
+    min-height: 100vh;
+}
+input[type="submit"]:not(:disabled), input[type="button"]:not(:disabled), button:not(:disabled), .button:not(:disabled) {
+    background-image: none;
+    box-shadow: none;
+}
+input[type="submit"]:hover:not(:disabled), input[type="button"]:hover:not(:disabled), button:hover:not(:disabled), .button:hover:not(:disabled), button:focus:not(:disabled) {
+    background-image: none;
+    box-shadow: none;
+}
+.login-register .action-primary, .financial-assistance-wrapper .financial-assistance-form .action-primary {
+    box-shadow: none;
+}
+button:hover:not(:disabled) {
+    background: #fff;
+}
+button:not(:disabled) {
+    background: #fff;
+
+}
+
+.btn-blue:hover, .dashboard-banner .wrapper-msg .msg.has-actions .donate-actions .action-donate:hover, .login-register .action-primary:hover, .financial-assistance-wrapper .financial-assistance-form .action-primary:hover, .verification-process .action-primary-blue:hover, .verification-process .carousel .wrapper-task .controls .control .action:hover, .verification-process .carousel .wrapper-task .msg .list-actions .action-retakephotos a:hover, .verification-process .carousel #wrapper-review .review-task-name .list-actions .action-editname a:hover, .verification-process.step-select-track .register-choice-audit .action-select input:hover, .verification-process.step-confirmation .course-info .options .action-course:hover, .verification-process.step-confirmation .course-info .course-actions .action-dashboard:hover, .reverify-blocked .action-primary:hover, .wrapper-authorize .btn-authorization-allow:hover, .wrapper-msg.wrapper-auto-cert .auto-cert-message .has-actions .msg-actions .btn:hover, .btn-blue:active, .dashboard-banner .wrapper-msg .msg.has-actions .donate-actions .action-donate:active, .login-register .action-primary:active, .financial-assistance-wrapper .financial-assistance-form .action-primary:active, .verification-process .action-primary-blue:active, .verification-process .carousel .wrapper-task .controls .control .action:active, .verification-process .carousel .wrapper-task .msg .list-actions .action-retakephotos a:active, .verification-process .carousel #wrapper-review .review-task-name .list-actions .action-editname a:active, .verification-process.step-select-track .register-choice-audit .action-select input:active, .verification-process.step-confirmation .course-info .options .action-course:active, .verification-process.step-confirmation .course-info .course-actions .action-dashboard:active, .reverify-blocked .action-primary:active, .wrapper-authorize .btn-authorization-allow:active, .wrapper-msg.wrapper-auto-cert .auto-cert-message .has-actions .msg-actions .btn:active, .btn-blue:focus, .dashboard-banner .wrapper-msg .msg.has-actions .donate-actions .action-donate:focus, .login-register .action-primary:focus, .financial-assistance-wrapper .financial-assistance-form .action-primary:focus, .verification-process .action-primary-blue:focus, .verification-process .carousel .wrapper-task .controls .control .action:focus, .verification-process .carousel .wrapper-task .msg .list-actions .action-retakephotos a:focus, .verification-process .carousel #wrapper-review .review-task-name .list-actions .action-editname a:focus, .verification-process.step-select-track .register-choice-audit .action-select input:focus, .verification-process.step-confirmation .course-info .options .action-course:focus, .verification-process.step-confirmation .course-info .course-actions .action-dashboard:focus, .reverify-blocked .action-primary:focus, .wrapper-authorize .btn-authorization-allow:focus, .wrapper-msg.wrapper-auto-cert .auto-cert-message .has-actions .msg-actions .btn:focus {
+    box-shadow: none;
+}
+.help-buttons button:hover, .login aside .btn-login .btn-login-action:hover, .register aside .btn-login .btn-login-action:hover, .passwordreset aside .btn-login .btn-login-action:hover, #forgot-password-modal #password-reset aside .btn-login .btn-login-action:hover, .login-register .login-provider:hover, .financial-assistance-wrapper .financial-assistance-form .login-provider:hover, .login .form-actions.form-third-party-auth button[type="submit"]:hover, .register .form-actions.form-third-party-auth button[type="submit"]:hover, .passwordreset .form-actions.form-third-party-auth button[type="submit"]:hover, #forgot-password-modal #password-reset .form-actions.form-third-party-auth button[type="submit"]:hover, .login-register .nav-btn:hover, .financial-assistance-wrapper .financial-assistance-form .nav-btn:hover, .login-register .button-secondary-login:hover, .financial-assistance-wrapper .financial-assistance-form .button-secondary-login:hover, .wrapper-authorize .btn-authorization-cancel:hover, .help-buttons button:active, .login aside .btn-login .btn-login-action:active, .register aside .btn-login .btn-login-action:active, .passwordreset aside .btn-login .btn-login-action:active, #forgot-password-modal #password-reset aside .btn-login .btn-login-action:active, .login-register .login-provider:active, .financial-assistance-wrapper .financial-assistance-form .login-provider:active, .login .form-actions.form-third-party-auth button[type="submit"]:active, .register .form-actions.form-third-party-auth button[type="submit"]:active, .passwordreset .form-actions.form-third-party-auth button[type="submit"]:active, #forgot-password-modal #password-reset .form-actions.form-third-party-auth button[type="submit"]:active, .login-register .nav-btn:active, .financial-assistance-wrapper .financial-assistance-form .nav-btn:active, .login-register .button-secondary-login:active, .financial-assistance-wrapper .financial-assistance-form .button-secondary-login:active, .wrapper-authorize .btn-authorization-cancel:active, .help-buttons button:focus, .login aside .btn-login .btn-login-action:focus, .register aside .btn-login .btn-login-action:focus, .passwordreset aside .btn-login .btn-login-action:focus, #forgot-password-modal #password-reset aside .btn-login .btn-login-action:focus, .login-register .login-provider:focus, .financial-assistance-wrapper .financial-assistance-form .login-provider:focus, .login .form-actions.form-third-party-auth button[type="submit"]:focus, .register .form-actions.form-third-party-auth button[type="submit"]:focus, .passwordreset .form-actions.form-third-party-auth button[type="submit"]:focus, #forgot-password-modal #password-reset .form-actions.form-third-party-auth button[type="submit"]:focus, .login-register .nav-btn:focus, .financial-assistance-wrapper .financial-assistance-form .nav-btn:focus, .login-register .button-secondary-login:focus, .financial-assistance-wrapper .financial-assistance-form .button-secondary-login:focus, .wrapper-authorize .btn-authorization-cancel:focus {
+    box-shadow: none;
+    background-image: none;
+}
+#login-and-registration-container {
+    width: 1440px;
+    max-width: 100%;
+    min-width: 0%;
+    min-height: calc(100vh - 148px);
+}
+@media (max-width: 1440px) {
+    #login-and-registration-container {
+    width: 100%}
+}#contenair {
+    width: 1440px;
+    margin-left: auto;
+    margin-right: auto;
+    height: auto;
+    background-color: #F8F8F8;
+}
+.section_block {
+    width: 100%;
+    height: auto;
+    background-color: #F8F8F8;
+    display: block;
+    padding-bottom: 50px;
+}
+#header {
+    width: 100%;
+    font-family: "mywebfont";
+    text-align: center;
+    height: auto;
+    min-height: 160px;
+}
+#header h1, #header p {
+    width: 100%;
+    color: #fff;
+}
+#header h1 {
+    text-transform: uppercase;
+    font-size: 38px;
+    line-height: 38px;
+    padding-top: 5px;
+    padding-bottom: 43px;
+    font-weight: bold;
+    margin: 0;
+}
+#header p {
+    font-size: 20px;
+    line-height: 26px;
+    padding-top: 43px;
+    padding-bottom: 5px;
+}
+#dashboard {
+    width: calc(100% - 40px);
+    height: auto;
+    padding: 20px;
+}
+#table_info, #table_stat {
+    float: left;
+    margin-left: 30px;
+    margin-right: 30px;
+    height: auto;
+    min-height: 20px;
+}
+#table_info {
+    width: calc((100% / 3) - 62px);
+    background-color: #fff;
+    padding-top: 0;
+    margin-top: 40px;
+    padding-bottom: 40px;
+}
+#table_stat {
+    width: calc(((100% / 3) * 2) - 60px);
+}
+.dashboard h2 {
+    width: calc(100% - 40px);
+    height: auto;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: "mywebfont";
+    line-height: 30px;
+    padding: 20px;
+    text-transform: uppercase;
+    color: #fff;
+}
+#table_info p {
+    margin-top: 45px;
+    width: calc(100% - 40px);
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-bottom: 0;
+    font-size: 18px;
+    font-family: "mywebfont";
+}
+#table_info span {
+    color: #cf9c49;
+    font-weight: bold;
+}
+#cellule_stat {
+    width: 100%;
+    height: auto;
+    margin-top: 50px;
+}
+.cellule_stat {
+    float: left;
+    margin: 10px;
+    margin-left: 14px;
+    margin-right: 14px;
+    width: calc((100% / 4) - 20px);
+    height: 198.33px;
+    background-color: #fff;
+}
+#cellule_stat_first {
+    margin-left: 0;
+    margin-right: 11.5px;
+}
+#cellule_stat_last {
+    margin-right: 0;
+    margin-left: 11.5px;
+}
+.cellule_stat p:first-child {
+    text-align: center;
+    font-weight: bold;
+    font-family: "mywebfont";
+    font-size: 20px;
+    line-height: 20px;
+    padding-top: 30px;
+    padding-bottom: 20px;
+}
+.cellule_stat p:last-child {
+    text-align: center;
+    font-weight: bold;
+    font-family: "mywebfont";
+    font-size: 50px;
+    line-height: 50px;
+    text-transform: uppercase;
+}
+.cellule_stat img {
+    height: 108.3px;
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%}
+#title {
+    width: 100%;
+    height: 108px;
+    padding-top: 10px;
+    line-height: 25px;
+    vertical-align: middle;
+    font-size: 33px;
+    padding: 0;
+    font-family: "mywebfont";
+    text-transform: uppercase;
+    font-weight: bold;
+}
+#result {
+    width: 100%;
+    height: auto;
+    margin-top: 50px;
+}
+#cell_result {
+    margin-top: 55px;
+    width: 100%;
+    height: auto;
+}
+.cell_result {
+    width: calc((100% / 2) - 30px);
+    height: auto;
+    float: left;
+    background-color: #fff;
+}
+#cell_result_first {
+    margin-right: 30px;
+}
+#cell_result_last {
+    margin-left: 30px;
+}
+.cell_result p {
+    width: 100%;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    font-family: "mywebfont"}
+.cell_result p:first-child {
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 20px;
+}
+.cell_result p:last-child {
+    margin-top: 50px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 50px;
+    line-height: 20px;
+}
+#num_result_on {
+    color: #cf9c49;
+}
+#score_title {
+    clear: left;
+    width: calc(100% - 100px);
+    height: auto;
+    padding: 50px;
+    padding-bottom: 0;
+    padding-top: 0;
+}
+#score_title h2 {
+    width: calc(100% - 40px);
+    height: auto;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: "mywebfont";
+    line-height: 30px;
+    padding: 20px;
+    margin: 0;
+    text-transform: uppercase;
+    color: #fff;
+}
+#block_stat_question {
+    width: calc(100% - 100px);
+    height: auto;
+    margin: 50px;
+    margin-bottom: 0;
+}
+#nav_block_stat_question {
+    width: calc(100% - 40px);
+    margin-left: 20px;
+    margin-right: 20px;
+    height: auto;
+}
+#nav_block_stat_question button {
+    width: 230px;
+    height: 55px;
+    line-height: 55px;
+    vertical-align: middle;
+    text-align: center;
+    font-family: "mywebfont";
+    font-size: 17px;
+    font-weight: bold;
+    text-transform: uppercase;
+    background-image: none;
+    box-shadow: none;
+    text-shadow: none;
+    border-radius: 0;
+    border: none;
+    padding: 0;
+    margin: 0;
+    background-color: #fff;
+    outline: none;
+    border: 1px solid #c8c8c8;
+    border-bottom: none;
+    display: block;
+    float: left;
+}
+#nav_block_stat_question button:nth-last-child(2n) {
+    margin-left: 0;
+    background-color: #fff;
+    opacity: 0.5;
+    padding-left: 0;
+    padding-right: 0;
+}
+#body_block_stat_question {
+    width: calc(100% - 40px);
+    padding: 20px;
+    padding-top: 0;
+    background-color: #F8F8F8;
+}
+#nav_participant {
+    width: 100%;
+    height: auto;
+    text-align: right;
+}
+#form_participant {
+    display: inline-block;
+    height: auto;
+    position: relative;
+}
+#list_participant {
+    display: none;
+    position: absolute;
+    left: 0;
+    z-index: 3;
+    width: 228px;
+    height: auto;
+    background-color: #fff;
+    border: 1px solid #c6c6c6;
+    border-top: none;
+}
+#list_participant span {
+    display: block;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    border-bottom: 1px solid #c6c6c6;
+    width: calc(100% - 20px);
+    height: auto;
+    margin-bottom: 5px;
+    text-align: left;
+    cursor: pointer;
+    font-family: "mywebfont";
+}
+
+#list_participant span:last-child {
+    margin-bottom: 0px;
+    border-bottom: none;
+}
+#name_participant {
+    width: 230px;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 0;
+    border-right: none;
+    display: block;
+    float: left;
+    font-family: "mywebfont";
+}
+#name_participant:focus {
+    border: 1px solid #c8c8c8;
+    box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.6), inset 0 0 3px 0 rgba(0, 0, 0, 0.1);
+}
+#participant_search {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    margin: 0;
+    background-image: none;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    display: block;
+    float: left;
+    outline: none;
+}
+#block_participant {
+    display: none;
+}
+.user_grade_cell {
+    width: 250px;
+    height: auto;
+    margin: 25px;
+    border: 2px solid #c6c6c6;
+    float: left;
+    text-align: center;
+    margin-left: 23px;
+    margin-right: 23px;
+}
+.user_grade_cell h4 {
+    width: 100%;
+    height: auto;
+    font-size: 20px;
+    font-family: 'Arial';
+    font-weight: bold;
+    text-align: center;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+.user_grade_cell p {
+    width: 100%;
+    height: auto;
+    font-size: 16px;
+    font-family: 'Arial';
+    font-weight: bold;
+    text-align: center;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+.user_grade_cell img {
+    width: 153px;
+    height: auto;
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+#content_participant {
+    margin-top: 20px;
+    height: auto;
+    width: 100%}
+.chapter_box, .section_box, .vertical_box {
+    width: 100%;
+    height: auto;
+}
+.section_box, .vertical_box {
+    width: calc(100% - 10px);
+    margin-left: 10px;
+}
+.chapter_box h3, .section_box h4, .vertical_box h5 {
+    width: calc(100% - 20px);
+    position: relative;
+    line-height: 18px;
+    font-size: 18px;
+    margin-left: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 5px;
+    text-shadow: none;
+    font-family: "mywebfont";
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    background-color: #fff;
+}
+.chapter_box h3 {
+    padding-left: 15px;
+    padding-right: 15px;
+    margin: 0;
+    font-size: 17px;
+    line-height: 22px;
+    font-weight: bold;
+    text-transform: uppercase;
+    width: calc(100% - 80px);
+    height: auto;
+    margin-left: 25px;
+    margin-right: 25px;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+}
+.chapter_box {
+    width: calc(100% - 2px);
+    border: 1px solid  #c8c8c8;
+    background-color: #fff;
+    margin-bottom: 15px;
+}
+.section_box, .vertical_box {
+    display: none;
+}
+.vertical_name {
+    font-family: "mywebfont";
+    font-size: 18px;
+    text-align: center;
+    line-height: 18px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    color: #fff;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+.section_box .user_grade_cell h6 {
+    width: 100%;
+    height: auto;
+    font-size: 20px;
+    font-family: 'Arial';
+    font-weight: bold;
+    text-align: center;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    background-color: #fff;
+}
+#block_average {
+    position: relative;
+}
+#voile {
+    position: absolute;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+#loader {
+    position: absolute;
+    z-index: 101;
+    top: 50%;
+    left: 50%;
+    width: 100px;
+    height: 100px;
+    margin-top: -50px;
+    margin-left: -50px;
+}
+#inside_user_content {
+    display: none;
+}
+.chart_fail, .chart_success {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    font-size: 18px;
+    line-height: 18px;
+    font-weight: bold;
+    font-family: "mywebfont";
+    text-transform: uppercase;
+}
+.chart_success {
+    color: #96C100;
+    float: left;
+}
+.chart_fail {
+    color: #CB5744;
+    float: right;
+}
+#nav_block_stat_question {
+    width: calc(100% - 40px);
+}
+.section_box {
+    width: calc(100% - 80px);
+    margin-left: auto;
+    margin-right: auto;
+}
+.section_box h4 {
+    width: calc(100% - 20px);
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: 20px;
+    font-size: 16px;
+    border-bottom: 2px solid transparent;
+}
+.section_box .user_grade_cell h6 {
+    font-size: 18px;
+}
+.problem_box {
+    display: none;
+}
+.bart_chat {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    height: 30px;
+    background-color: #CB5744;
+    position: relative;
+}
+.success_chart_bart {
+    background-color: #96C100;
+    height: 30px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.score_line {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    height: auto;
+}
+.user_grade_cell {
+    margin-left: 13px;
+    margin-right: 13px;
+}
+.vertical_name {
+    font-size: 15px;
+}
+
+.problem_box li {
+    position: relative;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.problem_box li .unrated_unit_span {
+    color: #cb5744;
+    font-style: italic;
+}
+.problem_box ul {
+    list-style: none;
+}
+.problem_box li .puce_li {
+    position: absolute;
+    top: 50%;
+    left: -16px;
+    height: 6px;
+    width: 6px;
+    border-radius: 50%;
+    margin-top: -3px;
+}
+#form_participant {
+    display: block;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+#nav_participant {
+    background-color: #fff;
+    width: calc(100%);
+    padding-left: 40px;
+    border: 1px solid #C8C8C8;
+}
+#name_participant {
+    width: 330px;
+    height: 45px;
+    line-height: 45px;
+}
+#participant_search {
+    width: 45px;
+    height: 45px;
+}
+.cellule_stat {
+    width: 198px;
+}
+#table_info span {
+    display: inline-block;
+}
+@media (max-width: 1440px) {
+    #contenair {
+    width: 100%}
+}@media (max-width: 1200px) {
+    .dashboard h2, .cellule_stat p: first-child {
+    font-size: 18px;
+}
+#table_info p {
+    font-size: 14px;
+}
+#title {
+    font-size: 25px;
+}
+}.arrow-bottom {
+    width: 0px;
+    height: 0px;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    display: block;
+    margin-top: 7px;
+}
+.arrow-right {
+    width: 0px;
+    height: 0px;
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    border-left: 11px solid black;
+    display: block;
+    margin-top: 5px;
+}
+.arrow_course_about {
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    right: 15px;
+    margin-top: -5.5px;
+}
+#table_participant {
+    width: calc(100% - 40px);
+    padding-right: 40px;
+    padding-bottom: 40px;
+}
+#table_participant table {
+    width: 80%;
+    margin-right: 20%;
+    border-collapse: collapse;
+}
+#table_participant th {
+    font-weight: bold;
+    background-color: #fff;
+}
+#table_participant td, #table_participant th {
+    padding: 6px;
+    text-align: left;
+    font-family: "mywebfont";
+    padding: 10px;
+}
+#table_participant td {
+    background-color: #F5F5F5;
+}
+#table_participant #grade {
+    color: #C64D38;
+    font-weight: bold;
+}
+#list_participant {
+    top: none;
+}
+@media (max-width: 1437px) {
+    .cellule_stat: nth-child(2n+1), #cellule_stat_first {
+    margin-right: calc((100% - 396px) / 2);
+    margin-left: 0;
+}
+.cellule_stat:nth-child(2n), #cellule_stat_last {
+    margin-left: calc((100% - 396px) / 2);
+    margin-right: 0;
+}
+}@media (max-width: 1280px) {
+    .cell_result {
+    width: 198px;
+    height: 120px;
+}
+.cell_result p {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 20px;
+}
+.cell_result p:last-child {
+    line-height: 50px;
+    margin-top: 0;
+}
+#cell_result_first, #cell_result_last {
+    margin-bottom: 25px;
+}
+#cell_result_first {
+    margin-right: calc((100% - 396px) / 2);
+    margin-left: 0;
+}
+#cell_result_last {
+    margin-left: calc((100% - 396px) / 2);
+    margin-right: 0;
+}
+}@media (max-width: 729px) {
+    #table_info, #table_stat {
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%}
+#table_info {
+    background-color: transparent;
+}
+#table_info p:nth-child(2n) {
+    margin-right: 5%;
+    margin-left: 0;
+}
+#table_info p:nth-child(2n+1) {
+    margin-left: 5%;
+    margin-right: 0;
+}
+#table_info p {
+    width: calc(45% - 40px);
+    float: left;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    background-color: #fff;
+}
+}@media (max-width: 568px) {
+    #name_participant {
+    width: 70%}
+}@media (max-width: 518px) {
+    #block_stat_question {
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%}
+}@media (max-width: 495px) {
+    #table_info p {
+    width: 50%;
+    float: none;
+    margin-top: 15px;
+}
+#table_info p:nth-child(2n) {
+    margin-right: auto;
+    margin-left: auto;
+}
+#table_info p:nth-child(2n+1) {
+    margin-left: auto;
+    margin-right: auto;
+}
+.cellule_stat {
+    float: none;
+    margin-top: 15px;
+}
+.cellule_stat:nth-child(2n+1), #cellule_stat_first {
+    margin-right: auto;
+    margin-left: auto;
+}
+.cellule_stat:nth-child(2n), #cellule_stat_last {
+    margin-left: auto;
+    margin-right: auto;
+}
+#cell_result_first, #cell_result_last {
+    margin-bottom: 0;
+    margin-top: 15px;
+    float: none;
+}
+#cell_result_first {
+    margin-left: auto;
+    margin-right: auto;
+}
+#cell_result_last {
+    margin-left: auto;
+    margin-right: auto;
+}
+}@media (max-width: 404px) {
+    .user_grade_cell {
+    clear: left;
+    width: 94%;
+    margin-left: 3%;
+    margin-right: 3%}
+}#participant_search {
+    background-image: url("/static/images/search.png");
+    background-position: center;
+    background-repeat: no-repeat;
+}
+#loader {
+    background-image: url("/static/images/loading.gif");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+#voile {
+    position: fixed !important;
+}
+#title {
+    font-size: 15px !important;
+}
+#fil_ariane a, #fil_ariane a:hover, #fil_ariane a:focus, #fil_ariane a:visited {
+    text-shadow: none;
+    text-decoration: none;
+}
+#header {
+    background-color: transparent;
+    text-align: left;
+    padding: 20px;
+    padding-left: 50px;
+    padding-right: 50px;
+    width: calc(100% - 100px);
+}
+#title h1 {
+    font-size: 23px !important;
+    line-height: 23px;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: "mywebfont";
+    text-align: left;
+}
+#cartouche {
+    width: calc(100% - 2px);
+    border: 1px solid #b2b2b2;
+    height: auto;
+    min-height: 151.5px;
+}
+#course_img {
+    width: 224px;
+    height: 151px;
+    border-right: 1px solid #b2b2b2;
+    position: relative;
+}
+#course_img img {
+    width: 100%;
+    height: 100%}
+#categorie_info {
+    position: absolute;
+    height: 25px;
+    line-height: 25px;
+    vertical-align: middle;
+    text-align: center;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+    color: #fff;
+}
+#cartouche {
+    width: calc(100% - 2px);
+    border: 1px solid #b2b2b2;
+    height: auto;
+    min-height: 151.5px;
+    background-color: #fff;
+}
+#course_img {
+    width: 224px;
+    height: 151px;
+    border-right: 1px solid #b2b2b2;
+    position: relative;
+}
+#course_img img {
+    width: 100%;
+    height: 100%}
+#categorie_info {
+    position: absolute;
+    height: 25px;
+    line-height: 25px;
+    vertical-align: middle;
+    text-align: center;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+    color: #fff;
+}
+.svg-class {
+    height: 20px;
+    width: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: block;
+    float: left;
+    margin-left: 5px;
+}
+.svg-class path {
+    fill: #dc9e29;
+    color: #dc9e29;
+}
+#course_img, #cartouche_info {
+    float: left;
+}
+#cartouche_info {
+    height: auto;
+    min-height: 151.5px;
+    position: relative;
+    width: auto;
+}
+#cartouche_info h3 {
+    font-weight: bold;
+    padding: 10px;
+    text-transform: uppercase;
+    font-size: 30px;
+}
+#header p {
+    font-size: 15px;
+    padding-left: 10px;
+    width: calc(100% - 10px);
+}
+#cartouche_info p {
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+#cartouche_info p span {
+    font-weight: bold;
+}
+.duration_course {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    line-height: 40px;
+    vertical-align: middle;
+}
+.duration_course span {
+    margin-left: 5px;
+    color: #cf9c49;
+}
+#title {
+    height: auto;
+}
+#Calque_1 {
+    fill: red;
+}
+#nav_participant {
+    position: relative;
+}
+#generate_grades, #generate_grades:hover, #generate_grades:focus, #generate_grades:visited {
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    text-shadow: none;
+    position: absolute;
+    top: 55px;
+    text-decoration: underline;
+    right: 20px;
+    text-transform: lowercase;
+}
+@media (max-width: 834px) {
+    #generate_grades, #generate_grades: hover, #generate_grades:focus, #generate_grades:visited {
+    top: 5px;
+    right: 0;
+    left: 25px;
+}
+}#generate_xls, #generate_xls:hover, #generate_xls:focus, #generate_xls:visited {
+    color: #fff;
+    border: none;
+    background-color: #cf9c49;
+    border-radius: 0;
+    text-shadow: none;
+    font-size: 18px;
+}
+
+#nav_block_stat_question {
+  position: relative;
+}
+#pop_up_grades {
+  position: absolute;
+  display: none;
+  right: 0;
+  top: -6px;
+  height: auto;
+  line-height: 20px;
+  z-index: 10;
+  width: calc(100% - 500px);
+  padding-left: 10px;
+  padding-right: 10px;
+  display: none;
+  margin-left: 8px;
+  margin-right: 8px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  border: 2px solid #39B2B6;
+}
+@media(max-width:1206px) {
+  #pop_up_grades {
+    width: calc(100% - 40px);
+    top: -57px;
+  }
+}
+@media(max-width: 730px) {
+   #pop_up_grades {
+    top: -130px;
+  }
+  #nav_block_stat_question {
+      width: calc(100% - 40px);
+      margin-top: 130px;
+  }
+}
+.pop_up_show {
+  display: block !important;
+}
+
+#generate_grades_task,#generate_grades_task:visited,#generate_grades_task:hover {
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  text-shadow: none;
+  color: #00A0E3;
+  position: absolute;
+  top: 55px;
+  text-decoration: underline;
+  right: 20px;
+  text-transform: lowercase;
+  background-color: transparent !important;
+}
+
+#list_participant {width: auto !important;}
+#categorie_info {
+  position: absolute;
+  bottom:0;
+  left: 0;
+  width: 100%;
+  text-align: right;
+  z-index: 20;
+}
+#course_img {
+  position: relative;
+}
+#cartouche_info h3 {
+  font-size: 22px;
+}
+.img_regulatory, .img_fundamental, .img_oursolutions, .img_salesapproach {
+ position: absolute;
+ bottom: 0;
+ right: 0;
+ width: 70%;
+ height: 120px;
+ z-index: 2;
+ background-position: center;
+ background-repeat: no-repeat;
+ background-size: cover;
+}
+.img_fundamental {
+ background-image: url('/static/images/fondamentaux.png');
+}
+.img_fundamentals {
+ background-image: url('/static/images/fondamentaux.png');
+}
+.img_oursolutions {
+ background-image: url('/static/images/nos_solutions.png');
+}
+.img_salesapproach {
+ background-image: url('/static/images/zdemarche_comm.png');
+}
+.img_regulatory {
+ background-image: url('/static/images/reglementaire.png');
+}
+.cell_result {
+ width: calc((100%/2) - 32px);
+}
+@media(max-width:1266px){
+ .cell_result{
+  width: 90%;
+  margin-left: 5% !important;
+  margin-right: 5% !important;
+  float: none;
+ }
+}
