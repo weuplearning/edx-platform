@@ -65,6 +65,7 @@ from courseware.courses import (
 )
 from openedx.core.djangoapps.models.course_details import CourseDetails
 from django.contrib.auth.models import User, AnonymousUser
+from lms.djangoapps.grades.course_grade_factory import CourseGradeFactory
 
 log = logging.getLogger("edx.student")
 
@@ -839,13 +840,11 @@ def student_dashboard(request):
         course_id = enrollment.course_overview.id
         user_id = request.user.id
         course_tma = get_course_by_id(enrollment.course_id)
-        try:
-            course_grade_factory = CourseGradeFactory().create(request.user, course_tma)
-            passed = course_grade_factory.passed
-            percent = course_grade_factory.percent
-        except:
-            passed = False
-            percent = 0
+
+        course_grade_factory = CourseGradeFactory().read(request.user, course_tma)
+        passed = course_grade_factory.passed
+        percent = course_grade_factory.percent
+
         ##MODIFcourse_progression = get_overall_progress(user_id,course_id)
         from course_progress.helpers import get_overall_progress
         #from lms.djangoapps.tma_apps.completion.completion import get_course_completion
@@ -865,7 +864,6 @@ def student_dashboard(request):
         #log.info(request.user.username)
         #log.info(subsection_key_list[0])
         #status = get_overall_progress(request.user.username,request,course_id,course_usage_key)
-   
 
         total_blocks=0
         total_blockstma=0
@@ -876,7 +874,6 @@ def student_dashboard(request):
         quiz_total_components=0
         quiz_completed_components=0
         quiz_completion_rate=0
-        
         course_sections = get_course_outline_block_tree(request,str(course_id)).get('children')
         for section in course_sections :
           total_blockstma+=1
