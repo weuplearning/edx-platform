@@ -876,8 +876,10 @@ body.view-in-course .container {
     background-color: #0064AE;
 }
 .not_finished .picto_sf {
-  background-color: transparent;
-  border-radius: 0%;
+}
+.xmodule_display.xmodule_SequenceModule .sequence-nav-button:hover, .xmodule_display.xmodule_SequenceModule .sequence-nav-button:active, .xmodule_display.xmodule_SequenceModule .sequence-nav-button.active, .xmodule_display.xmodule_SequenceModule .sequence-nav button:hover, .xmodule_display.xmodule_SequenceModule .sequence-nav button:active, .xmodule_display.xmodule_SequenceModule .sequence-nav button.active {
+padding-top 2px !important;
+
 }
 .success_quiz_atp .picto_sf {
   background-image: url('/media/checked.png');
@@ -889,6 +891,13 @@ body.view-in-course .container {
   background-color: transparent!important;
   border-radius: 0%;
 }
+.xmodule_display.xmodule_ProblemBlock div.problem button:hover{
+     height : 30px!important;
+}
+.xmodule_display.xmodule_ProblemBlock div.problem button{ 
+     height : 30px!important;
+}
+
 #module-over{
   color:#c6c6c6;
   font-style:italic;

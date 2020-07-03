@@ -72,14 +72,14 @@ $( document ).ready(function() {
 
 });
 function scroll_to_ques(question_id){
-    console.log('scroll to question '+question_id);
     $(document).scrollTo($('#'+question_id).offset().top-80+'px',500);
-    console.log('scroll to question');
+    console.log($('#'+question_id).offset().top)
 }
 // on next click
 $('.question_next').live("click",function () {
   next_id=$(this).parents('.vert').next('.vert').find('.problems-wrapper').attr('id');
   scroll_to_ques(next_id);
+  console.log(next_id)
   $('#'+next_id).find('.hd.hd-2.problem-header').trigger( "click" );
 });
 // on question title click
@@ -344,8 +344,13 @@ $(document).ready(function() {
   });
   //or all questions are answered
   if(all_questions_answered()){
+    console.log("all")
+    console.log($('#result-content').offset())
+    $(document).scrollTo($('#result-content').offset().top);
     enable_score_panel(url_last_question);
     result_enabled=true;
+  }else{
+   scroll_to_ques($('.last_finished').last().attr('data-problem-id'))
   }
 });
 
