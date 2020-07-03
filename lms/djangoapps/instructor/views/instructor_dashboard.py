@@ -13,7 +13,7 @@ import pytz
 import six
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.http import Http404, HttpResponseServerError
+from django.http import Http404, HttpResponseServerError, HttpResponse
 from django.urls import reverse
 from django.utils.html import escape
 from django.utils.translation import ugettext as _
@@ -67,14 +67,12 @@ from opaque_keys.edx.locator import CourseLocator
 from .tools import get_units_with_due_date, title_or_url
 from .. import permissions
 
-#GEOFFREY
-#from course_progress.helpers import get_overall_progress
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
 from courseware.courses import get_course_by_id
 from django.db import connection,connections
 from opaque_keys.edx.locations import SlashSeparatedCourseKey
 from lms.djangoapps.grades.course_grade_factory import CourseGradeFactory
-#GEOFFREY 2
+
 from lms.djangoapps.courseware.models import StudentModule
 from course_api.blocks.api import get_blocks
 from course_api.blocks.views import BlocksInCourseView,BlocksView
@@ -84,12 +82,6 @@ from django.db.models import Q
 from lms.djangoapps.tma_grade_tracking.models import dashboardStats
 from xlwt import *
 import os
-#GEOFFREY
-
-#AGATHE
-#from course_progress.helpers import get_overall_progress
-#from course_progress.models import StudentCourseProgress
-
 
 log = logging.getLogger(__name__)
 from pprint import pformat
@@ -884,8 +876,6 @@ def stat_dashboard(request, course_id):
     course_key_modulestore = CourseKey.from_string(course_id)
     #course_module
     course_module = modulestore().get_course(course_key, depth=0)
-    #course cutoff
-    course_cutoff = course_module.grade_cutoffs['Pass']
     #GET COURSE
     course = get_course_by_id(course_key)
     #overview
@@ -928,32 +918,30 @@ def stat_dashboard(request, course_id):
         user_completed_quiz_list.append(user.username)
 
     # connect mongodb return values:
-    mongo_persist = dashboardStats()
-    collection = mongo_persist.connect()
-    find_mongo_persist_course = mongo_persist.find_by_course_id(collection,course_id)
+    #mongo_persist = dashboardStats()
+    #collection = mongo_persist.connect()
+    #find_mongo_persist_course = mongo_persist.find_by_course_id(collection,course_id)
     for n in row:
         user_id = n.id
         users = User.objects.get(pk=user_id)
 
-    try:
-        users_info = find_mongo_persist_course['users_info']
-        for key, value in users_info.iteritems():
-            #log.info("user_info key:"+pformat(key)+" value"+pformat(value))
-            _passed = value['passed']
-            _percent = value['percent']
+    if True:
+        all_enrolled_users = CourseEnrollment.objects.all().filter(course_id=course_key)
+        for _ue in all_enrolled_users:
+            current_user = User.objects.get(pk=_ue.user_id)
+            current_grade = CourseGradeFactory().read(current_user,course)
+            _passed = current_grade.passed
+            _percent = current_grade.percent
             user_course_started = user_course_started + 1
             # Average grade of all users who completed the quiz
-            _username = value['username']
+            _username = current_user.username
             if _username in user_completed_quiz_list:
                 course_average_grade_global = course_average_grade_global + (_percent * 100)
             # Average grade of users who passed the quiz
             if _passed:
                 course_average_grade = course_average_grade + (_percent * 100)
                 user_finished = user_finished + 1
-                if _percent >= course_cutoff:
-                    num_passed = num_passed + 1
-    except:
-        pass
+                num_passed = num_passed + 1
 
     #return context
     if user_finished != 0:
@@ -1333,9 +1321,9 @@ def download_xls(request,filename):
 def download_xls_files(request,filename):
     log.info('downloading xls file')
     full_path = '/edx/var/edxapp/'+filename
-    with open(full_path, "r") as excel:
+    with open(full_path, "r",encoding='ISO-8859-1') as excel:
         _content = excel.read()
-    response = HttpResponse(_content, content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response = HttpResponse(_content, content_type="application/vnd.ms-excel")
     response['Content-Disposition'] = "attachment; filename="+filename
     os.remove(full_path)
     return response
