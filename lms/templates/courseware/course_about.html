@@ -72,7 +72,7 @@ else:
 
 <%
 try:
-    course_factory = CourseGradeFactory().create(request.user, course)
+    course_factory = CourseGradeFactory().read(request.user, course)
     pass_atp = course_factory.passed
     percent_atp = course_factory.percent
 except:
