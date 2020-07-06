@@ -113,7 +113,6 @@ from openedx.core.djangoapps.site_configuration.models import SiteConfiguration
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 from django.template.loader import render_to_string
 
-#GEOFFREY TMA ATP
 import sys
 from django.core.mail import send_mail
 from django.utils.timezone import localtime, now
@@ -121,7 +120,10 @@ from importlib import reload
 from pprint import pformat
 from django.views.decorators.csrf import csrf_exempt
 from lms.djangoapps.instructor.enrollment import enroll_email,get_email_params
-#for verbose request
+
+# Email imports
+import html2text
+import html
 
 log = logging.getLogger(__name__)
 
@@ -1364,12 +1366,8 @@ def session_manager_handler(emails,org,course,specific_msg=None):
         redirect_language='en'
     # Override msg if specific msg was provided
     if specific_msg:
-        log.info("specific msg before html unescape: "+pformat(specific_msg))
-        msg = HTMLParser.HTMLParser().unescape(specific_msg)
-        log.info("specific msg after html unescape: "+pformat(msg))
+        msg = html.unescape(specific_msg)
         msg = html2text.html2text(msg)
-        log.info("specific msg after html2text: "+pformat(msg))
-    log.info("session_manager_handler: course display name {}".format(course.display_name))
     grant_type = 'client_credentials'
     sem_org = org.lower()
     credentials = settings.FEATURES.get('SEM_CREDENTIALS')
