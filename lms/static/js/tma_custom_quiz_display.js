@@ -107,25 +107,11 @@ function get_all_questions(){
 function reset_all_problems() {
   var i=0;
   problem_xblock_list=get_all_questions();
-
+  console.log(user)
   problem_xblock_list.forEach(function(xblock_id) {
-   $.ajax({
-    url:'/courses/'+course_id+'/xblock/'+xblock_id+'/handler/xmodule_handler/problem_reset',
-    type:'POST',
-    dataType:'json',
-    data: {
-        'id': xblock_id
-    },
-    success: function(result){
-      i+=1;
-      if(i>=problem_xblock_list.length){
-        window.location.reload(true);
-      }
-    },error : function(error){
-      console.log(error)
-  }
-   });
-  });
+    i++;
+    reset_problem(xblock_id,i,problem_xblock_list.length)
+  })
 };
 
 
@@ -234,7 +220,8 @@ function get_completion_status_tma(username,course_key,subsection_id){
       type:'GET',
       dataType:'json',
       success:function(data){
-
+           console.log('completion state')
+           console.log(data)
       },
       error: function(error){
         console.log(error)
@@ -248,6 +235,7 @@ function get_completion_status_tma_for_quiz(username,course_key,subsection_id){
       type:'GET',
       dataType:'json',
       success:function(data){
+        console.log('completin state for subsection')
         console.log(data)
       },
       error: function(error){
@@ -261,6 +249,7 @@ function returnScore() {
     type:'GET',
     dataType:'json',
     success:function(data) {
+      console.log('Entering courseware certif')
       console.log(data)
       var passed = data.passed;
       var is_graded = data.is_graded;
@@ -376,3 +365,40 @@ $(document).ajaxSuccess(function(event, xhr, settings) {
     }
   }
 });
+
+    function reset_problem(location,count,problem_lengt) {
+        var pdata = {
+            problem_to_reset: location,
+            unique_student_identifier: user,
+            delete_module: true
+        };
+        $.ajax({
+            type: 'POST',
+            url: getURL("reset_student_attempts"),
+            data: pdata,
+            success: function(data) {
+               console.log('reset')
+                    var countt = count +1;
+                    console.log(countt)
+                    console.log(problem_lengt)
+                    if(countt>=problem_lengt){
+                        window.location.reload(true);
+                     }
+            },
+            error: function(request, status, error) {
+ 	 	console.log(erro)
+            },
+            dataType: 'json'
+        });
+    };
+
+
+    var getURL = function(action) {
+        var pathname = window.location.pathname;
+        var index = pathname.indexOf('/courseware');
+        if (index <= 0) {
+            index = pathname.indexOf('/', '/courses/'.length);
+        }
+        return pathname.substr(0, index) + '/instructor/api/' + action;
+    };
+
