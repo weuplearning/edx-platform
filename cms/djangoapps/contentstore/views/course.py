@@ -2585,11 +2585,11 @@ def manage_handler(request, course_key_string):
         overview = CourseOverview.get_from_id(course_key)
         details = CourseDetails.fetch(course_key)
         course = get_course_by_id(course_key)
-    _ensure_user_status = list(CourseEnrollment.objects.raw('select a.id from student_courseenrollment a where not exists (select * from student_courseaccessrole b where a.user_id=b.user_id and a.course_id=b.course_id) and a.course_id=%s',[course_key_string]))
-    if len(_ensure_user_status) > 0:
-        _enroll_start = True
-    else:
-        _enroll_start = False
+        _ensure_user_status = list(CourseEnrollment.objects.raw('select a.id from student_courseenrollment a where not exists (select * from student_courseaccessrole b where a.user_id=b.user_id and a.course_id=b.course_id) and a.course_id=%s',[course_key_string]))
+        if len(_ensure_user_status) > 0:
+            _enroll_start = True
+        else:
+            _enroll_start = False
         module_store = modulestore().get_course(course_key, depth=0)
         start_date = overview.start.strftime('%Y-%d-%m')
         if overview.end is not None:
@@ -2600,7 +2600,7 @@ def manage_handler(request, course_key_string):
         context = {
             'course':course,
             'course_key':course_key_string,
-	        'enroll_start':_enroll_start,
+            'enroll_start':_enroll_start,
             'overview':overview,
             'details':details,
             'module_store':module_store,
