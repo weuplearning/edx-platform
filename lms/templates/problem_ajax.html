@@ -21,6 +21,11 @@ $('.position_atp').each(function(){
     answered = true;
   }
 })
+$($('.problems-wrapper')[0]).removeClass('not_finished')
+$($('.problems-wrapper')[0]).removeClass('is_overflow')
+
+
+
 console.log(answered)
 </script>
 % if LANGUAGE_CODE == "en":
@@ -28,7 +33,7 @@ console.log(answered)
 setInterval(function(){
   $('.notification-message').each(function(){
     var text = $(this).text();
-    text = text.replace('Incorrect ','Unfortunately, it is not the right answer. ');
+    text = text.replace('Incorrect ','Incorrect ');
     text = text.replace('Correct ','Correct! ');
     $(this).text(text);
   })
@@ -39,8 +44,8 @@ setInterval(function(){
   setInterval(function(){
     $('.notification-message').each(function(){
       var text = $(this).text();
-      text = text.replace('Incorrect ','Ce n\'est pas la bonne reponse. ');
-      text = text.replace('Correct ','Excellente reponse ! ');
+      text = text.replace('Incorrect ','Incorrect ');
+      text = text.replace('Correct ','Correct ');
       $(this).text(text);
     })
   },300);

@@ -1,5 +1,4 @@
 /* DISPLAY ANSWERS ON QUIZ */
-
 $(document).ajaxSuccess(function(event, xhr, settings){
   if( settings.url.endsWith('problem_check') ) {
     var url_check_pb=settings.url;
@@ -45,7 +44,7 @@ function ajax_problem_show(url_show_pb){
 
 
 error_div='<div class="notification error notification-submit" tabindex="-1"><span class="icon fa fa-close" aria-hidden="true"></span><span class="notification-message">'+incorrect_wording+'</span><div class="notification-btn-wrapper"><button type="button" class="btn btn-default btn-small notification-btn review-btn sr">Review</button></div></div>';
-success_div='<div class="notification success notification-submit " tabindex="-1"><span class="icon fa fa-check" aria-hidden="true"></span><span class="notification-message">'+correct_wording+'</span><div class="notification-btn-wrapper"><button type="button" class="btn btn-default btn-small notification-btn review-btn sr">Review</button></div></div>';
+success_div='<div class="notification success notification-submit " tabindex="-1"><span class="icon fa fa-check" aria-hidden="true"></span><span class="notification-message">'+correct_wording+'</span><div class="notification-btn-wrapper"><bu tton type="button" class="btn btn-default btn-small notification-btn review-btn sr">Review</button></div></div>';
 
 /* display answers on questions first attempt quiz */
 $('.problems-wrapper').live('click', function(){
@@ -62,7 +61,7 @@ $('.problems-wrapper').live('click', function(){
     }
   }
 })
-
+$('.tma_tab').eq(-2).children().children('.button-next').click(function(){$(document).scrollTo($('.tma_tab').eq(-1).offset().top-80+'px',500);})
 /* SCROLL TO NEXT QUES IN QUIZ*/
 problem_ids_list=[]
 $( document ).ready(function() {
@@ -72,6 +71,7 @@ $( document ).ready(function() {
 
 });
 function scroll_to_ques(question_id){
+    console.log(question_id)
     console.log($('#'+question_id))
     $(document).scrollTo($('#'+question_id).offset().top-80+'px',500);
     console.log($('#'+question_id).offset().top)
@@ -85,7 +85,6 @@ $('.question_next').live("click",function () {
 });
 
 $('.button-next').live("click",function () {
-  console.log('next')
   next_id=$(this).parent().parent('.tma_tab').next().attr('id');
   console.log($(this))
   scroll_to_ques(next_id);

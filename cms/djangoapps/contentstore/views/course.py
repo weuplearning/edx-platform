@@ -584,6 +584,7 @@ def course_listing(request):
     active_courses, archived_courses = _process_courses_list(courses_iter, in_process_course_actions, split_archived)
     in_process_course_actions = [format_in_process_course_view(uca) for uca in in_process_course_actions]
     log.info(active_courses)
+    from courseware.courses import get_course_by_id
     for course_info in sorted(active_courses, key=lambda s: s['display_name'].lower() if s['display_name'] is not None else ''):
       q={}
       q['course_key_id'] = CourseKey.from_string(course_info['course_key'])
@@ -596,7 +597,7 @@ def course_listing(request):
       q['is_true'] = is_true
       q['courses_overviews'] = CourseOverview.get_from_id(q['course_key_id'])
       q['courses_stats'] = CourseOverview.get_from_id(q['course_key_id'])
-      q['categories'] = q['courses_stats'].categ
+      q['categories'] = get_course_by_id(q['course_key_id']).categ
       q['course_img'] = q['courses_overviews'].image_urls
       q['course_start'] = q['courses_overviews'].start.strftime('%Y-%m-%d')
       q['course_end'] = ''
@@ -621,7 +622,6 @@ def course_listing(request):
           cur_indice = sorted_indices[q['categories'].lower().replace(' ','')]
       else:
           cur_indice = 4
-
       #sort by arrays
       if (not 'AMUNDI-GENERIC-TEMPLATE' in course_info['display_name']) and (current_date < q['course_start_compare']) and is_true and (not q['course_key_id'] in course_scheduled):
            course_scheduled[cur_indice].append(q)
@@ -634,7 +634,7 @@ def course_listing(request):
            _active_camp = True
       elif ('AMUNDI-GENERIC-TEMPLATE' in course_info['display_name']) and (not q['course_key_id'] in amundi_template):
            amundi_template[cur_indice].append(q)
-
+      log.info(course_scheduled)
     log.info(_get_course_creator_status(user))
     return render_to_response(u'index.html', {
 

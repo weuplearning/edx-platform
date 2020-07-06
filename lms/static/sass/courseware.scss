@@ -24,6 +24,11 @@ body.view-in-course .course-wrapper {
   float: left;
   border: none;
 }
+
+.submit-attempt-container button:not(:disabled), .submit-attempt-container button:not(:disabled):hover {
+    background-color: #0C1C49!important;
+    border-color: #0C1C49!important;
+}
 .course-wrapper .course-content {
   padding: 40px;
   margin-left: 75px;
@@ -35,6 +40,43 @@ body.view-in-course .course-wrapper {
   display: block;
   float: left;
   position: relative;
+}
+.submit-attempt-container{
+  position : absolute;
+  left : 10px;
+
+}
+.course-wrapper .course-content .vert-mod .vert, .course-wrapper .courseware-results-wrapper .vert-mod .vert{
+   border:none!important
+}
+
+
+
+.finished h3.problem-header {
+    border : none!important;
+}
+.submit-attempt-container .submit, .xmodule_display.xmodule_CapaModule div.problem .action .submit-attempt-container .submit:hover, .xmodule_display.xmodule_CapaModule div.problem .action .submit-attempt-container .submit:focus {
+    padding-top: 2px!important;
+    padding-bottom: 2px!important;
+    border-radius: 11px!important;
+    color: #fff!important;
+    background-color: gray!important;
+    border-color: gray !important;
+}
+
+.seq_content_next a {
+    font-weight: 400;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 11px;
+    width : auto!important;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    line-height: 18.4px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 /*
 .wrapper-course-modes,.course-wrapper .course-content .path,.xmodule_display.xmodule_SequenceModule .sequence-nav,.wrap-instructor-info.studio-view,.course-content .bookmark-button-wrapper {
