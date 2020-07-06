@@ -72,6 +72,7 @@ $( document ).ready(function() {
 
 });
 function scroll_to_ques(question_id){
+    console.log($('#'+question_id))
     $(document).scrollTo($('#'+question_id).offset().top-80+'px',500);
     console.log($('#'+question_id).offset().top)
 }
@@ -82,6 +83,16 @@ $('.question_next').live("click",function () {
   console.log(next_id)
   $('#'+next_id).find('.hd.hd-2.problem-header').trigger( "click" );
 });
+
+$('.button-next').live("click",function () {
+  console.log('next')
+  next_id=$(this).parent().parent('.tma_tab').next().attr('id');
+  console.log($(this))
+  scroll_to_ques(next_id);
+  console.log(next_id)
+  $('#'+next_id).find('.hd.hd-2.problem-header').trigger( "click" );
+});
+
 // on question title click
 $('.hd.hd-2.problem-header').live("click", function(){
   question_id="problem_"+$(this).attr('id').replace('-problem-title','');
