@@ -177,13 +177,13 @@ class course_grade():
         header.append('total grade (in %)')
 
         filename = '{}_grades_reports.xls'.format(self.course_id).replace('+','_')
-
-        wb = Workbook(encoding='utf-8')
-        sheet = wb.add_sheet('Users')
-        log.info(sheet)
+        from openpyxl import Workbook
+        ws = Workbook()
+        sheet = ws.active
+        
         for i, head in enumerate(header):
-            sheet.write(0,i,head)
-
+            i = i + 1
+            sheet.cell(row=1,column=i).value = head
         j = 0
 
         for i in range(len(course_enrollement)):
@@ -233,16 +233,16 @@ class course_grade():
 
             _user_blocks = self._user(user_id)
 
-            sheet.write(j, 0, user_id)
-            sheet.write(j, 1, email)
-            sheet.write(j, 2, first_name)
-            sheet.write(j, 3, last_name)
-            sheet.write(j, 4, _lvl[0])
-            sheet.write(j, 5, _lvl[1])
-            sheet.write(j, 6, _lvl[2])
-            sheet.write(j, 7, _lvl[3])
-            sheet.write(j, 8, progress_status)
-            k = 9
+            sheet.cell(row=j, column=1).value = user_id
+            sheet.cell(row=j, column=2).value = email
+            sheet.cell(row=j, column=3).value = first_name
+            sheet.cell(row=j, column=4).value = last_name
+            sheet.cell(row=j, column=5).value = _lvl[0]
+            sheet.cell(row=j, column=6).value = _lvl[1]
+            sheet.cell(row=j, column=7).value = _lvl[2]
+            sheet.cell(row=j, column=8).value = _lvl[3]
+            sheet.cell(row=j, column=9).value = progress_status 
+            k = 10
 
             for val in title:
                 _grade = 0
@@ -252,14 +252,14 @@ class course_grade():
                         _grade = block.get('earned')
 
 
-                sheet.write(j, k, _grade)
+                sheet.cell(row=j, column=k).value = _grade
 
                 k = k + 1
 
-            sheet.write(j, k, final_grade)
+            sheet.cell(row=j, column=k).value =final_grade
 
+        ws.save(filename)
         output = BytesIO()
-        wb.save(output)
         _files_values = output.getvalue()
 
         log.warning("End Task grade reports course_id : "+str(self.course_id))

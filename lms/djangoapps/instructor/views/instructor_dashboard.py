@@ -1,3 +1,4 @@
+
 """
 Instructor Dashboard Views
 """
@@ -80,11 +81,12 @@ from course_api.blocks.views import BlocksInCourseView,BlocksView
 from django.db.models import Q
 
 from lms.djangoapps.tma_grade_tracking.models import dashboardStats
-from xlwt import *
 import os
 
+from openpyxl import Workbook
+
 log = logging.getLogger(__name__)
-from pprint import pformat
+from pprint import pformat, pprint
 
 class InstructorDashboardTab(CourseTab):
     """
@@ -1256,51 +1258,57 @@ def get_course_users(request,course_id):
         except:
             pass
 
-    filename = '{}_registered_users.xls'.format(course_id).replace('+','_')
-    filepath = '/edx/var/edxapp/'+filename
+    filename = 'registered_users.xlsx'
+    filepath = '/edx/var/edxapp/media/'+filename
     HEADERS = (u"Nom",u"Prenom",u"Adresse email",u"Niveau 1",u"Niveau 2",u"Niveau 3",u"Niveau 4",u"Statut")
-    wb = Workbook(encoding='utf-8')
-    sheet = wb.add_sheet('Users')
 
+    wb = Workbook()
+    ws = wb.active
+    wb.template = False
     for i, header in enumerate(HEADERS):
-        sheet.write(0, i, header)
+        i = i+ 1
+        ws.cell(1, i).value = header
+    j = 1
+    ws.title = 'registered'
 
-    j = 0
     for i in range(len(users)):
+
         j=j+1
         try:
-            sheet.write(j, 0, users[i]['Nom'])
+            ws.cell(j, 1).value = users[i]['Nom']
         except:
-            sheet.write(j, 0, ' ')
+            ws.cell(j, 1).value = ' '
         try:
-            sheet.write(j, 1, users[i]['Prenom'])
+            ws.cell(j, 2).value = users[i]['Prenom']
         except:
-            sheet.write(j, 1, ' ')
+            ws.cell(j, 2).value = ' '
         try:
-            sheet.write(j, 2, users[i]['email'])
+            ws.cell(j, 3).value = users[i]['email']
         except:
-            sheet.write(j, 2, ' ')
+            ws.cell(j, 3).value = ' '
         try:
-            sheet.write(j, 3, users[i]['Niveau 1'])
+            ws.cell(j, 4).value = users[i]['Niveau 1']
         except:
-            sheet.write(j, 3, ' ')
+            ws.cell(j, 4).value = ' '
         try:
-            sheet.write(j, 4, users[i]['Niveau 2'])
+            ws.cell(j, 5).value =  users[i]['Niveau 2']
         except:
-            sheet.write(j, 4, ' ')
+            ws.cell(j, 5).value = ' '
         try:
-            sheet.write(j, 5, users[i]['Niveau 3'])
+            ws.cell(j, 6).value =  users[i]['Niveau 3']
         except:
-            sheet.write(j, 5, ' ')
+            ws.cell(j, 6).value = ' '
         try:
-            sheet.write(j, 6, users[i]['Niveau 4'])
+            ws.cell(j, 7).value =  users[i]['Niveau 4']
         except:
-            sheet.write(j, 6, ' ')
+            ws.cell(j, 7).value = ' '
         try:
-            sheet.write(j, 7, users[i]['statut'])
+            ws.cell(j, 8).value =  users[i]['status']
         except:
-            sheet.write(j, 7, ' ')
+            ws.cell(j, 8).value = ' '
 
+
+    log.info(ws.cell(1, 1).value)
     wb.save(filepath)
     context = {
         'filename':filename,
@@ -1310,20 +1318,20 @@ def get_course_users(request,course_id):
     return JsonResponse(context)
 
 def download_xls(request,filename):
-    full_path = '/edx/var/edxapp/'+filename
+    full_path = '/edx/var/edxapp/media/'+filename
     _file = open(full_path,'r')
     _content = _file.read()
-    response = HttpResponse(_content, content_type="application/vnd.ms-excel")
+    response = HttpResponse(_cotent, content_type="application/vnd.ms-excel")
     response['Content-Disposition'] = "attachment; filename="+filename
     os.remove(full_path)
     return response
 
 def download_xls_files(request,filename):
     log.info('downloading xls file')
-    full_path = '/edx/var/edxapp/'+filename
-    with open(full_path, "r",encoding='ISO-8859-1') as excel:
+    full_path = '/edx/var/edxapp/media/'+filename
+    with open(full_path, "r",encoding="ISO-8859-1") as excel:
         _content = excel.read()
-    response = HttpResponse(_content, content_type="application/vnd.ms-excel")
+    response = HttpResponse(filename, content_type="application/vnd.ms-excel")
     response['Content-Disposition'] = "attachment; filename="+filename
     os.remove(full_path)
     return response

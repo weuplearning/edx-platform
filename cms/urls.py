@@ -18,6 +18,8 @@ from cms.djangoapps.contentstore.views.organization import OrganizationListView
 from openedx.core.djangoapps.password_policy import compliance as password_policy_compliance
 from openedx.core.djangoapps.password_policy.forms import PasswordPolicyAwareAdminAuthForm
 from openedx.core.apidocs import api_info
+from cms.djangoapps.microsite_manager.views import create_microsite, update_microsite, admin_microsite, microsite_admin_manager
+
 
 
 django_autodiscover()
@@ -181,6 +183,16 @@ urlpatterns = [
     url(r'^api/tasks/v0/', include('user_tasks.urls')),
     url(r'^accessibility$', contentstore.views.accessibility, name='accessibility'),
 ]
+
+
+# TMA microsite manager
+urlpatterns += (
+    url(r'^create-microsite/<microsite_id>/$',create_microsite, name='create-microsite'),
+    #url(r'^add_microsite_static_content/$','microsite_manager.views.add_microsite_content', name="get_microsite_content"),
+    url(r'^update-microsite/<microsite_id>/$',update_microsite, name='update-microsite'),
+    url(r'^admin-microsite/(?P<microsite_id>[0-9]+)/$', admin_microsite, name='admin-microsite'),
+    url(r'^add_microsite_admin/(?P<microsite_key>[A-Za-z0-9]+)/$', microsite_admin_manager, name='microsite_admin_manager'),
+)
 
 if not settings.DISABLE_DEPRECATED_SIGNIN_URL:
     # TODO: Remove deprecated signin url when traffic proves it is no longer in use
