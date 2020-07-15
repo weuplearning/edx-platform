@@ -991,7 +991,7 @@ def course_about(request, course_id):
         #log.info(request.user.username)
         #log.info(subsection_key_list[0])
         #status = get_overall_progress(request.user.username,request,course_id,course_usage_key)
-   
+
 
         total_blocks=0
         total_blockstma=0
@@ -1002,28 +1002,29 @@ def course_about(request, course_id):
         quiz_total_components=0
         quiz_completed_components=0
         quiz_completion_rate=0
-        
+
         course_sections = get_course_outline_block_tree(request,str(course_id)).get('children')
-        for section in course_sections :
-          total_blockstma+=1
-          section_completion = SubsectionCompletionView().get(request,request.user,str(course_id),section.get('id')).data
-          for subsection in section.get('children') :
-            if subsection.get('children'):
-                for unit in subsection.get('children'):
-                    total_blocks+=1
-                    unit_completion = SubsectionCompletionView().get(request,request.user,str(course_id),unit.get('id')).data
-                    log.info(unit_completion)
-                    if unit_completion.get('completion'):
-                        completed_blocks+=1
-                    if unit.get('graded'):
-                        for component in unit.get('children') :
-                            quiz_total_components+=1
-                            if component.get('complete'):
-                                quiz_completed_components+=1
-                if completed_blocks == total_blocks:
-                    completed_blockstma+=1
-        log.info(completed_blocks)
-        log.info(total_blocks)
+        if course_sections :
+            for section in course_sections :
+              total_blockstma+=1
+              section_completion = SubsectionCompletionView().get(request,request.user,str(course_id),section.get('id')).data
+              for subsection in section.get('children') :
+                if subsection.get('children'):
+                    for unit in subsection.get('children'):
+                        total_blocks+=1
+                        unit_completion = SubsectionCompletionView().get(request,request.user,str(course_id),unit.get('id')).data
+                        log.info(unit_completion)
+                        if unit_completion.get('completion'):
+                            completed_blocks+=1
+                        if unit.get('graded'):
+                            for component in unit.get('children') :
+                                quiz_total_components+=1
+                                if component.get('complete'):
+                                    quiz_completed_components+=1
+                    if completed_blocks == total_blocks:
+                        completed_blockstma+=1
+            log.info(completed_blocks)
+            log.info(total_blocks)
         if quiz_total_components!=0:
             quiz_completion_rate =float(quiz_completed_components)/quiz_total_components
         if total_blocks != 0:
