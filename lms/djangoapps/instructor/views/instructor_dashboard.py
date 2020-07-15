@@ -1264,12 +1264,11 @@ def get_course_users(request,course_id):
 
     wb = Workbook()
     ws = wb.active
-    wb.template = False
+
     for i, header in enumerate(HEADERS):
         i = i+ 1
         ws.cell(1, i).value = header
     j = 1
-    ws.title = 'registered'
 
     for i in range(len(users)):
 
@@ -1308,7 +1307,6 @@ def get_course_users(request,course_id):
             ws.cell(j, 8).value = ' '
 
 
-    log.info(ws.cell(1, 1).value)
     wb.save(filepath)
     context = {
         'filename':filename,
@@ -1319,20 +1317,20 @@ def get_course_users(request,course_id):
 
 def download_xls(request,filename):
     full_path = '/edx/var/edxapp/media/'+filename
-    _file = open(full_path,'r')
+    _file = open(full_path,'rb')
     _content = _file.read()
-    response = HttpResponse(_cotent, content_type="application/vnd.ms-excel")
+    response = HttpResponse(_content, content_type="application/vnd.ms-excel")
     response['Content-Disposition'] = "attachment; filename="+filename
     os.remove(full_path)
     return response
 
 def download_xls_files(request,filename):
-    log.info('downloading xls file')
+    import mimetypes
     full_path = '/edx/var/edxapp/media/'+filename
-    with open(full_path, "r",encoding="ISO-8859-1") as excel:
-        _content = excel.read()
-    response = HttpResponse(filename, content_type="application/vnd.ms-excel")
-    response['Content-Disposition'] = "attachment; filename="+filename
+    fl = open(full_path, 'rb')
+    mime_type, _ = mimetypes.guess_type(full_path)
+    response = HttpResponse(fl, content_type=mime_type)
+    response['Content-Disposition'] = "attachment; filename=%s" % filename
     os.remove(full_path)
     return response
 
@@ -1392,36 +1390,36 @@ def get_course_users_grades(request,course_id):
     filename = '{}_grades_reports.xls'.format(course_id).replace('+','_')
     filepath = '/edx/var/edxapp/'+filename
     HEADERS = q['title']
-    wb = Workbook(encoding='utf-8')
-    sheet = wb.add_sheet('Grades')
+    wb = Workbook()
+    sheet = wb.active
 
     for i, header in enumerate(HEADERS):
-        sheet.write(0, i, header)
+        sheet.cell(1, i).value = header
 
-    j = 0
+    j = 1
     for i in range(len(q['users'])):
         j=j+1
         try:
-            sheet.write(j, 0, q['users'][i]['email'])
+            sheet.cell(j, 1).value =  q['users'][i]['email']
         except:
-            sheet.write(j, 0, ' ')
+            sheet.cell(j, 1).value =  ' '
         try:
-            sheet.write(j, 1, q['users'][i]['first_name'])
+            sheet.cell(j, 2).value = q['users'][i]['first_name']
         except:
-            sheet.write(j, 1, ' ')
+            sheet.cell(j, 2).value = ' '
         try:
-            sheet.write(j, 2, q['users'][i]['last_name'])
+            sheet.cell(j, 3 ).value = q['users'][i]['last_name']
         except:
-            sheet.write(j, 2, ' ')
+            sheet.cell(j, 3).value = ' '
         d = 2
         for grade in q['users'][i]['grades']:
             d = d + 1
             try:
-                sheet.write(j, d, grade['percent'])
+                sheet.cell(j, d).value = grade['percent']
             except:
-                sheet.write(j, d, ' ')
+                sheet.cell(j, d).value = ' '
         d = d + 1
-        sheet.write(j, d, q['users'][i]['percent'])
+        sheet.cell(j, d).value =  q['users'][i]['percent']
 
     wb.save(filepath)
 

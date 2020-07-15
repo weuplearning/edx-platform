@@ -32,8 +32,6 @@ from django.core.mail import EmailMessage
 from lms.djangoapps.grades.course_grade_factory import CourseGradeFactory
 #from course_progress.helpers import get_overall_progress
 
-from xlwt import *
-
 from django.conf import settings
 
 from pprint import pformat
@@ -184,7 +182,7 @@ class course_grade():
         for i, head in enumerate(header):
             i = i + 1
             sheet.cell(row=1,column=i).value = head
-        j = 0
+        j = 1
 
         for i in range(len(course_enrollement)):
 
