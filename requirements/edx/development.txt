@@ -333,3 +333,6 @@ zipp==1.0.0               # via -c requirements/edx/../constraints.txt, -r requi
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
+
+
+openpyxl==2.6.4                     # TMA custom import
