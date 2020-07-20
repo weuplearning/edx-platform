@@ -10,7 +10,9 @@ define(["domReady", "jquery", "underscore"],
         var ajax_cancel_microsite = function(e) {
           $('.wrapper-create-microsite').removeClass('is-shown');
         }
+        console.log('sdf sdf sdf sd fsd fsdgfqkj sdqsjkdf qksdjgh fkqsdjhgf qksdjghf qksdjhg fqsdj gfkqsjdhgf kqsdjgf qsdkjgfsdkqjf kqsdjgf qksdjgh qsdkjghf qsdjk qsdkjhgf qksdjhgqf sdkjhg ')
         var ajax_call_create_microsite = function(e) {
+          console.log('creating microsite')
           e.preventDefault();
           var url = '/create-microsite/';
           var formData = new FormData();

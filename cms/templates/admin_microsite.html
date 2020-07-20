@@ -1,0 +1,135 @@
+<%page expression_filter="h"/>
+<%!
+from django.utils.translation import ugettext as _
+
+from openedx.core.djangolib.markup import HTML, Text
+%>
+<%inherit file="base.html" />
+
+<%def name="online_help_token()"><% return "home" %></%def>
+<%block name="title">${_("{studio_name} Home").format(studio_name=settings.STUDIO_SHORT_NAME)}</%block>
+<%block name="bodyclass">is-signedin index view-dashboard</%block>
+
+<%block name="requirejs">
+  require(["js/factories/index"], function (IndexFactory) {
+      IndexFactory();
+  });
+  //require(['${static.url("js/invite.js")}']);
+  //require(['https://demo-atp.themoocagency.com/media/studio/admin_microsite.js']);
+  require(['${static.url("js/atp/admin_microsite.js")}']);
+</%block>
+<%namespace name='static' file='static_content.html'/>
+<%block name="content">
+  <section id="primary">
+    <div id="fil_ariane"><span>${_('Microsites')} ></span></div>
+    <div id="title">
+      <h1>${_('microsite admin management')}</h1>
+    </div>
+    <div id="admin_management">
+    <style>
+      #primary{
+        padding-left:15px;
+        padding-right: 15px;
+      }
+      #admin_management {
+        width: 50%;
+        margin-top: 30px;
+      }
+      #admin_management div {
+        position: relative;
+        width: 100%;
+        height: auto;
+        margin-top: 5px;
+        margin-bottom: 5px;
+      }
+      #admin_management div button {
+        position: absolute;
+        right: 0;
+        top: 0;
+        border-radius: 5px;
+        font-family: "mywebfont";
+      }
+      #pre_email {
+        margin-top: 30px;
+      }
+      .hide_message {
+        display:none;
+      }
+    </style>
+    <div>
+      <span id="NoRegistred"
+${microsite_admin}
+% if len(microsite_admin['users_admin']) != 0:
+      class="hide_message"
+% endif
+      > ${_("No registered admin")}</span>
+    </div>
+
+% for n in microsite_admin['users_admin']:
+      <div>
+        <span>${n['email']}</span><button data-type="DELETE" data-key="${site_id}" data-user_id="${n['user_id']}" class="microsite_admin_del">${_('delete')}</button>
+      </div>
+% endfor
+
+
+
+  </div>
+    <div id="form">
+      <div id="pre_email" class="form_update">
+        <label data-value="email">${_('Email')}</label>
+        <input type="text" value="" name="email" id="micro_admin_email" placeholder="microsite admin email" class="input_update" data-key="${site_id}">
+      </div>
+    </div>
+  </section>
+  <div class="wrapper wrapper-notification wrapper-notification-warning" id="notification-warning" aria-hidden="false" aria-labelledby="notification-warning-title" tabindex="-1" aria-describedby="notification-warning-description" role="dialog">
+    <div class="notification warning has-actions"><span class="feedback-symbol fa fa-warning" aria-hidden="true"></span>
+      <div class="copy">
+        <h2 class="title title-3" id="notification-warning-title">You've made some changes</h2>
+        <p class="message" id="notification-warning-description">Your changes will not take effect until you save your progress.</p>
+      </div>
+      <nav class="nav-actions">
+        <ul>
+          <li class="nav-item">
+            <button class="action-primary action-save">Save Changes</button>
+          </li>
+          <li class="nav-item">
+            <button class="action-secondary action-cancel">Cancel</button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+<link rel="stylesheet" type="text/css" href="${static.url('css/invite_course.css')}">
+<style>
+#form label,#form input {
+  display: block;
+}
+#content {
+  min-height: 900px;
+}
+#primary {
+  width: 100%;
+}
+input[type="text"] {
+  width: 50%;
+}
+.form_update {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+#form label {
+  font-size: 18px;
+  font-family: "Arial";
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+/*
+.js .wrapper-notification {
+  bottom: 0;
+}
+#notification-warning {
+  display: none;
+}
+*/
+</style>
+</%block>

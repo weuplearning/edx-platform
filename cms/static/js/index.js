@@ -185,7 +185,41 @@ define(['domReady', 'jquery', 'underscore', 'js/utils/cancel_on_escape', 'js/vie
             $('#course-index-tabs .archived-courses-tab').bind('click', showTab('archived-courses'));
             $('#course-index-tabs .libraries-tab').bind('click', showTab('libraries'));
         };
-
+        var new_microsite_form = function(e) {
+          e.preventDefault();
+          $('.wrapper-create-element').removeClass('is-shown');
+          $('.wrapper-create-microsite').addClass('is-shown');
+        }
+        var ajax_cancel_microsite = function(e) {
+          $('.wrapper-create-microsite').removeClass('is-shown');
+        }
+        var ajax_call_create_microsite = function(e) {
+          e.preventDefault();
+          var url = '/create-microsite/';
+          var formData = new FormData();
+          formData.append('display_name',$('#new-microsite-name').val());
+          formData.append('logo',$('#new-microsite-logo').prop("files")[0]);
+          formData.append('logo_couleur',$('#new-microsite-logo-couleur').prop("files")[0]);
+          formData.append('primary_color',$('#new-microsite-primary_color').val());
+          formData.append('secondary_color',$('#new-microsite-secondary_color').val());
+          formData.append('contact_address',$('#new-microsite-contact').val());
+          formData.append('language',$('#language-value').val());
+          formData.append('amundi_brand',$('#amundi-brand').val());
+          formData.append('disclaimer',$('#new-microsite-disclaimer').val());
+          formData.append('trademark',$('#new-microsite-trademark').val());
+          $.ajax({
+            url:url,
+            data:formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            type: 'POST',
+            success: function(data) {
+              $('.wrapper-create-microsite').removeClass('is-shown');
+              location.reload();
+            }
+          })
+        }
         domReady(onReady);
 
         return {

@@ -1,0 +1,263 @@
+<%page expression_filter="h"/>
+<%!
+from django.utils.translation import ugettext as _
+
+from openedx.core.djangolib.markup import HTML, Text
+%>
+<%inherit file="base.html" />
+
+<%def name="online_help_token()"><% return "home" %></%def>
+<%block name="title">${_("{studio_name} Home").format(studio_name=settings.STUDIO_SHORT_NAME)}</%block>
+<%block name="bodyclass">is-signedin index view-dashboard</%block>
+
+<%block name="requirejs">
+  require(["js/factories/index"], function (IndexFactory) {
+      IndexFactory();
+  });
+  //require(['https://${settings.LMS_BASE}/media/studio/update.js']);
+  require(['${static.url("js/atp/update.js")}']);
+</%block>
+<%namespace name='static' file='static_content.html'/>
+<%block name="content">
+<style>
+.secondary-color-text{
+  color:${secondary_color}!important;
+}
+.third-color-text{
+  color:${third_color}!important;
+}
+#logo_preview img, #logo_preview_couleur img {
+  max-height: 250px;
+  height: auto;
+  width: auto;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+#primary{
+  padding: 15px;
+}
+.wrapper-sock{
+  margin: 0px!important;
+  border-top: 0px;
+  position: static;
+}
+textarea{
+  width: 50%;
+}
+.bold{
+  font-weight: bold;
+}
+#form{
+  padding-top: 40px;
+}
+.update_part{
+  margin-bottom: 30px!important;
+}
+#third_color_preview, #secondary_color_preview, #primary_color_preview{
+  height: 20px;
+  width:20px;
+  display: inline-block;
+  margin-right:15px;
+}
+#secondary_color_preview{
+  background-color: ${secondary_color};
+}
+#third_color_preview{
+  background-color: ${third_color};
+}
+#primary_color_preview, .primary-color-bg{
+  background-color:${primary_color}
+}
+
+label{
+  display: inline!important;
+}
+.ms-title{
+  text-transform: capitalize;
+}
+.max_width{
+  width:100%;
+}
+#form label,#form input {
+  display: block;
+}
+#content {
+  min-height: 900px;
+}
+#primary {
+  width: 100%;
+}
+input[type="text"] {
+  width: 50%;
+}
+.form_update {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+#form label {
+  font-size: 18px;
+  font-family: "Arial";
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+.w-150{
+  width: 150px!important;
+}
+</style>
+  <section id="primary">
+    <div id="fil_ariane"><a href="/"  class="secondary-color-text">${_('My campaigns')} ></a></div>
+    <div id="title">
+      <h1>${_('Manage my microsite')}</h1>
+    </div>
+    <div id="form">
+
+      <!-- Site Title  To Be Updated for hanflin "platform_name" in site_values of SiteConfig instead key from MS
+      <div id="pre_title" class="form_update update_part">
+        <label class="ms-title" data-value="${key}">${key}</label>
+        <input type="text" value="" name="key" id="micro_key" placeholder="microsite title" class="input_update">
+      </div>
+      -->
+
+      <!--White Logo -->
+      <div id="logo_preview" class="update_part">
+        <label class="">${_('White logo')}</label>
+        <div class="max_width">
+          <img class="w-150 primary-color-bg" src="https://${settings.LMS_BASE+logo_site}" />
+        </div>
+        <div id="pre_picture" class="form_update_logo">
+          <form id="upload_microsite_logo">
+            <input class="new-microsite-logo" id="new-microsite-logo" type="file" name="logo" required="" aria-describedby="tip-new-microsite-logo tip-error-new-microsite-logo">
+          </form>
+        </div>
+      </div>
+
+      <!--Color Logo -->
+      <div id="logo_preview_couleur" class="update_part">
+        <label class="">${_('Color logo')}</label>
+        % if logo_couleur:
+        <div class="max_width">
+          <img class="w-150" src="https://${settings.LMS_BASE+logo_couleur}" />
+        </div>
+        % else :
+        <p>${_('No color logo defined for this site')}</p>
+        %endif
+        <div id="pre_picture" class="form_update_logo">
+          <form id="upload_microsite_logo_couleur">
+            <input class="new-microsite-logo" id="new-microsite-logo" type="file" name="logo_couleur" required="" aria-describedby="tip-new-microsite-logo tip-error-new-microsite-logo">
+          </form>
+        </div>
+      </div>
+
+
+      <!--1st color -->
+      <div id="pre_primary" class="form_update update_part">
+        <div id="primary_color_preview"></div> <label data-value="${primary_color}"> ${_('Primary color')} :${primary_color}</label>
+        <input type="text" value="" name="primary_color" id="micro_primary_color" placeholder="microsite primary color" class="input_update">
+      </div>
+
+
+      <!--2nd Color -->
+      <div id="pre_secondary" class="form_update update_part">
+        <div id="secondary_color_preview"></div><label data-value="${secondary_color}">${_('Secondary color')} : ${secondary_color}</label>
+        <input type="text" value="" name="secondary_color" id="micro_secondary_color" placeholder="microsite secondary color" class="input_update">
+      </div>
+
+      <!--3nd Color -->
+      <div id="pre_third" class="form_update update_part">
+        <div id="third_color_preview"></div><label data-value="${third_color}">${_('Header and footer color')} : ${third_color}</label>
+        <input type="text" value="" name="third_color" id="micro_third_color" placeholder="microsite third color" class="input_update">
+      </div>
+
+      <!-- Technical contact address -->
+      <div id="pre_contact" class="form_update update_part">
+        % if contact_address:
+        <span>${_('Contact address')} :</span><label data-value="${contact_address}"> ${contact_address}</label>
+        %else:
+        <span>${_('Contact address')} : </span><p>${_('No contact address defined for this site')}</p>
+        %endif
+        <input type="text" value="" name="contact_address" id="micro_contact_address" placeholder="microsite contact address" class="input_update">
+      </div>
+
+      <!-- Disclaimer -->
+      <div class="form_update update_part">
+        <label> ${_('Disclaimer')} </label>
+        <div class="max_width">
+          <textarea name="disclaimer" rows="15" id="micro_disclaimer" placeholder="site disclaimer" class="input_update">
+            %if disclaimer is UNDEFINED :
+              <p>${_('No text')}</p>
+            %else:
+              ${disclaimer|n}
+            %endif
+          </textarea>
+        </div>
+      </div>
+
+
+      <!--Trademark -->
+      <div id="pre_trademark" class="form_update update_part">
+        %if trademark is UNDEFINED :
+          <label> Trademark</label>
+        %else:
+          <label>Trademark : ${trademark}</label>
+        %endif
+        <input type="text" value="" name="trademark" id="micro_trademark" placeholder="microsite trademark" class="input_update">
+      </div>
+
+      <!-- AmundiAcademy Brand -->
+      <div id="pre_amundibrand" class="form_update update_part">
+        % if amundi_brand:
+          %if amundi_brand == 'true':
+            <label data-value="${amundi_brand}">AmundiBrand : ${_('AmundiBrand is displayed')}</label>
+          %else:
+           <label data-value="${amundi_brand}">AmundiBrand : ${_('AmundiBrand is hidden')}</label>
+          %endif
+        %else:
+        <p>${_('Please select AmundiBrand appearance')}</p>
+        %endif
+        <div class="max_width">
+          <select class="input new-microsite-amundibrand select amundibrand-selector input_update" id="amundibrand-value" name="amundi_brand">
+            %if amundi_brand == 'true':
+            <option value="true" selected>${_('Display')}</value>
+            <option value="false">${_('Hide')}</value>
+            %else :
+            <option value="true">${_('Display')}</value>
+            <option value="false" selected>${_('Hide')}</value>
+            %endif
+          </select>
+        </div>
+      </div>
+
+      <!-- Language -->
+      <div id="language_code" class="form_update update_part">
+        <label for="new-microsite-language">${_('Chose language')}</label>
+        <div class="max_width">
+          <select class="input new-microsite-language select language-selector input_update" id="language-value" name="language_code">
+            <option value="fr">Français</value>
+            <option value="en">English</value>
+          </select>
+        </div>
+      </div>
+
+    </div>
+  </section>
+  <div class="wrapper wrapper-notification wrapper-notification-warning" id="notification-warning" aria-hidden="false" aria-labelledby="notification-warning-title" tabindex="-1" aria-describedby="notification-warning-description" role="dialog">
+    <div class="notification warning has-actions"><span class="feedback-symbol fa fa-warning" aria-hidden="true"></span>
+      <div class="copy">
+        <h2 class="title title-3" id="notification-warning-title">You've made some changes</h2>
+        <p class="message" id="notification-warning-description">Your changes will not take effect until you save your progress.</p>
+      </div>
+      <nav class="nav-actions">
+        <ul>
+          <li class="nav-item">
+            <button class="action-primary action-save">Save Changes</button>
+          </li>
+          <li class="nav-item">
+            <button class="action-secondary action-cancel">Cancel</button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+<link rel="stylesheet" type="text/css" href="${static.url('css/invite_course.css')}">
+
+</%block>

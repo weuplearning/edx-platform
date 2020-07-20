@@ -16,6 +16,8 @@ import logging
 from openedx.core.djangoapps.site_configuration.models import SiteConfiguration
 orgs = SiteConfiguration.get_all_orgs()
 log = logging.getLogger(__name__)
+siteconfig_id = 1
+siteconfig_all = SiteConfiguration.objects.all()
 %>
 
 <%inherit file="base.html" />
@@ -394,7 +396,7 @@ log.info("timer 7 {}".format(datetime.datetime.now()))
 
           <div class="actions">
             <input type="hidden" value="False" class="allow-unicode-course-id">
-            <input type="submit" value="Create" class="action action-primary new--save">
+            <input type="submit" value="Create" class="action action-primary new-microsite-save ">
             <input type="button" value="Cancel" class="action action-secondary action-cancel new-microsite-cancel">
           </div>
         </form>
@@ -748,22 +750,29 @@ log.info("timer 8 {}".format(datetime.datetime.now()))
               % if request.user.is_staff:
                 % if len(orgs)>0:
                   %for org in sorted(orgs):
+		    %for siteconfig in siteconfig_all:
+		      %if siteconfig.site_values['course_org_filter'] == org:
+                        <% 
+			siteconfig_id = siteconfig.site_id
+			%>
+                      %endif
+                    %endfor
                   <li class="course-item" data-status="microsites" style="display:none;">
                   <div class="content_img" style="background-color :#0C1C49 ">
                     <a href="/update-microsite/${org}">
-                      <img src="https://qualif-atp.themoocagency.com/media/logo-amundi.png" data-src="${settings.LMS_ROOT_URL}/media/microsite/${org}/images/${org}" class="img_course b-lazy"/>
+                      <img src="${settings.LMS_ROOT_URL}/media/microsite/${org}/images/logo.png" data-src="${settings.LMS_ROOT_URL}/media/microsite/${org}/images/${org}" class="img_course b-lazy"/>
                     </a>
                   </div>
                   <div class="content_info">
-                    <a class="course-link" href="/update-microsite/${org}">
+                    <a class="course-link" href="/update-microsite/${siteconfig_id}">
                       <h3 class="course-title">${org}</h3>
                     </a>
                   </div>
                   <span style="clear:left;display:block;"></span>
                     <ul class="more_about_courses">
                       <li><a href="https://${org}.${settings.SITE_NAME}">${_('Microsite')}</a></li>
-                      <li><a href="/update-microsite/${org}">${_('Manage Microsite')}</a></li>
-                      <li><a href="/admin-microsite/${org}">${_('Manage Microsite Admin')}</a></li>
+                      <li><a href="/update-microsite/${siteconfig_id}">${_('Manage Microsite')}</a></li>
+                      <li><a href="/admin-microsite/${siteconfig_id}">${_('Manage Microsite Admin')}</a></li>
                     </ul>
                   </li>
                   %endfor

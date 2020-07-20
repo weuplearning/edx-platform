@@ -12,6 +12,7 @@
   from student.models import User
   import six
   from six.moves.urllib.parse import quote
+  from openedx.core.djangoapps.site_configuration.models import SiteConfiguration
   log = logging.getLogger(__name__)
 %>
 
@@ -19,34 +20,34 @@
 <%
 #Microsite-logo
 
-#try:
-#  microsite_key = MicrositeAdminManager.objects.get(user=user).microsite_id
-#  microsite_data=Microsite.objects.get(pk=microsite_key).values
-#
-#  if microsite_data.get('logo') is not None:
-#    logo=microsite_data.get('logo')
-#  else :
-#    logo=''
-#
-#  if microsite_data.get('amundi_brand'):
-#    amundi_brand=microsite_data.get('amundi_brand')
-#  else :
-#    amundi_brand=False
-#  if microsite_data.get('primary_color') is not None:
-#    primary_color=microsite_data.get('primary_color')
-#  else :
-#    primary_color="#0C1C49"
-#
-#  if microsite_data.get('secondary_color') is not None:
-#    secondary_color=microsite_data.get('secondary_color')
-#  else :
-#    secondary_color="#00B6ED"
-#except:
-#  logo='/media/logo-amundi.png'
-#  amundi_brand=True
-#  secondary_color="#00B6ED"
-#  primary_color="#0C1C49"
-#  pass
+try:
+  
+  microsite_data=SiteConfiguration.get_current_site_configuration()
+
+  if microsite_data.get('logo') is not None:
+    logo=microsite_data.get('logo')
+  else :
+    logo=''
+
+  if microsite_data.get('amundi_brand'):
+    amundi_brand=microsite_data.get('amundi_brand')
+  else :
+    amundi_brand=False
+  if microsite_data.get('primary_color') is not None:
+    primary_color=microsite_data.get('primary_color')
+  else :
+    primary_color="#0C1C49"
+
+  if microsite_data.get('secondary_color') is not None:
+    secondary_color=microsite_data.get('secondary_color')
+  else :
+    secondary_color="#00B6ED"
+except:
+  logo='/media/logo-amundi.png'
+  amundi_brand=True
+  secondary_color="#00B6ED"
+  primary_color="#0C1C49"
+  pass
 
 logo='/edx/var/edxapp/media/logo-amundi.png'
 
