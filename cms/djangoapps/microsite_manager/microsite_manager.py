@@ -110,7 +110,6 @@ class microsite_manager():
                     admin=request.POST.get('admin')
                 )
 
-                #microsite values to sql db
                 # Set the mother domain name
                 mother_domain = settings.LMS_BASE
 
@@ -124,7 +123,7 @@ class microsite_manager():
                     domain=site_name,
                     name=self.microsite_name.capitalize()
                 )
-                # Create microsite using Database backend
+                # Create Siteconfig using Database backend
                 log.info(u'microsite_manager.create microsite')
                 microsite = SiteConfiguration.objects.create(
                     site=site,
@@ -328,10 +327,8 @@ class microsite_manager():
 
             #GET CURRENT SITE INFORMATONS
             _cur_microsite = SiteConfiguration.objects.get(id=microsite_id)
-            #UPDATE CLASS PROPERTIES WITH NEW VALUES IF ANY
 
-            log.info(request.POST)
-            log.info(str(request.POST.get('key')))
+            #UPDATE CLASS PROPERTIES WITH NEW VALUES IF ANY
             self.add(
                 logo=request.FILES.get('logo'),
                 logo_couleur=request.FILES.get('logo_couleur'),
@@ -360,15 +357,9 @@ class microsite_manager():
             i = 0
             for n in values.site_values:
                 q[n] =  values.site_values[n]
-                log.info(values.site_values[n])
-                log.info(q[n])
                 i = i + 1
-            log.info(q)
             for key,value in _static.items():
-
                 q[key] = value
-            log.info(_cur_microsite.site_values)
-            log.info(q)
             _cur_microsite.site_values = q
             _cur_microsite.save()
             return JsonResponse(_static)
@@ -415,8 +406,6 @@ class microsite_manager():
                         destination.write(chunk)
             except:
                 pass
-
-
 
 
         #Replace missing values for colors replacement and final context
@@ -495,13 +484,10 @@ class microsite_manager():
         context = {}
 
         try:
-            log.info(microsite)
-            log.info( SiteConfiguration.objects.get(id=microsite.id).site_values)
             microsite_manager = SiteConfiguration.objects.get(id=microsite.id).site_values['admin']
             users = []
             for n in microsite_manager:
                 try:
-                    log.info(n)
                     user = User.objects.get(id=n)
                     email = user.email
                     q = {}
@@ -509,7 +495,6 @@ class microsite_manager():
                     q['email'] = email
                     users.append(q)
                 except:
-                    log.info('except user')
                     test = None
             context['users_admin'] = users
             context['status'] = True
@@ -532,27 +517,21 @@ class microsite_manager():
             user = None
             try:
                 user = User.objects.get(email=email)
-                log.info(user)
             except:
                 check_user = False
                 context['user'] = 'email invalide'
             try:
                 log.info(microsite)
             except:
-                log.info(SiteConfiguration.objects.get(id=microsite.id))
                 check_microsite = False
                 context['microsite'] = 'microsite invalide'
 
             if check_user and check_microsite:
-                log.info('checked')
-
                 check_microsite = True
                 try:
-                    log.info('add')
                     user.id in SiteConfiguration.objects.get(id=microsite.id).site_values['admin']
                     context['microsite_admin'] = False
                 except:
-                    log.info('don t work')
                     check_microsite = False
 
                 if not user.id in SiteConfiguration.objects.get(id=microsite.id).site_values['admin']:
@@ -584,10 +563,8 @@ class microsite_manager():
                 check_user = False
                 context['user'] = 'user invalide'
             try:
-                log.info(SiteConfiguration.objects.get(id=microsite.id))
-                log.info(microsite)
+                microsite_id = SiteConfiguration.objects.get(id=microsite.id)
             except:
-                log.info(SiteConfiguration.objects.get(id=microsite.id))
                 check_microsite = False
                 context['microsite'] = 'microsite invalide'
 
