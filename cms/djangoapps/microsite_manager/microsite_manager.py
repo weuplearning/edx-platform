@@ -235,7 +235,7 @@ class microsite_manager():
 
     #DISPLAY MICROSITE DATA AND MANAGE IT
     def manage_microsite_data(self, request, microsite_id=None):
-        site_config = SiteConfiguration.objects.get(id=microsite_id)
+        site_config = SiteConfiguration.objects.get(site_id=microsite_id)
         microsite_value = site_config.site_values
 
 
@@ -326,7 +326,7 @@ class microsite_manager():
             user_email = request.user.email
 
             #GET CURRENT SITE INFORMATONS
-            _cur_microsite = SiteConfiguration.objects.get(id=microsite_id)
+            _cur_microsite = SiteConfiguration.objects.get(site_id=microsite_id)
 
             #UPDATE CLASS PROPERTIES WITH NEW VALUES IF ANY
             self.add(

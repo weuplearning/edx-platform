@@ -51,7 +51,7 @@ def admin_microsite(request, microsite_id=None):
     if request.method == 'GET':
         #try:
         log.info(microsite_id)
-        microsite = SiteConfiguration.objects.get(id=microsite_id)
+        microsite = SiteConfiguration.objects.get(site_id=microsite_id)
         log.info(microsite)
         microsite_name = microsite.site_values['platform_name']
         microsite_value = microsite.site_values
@@ -66,7 +66,7 @@ def admin_microsite(request, microsite_id=None):
 
 
 def microsite_admin_manager(request, microsite_key):
-    microsite = SiteConfiguration.objects.get(id=microsite_key)
+    microsite = SiteConfiguration.objects.get(site_id=microsite_key)
     log.info(microsite)
     return microsite_manager().microsite_admin_manager(request, microsite)
 
