@@ -51,6 +51,9 @@
       box-shadow: none;
       border: none;
     }
+    .search-button-text{
+      font-size: 20px;
+    }
   }
 
   .cancel-button {
@@ -142,9 +145,15 @@
 }
 
 .courseware-search-bar {
-  width: flex-grid(7);
+  width: flex-grid(6);
 
   @extend %ui-print-excluded;
+}
+
+@include media-breakpoint-down(md) {
+  .courseware-search-bar {
+    width: flex-grid(9);
+  }
 }
 
 .dashboard-search-bar {

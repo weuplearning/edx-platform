@@ -115,9 +115,9 @@ html.video-fullscreen {
     display: none;
   }
 
-  main {
-    padding: $baseline;
-  }
+  // main {
+  //   padding: $baseline;
+  // }
 
   .course-content {
     padding: 0;
@@ -510,6 +510,9 @@ html.video-fullscreen {
     }
 
     div#seq_content {
+      
+      padding: $baseline;
+
       h1 {
         background: none;
         margin-bottom: lh();

@@ -52,6 +52,11 @@ from openedx.core.djangoapps.site_configuration import helpers as configuration_
           </a>
       </div>
     % endif
+    % if default_tab:
+      <%include file="/courseware/course_navigation.html" />
+    % else:
+      <%include file="/courseware/course_navigation.html" args="active_page='courseware'" />
+    % endif
     % if show_sysadmin_dashboard:
       <div class="mobile-nav-item hidden-mobile nav-item nav-tab">
         ## Translators: This is short for "System administration".
@@ -60,9 +65,9 @@ from openedx.core.djangoapps.site_configuration import helpers as configuration_
     % endif
   </div>
   <div class="secondary">
-    <div class="mobile-nav-item hidden-mobile nav-item">
+    <!-- <div class="mobile-nav-item hidden-mobile nav-item">
       <a class="help-link" href="${help_link}" rel="noopener" target="_blank">${_("Help")}</a>
-    </div>
+    </div> -->
     <%include file="user_dropdown.html"/>
   </div>
 </div>
