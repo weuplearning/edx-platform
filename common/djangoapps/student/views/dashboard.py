@@ -900,7 +900,6 @@ def student_dashboard(request):
         if total_blocks != 0:
             completion_rate = float(completed_blocks)/total_blocks
         status ={}
-
         course_progression = int(completion_rate * 10);
         log.info(course_progression)
         try:
@@ -911,6 +910,7 @@ def student_dashboard(request):
         course_open = True
         if _end > 0 and _end < _now:
             course_open = False
+        q['course_progression'] = int(course_progression * 10)
         q['passed'] = passed
         q['percent'] = float(int(percent * 1000)/10)
         q['course_id'] = str(enrollment.course_id)
@@ -971,6 +971,7 @@ def student_dashboard(request):
         'finish_courses': finish_courses,
         'start_course':start_course,
         'list_category':list_category,
+        'course_progression': int(course_progression * 10),
         #END ATP add
         'programs_data': programs_data,
         'enterprise_message': enterprise_message,
