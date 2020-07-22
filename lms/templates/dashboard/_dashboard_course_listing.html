@@ -382,9 +382,9 @@ else:
    </div>
    <div class="atp_course_progress">
      % if passed:
-     <img src="${static.url('images/success.png')}" class="validate_img"/><span class="is_green validate">${_("Validated")}</span>
+     <img src="${static.url('images/success.png')}" class="validate_img"/><span class="is_green validate">${_("Validated")} ${float(int(percent * 1000)/10)}%</span>
      % else:
-     <img src="${static.url('images/error.png')}" class="validate_img"/><span class="validate">${_("Not validated")}</span>
+     <img src="${static.url('images/error.png')}" class="validate_img"/><span class="validate">${_("Not validated")} ${float(int(percent * 1000)/10)}%</span>
      % endif
    </div>
    <div class="atp_course_picto">

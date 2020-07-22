@@ -52,7 +52,7 @@ $('.problems-wrapper').live('click', function(){
     console.log('ok finished');
     if($(this).hasClass('fail_quiz_atp') && $(this).find('div.notification.error').length<=0){
       $(this).find('.action').before(error_div);
-      //afficher réponse si faux
+      //afficher rÃ©ponse si faux
       url_show_pb=$(this).attr('data-url')+'/problem_show';
       ajax_problem_show(url_show_pb);
     }
@@ -70,11 +70,16 @@ $( document ).ready(function() {
   });
 
 });
-function scroll_to_ques(question_id){
-    console.log(question_id)
-    console.log($('#'+question_id))
+function scroll_to_ques(question_id,classNotId = false){
+$('.sequence-nav-button').removeAttr('disabled')
+   $('.sequence-nav-button').removeClass('disabled')
+
+    if(classNotId){
+	$(document).scrollTo($(question_id).offset().top-80+'px',500);
+    }else{
+	$(document).scrollTo($('#'+question_id).offset().top-80+'px',500);
+    }
     $(document).scrollTo($('#'+question_id).offset().top-80+'px',500);
-    console.log($('#'+question_id).offset().top)
 }
 // on next click
 $('.question_next').live("click",function () {
@@ -135,7 +140,7 @@ var picto_failed = failed_img;
 var template_and_title = '<div id="final_score"></div>';
 var congrats = "<div id='congrats_score' class='primary-color-text'>"+congratulation_wording+" !</div>";
 var picto = '<div id="score_picto"><img src="" class="svg"/></div>';
-var first_par = ['<div id="score_first_para" class="primary-color-text">'+completed_wording+'<br>« '+course_default_name+' »</div>','<div id="score_first_para">'+started_wording+'<br>« '+course_default_name+' ».</div>'];
+var first_par = ['<div id="score_first_para" class="primary-color-text">'+completed_wording+'<br>Â« '+course_default_name+' Â»</div>','<div id="score_first_para">'+started_wording+'<br>Â« '+course_default_name+' Â».</div>'];
 var second_par = ['<div id="second_par_score" class="primary-color-text">'+unfortunately_wording+'</div>','<div id="second_par_score">'+to_end_wording+'</div>'];
 var score_div = '<div id="score_div_info"><span class="primary-color-text">'+score_wording+'</span><span id="insert_score"></span></div>';
 var boutton_certificat = '<div id="score_button"><button class="primary-color-bg" onclick=\"followClickEvents(this,\'certificate\',\'download\')\">'+certificate_wording+'</button></div>';
@@ -351,7 +356,15 @@ $(document).ready(function() {
     enable_score_panel(url_last_question);
     result_enabled=true;
   }else{
-   scroll_to_ques($('.last_finished').last().attr('data-problem-id'))
+    if($('.last_finished').length){
+    if($('.last_finished').last().hasClass('problems-wrapper')){
+	 scroll_to_ques('.sequence-list-wrapper:eq(-2)',true)
+	}else{
+	 scroll_to_ques($('.last_finished').last().attr('data-problem-id'))	
+	}
+   }else{
+	scroll_to_ques('.sequence-list-wrapper:eq(-2)',true)
+   }
   }
 });
 
@@ -411,4 +424,3 @@ $(document).ajaxSuccess(function(event, xhr, settings) {
         }
         return pathname.substr(0, index) + '/instructor/api/' + action;
     };
-

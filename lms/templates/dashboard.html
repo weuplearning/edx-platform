@@ -39,12 +39,12 @@ url_image = random.choice(url_array)
 
 siteconfig = configuration_helpers.get_current_site_configuration()
 
-if siteconfig:
+if siteconfig and siteconfig.site_values['primary_color'] is not None:
   primary_color=siteconfig.site_values['primary_color']
 else:
   primary_color='#05144d'
 
-if siteconfig:
+if siteconfig and siteconfig.site_values['secondary_color'] is not None:
   secondary_color=siteconfig.site_values['secondary_color']
 else:
   secondary_color='#05144d'
