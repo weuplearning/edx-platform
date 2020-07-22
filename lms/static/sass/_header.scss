@@ -258,6 +258,12 @@
       position: inherit;
     }
 
+    .nav-links {
+      .main {
+        display:none;
+      }
+    }
+
     // Display the menu icon and allow for transition to an X on click
     .hamburger-menu {
       @include left($baseline);

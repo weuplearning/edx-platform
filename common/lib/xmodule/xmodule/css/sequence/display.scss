@@ -83,7 +83,6 @@ $seq-nav-height: 50px;
 
     @include media-breakpoint-down(md) {
       white-space: nowrap;
-      overflow-x: scroll;
     }
   }
 
