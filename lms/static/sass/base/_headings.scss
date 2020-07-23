@@ -118,6 +118,7 @@ $headings-base-color:                       $gray-d2;
     font-weight: $headings-font-weight-bold;
     // override external modules and xblocks that use inline CSS
     text-transform: initial;
+    display: inline-block;
 
     &.discussion-module-title {
       margin-bottom: 0;
@@ -126,3 +127,20 @@ $headings-base-color:                       $gray-d2;
   }
 }
 
+.unit-top-icons {
+  float: right;
+
+  div{
+    color: theme-color("primary");
+    -webkit-transition: 0.25s ease-in-out;
+    transition: 0.25s ease-in-out;
+  }
+  div:hover{
+    -webkit-transition: 0.25s ease-in-out;
+    transition: 0.25s ease-in-out;
+    font-size: 20px;
+    margin-right: -2px;
+    margin-top: -2px;
+    cursor: pointer;
+  }
+}

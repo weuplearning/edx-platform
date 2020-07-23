@@ -103,7 +103,11 @@
     <%include file="_gated_content.html" args="prereq_url=gated_content['prereq_url'], prereq_section_name=gated_content['prereq_section_name'], gated_section_name=gated_content['gated_section_name']"/>
   % else:
   <div class="sr-is-focusable" tabindex="-1"></div>
-
+  <div class="unit-top-icons">
+    <div class="unit-top-icon_1">
+      &#9974;
+    </div>
+  </div>
   % for idx, item in enumerate(items):
   <div id="seq_contents_${idx}"
     aria-labelledby="tab_${idx}"
@@ -133,3 +137,9 @@
   </nav>
 </div>
 % endif
+
+<script>
+  $( ".unit-top-icon_1" ).click(function() {
+    $( ".course-index" ).toggle();
+  });
+</script>
