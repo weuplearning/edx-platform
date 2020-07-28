@@ -213,8 +213,6 @@ def generate_html(user,score,course_img_path,template_path,course_title,categori
         py_logo=(marge_haute)
         px_amundi=(background_largeur-amundi_largeur-marge_laterale)
         py_amundi=marge_haute+((logo_hauteur-amundi_hauteur)/2)
-        from pprint import pformat
-        log.info(pformat(px_logo)+"-"+pformat(py_logo))
         background.paste(logo, (int(px_logo),int(py_logo)), mask=logo)
         background.paste(amundi, (int(px_amundi),int(py_amundi)))
     else:
