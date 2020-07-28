@@ -830,6 +830,7 @@ def student_dashboard(request):
     compteur_progress = 0
     compteur_finish = 0
     compteur_start = 0
+    course_progression = 0
     progress_courses = []
     finish_courses = []
     start_course = []
@@ -884,7 +885,6 @@ def student_dashboard(request):
                     for unit in subsection.get('children'):
                         total_blocks+=1
                         unit_completion = SubsectionCompletionView().get(request,request.user,str(course_id),unit.get('id')).data
-                        log.info(unit_completion)
                         if unit_completion.get('completion'):
                             completed_blocks+=1
                         if unit.get('graded'):
