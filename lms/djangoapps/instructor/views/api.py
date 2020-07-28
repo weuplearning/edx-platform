@@ -1548,7 +1548,6 @@ def get_student_progress_url(request, course_id):
 @require_POST
 @ensure_csrf_cookie
 @cache_control(no_cache=True, no_store=True, must_revalidate=True)
-@require_course_permission(permissions.GIVE_STUDENT_EXTENSION)
 @require_post_params(
     problem_to_reset="problem urlname to reset"
 )
@@ -1573,7 +1572,7 @@ def reset_student_attempts(request, course_id):
     """
     course_id = CourseKey.from_string(course_id)
     course = get_course_with_access(
-        request.user, 'staff', course_id, depth=None
+        request.user, 'load', course_id, depth=None
     )
     all_students = _get_boolean_param(request, 'all_students')
 
@@ -1596,7 +1595,6 @@ def reset_student_attempts(request, course_id):
         return HttpResponseBadRequest(
             "all_students and delete_module are mutually exclusive."
         )
-
     try:
         module_state_key = UsageKey.from_string(problem_to_reset).map_into_course(course_id)
     except InvalidKeyError:
