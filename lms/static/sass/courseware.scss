@@ -596,9 +596,6 @@ body.view-in-course .window-wrap {
 body.view-in-course .container {
   margin-top: 10px;
 }
-#tma_course_top {
-  margin-top: 10px;
-}
 #tma_course_ariane span, #tma_course_ariane a, #tma_course_ariane a:hover, #tma_course_ariane a:focus {
   text-transform: uppercase;
 }
@@ -612,7 +609,6 @@ body.view-in-course .container {
   padding-top: 15px;
   padding-bottom: 15px;
   position: relative;
-  margin-top: 0;
 }
 .group-heading,.active .accordion-nav .accordion-display-name,#tma_course_ariane span {
   font-weight: bold;
