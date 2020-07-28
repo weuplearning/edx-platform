@@ -409,7 +409,7 @@ $(document).ajaxSuccess(function(event, xhr, settings) {
                      }
             },
             error: function(request, status, error) {
- 	 	console.log(erro)
+ 	 	console.log(error)
             },
             dataType: 'json'
         });
