@@ -255,7 +255,7 @@ class microsite_manager():
         except:
             context['course_org_filter'] = "Amundi"
         try:
-            context['platform_name'] = microsite_value['platform_name']
+            context['platform_name'] = microsite_value['PLATFORM_NAME']
         except:
             context['platform_name'] = "Amundi"
         try:
@@ -368,7 +368,7 @@ class microsite_manager():
     def add_static_values(self, _cur_microsite=None):
         if self.microsite_name is None:
             microsite_name = _cur_microsite.site_values['course_org_filter']
-            microsite_name = _cur_microsite.site_values['platform_name']
+            microsite_name = _cur_microsite.site_values['PLATFORM_NAME']
         else :
             microsite_name = self.microsite_name
 
@@ -434,7 +434,7 @@ class microsite_manager():
             if self.admin is None :
                 self.admin = microsite_value.site_values['admin']
             if self.platform_name is None :
-                self.platform_name = microsite_value.site_values['platform_name']
+                self.platform_name = microsite_value.site_values['PLATFORM_NAME']
             if self.course_org_filter is None :
                 self.course_org_filter = microsite_value.site_values['course_org_filter']
 
