@@ -192,10 +192,10 @@
         };
 
         Sequence.prototype.enableButton = function(buttonClass, buttonAction) {
-            /*this.$(buttonClass)
+            this.$(buttonClass)
                 .removeClass('disabled')
                 .removeAttr('disabled')
-                .click(buttonAction);*/
+                .click(buttonAction);
             this.$(buttonClass).click(buttonAction);
         };
 
@@ -230,7 +230,6 @@
         };
 
         Sequence.prototype.render = function(newPosition) {
-            console.log(this)
             var bookmarked, currentTab, modxFullUrl, sequenceLinks,
                 self = this;
             if (this.position !== newPosition) {
@@ -291,6 +290,8 @@
                 this.updatePageTitle();
                 sequenceLinks =   this.content_containertma.eq(newPosition - 1).find('a.seqnav');
                 sequenceLinks.click(this.goto);
+
+                debugger;
 
                 this.sr_container.focus();
             }
@@ -393,11 +394,6 @@
 
             // If we're staying on the page, no need to wait for the event logging to finish
             if (!targetUrl) {
-                // If the bottom nav is used, scroll to the top of the page on change.
-                if (isBottomNav) {
-                    $.scrollTo(0, 150);
-                }
-
                 offset = {
                     next: 1,
                     previous: -1

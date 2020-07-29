@@ -79,7 +79,6 @@ $('.sequence-nav-button').removeAttr('disabled')
     }else{
 	$(document).scrollTo($('#'+question_id).offset().top-80+'px',500);
     }
-    $(document).scrollTo($('#'+question_id).offset().top-80+'px',500);
 }
 // on next click
 $('.question_next').live("click",function () {
