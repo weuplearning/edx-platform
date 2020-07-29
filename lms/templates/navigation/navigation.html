@@ -18,7 +18,6 @@ from status.status import get_site_status_msg
 from student.models import User
 
 %>
-
 ## Provide a hook for themes to inject branding on top.
 <%block name="navigation_top" />
 
@@ -83,7 +82,6 @@ else:
 val_logo = str(configuration_helpers.get_value('logo'))
 statu='{}'.format(val_logo)
 %>
-
 
 <style>
 .primary-color-bg{
@@ -261,7 +259,7 @@ else :
 %>
 
 
-<nav id="barre-nav-atp" class="navbar navbar-default primary-color-bg third-color-border navbar-fixed-top">
+<nav id="barre-nav-atp" class="navbar navbar-default primary-color-bg third-color-bg third-color-border navbar-fixed-top">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
