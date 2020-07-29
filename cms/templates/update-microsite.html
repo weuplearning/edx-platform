@@ -206,7 +206,7 @@ input[type="text"] {
       <!-- AmundiAcademy Brand -->
       <div id="pre_amundibrand" class="form_update update_part">
         % if amundi_brand:
-          %if amundi_brand == 'true':
+          %if amundi_brand.lower() == 'true':
             <label data-value="${amundi_brand}">AmundiBrand : ${_('AmundiBrand is displayed')}</label>
           %else:
            <label data-value="${amundi_brand}">AmundiBrand : ${_('AmundiBrand is hidden')}</label>
@@ -216,7 +216,7 @@ input[type="text"] {
         %endif
         <div class="max_width">
           <select class="input new-microsite-amundibrand select amundibrand-selector input_update" id="amundibrand-value" name="amundi_brand">
-            %if amundi_brand == 'true':
+            %if amundi_brand.lower() == 'true':
             <option value="true" selected>${_('Display')}</value>
             <option value="false">${_('Hide')}</value>
             %else :
