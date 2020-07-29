@@ -187,6 +187,15 @@ else:
 <body class="${static.dir_rtl()} <%block name='bodyclass'/> lang_${LANGUAGE_CODE}">
 
 <%static:optional_include_mako file="body-initial.html" is_theming_enabled="True" />
+
+% if "preprod." in settings.SITE_NAME or "qualif-" in settings.SITE_NAME:
+<script src="//tag.aticdn.net/588423/smarttag.js"></script>
+% else:
+<script src="//tag.aticdn.net/588424/smarttag.js"></script>
+% endif
+<style>
+
+
 <div id="page-prompt"></div>
 % if not disable_window_wrap:
   <div class="window-wrap" dir="${static.dir_rtl()}">
