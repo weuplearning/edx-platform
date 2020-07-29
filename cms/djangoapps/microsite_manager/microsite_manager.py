@@ -287,7 +287,7 @@ class microsite_manager():
         except:
             context['white_or_color_logo'] = ''
         try :
-            context['logo_site'] = microsite_value['logo_site']
+            context['logo_site'] = microsite_value['logo']
         except:
             context['logo_site'] = ''
         try:

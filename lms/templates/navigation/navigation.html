@@ -249,7 +249,7 @@ else :
 
 
 <%
-  if configuration_helpers.get_value('amundi_brand')=="true" or configuration_helpers.get_value('amundi_brand')==True:
+  if configuration_helpers.get_value('amundi_brand').lower()=="true" or configuration_helpers.get_value('amundi_brand')==True:
     amundi_brand=True
     amundi_brand_url='/media/logo-amundiacademy_blanc.png'
     separation_logos='separation-logos'
