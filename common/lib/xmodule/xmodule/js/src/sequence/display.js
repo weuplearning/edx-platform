@@ -192,10 +192,10 @@
         };
 
         Sequence.prototype.enableButton = function(buttonClass, buttonAction) {
-            this.$(buttonClass)
+            /*this.$(buttonClass)
                 .removeClass('disabled')
                 .removeAttr('disabled')
-                .click(buttonAction);
+                .click(buttonAction);*/
             this.$(buttonClass).click(buttonAction);
         };
 
@@ -291,9 +291,12 @@
                 sequenceLinks =   this.content_containertma.eq(newPosition - 1).find('a.seqnav');
                 sequenceLinks.click(this.goto);
 
-                debugger;
-
-                this.sr_container.focus();
+                if(newPosition == this.content_containertma.length){
+                    this.$(".tma_tab").eq(newPosition - 1).focus();
+		}else{
+                    this.sr_container.focus();
+                    this.$(".tma_tab").eq(newPosition - 1).focus();
+		}
             }
         };
 
