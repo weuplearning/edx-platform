@@ -362,7 +362,7 @@ $(document).ready(function() {
 	 scroll_to_ques($('.last_finished').last().attr('data-problem-id'))	
 	}
    }else{
-	scroll_to_ques('.sequence-list-wrapper:eq(-2)',true)
+         scroll_to_ques(".tma_tab.active:eq(-1)",true)
    }
   }
 });
