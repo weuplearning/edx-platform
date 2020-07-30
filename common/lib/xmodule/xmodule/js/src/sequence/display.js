@@ -291,11 +291,16 @@
                 sequenceLinks =   this.content_containertma.eq(newPosition - 1).find('a.seqnav');
                 sequenceLinks.click(this.goto);
 
+                this.$('.sequence-nav-button.button-next').unbind('click');
+                this.$(".sequence-nav-button.button-next").removeClass('disabled').removeAttr('disabled').click(this.selectNext);
+
                 if(newPosition == this.content_containertma.length){
-                    this.$(".tma_tab").eq(newPosition - 1).focus();
+                    this.$(".tma_tab").eq(newPosition - 1).focus(false);
+                    this.$('html, body').animate( { scrollTop: $(".tma_tab").eq(newPosition - 1).offset().top - 80 }, 500 );
 		}else{
-                    this.sr_container.focus();
-                    this.$(".tma_tab").eq(newPosition - 1).focus();
+                    this.sr_container.focus(false);
+                    this.$(".tma_tab").eq(newPosition - 1).focus(false);
+                    this.$('html, body').animate( { scrollTop: $(".tma_tab").eq(newPosition - 1).offset().top - 80 }, 500 );
 		}
             }
         };
