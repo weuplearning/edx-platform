@@ -24,10 +24,6 @@ from xmodule.x_module import STUDENT_VIEW
    (course.enable_proctored_exams or course.enable_timed_exams)
    )
 %>
-<script>
-console.log('${type(HTML(fragment))}')
-console.log('${HTML(fragment)}')
-</script>
 % if display_reset_dates_banner:
     <script type="text/javascript">
         $('.reset-deadlines-banner').css('display', 'flex');

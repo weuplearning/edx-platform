@@ -128,7 +128,9 @@ $headings-base-color:                       $gray-d2;
 }
 
 .unit-top-icons {
-  float: right;
+  position: absolute;
+  right: 5%;
+  top: 75px;
 
   div{
     color: theme-color("primary");

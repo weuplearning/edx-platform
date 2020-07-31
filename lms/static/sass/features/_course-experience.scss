@@ -317,6 +317,47 @@
   }
 }
 
+// Rules for Bookmarks Button
+.courseware-bookmarks-button {
+  width: flex-grid(6);
+  vertical-align: top;
+
+  .bookmarks-list-button {
+    @extend %ui-clear-button;
+    
+    // set styles
+    @extend %btn-pl-default-base;
+    
+    font-size: 13px;
+    
+    width: 100%;
+    padding: ($baseline/4) ($baseline/2);
+    padding-left: 0;
+    padding-right: 0;
+
+    &::before {
+      content: $bookmarked-icon;
+      font-family: FontAwesome;
+      color:theme-color("primary");
+    }
+    .bookmarks-list-text {
+      font-size: 16px;
+    }
+  }
+}
+
+@include media-breakpoint-down(md) {
+  .courseware-bookmarks-button {
+    width: flex-grid(2);
+
+    .bookmarks-list-button {
+      .bookmarks-list-text {
+        display: none;
+      }
+    }
+  }
+}
+
 // Course outline for visual progress waffle switch
 .course-outline {
   .block-tree {
@@ -337,6 +378,7 @@
 
       .fa {
         color: $blue;
+        font-size: 12px;
       }
 
       .prerequisites-icon {
@@ -368,7 +410,7 @@
 
         .section-title {
           font-weight: $font-regular;
-          font-size: 1.1rem;
+          font-size: 12px;
           margin: 0;
           display: inline;
           padding-left: $baseline - 2;
@@ -391,6 +433,7 @@
             margin: 0;
             font-weight: $font-regular;
             display: inline;
+            font-size:12px;
           }
 
           .subsection-text {
@@ -415,6 +458,9 @@
   background-color: transparent;
   color: $black;
   cursor: pointer;
+  position: relative;
+  font-size: 12px;
+  padding: 5px;
 }
 
 // extra padding for expand/collapse text change

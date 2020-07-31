@@ -24,43 +24,6 @@ from openedx.features.course_experience.course_tools import HttpMethod
 
 <%block name="content">
 <div class="course-view page-content-container" id="course-container">
-    <header class="page-header has-secondary">
-        <div class="page-header-main">
-            <nav aria-label="${_('Course Outline')}" class="sr-is-focusable" tabindex="-1">
-                <h2 class="hd hd-3 page-title">${course.display_name_with_default}</h2>
-            </nav>
-        </div>
-        <div class="page-header-secondary">
-            % if show_search:
-                <div class="page-header-search">
-                    <form class="search-form input-group" role="search" action="${reverse('openedx.course_search.course_search_results', args=[course_key])}">
-                        <label class="field-label sr-only" for="search" id="search-hint">${_('Search the course')}</label>
-                        <input
-                                class="field-input input-text search-input form-control"
-                                type="search"
-                                name="query"
-                                id="search"
-                                placeholder="${_('Search the course')}"
-                        />
-                        <span class="input-group-btn">
-                            <button class="btn btn-outline-primary search-button" type="submit">${_('Search')}</button>
-                        </span>
-                    </form>
-                </div>
-            % endif
-            <div class="form-actions">
-                % if resume_course_url:
-                    <a class="btn btn-primary action-resume-course" href="${resume_course_url}">
-                        % if has_visited_course:
-                            <span data-action-type="resume">${_("Resume Course")}</span>
-                        % else:
-                            <span data-action-type="start">${_("Start Course")}</span>
-                        % endif
-                    </a>
-                % endif
-            </div>
-        </div>
-    </header>
     <div class="page-content">
         <div class="page-content-main">
             % if next_up_banner_fragment:
@@ -86,88 +49,52 @@ from openedx.features.course_experience.course_tools import HttpMethod
                 ${HTML(outline_fragment.body_html())}
             % endif
         </div>
-        <aside class="page-content-secondary course-sidebar">
-            % if has_goal_permission:
-                <div class="section section-goals ${'' if current_goal else 'hidden'}">
-                    <div class="current-goal-container">
-                        <label class="title title-label hd-6" for="goal">
-                            <h3 class="hd-6">${_("Goal: ")}</h3>
-                        </label>
-                        <h3 class="title hd-6">${_("Goal: ")}</h3>
-                        <div class="goal">
-                            <span class="text">${goal_options[current_goal.goal_key] if current_goal else ""}</span>
-                        </div>
-                        <select class="edit-goal-select" id="goal">
-                            % for goal, goal_text in goal_options.items():
-                                <option value="${goal}" ${"selected" if current_goal and current_goal.goal_key == goal else ""}>${goal_text}</option>
-                            % endfor
-                        </select>
-                        <span class="sr sr-update-response-msg" aria-live="polite"></span>
-                        <span class="response-icon" aria-hidden="true"></span>
-                        <span class="sr">${_("Edit your course goal:")}</span>
-                        <button class="edit-icon">
-                            <span class="sr">${_("Edit your course goal:")}</span>
-                            <span class="fa fa-pencil" aria-hidden="true"></span>
-                        </button>
+        <div class="page-content-overview">
+                <!-- block bottom profil -->
+            <div class="overview_box" id="overview_grades_list">
+                <div class="progress-container">
+                    <%
+                    grades_summary_len = len(grade_summary.get("section_breakdown"))
+                    global_score = grade_summary.get('percent')
+                    mark = 0
+                    %>
+                    <div class="progress-bar progress-bar_total" data-effect="1" data-value="${round(global_score, 2)*100}" data-skill="${_('Your final grade')}"></div>
+                    % for n in grade_summary.get("section_breakdown"):
+                    <% mark = mark + 1 %>
+                    <div class="progress-bar progress-bar_exercie" data-effect="1" data-value="${round(n.get('percent'), 2)*100}" data-skill="${n.get('detail')}"></div>
+                    % endfor
+                </div>
+                <button class="edit-icon">
+                    <span>Download certificate</span>
+                </button>
+            </div>
+            <div id="overwiew_aside_completion">
+                <div class="overview_box" id="overwiew_aside_completion">
+                    You have completed ${round(completion_rate, 2)}% of the course content!
+                    <br />${remaining_days} days remaining before the end of the course
+                </div>
+                <div class="overview_box" id="overwiew_aside_chat">
+                    <a href="/courses/${course.id}/discussion/forum/">Come and chat with us</a>
+                </div>
+                <div  class="overview_box" id="overwiew_aside_summary">
+                    <img src="${course_overview.course_image_url}" align="right" />
+                    <div id="overwiew_aside_summary_text">
+                        ${course_overview.short_description}
                     </div>
                 </div>
-            % endif
-            % if course_tools:
-                <div class="section section-tools">
-                    <h3 class="hd-6 section-title">${_("Course Tools")}</h3>
-                    <ul class="list-unstyled">
-                        % for course_tool in course_tools:
-                            <li class="course-tool">
-                                % if course_tool.http_method == HttpMethod.GET:
-                                    <a class="course-tool-link" data-analytics-id="${course_tool.analytics_id()}" href="${course_tool.url(course_key)}">
-                                        <span class="icon ${course_tool.icon_classes()}" aria-hidden="true"></span>
-                                        ${course_tool.title()}
-                                    </a>
-                                % elif course_tool.http_method == HttpMethod.POST:
-                                    <form class="course-tool-form" action="${course_tool.url(course_key)}" method="post">
-                                        <input type="hidden" id="csrf_token" name="csrfmiddlewaretoken" value="${csrf_token}">
-                                        <input type="hidden" name="tool_data" value="${course_tool.data()}">
-                                        <button class="course-tool-button" data-analytics-id="${course_tool.analytics_id()}" aria-hidden="true">
-                                            <span class="icon ${course_tool.icon_classes()}" aria-hidden="true"></span>
-                                            ${course_tool.title()}
-                                        </button>
-                                    </form>
-                                % endif
-                            </li>
-                        % endfor
-                    </ul>
-                </div>
-            % endif
-            % if upgrade_url and upgrade_price:
-                <div class="section section-upgrade course-home-sidebar-upgrade ${'discount' if has_discount else 'no-discount'}">
-                    <h3 class="hd hd-6">${_("Pursue a verified certificate")}</h3>
-                        <img src="https://courses.edx.org/static/images/edx-verified-mini-cert.png" alt="">
-                        <div class="upgrade-container">
-                            <p>
-                                <a class="btn-brand btn-upgrade"
-                                   href="${upgrade_url}"
-                                   data-creative="sidebarupsell"
-                                   data-position="sidebar-message"
-                                >
-                                    ${Text(_("Upgrade ({price})")).format(price=upgrade_price)}
-                                </a>
-                            </p>
-                            <p><button class="btn-link btn-small promo-learn-more">${_('Learn More')}</button></p>
-                        </div>
-                </div>
-            % endif
-            % if dates_fragment:
-                <div class="section section-dates">
-                    ${HTML(dates_fragment.body_html())}
-                </div>
-            % endif
-            % if handouts_html:
-                <div class="section section-handouts">
-                    <h3 class="hd-6 section-title">${_("Course Handouts")}</h3>
-                    ${HTML(handouts_html)}
-                </div>
-            % endif
-        </aside>
+            </div>
+            <div class="overview_box" id="overview_course_achievements">
+                <h2>Achievements</h2>
+                <h3>Badges :</h3>
+                <div class="${(completion_rate >= 25 and 'badge_success') or ''}">25% completion</div>
+                <div class="${(completion_rate >= 50 and 'badge_success') or ''}">50% completion</div>
+                <div class="${(completion_rate >= 75 and 'badge_success') or ''}">75% completion</div>
+                <div class="${(completion_rate == 1 and 'badge_success') or ''}">100% completion</div>
+                <div class="${(completion_rate == 1 and global_score*100 > course.lowest_passing_grade and 'badge_success') or ''}">Note Passed</div>
+                <div class="${(completion_rate == 1 and global_score*100 > (1 - course.lowest_passing_grade / 2) and 'badge_success') or ''}">Note > 100%-passed/2</div>
+                <div class="${(completion_rate == 1 and global_score*100 == 1 and 'badge_success') or ''}">Note = 100%</div>
+            </div>
+        </div>
     </div>
     % if course_sock_fragment:
         ${HTML(course_sock_fragment.body_html())}
@@ -189,3 +116,110 @@ from openedx.features.course_experience.course_tools import HttpMethod
 <%static:webpack entry="Enrollment">
     new CourseEnrollment('.enroll-btn', '${course_key | n, js_escaped_string}');
 </%static:webpack>
+
+
+<!-- PROGRESS BARS -->
+<script>
+//function for adding <span> elements for value and skill name
+    function additionalElems(progressElement, value, skillName) {
+
+//adding value
+var valueChild = document.createElement('span');
+valueChild.className = 'progress-bar__value';
+valueChild.innerHTML = value +'%';
+progressElement.appendChild(valueChild);
+
+//adding bar area
+var barChild = document.createElement('div');
+barChild.className = 'progress-bar__bar';
+progressElement.appendChild(barChild);
+
+//adding inner area with the width of value
+var barInnerChild = document.createElement('div');
+barInnerChild.className = 'progress-bar__bar-inner';
+barInnerChild.style.width = value + '%';
+barChild.appendChild(barInnerChild);
+
+
+//adding skillName
+var skillChild = document.createElement('span');
+skillChild.className = 'progress-bar__skill';
+skillChild.innerHTML = skillName;
+progressElement.appendChild(skillChild);
+}
+
+//adding <span> elements for value and skill name
+var progressBar = document.querySelectorAll('.progress-bar');
+
+progressBar.forEach(function(item) {
+
+var self = item,
+    barValue = self.getAttribute('data-value'),
+    skillValue = self.getAttribute('data-skill'),
+    effectNum = self.getAttribute('data-effect');
+
+additionalElems(self, barValue, skillValue);
+
+//adding special BEM classes to every progress bar element (to set classes for effects)
+self.className += ' progress-bar--' + effectNum;
+
+var valueElem = self.querySelector('.progress-bar__value');
+  
+valueElem.className += ' progress-bar__value--' + effectNum;
+
+var barElem = self.querySelector('.progress-bar__bar');
+
+barElem.className += ' progress-bar__bar--' + effectNum;
+
+var barInnerElem = self.querySelector('.progress-bar__bar-inner');
+
+barInnerElem.className += ' progress-bar__bar-inner--' + effectNum;
+
+var skillElem = self.querySelector('.progress-bar__skill');
+  
+  skillElem.className += ' progress-bar__skill--' + effectNum;
+
+//adding alignment for values
+if(self.classList.contains('progress-bar--aligned-values')) {
+   valueElem.style.left = barValue + '%';
+   valueElem.classList.add('progress-bar__value--aligned-value');
+}
+
+//adding additional class for no overflow hidden
+if(self.classList.contains('progress-bar--no-overflow')) {
+   barElem.classList.add('progress-bar__bar--no-overflow');
+}
+
+})
+
+//function for animation toggling
+function animationToggle(progressElement, delay) {
+
+  var skillElem = progressElement.querySelector('.progress-bar__skill'),
+      valueElem = progressElement.querySelector('.progress-bar__value'),
+      skillBar = progressElement.querySelector('.progress-bar__bar-inner');
+
+//removing animated classes, returning to start position
+skillElem.classList.remove('js-animated');
+valueElem.classList.remove('js-animated');
+skillBar.classList.remove('js-animated');
+
+//adding animated classes to start animation
+setTimeout(function() {
+  skillElem.classList.add('js-animated');
+  valueElem.classList.add('js-animated');
+  skillBar.classList.add('js-animated');
+}, delay);
+}
+
+//add animation onload
+function onloadAnimation() {
+
+progressBar.forEach(function(item) {
+  animationToggle(item, 500)
+});
+
+}
+
+document.addEventListener("DOMContentLoaded", onloadAnimation());
+</script>

@@ -7,6 +7,7 @@ import datetime
 import re
 import six
 
+from django.conf import settings
 from completion import waffle as completion_waffle
 from django.contrib.auth.models import User
 from django.db.models import Q
@@ -60,9 +61,16 @@ class CourseOutlineFragmentView(EdxFragmentView):
             request.user, 'load', course_key, check_if_enrolled=user_is_enrolled
         )
         course = modulestore().get_course(course_key)
+        
+        is_staff = has_access(request.user, 'staff', course)
 
         course_block_tree = get_course_outline_block_tree(
             request, course_id, request.user if user_is_enrolled else None
+        )
+
+        show_search = (
+            settings.FEATURES.get('ENABLE_COURSEWARE_SEARCH') or
+            (settings.FEATURES.get('ENABLE_COURSEWARE_SEARCH_FOR_COURSE_STAFF') and is_staff)
         )
         if not course_block_tree:
             return None
@@ -74,6 +82,7 @@ class CourseOutlineFragmentView(EdxFragmentView):
             'blocks': course_block_tree,
             'enable_links': user_is_enrolled or course.course_visibility == COURSE_VISIBILITY_PUBLIC,
             'course_key': course_key,
+            'show_search': show_search,
         }
 
         resume_block = get_resume_block(course_block_tree) if user_is_enrolled else None

@@ -10,6 +10,7 @@ import pytz
 from datetime import date, datetime, timedelta
 
 from django.utils import timezone
+from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.utils.translation import ngettext
 
@@ -168,6 +169,35 @@ dates_banner_displayed = False
                 </li>
         % endfor
         </ol>
+        <div class="wrapper-course-modes">
+            <div class="courseware-bookmarks-button">
+                <a class="bookmarks-list-button" href="${reverse('openedx.course_bookmarks.home', args=[course.id])}">
+                    <span class="bookmarks-list-text">${_('Bookmarks')}</span>
+                </a>
+            </div>
+            % if False and show_search:
+                <%static:require_module module_name="course_search/js/course_search_factory" class_name="CourseSearchFactory">
+                var courseId = $('.courseware-results').data('courseId');
+                CourseSearchFactory({
+                    courseId: courseId,
+                    searchHeader: $('.search-bar')
+                });
+                </%static:require_module> 
+            <div id="courseware-search-bar" class="search-bar courseware-search-bar" role="search" aria-label="Course">
+                <form class="search-form">
+                <label for="course-search-input" class="sr">${_('Course Search')}</label>
+                <div class="search-field-wrapper">
+                    <input id="course-search-input" type="text" class="search-field" placeholder="${_('Search')}"/>
+                    <button type="submit" class="search-button"><span class="search-button-text">&#128269</span></button>
+                    <button type="button" class="cancel-button" title="${_('Clear search')}">
+                    <span class="icon fa fa-remove" aria-hidden="true"></span>
+                    </button>
+                </div>
+                </form>
+            </div>
+            % endif
+        </div>
+         
     % endif
 </main>
 

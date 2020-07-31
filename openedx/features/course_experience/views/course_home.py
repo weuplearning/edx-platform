@@ -52,6 +52,13 @@ from .latest_update import LatestUpdateFragmentView
 from .next_up_banner import NextUpBannerFragmentView
 from .welcome_message import WelcomeMessageFragmentView
 
+#Yoann : additions to get grades, completion and dates infos in course home page
+import time
+from datetime import date, datetime, timedelta
+from lms.djangoapps.grades.api import CourseGradeFactory
+from django.contrib.auth.models import AnonymousUser, User
+from completion.api.v1.views import SubsectionCompletionView
+
 EMPTY_HANDOUTS_HTML = u'<ol></ol>'
 
 
@@ -117,6 +124,14 @@ class CourseHomeFragmentView(EdxFragmentView):
         if not handouts or handouts == EMPTY_HANDOUTS_HTML:
             return None
         return handouts
+    
+    def get_course_grades(self, student, course):
+        course_grades = CourseGradeFactory().read(student, course)
+        return course_grades
+
+    def get_courseware_summary(self, course_grades):
+        courseware_summary = list(course_grades.chapter_grades.values())
+        return courseware_summary
 
     def render_to_fragment(self, request, course_id=None, **kwargs):
         """
@@ -124,6 +139,11 @@ class CourseHomeFragmentView(EdxFragmentView):
         """
         course_key = CourseKey.from_string(course_id)
         course = get_course_with_access(request.user, 'load', course_key)
+
+        student = User.objects.get(id=request.user.id)
+
+        course_grades = self.get_course_grades(student, course)
+        courseware_summary = self.get_courseware_summary(course_grades)
 
         # Render the course dates as a fragment
         dates_fragment = CourseDatesFragmentView().render_to_fragment(request, course_id=course_id, **kwargs)
@@ -235,6 +255,34 @@ class CourseHomeFragmentView(EdxFragmentView):
             settings.FEATURES.get('ENABLE_COURSEWARE_SEARCH') or
             (settings.FEATURES.get('ENABLE_COURSEWARE_SEARCH_FOR_COURSE_STAFF') and user_access['is_staff'])
         )
+
+        # Get course completion
+        total_blocks=0
+        total_blockstma=0
+        completed_blocks=0
+        completion_rate=0
+        course_sections = get_course_outline_block_tree(request,str(course_id)).get('children')
+        if course_sections:
+            for section in course_sections :
+              total_blockstma+=1
+              section_completion = SubsectionCompletionView().get(request,request.user,str(course_id),section.get('id')).data
+              for subsection in section.get('children') :
+                if subsection.get('children'):
+                    for unit in subsection.get('children'):
+                        total_blocks+=1
+                        unit_completion = SubsectionCompletionView().get(request,request.user,str(course_id),unit.get('id')).data
+                        if unit_completion.get('completion'):
+                            completed_blocks+=1
+        if total_blocks != 0:
+            completion_rate = float(completed_blocks)/total_blocks
+
+        # Get remaining days before end of course
+        _current = date.today()
+        course_end_date = course_overview.end_date
+        course_end_date = course_end_date.replace(hour=0, minute=0, second=0, microsecond=0)
+        course_end_date = course_end_date.date()
+        remaining_days = (course_end_date - _current).days
+
         # Render the course home fragment
         context = {
             'request': request,
@@ -264,6 +312,11 @@ class CourseHomeFragmentView(EdxFragmentView):
             'upgrade_url': upgrade_url,
             'has_discount': has_discount,
             'show_search': show_search,
+            'courseware_summary': courseware_summary,
+            'grade_summary': course_grades.summary,
+            'course_overview': course_overview,
+            'completion_rate': int(completion_rate*100),
+            'remaining_days':remaining_days,
         }
         html = render_to_string('course_experience/course-home-fragment.html', context)
         return Fragment(html)

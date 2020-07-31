@@ -36,7 +36,7 @@ displayname = get_enterprise_learner_generic_name(request) or username
         <span class="fa fa-caret-down" aria-hidden="true"></span>
     </div>
     <div class="dropdown-user-menu hidden" aria-label=${_("More Options")} role="menu" id="user-menu" tabindex="-1">
-        % if disable_tabs is UNDEFINED or not disable_tabs:
+        % if course is not None and course is not UNDEFINED and (disable_tabs is UNDEFINED or not disable_tabs):
         <%
             tab_list = get_course_tab_list(request.user, course)
         %>

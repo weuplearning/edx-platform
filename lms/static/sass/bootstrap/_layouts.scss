@@ -109,17 +109,53 @@
 .page-content {
   padding: $baseline*2;
 
+  .page-content-overview{
+
+    .overview_box {
+      box-sizing: border-box;
+      display: inline-block;
+      border: 1px solid #c8c8c8;
+      padding: 5px;
+    }
+  }
+
   // Adjust styles for desktop sized screens
   @include media-breakpoint-up(md) {
     display: flex;
 
     .page-content-main {
-      flex-grow: 1;  // This column should consume all the available space
+      width: 20%;
+    }
+
+    .page-content-overview{
+      width: 80%;
+
+      #overview_grades_list {
+        width: 25%;
+      }
+
+      #overwiew_aside_completion {
+        box-sizing: border-box;
+        display: inline-block;
+        width: 50%;
+
+        * {
+          width: 100%;
+          display: block;
+        }
+      }
+
+      #overview_course_achievements {
+        width: 23%;
+
+        .badge_success {
+          font-weight: 900;
+        }
+      }
     }
 
     .page-content-secondary {
-      min-width: 350px;  // Note: setting width only is not obeyed
-      max-width: 350px;  // Note: setting width only is not obeyed
+      width: 20%;
       margin-left: $baseline*2;
     }
   }
@@ -135,5 +171,162 @@
   // Adjust styles for phone sized screens
   @include media-breakpoint-down(sm) {
     padding: $baseline;
+  }
+}
+
+
+
+// PROGRESS BARS
+
+//COMMON VARIABLES
+$dark-theme-color: #1c1c1c;
+$accent-theme-color: #A42CD6;
+$light-theme-color: #fff;
+
+//MIXINS
+
+//transitions mixin
+@mixin transition-mix($property: all, $duration: 0.2s, $timing: linear, $delay: 0s) {
+  transition-property: $property;
+  transition-duration: $duration;
+  transition-timing-function: $timing;
+  transition-delay: $delay;
+}
+
+//position absolute mixin
+@mixin position-absolute ($top: null, $left: null, $right: null, $bottom: null) {
+  position: absolute;
+  top: $top;
+  left: $left;
+  right: $right;
+  bottom: $bottom;
+}
+
+$progress-bar-width: 100%;
+$progress-bar-offset-vert: 35px;
+
+.progress-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.progress-bar {
+  position: relative;
+  
+  width: $progress-bar-width;
+  
+  box-sizing: border-box;
+  
+  &:not(:last-child) {
+    margin-bottom: $progress-bar-offset-vert;
+  }
+}
+
+.progress-bar--lg-offset {
+  
+  &:not(:last-child) {
+    margin-bottom: $progress-bar-offset-vert * 1.5;
+  }
+}
+
+.progress-bar__bar,
+.progress-bar__bar-inner,
+.progress-bar__value,
+.progress-bar__skill {
+  box-sizing: border-box;
+}
+
+$progress-1-bg-color-1: rgb(163, 153, 161);
+$progress-1-bg-color-2: rgb(101, 177, 172);
+
+.progress-bar__bar {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.progress-bar__bar--no-overflow {
+    overflow: visible;
+}
+
+.progress-bar__bar-inner {
+  @include position-absolute($top: 0, $left: 0);
+  
+  height: 100%;
+  
+  transform: scaleX(0);
+  transform-origin: left center;
+  background-color: $progress-1-bg-color-1;
+  
+  &.js-animated {
+    @include transition-mix($duration: .5s, $timing: cubic-bezier(0.1, 1.14, 0.31, 1.06));
+    
+    transform: scaleX(1);
+  }
+}
+
+.progress-bar__skill,
+.progress-bar__value {
+  font: {
+    size: 14px;
+  }
+  letter-spacing: 1px;
+}
+
+.progress-bar__value--aligned-value {
+  transform: translateX(-50%);
+}
+
+$progress-1-height: 10px;
+$progress-1-border: #dddddd;
+$progress-1-color-1: rgb(156, 96, 143);
+$progress-1-color-2: #a7109a;
+$progress-1-color-3: #00BFB3;
+$progress-1-color-4: #037971;
+
+$progress-1-label-top: - ($progress-1-height + 7);
+
+.progress-bar--1 {
+  height: $progress-1-height;
+  padding: 1px;
+  border: 1px solid $progress-1-border;
+}
+
+.progress-bar__bar-inner--1 {
+  background-size: 200%;
+  background-position: 0 0;
+}
+
+.progress-bar__bar-inner--1 {
+  background-size: 200%;
+  background-position: 0 0;
+  background-image: linear-gradient(to right, $progress-1-color-1 0, $progress-1-color-2 100%);
+}
+
+.progress-bar__skill--1 {
+  @include position-absolute($top: $progress-1-label-top, $left: -20px);
+  
+  opacity: 0;
+  
+  &.js-animated {
+    @include transition-mix;
+    left: 0;
+    opacity: 1;
+    color: black;
+  }
+}
+
+.progress-bar__value--1 {
+  @include position-absolute($top: $progress-1-label-top, $right: -20px);
+  
+  opacity: 0;
+  
+  &.js-animated {
+    @include transition-mix;
+    right: 0;
+    opacity: 1;
+    color: black;
   }
 }
