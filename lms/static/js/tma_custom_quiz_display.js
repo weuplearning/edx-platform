@@ -139,7 +139,7 @@ var picto_failed = failed_img;
 var template_and_title = '<div id="final_score"></div>';
 var congrats = "<div id='congrats_score' class='primary-color-text'>"+congratulation_wording+" !</div>";
 var picto = '<div id="score_picto"><img src="" class="svg"/></div>';
-var first_par = ['<div id="score_first_para" class="primary-color-text">'+completed_wording+'<br>Â« '+course_default_name+' Â»</div>','<div id="score_first_para">'+started_wording+'<br>Â« '+course_default_name+' Â».</div>'];
+var first_par = ['<div id="score_first_para" class="primary-color-text">'+completed_wording+'<br>« '+course_default_name+' »</div>','<div id="score_first_para">'+started_wording+'<br>Â« '+course_default_name+' Â».</div>'];
 var second_par = ['<div id="second_par_score" class="primary-color-text">'+unfortunately_wording+'</div>','<div id="second_par_score">'+to_end_wording+'</div>'];
 var score_div = '<div id="score_div_info"><span class="primary-color-text">'+score_wording+'</span><span id="insert_score"></span></div>';
 var boutton_certificat = '<div id="score_button"><button class="primary-color-bg" onclick=\"followClickEvents(this,\'certificate\',\'download\')\">'+certificate_wording+'</button></div>';
