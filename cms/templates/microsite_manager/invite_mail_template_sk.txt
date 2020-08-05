@@ -8,7 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Titre invitation - Amundi Academy</title>
+<title>Amundi Academy</title>
 </head>
 
 <body>
@@ -20,7 +20,7 @@
 		<!--HEADER LOGOS-->
 <table width="600" border="0" cellspacing="0" cellpadding="0" align="center" style="font-family: arial;background-color:#fff;">
     <tr>
-		<td><img src="{{ org_image }}" alt="Amundi" width="150" style="display:block;padding:10px;"></td>
+      <td><img src="{{ org_image }}" alt="Amundi" width="150" style="display:block;padding:10px;"></td>
 		<td width="150" height="68"></td>
 		<td>{{ platform_image }}</td>
     </tr>
@@ -28,9 +28,9 @@
 	<!--IMAGE FORMATION-->
 	<table width="600" border="0" cellspacing="0" cellpadding="0" align="center" style="font-family: arial;">
     <tr>
-      <td>
-				  <img src="{{ course_link_img }}" alt ="{{ course_title }}" width="600" style="display:block;">
-		</td>
+			<td>
+				<img src="{{ course_link_img }}" alt ="{{ course_title }}" width="600" style="display:block;">
+			</td>
   </tr>
 	</table>
 	<!--TITRE-->
@@ -45,10 +45,10 @@
 		<!--DETAILS-->
 	<table width="600" border="0" cellspacing="0" cellpadding="0" style="background-color:#fff; font-family:arial;" align="center">
 		<tr>
-          <td style="padding:0 5px; text-align:center; font-weight:bold; text-align:center; font-size:14px; color:#d2840a;">Kategorie:</td>
-			 <td style="padding:0 5px; text-align:center; font-weight:bold; text-align:center; font-size:14px; color:#d2840a;">Doba trvání:</td>
+          <td style="padding:0 5px; text-align:center; font-weight:bold; text-align:center; font-size:14px; color:#d2840a;">Kategória:</td>
+			 <td style="padding:0 5px; text-align:center; font-weight:bold; text-align:center; font-size:14px; color:#d2840a;">Durácia:</td>
 			 <td style="padding:0 5px; text-align:center; font-weight:bold; text-align:center; font-size:14px; color:#d2840a;">Režim:</td>
-			 <td style="padding:0 5px; text-align:center; font-weight:bold; text-align:center; font-size:14px; color:#d2840a;">Datum ukončení:</td>
+			 <td style="padding:0 5px; text-align:center; font-weight:bold; text-align:center; font-size:14px; color:#d2840a;">Dátum ukonèenia:</td>
         </tr>
         <tr>
           <td style="padding:0 5px 15px; text-align:center; font-weight:bold; text-align:center; font-size:14px; color:#040b31;">{{ category }}</td>
@@ -61,7 +61,7 @@
 	<table width="600" border="0" cellspacing="30" cellpadding="0" align="center" style="font-family:arial; color:#fff; font-size:14px;">
 		<tr>
 			<td width="200"></td>
-			<td width="200" style="background-color:{{ atp_primary_color }}; font-weight:bold; color:#fff; font-size:16px; text-align:center; display:block; width:200px; border-radius:30px; display:block; padding:20px;"><a target="_blank" href="{{ link }}" style="text-decoration:none; color:#fff;">Přejít na kurz</a></td>
+			<td width="200" style="background-color:{{ atp_primary_color }}; font-weight:bold; color:#fff; font-size:16px; text-align:center; display:block; width:200px; border-radius:30px; display:block; padding:20px;"><a target="_blank" href="{{ link }}" style="text-decoration:none; color:#fff;">Získajte prístup k svojím vzdelávacím kurzom</a></td>
 			<td width="200"></td>
 		</tr>
 	</table>
@@ -72,20 +72,20 @@
 		<td style="font-weight:bold; color:#040b31;">$first_name $last_name,</td>
 		</tr>
 		<tr>
-		<td style="color:#040b31;">Zveme Vás k účasti na vzdělávacím kurzu <strong>{{ course_title }}.</strong></td>
+		<td style="color:#040b31;">Pozývame vás na úèas na vzdelávacom kurze <strong>{{ course_title }}.</strong></td>
 		</tr>
 		<tr>
-		<td style="color:#040b31;"><strong>Kurz můžete začít kdykoliv až do {{ end_date }}.</strong><br>
-		  Tento vzdělávací kurz je <strong>{{ mode_in_text }}.</strong></td>
+		<td style="color:#040b31;"><strong>Vzdelávací kurz musíte dokonèi do {{ end_date }}.</strong><br>
+		  Tento vzdelaávací kurz je <strong>{{ mode }}.</strong></td>
 		</tr>
 			<tr>
-				<td style="color:#040b31;">K úspěšnému absolvování kurzu musíte získat minimální skóre <span style="font-weight:bold;">{{ grade_cutoff }}</span>.</td>
+				<td style="color:#040b31;">Na potvrdenie vzdelavacieho kurzu je potrebné minimálne skóre <span style="font-weight:bold;">{{ grade_cutoff }}</span>.</td>
 		</tr>
 		<tr>
 		<td style="color:#040b31;">{{ content }}</td>
 		</tr>
 		<tr>
-		<td style="padding:0 0 10px; color:#040b31;">Pro přístup ke vzdělávacímu kurzu <span style="font-weight:bold;">{{ course_title }}</span>, prosím klikněte na odkaz níže: <a href="{{ link }}">{{ link }}</a></td>
+		<td style="padding:0 0 10px; color:#040b31;">Ak chcete získa prístup k vzdelavaciemu kurzu <span style="font-weight:bold;">{{ course_title }}</span>, kliknite na nasledujúci odkaz:<br><a href="{{ link }}">{{ link }}</a></td>
 		</tr>
 
 	</table>
