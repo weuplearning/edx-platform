@@ -69,6 +69,16 @@ class LanguagePreferenceMiddleware(MiddlewareMixin):
                 except (UserAPIRequestError, UserAPIInternalError):
                     # If we can't find the user preferences, then don't modify the cookie
                     pass
+                from student.models import UserPreprofile
+                try:
+                    uuid_user = UserPreprofile.objects.get(email=request.user.email)
+                    _lang = uuid_user.language
+                    if _lang is not None:
+                        user_pref = _lang
+                    else:
+                        user_pref = get_user_preference(request.user, DARK_LANGUAGE_KEY)
+                except:
+                    pass
 
             # If set, set the user_pref in the LANGUAGE_COOKIE
             if user_pref and not is_request_from_mobile_app(request):

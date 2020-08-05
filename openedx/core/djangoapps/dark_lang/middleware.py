@@ -140,7 +140,16 @@ class DarkLangMiddleware(MiddlewareMixin):
         preview_lang = None
         if auth_user:
             # Get the request user's dark lang preference
-            preview_lang = get_user_preference(request.user, DARK_LANGUAGE_KEY)
+            from student.models import UserPreprofile
+            try:
+                uuid_user = UserPreprofile.objects.get(email=request.user.email)
+                _lang = uuid_user.language
+                if _lang is not None:
+                    preview_lang = _lang
+                else:
+                    preview_lang = get_user_preference(request.user, DARK_LANGUAGE_KEY)
+            except:
+                preview_lang = get_user_preference(request.user, DARK_LANGUAGE_KEY)
 
         # User doesn't have a dark lang preference, so just return
         if not preview_lang:
