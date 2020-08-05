@@ -10,6 +10,10 @@ from django.utils.translation import ugettext as _
 from lms.djangoapps.ccx.overrides import get_current_ccx
 from openedx.core.djangolib.markup import HTML, Text
 
+from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
+
+from urllib.parse import urlencode
+
 # App that handles subdomain specific branding
 from branding import api as branding_api
 # app that handles site status messages
@@ -18,6 +22,19 @@ from status.status import get_site_status_msg
 from student.models import User
 
 %>
+
+<%
+#Build SEM redirect URI
+sem_logout_uri = configuration_helpers.get_value('logout_uri','')
+user_language = request.LANGUAGE_CODE
+if '-' in user_language:
+  user_language=user_language.split('-')[0]
+if user_language == 'cs':
+  user_language = 'cz'
+sem_logout_uri = sem_logout_uri.replace("[LANG]",user_language)
+sem_logout_uri = urlencode({"next":sem_logout_uri})
+%>
+
 ## Provide a hook for themes to inject branding on top.
 <%block name="navigation_top" />
 
@@ -65,7 +82,6 @@ except:
 <!-- GEOFFREY -->
 
 <%
-from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 
 if configuration_helpers.get_value('secondary_color') :
   secondary_color = configuration_helpers.get_value('secondary_color')
@@ -344,7 +360,7 @@ else :
           </div>
           %endif
           <div class="gray-btn">
-            <a class="" id="logout-btn" onclick="followClickEvents(this,'logout','exit');window.location.replace('/logout')">
+            <a class="" id="logout-btn" onclick="followClickEvents(this,'logout','exit');window.location.replace('/logout?${sem_logout_uri}')">
               <img style="height:20px;"src="${static.url('images/poweroff.png')}" alt="">
               <span class="font-basic logout-text">${_('logout')}</span>
             </a>
