@@ -155,6 +155,20 @@ def generate_html(user,score,course_img_path,template_path,course_title,categori
         "phrase2":u"tréninget teljesítette",
         "soft skills":u"soft skills",
         "expert":u"expert",
+    },
+    "sk":{
+        "date_title":u"Dátum",
+        "score_title":u"Skóre",
+        "category_label":u"Kategória",
+        "fundamentals":u"Fundamenty",
+        "fundamental":u"Fundamenty",
+        "sales approach":u"Predajný prístup",
+        "our solutions":u"Naše riešenie",
+        "regulatory":u"Regulácia",
+        "phrase":u"Certifikát o absolvovaní pre",
+        "phrase2":u"sa pripisuje",
+        "soft skills":u"Predajné zručnosti",
+        "expert":u"Doplnkové riešenia",
     }
     }
 
