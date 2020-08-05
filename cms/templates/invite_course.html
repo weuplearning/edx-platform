@@ -1,4 +1,4 @@
-	<%page expression_filter="h"/>
+<%page expression_filter="h"/>
 <%!
 from django.utils.translation import ugettext as _
 import time
@@ -23,8 +23,6 @@ primary_color=configuration_helpers.get_value('primary_color')
   require(["js/factories/index"], function (IndexFactory) {
       IndexFactory();
   });
-  //require(['${static.url("js/invite.js")}']);
-  //require(['https://amundi.qualif-atp.themoocagency.com/media/jswork/invite.js']);
   require(['${static.url("js/atp/invite.js")}']);
 </%block>
 <%namespace name='static' file='static_content.html'/>
