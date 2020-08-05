@@ -2632,7 +2632,7 @@ language_setup={
         'sem_lang' :'nl',
         'msg':'Na deze stap hebt u toegang tot de opleidingsmodule {0}.',
         'obj':'Uitnodiging om opleidingsmodule {0} te volgen',
-        'title_mail' : [' Categorie','Duur','Wijze','Einddatum'],
+        'title_mail' : [' Categorie','Duur','Wijze','Einddatum'],
         'required':'verplicht',
         'optional':'facultatief',
         'categories':{
@@ -2734,7 +2734,7 @@ language_setup={
     "hu":{
         'platform_lang' :'hu',
         'sem_lang' :'hu',
-        'msg':'Miután teljesítetted ezt a lépést, eléred a tréning modult {0}.',
+        'msg':'A regisztráció befejezése után eléred az alábbi tréninget: {0}.',
         'obj':'Meghívás a {0} tréning modulra',
         'title_mail' : ['Kategória','Idõigény','Mód','Határidõ'],
         'required':'kötelezõ',
@@ -2747,5 +2747,23 @@ language_setup={
             'expert':'expert',
             'soft skills':'soft skills'
         }
+    },
+    "sk":{
+        'platform_lang' :'sk',
+        'sem_lang' :'sk',
+        'msg':'Po dokonèení tohto kroku budete ma prístup k vzdelavaciemu modulu {0}.',
+        'obj':'Pozvánka na prístup k {0} vzdelávaciemu modulu',
+        'title_mail' : ['Kategória','Durácia','Režim','Dátum ukonèenia'],
+        'required':'povinná',
+        'optional':'voliteľná',
+        'categories':{
+            'fundamentals':'Všeobecné základy',
+            'our solutions':'Zakladné riešenia',
+            'sales approach' :'Predajný prístup',
+            'regulatory' : 'Regulácia',
+            'expert':'Doplnkové riešenia',
+            'soft skills':'Predajné zručnosti'
+        }
     }
 }
+
