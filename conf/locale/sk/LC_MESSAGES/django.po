@@ -1,12 +1,12 @@
 # #-#-#-#-#  django-partial.po (edx-platform)  #-#-#-#-#
-# edX community translations have been downloaded from Slovak (http://www.transifex.com/open-edx/edx-platform/language/sk/).
+# edX translation file.
 # Copyright (C) 2020 EdX
 # This file is distributed under the GNU AFFERO GENERAL PUBLIC LICENSE.
 #
 # Translators:
-# adb712fb58d87c74cf0f50ac3f74745f_5787dfc <f5bd2e80de1f49ebcbfb1ada57f8da8f_182912>, 2014
+# veronika.bundzikova <inactive+veronika.bundzikova@transifex.com>, 2014
 # #-#-#-#-#  django-studio.po (edx-platform)  #-#-#-#-#
-# edX community translations have been downloaded from Slovak (http://www.transifex.com/open-edx/edx-platform/language/sk/).
+# edX translation file.
 # Copyright (C) 2020 EdX
 # This file is distributed under the GNU AFFERO GENERAL PUBLIC LICENSE.
 #
@@ -14,9 +14,9 @@
 # Livia Meskova <liviameskova@hotmail.com>, 2015
 # Marcel Miklosik <marcel.miklosik@gmail.com>, 2015
 # Peter Sinal <396106@mail.muni.cz>, 2017
-# Vladimír Záhradník <vladimir@zahradnik.io>, 2015
+# Vladimír Záhradník <vladimir.zahradnik@protonmail.com>, 2015
 # #-#-#-#-#  mako.po (edx-platform)  #-#-#-#-#
-# edX community translations have been downloaded from Slovak (http://www.transifex.com/open-edx/edx-platform/language/sk/)
+# edX translation file
 # Copyright (C) 2020 edX
 # This file is distributed under the GNU AFFERO GENERAL PUBLIC LICENSE.
 #
@@ -25,46 +25,37 @@
 # Lucia Štubňová <stubnovalucia@gmail.com>, 2015
 # Marcel Miklosik <marcel.miklosik@gmail.com>, 2015
 # Muhammad Adeel Khan <adeel@edx.org>, 2019
-# Vladimír Záhradník <vladimir@zahradnik.io>, 2014
+# Vladimír Záhradník <vladimir.zahradnik@protonmail.com>, 2014
 # #-#-#-#-#  mako-studio.po (edx-platform)  #-#-#-#-#
-# edX community translations have been downloaded from Slovak (http://www.transifex.com/open-edx/edx-platform/language/sk/)
+# edX translation file
 # Copyright (C) 2020 edX
 # This file is distributed under the GNU AFFERO GENERAL PUBLIC LICENSE.
 #
 # Translators:
-# adb712fb58d87c74cf0f50ac3f74745f_5787dfc <f5bd2e80de1f49ebcbfb1ada57f8da8f_182912>, 2014
+# veronika.bundzikova <inactive+veronika.bundzikova@transifex.com>, 2014
 # #-#-#-#-#  wiki.po (edx-platform)  #-#-#-#-#
-# edX community translations have been downloaded from Slovak (http://www.transifex.com/open-edx/edx-platform/language/sk/)
+# edX translation file
 # Copyright (C) 2020 edX
 # This file is distributed under the GNU AFFERO GENERAL PUBLIC LICENSE.
 #
 # Translators:
 # Marcel Miklosik <marcel.miklosik@gmail.com>, 2015
-# Vladimír Záhradník <vladimir@zahradnik.io>, 2014
-# Vladimír Záhradník <vladimir@zahradnik.io>, 2015
-# #-#-#-#-#  edx_proctoring_proctortrack.po (0.1a)  #-#-#-#-#
-# edX community translations have been downloaded from Slovak (https://www.transifex.com/open-edx/teams/6205/sk/)
-# Copyright (C) 2020 edX
-# This file is distributed under the GNU AFFERO GENERAL PUBLIC LICENSE.
-# EdX Team <info@edx.org>, 2020.
-#
-# Translators:
-# Waheed Ahmed <waheed@edx.org>, 2019
-#
+# Vladimír Záhradník <vladimir.zahradnik@protonmail.com>, 2014
+# Vladimír Záhradník <vladimir.zahradnik@protonmail.com>, 2015
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.1a\n"
+"Project-Id-Version: edx-platform\n"
 "Report-Msgid-Bugs-To: openedx-translation@googlegroups.com\n"
-"POT-Creation-Date: 2020-07-26 20:42+0000\n"
-"PO-Revision-Date: 2019-01-20 20:43+0000\n"
-"Last-Translator: Waheed Ahmed <waheed@edx.org>, 2019\n"
-"Language-Team: Slovak (https://www.transifex.com/open-edx/teams/6205/sk/)\n"
+"POT-Creation-Date: 2020-03-29 20:42+0000\n"
+"PO-Revision-Date: 2018-07-23 07:15+0000\n"
+"Last-Translator: Muhammad Ayub khan <ayubkhan@edx.org>\n"
+"Language-Team: Slovak (http://www.transifex.com/open-edx/edx-platform/language/sk/)\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);\n"
-"Generated-By: Babel 2.8.0\n"
+"Generated-By: Babel 1.3\n"
 
 #. #-#-#-#-#  django-partial.po (edx-platform)  #-#-#-#-#
 #. Translators: 'Discussion' refers to the tab in the courseware that leads to
@@ -89,8 +80,8 @@ msgstr ""
 
 #: cms/djangoapps/contentstore/views/helpers.py
 #: common/lib/xmodule/xmodule/unit_block.py
-#: lms/djangoapps/instructor/views/tools.py lms/templates/ccx/schedule.html
-#: lms/templates/seq_module.html
+#: lms/djangoapps/instructor/views/tools.py lms/templates/seq_module.html
+#: lms/templates/ccx/schedule.html
 msgid "Unit"
 msgstr "Oddiel"
 
@@ -403,13 +394,13 @@ msgstr ""
 
 #: common/djangoapps/student/helpers.py
 #, python-brace-format
-msgid "An account with the Email '{email}' already exists."
-msgstr "Účet s Emailom '{email}' už existuje. "
+msgid "An account with the Public Username '{username}' already exists."
+msgstr ""
 
 #: common/djangoapps/student/helpers.py
 #, python-brace-format
-msgid "An account with the Public Username '{username}' already exists."
-msgstr ""
+msgid "An account with the Email '{email}' already exists."
+msgstr "Účet s Emailom '{email}' už existuje. "
 
 #: common/djangoapps/student/management/commands/manage_group.py
 msgid "Removed group: \"{}\""
@@ -635,13 +626,6 @@ msgid ""
 "                     first row being the header and columns will be as "
 "follows:                     user_id, username, email, course_id, "
 "is_verified, verification_date"
-msgstr ""
-
-#: common/djangoapps/student/models.py
-msgid ""
-"It expect that the data will be provided in a csv file format with"
-"                     first row being the header and columns will be as "
-"follows:                     course_id, username, mode"
 msgstr ""
 
 #: common/djangoapps/student/models.py
@@ -2067,8 +2051,7 @@ msgstr ""
 msgid "Never"
 msgstr ""
 
-#: common/lib/xmodule/xmodule/capa_base.py lms/templates/courseware/dates.html
-#: lms/templates/vert_module.html
+#: common/lib/xmodule/xmodule/capa_base.py
 msgid "Past Due"
 msgstr ""
 
@@ -2239,9 +2222,9 @@ msgstr ""
 #: common/lib/xmodule/xmodule/capa_base.py
 #: lms/templates/admin/user_api/accounts/cancel_retirement_action.html
 #: cms/templates/index.html cms/templates/videos_index_pagination.html
+#: lms/templates/manage_user_standing.html
 #: lms/templates/dashboard/_entitlement_reason_survey.html
 #: lms/templates/dashboard/_reason_survey.html
-#: lms/templates/manage_user_standing.html
 #: lms/templates/peer_grading/peer_grading_problem.html
 #: lms/templates/survey/survey.html
 #: lms/templates/widgets/footer-language-selector.html
@@ -2249,11 +2232,11 @@ msgstr ""
 #: openedx/core/djangoapps/theming/templates/theming/theming-admin-fragment.html
 #: themes/stanford-style/lms/templates/register-shib.html
 msgid "Submit"
-msgstr "Odoslať"
+msgstr "Potvrdiť"
 
 #: common/lib/xmodule/xmodule/capa_base.py
 msgid "Submitting"
-msgstr ""
+msgstr "Potvrdiť"
 
 #: common/lib/xmodule/xmodule/capa_base.py
 msgid "Warning: The problem has been reset to its initial state!"
@@ -2648,13 +2631,13 @@ msgstr ""
 msgid ""
 "Enter discussion categories in the following format: \"CategoryName\": "
 "{\"id\": \"i4x-InstitutionName-CourseNumber-course-CourseRun\"}. For "
-"example, one discussion category may be \"Lydian Mode\": {\"id\": "
-"\"i4x-UniversityX-MUS101-course-2015_T1\"}. The \"id\" value for each "
-"category must be unique. In \"id\" values, the only special characters that "
-"are supported are underscore, hyphen, and period. You can also specify a "
+"example, one discussion category may be \"Lydian Mode\": {\"id\": \"i4x-"
+"UniversityX-MUS101-course-2015_T1\"}. The \"id\" value for each category "
+"must be unique. In \"id\" values, the only special characters that are "
+"supported are underscore, hyphen, and period. You can also specify a "
 "category as the default for new posts in the Discussion page by setting its "
-"\"default\" attribute to true. For example, \"Lydian Mode\": {\"id\": "
-"\"i4x-UniversityX-MUS101-course-2015_T1\", \"default\": true}."
+"\"default\" attribute to true. For example, \"Lydian Mode\": {\"id\": \"i4x-"
+"UniversityX-MUS101-course-2015_T1\", \"default\": true}."
 msgstr ""
 
 #: common/lib/xmodule/xmodule/course_module.py
@@ -3188,17 +3171,6 @@ msgstr ""
 msgid ""
 "Enter the proctoring provider you want to use for this course run. Choose "
 "from the following options: {available_providers}."
-msgstr ""
-
-#: common/lib/xmodule/xmodule/course_module.py
-msgid "Proctortrack Exam Escalation Contact"
-msgstr ""
-
-#: common/lib/xmodule/xmodule/course_module.py
-msgid ""
-"Required if 'proctortrack' is selected as your proctoring provider. Enter an"
-" email address to be contacted by the support team whenever there are "
-"escalations (e.g. appeals, delayed reviews, etc.)."
 msgstr ""
 
 #: common/lib/xmodule/xmodule/course_module.py
@@ -3907,12 +3879,12 @@ msgid ""
 " considered in the Entrance Exam scoring/gating algorithm."
 msgstr ""
 
-#: common/lib/xmodule/xmodule/partitions/enrollment_track_partition_generator.py
+#: common/lib/xmodule/xmodule/partitions/partitions_service.py
 #: cms/templates/group_configurations.html
 msgid "Enrollment Track Groups"
 msgstr ""
 
-#: common/lib/xmodule/xmodule/partitions/enrollment_track_partition_generator.py
+#: common/lib/xmodule/xmodule/partitions/partitions_service.py
 msgid "Partition for segmenting users by enrollment track"
 msgstr ""
 
@@ -4135,9 +4107,8 @@ msgid "External Discussion"
 msgstr ""
 
 #: common/lib/xmodule/xmodule/tabs.py lms/djangoapps/courseware/tabs.py
-#: openedx/features/enterprise_support/templates/enterprise_support/admin/enrollment_attributes_override.html
 msgid "Home"
-msgstr ""
+msgstr "Domov"
 
 #: common/lib/xmodule/xmodule/tabs.py lms/djangoapps/courseware/tabs.py
 #: lms/djangoapps/courseware/views/views.py
@@ -4496,17 +4467,17 @@ msgstr ""
 #. interface (a menu or piece of UI that takes the full focus of the screen)
 #: common/templates/admin/student/loginfailures/change_form_template.html
 #: lms/templates/wiki/edit.html lms/templates/wiki/history.html
-#: lms/templates/wiki/includes/cheatsheet.html lms/templates/ccx/schedule.html
-#: lms/templates/dashboard.html
+#: lms/templates/wiki/includes/cheatsheet.html lms/templates/dashboard.html
+#: lms/templates/forgot_password_modal.html lms/templates/signup_modal.html
+#: lms/templates/ccx/schedule.html
 #: lms/templates/dashboard/_dashboard_entitlement_unenrollment_modal.html
-#: lms/templates/forgot_password_modal.html
 #: lms/templates/instructor/instructor_dashboard_2/add_coupon_modal.html
 #: lms/templates/instructor/instructor_dashboard_2/edit_coupon_modal.html
 #: lms/templates/instructor/instructor_dashboard_2/generate_registarion_codes_modal.html
 #: lms/templates/instructor/instructor_dashboard_2/invalidate_registration_code_modal.html
 #: lms/templates/instructor/instructor_dashboard_2/set_course_mode_price_modal.html
 #: lms/templates/modal/_modal-settings-language.html
-#: lms/templates/signup_modal.html themes/edx.org/lms/templates/dashboard.html
+#: themes/edx.org/lms/templates/dashboard.html
 #: themes/edx.org/lms/templates/dashboard/_dashboard_entitlement_unenrollment_modal.html
 msgid "Close"
 msgstr "Zatvoriť"
@@ -5217,7 +5188,6 @@ msgstr ""
 
 #: lms/djangoapps/certificates/views/webview.py
 #: lms/templates/certificates/invalid.html
-#: lms/templates/certificates/url_unsupported.html
 #, python-brace-format
 msgid "About {platform_name} Certificates"
 msgstr ""
@@ -5384,6 +5354,50 @@ msgid ""
 "this request, please visit the link(s) below."
 msgstr ""
 
+#: lms/djangoapps/commerce/views.py
+msgid "Receipt"
+msgstr ""
+
+#: lms/djangoapps/commerce/views.py
+msgid "Payment Failed"
+msgstr ""
+
+#: lms/djangoapps/commerce/views.py
+msgid "There was a problem with this transaction. You have not been charged."
+msgstr ""
+
+#: lms/djangoapps/commerce/views.py
+msgid ""
+"Make sure your information is correct, or try again with a different card or"
+" another form of payment."
+msgstr ""
+
+#: lms/djangoapps/commerce/views.py
+msgid ""
+"A system error occurred while processing your payment. You have not been "
+"charged."
+msgstr ""
+
+#: lms/djangoapps/commerce/views.py
+msgid "Please wait a few minutes and then try again."
+msgstr ""
+
+#: lms/djangoapps/commerce/views.py
+#, python-brace-format
+msgid "For help, contact {payment_support_link}."
+msgstr ""
+
+#: lms/djangoapps/commerce/views.py
+msgid "An error occurred while creating your receipt."
+msgstr ""
+
+#: lms/djangoapps/commerce/views.py
+#, python-brace-format
+msgid ""
+"If your course does not appear on your dashboard, contact "
+"{payment_support_link}."
+msgstr ""
+
 #: lms/djangoapps/course_goals/models.py
 msgid "Earn a certificate"
 msgstr ""
@@ -5398,18 +5412,6 @@ msgstr ""
 
 #: lms/djangoapps/course_goals/models.py
 msgid "Not sure yet"
-msgstr ""
-
-#: lms/djangoapps/course_home_api/outline/v1/views.py
-msgid "'course_id' is required."
-msgstr ""
-
-#: lms/djangoapps/course_home_api/outline/v1/views.py
-msgid "Only 'course_id' is expected."
-msgstr ""
-
-#: lms/djangoapps/course_home_api/outline/v1/views.py
-msgid "Welcome message successfully dismissed."
 msgstr ""
 
 #: lms/djangoapps/course_wiki/tab.py lms/djangoapps/course_wiki/views.py
@@ -5458,51 +5460,13 @@ msgstr ""
 msgid "You do not have access to this course on a mobile device"
 msgstr ""
 
-#: lms/djangoapps/courseware/access_response.py
-msgid "You must be enrolled in the course"
-msgstr ""
-
-#: lms/djangoapps/courseware/access_response.py
-msgid "You must be logged in to see this course"
-msgstr ""
-
 #: lms/djangoapps/courseware/course_tools.py
 #: lms/templates/dashboard/_dashboard_course_listing.html
 msgid "Upgrade to Verified"
 msgstr ""
 
-#: lms/djangoapps/courseware/course_tools.py
-msgid "Financial Assistance"
-msgstr ""
-
 #: lms/djangoapps/courseware/courses.py
 msgid "Assignment"
-msgstr ""
-
-#: lms/djangoapps/courseware/courses.py
-msgid "Open Response Assessment"
-msgstr ""
-
-#: lms/djangoapps/courseware/courses.py
-msgid "Self Assessment"
-msgstr ""
-
-#: lms/djangoapps/courseware/courses.py
-msgid "Peer Assessment"
-msgstr ""
-
-#: lms/djangoapps/courseware/courses.py
-msgid "Staff Assessment"
-msgstr ""
-
-#: lms/djangoapps/courseware/courses.py
-msgid "Submission"
-msgstr ""
-
-#: lms/djangoapps/courseware/courses.py
-msgid ""
-"Open Response Assessment due dates are set by your instructor and can't be "
-"shifted."
 msgstr ""
 
 #. Translators: 'absolute' is a date such as "Jan 01,
@@ -5518,10 +5482,6 @@ msgstr ""
 #: lms/djangoapps/courseware/date_summary.py
 #, python-brace-format
 msgid "in {relative} - {absolute}"
-msgstr ""
-
-#: lms/djangoapps/courseware/date_summary.py
-msgid "Enrollment Date"
 msgstr ""
 
 #: lms/djangoapps/courseware/date_summary.py
@@ -5899,23 +5859,6 @@ msgid "Annual Household Income"
 msgstr ""
 
 #: lms/djangoapps/courseware/views/views.py
-msgid ""
-"Tell us about your current financial situation. Why do you need assistance?"
-msgstr ""
-
-#: lms/djangoapps/courseware/views/views.py
-msgid ""
-"Tell us about your learning or professional goals. How will a Verified "
-"Certificate in this course help you achieve these goals?"
-msgstr ""
-
-#: lms/djangoapps/courseware/views/views.py
-msgid ""
-"Tell us about your plans for this course. What steps will you take to help "
-"you complete the course work and receive a certificate?"
-msgstr ""
-
-#: lms/djangoapps/courseware/views/views.py
 msgid "Use between 1250 and 2500 characters or so in your response."
 msgstr ""
 
@@ -6153,18 +6096,14 @@ msgid "Good"
 msgstr ""
 
 #: lms/djangoapps/discussion/templates/discussion/edx_ace/responsenotification/email/body.html
+#: lms/djangoapps/discussion/templates/discussion/edx_ace/responsenotification/email/body.txt
 #, python-format
-msgid "%(comment_username)s replied to"
+msgid "%(comment_username)s replied to <b>%(thread_title)s</b>:"
 msgstr ""
 
 #: lms/djangoapps/discussion/templates/discussion/edx_ace/responsenotification/email/body.html
 #: lms/djangoapps/discussion/templates/discussion/edx_ace/responsenotification/email/body.txt
 msgid "View discussion"
-msgstr ""
-
-#: lms/djangoapps/discussion/templates/discussion/edx_ace/responsenotification/email/body.txt
-#, python-format
-msgid "%(comment_username)s replied to <b>%(thread_title)s</b>:"
 msgstr ""
 
 #: lms/djangoapps/discussion/templates/discussion/edx_ace/responsenotification/email/subject.txt
@@ -6279,6 +6218,51 @@ msgid ""
 "sailthru."
 msgstr ""
 
+#: lms/djangoapps/instructor/paidcourse_enrollment_report.py
+#, python-brace-format
+msgid "{platform_name} Staff"
+msgstr ""
+
+#: lms/djangoapps/instructor/paidcourse_enrollment_report.py
+msgid "Course Staff"
+msgstr ""
+
+#: lms/djangoapps/instructor/paidcourse_enrollment_report.py
+#: openedx/core/djangoapps/django_comment_common/models.py
+msgid "Student"
+msgstr "Študent"
+
+#: lms/djangoapps/instructor/paidcourse_enrollment_report.py
+#: lms/templates/preview_menu.html
+#: lms/templates/instructor/instructor_dashboard_2/membership.html
+msgid "Staff"
+msgstr "Personál"
+
+#: lms/djangoapps/instructor/paidcourse_enrollment_report.py
+msgid "Used Registration Code"
+msgstr ""
+
+#: lms/djangoapps/instructor/paidcourse_enrollment_report.py
+msgid "Credit Card - Individual"
+msgstr ""
+
+#: lms/djangoapps/instructor/paidcourse_enrollment_report.py
+#, python-brace-format
+msgid "manually enrolled by username: {username}"
+msgstr ""
+
+#: lms/djangoapps/instructor/paidcourse_enrollment_report.py
+msgid "Manually Enrolled"
+msgstr ""
+
+#: lms/djangoapps/instructor/paidcourse_enrollment_report.py
+msgid "Data Integrity Error"
+msgstr ""
+
+#: lms/djangoapps/instructor/paidcourse_enrollment_report.py
+msgid "TBD"
+msgstr ""
+
 #: lms/djangoapps/instructor/services.py
 #, python-brace-format
 msgid "Proctored Exam Review: {review_status}"
@@ -6367,6 +6351,29 @@ msgid "Could not find problem with this location."
 msgstr ""
 
 #: lms/djangoapps/instructor/views/api.py
+#, python-brace-format
+msgid "Invoice number '{num}' does not exist."
+msgstr ""
+
+#: lms/djangoapps/instructor/views/api.py
+msgid "The sale associated with this invoice has already been invalidated."
+msgstr ""
+
+#: lms/djangoapps/instructor/views/api.py
+#, python-brace-format
+msgid "Invoice number {0} has been invalidated."
+msgstr ""
+
+#: lms/djangoapps/instructor/views/api.py
+msgid "This invoice is already active."
+msgstr ""
+
+#: lms/djangoapps/instructor/views/api.py
+#, python-brace-format
+msgid "The registration codes for invoice {0} have been re-activated."
+msgstr ""
+
+#: lms/djangoapps/instructor/views/api.py
 msgid "CourseID"
 msgstr ""
 
@@ -6388,14 +6395,17 @@ msgid "enrolled learner profile"
 msgstr ""
 
 #: lms/djangoapps/instructor/views/api.py
+#: lms/djangoapps/instructor_task/tasks_helper/enrollments.py
 msgid "User ID"
 msgstr ""
 
 #: lms/djangoapps/instructor/views/api.py
 #: lms/djangoapps/instructor/views/tools.py
+#: lms/djangoapps/instructor_task/tasks_helper/enrollments.py
 #: openedx/core/djangoapps/schedules/admin.py
+#: lms/templates/staff_problem_info.html
 #: lms/templates/api_admin/catalogs/search.html
-#: lms/templates/ccx/enrollment.html lms/templates/staff_problem_info.html
+#: lms/templates/ccx/enrollment.html
 msgid "Username"
 msgstr "Meno používateľa"
 
@@ -6417,6 +6427,7 @@ msgid "Email"
 msgstr "Email"
 
 #: lms/djangoapps/instructor/views/api.py
+#: lms/djangoapps/instructor_task/tasks_helper/enrollments.py
 msgid "Language"
 msgstr "Jazyk"
 
@@ -6432,6 +6443,7 @@ msgstr "Rok narodenia"
 #. Translators: This label appears above a dropdown menu on the registration
 #. form used to select the user's gender.
 #: lms/djangoapps/instructor/views/api.py
+#: lms/djangoapps/instructor_task/tasks_helper/enrollments.py
 #: openedx/core/djangoapps/user_authn/views/registration_form.py
 #: lms/templates/signup_modal.html
 #: themes/stanford-style/lms/templates/register-form.html
@@ -6439,15 +6451,18 @@ msgid "Gender"
 msgstr "Pohlavie"
 
 #: lms/djangoapps/instructor/views/api.py
+#: lms/djangoapps/instructor_task/tasks_helper/enrollments.py
 msgid "Level of Education"
 msgstr ""
 
 #: lms/djangoapps/instructor/views/api.py
+#: lms/djangoapps/instructor_task/tasks_helper/enrollments.py
 #: themes/stanford-style/lms/templates/register-form.html
 msgid "Mailing Address"
 msgstr ""
 
 #: lms/djangoapps/instructor/views/api.py
+#: lms/djangoapps/instructor_task/tasks_helper/enrollments.py
 msgid "Goals"
 msgstr ""
 
@@ -6480,6 +6495,7 @@ msgstr ""
 #. Translators: This label appears above a field on the registration form
 #. which allows the user to input the city in which they live.
 #: lms/djangoapps/instructor/views/api.py
+#: lms/djangoapps/instructor_task/tasks_helper/enrollments.py
 #: openedx/core/djangoapps/user_api/accounts/settings_views.py
 #: openedx/core/djangoapps/user_authn/views/registration_form.py
 #: lms/templates/instructor/instructor_dashboard_2/generate_registarion_codes_modal.html
@@ -6489,6 +6505,7 @@ msgid "City"
 msgstr ""
 
 #: lms/djangoapps/instructor/views/api.py
+#: lms/djangoapps/instructor_task/tasks_helper/enrollments.py
 #: lms/templates/instructor/instructor_dashboard_2/generate_registarion_codes_modal.html
 #: lms/templates/shoppingcart/receipt.html
 #: themes/stanford-style/lms/templates/register-form.html
@@ -6509,6 +6526,64 @@ msgid "The file must contain a 'username' column, an 'email' column, or both."
 msgstr ""
 
 #: lms/djangoapps/instructor/views/api.py
+#: lms/templates/instructor/instructor_dashboard_2/add_coupon_modal.html
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+#: lms/templates/instructor/instructor_dashboard_2/executive_summary.html
+msgid "Coupon Code"
+msgstr ""
+
+#: lms/djangoapps/instructor/views/api.py
+#: openedx/core/djangoapps/schedules/admin.py
+msgid "Course Id"
+msgstr ""
+
+#: lms/djangoapps/instructor/views/api.py
+msgid "% Discount"
+msgstr ""
+
+#: lms/djangoapps/instructor/views/api.py
+#: lms/djangoapps/shoppingcart/reports.py
+#: lms/templates/instructor/instructor_dashboard_2/add_coupon_modal.html
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+#: lms/templates/instructor/instructor_dashboard_2/edit_coupon_modal.html
+#: wiki/plugins/attachments/forms.py
+#: wiki/plugins/attachments/templates/wiki/plugins/attachments/history.html
+msgid "Description"
+msgstr "Popis"
+
+#: lms/djangoapps/instructor/views/api.py
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+#: lms/templates/instructor/instructor_dashboard_2/edit_coupon_modal.html
+msgid "Expiration Date"
+msgstr ""
+
+#: lms/djangoapps/instructor/views/api.py
+msgid "Is Active"
+msgstr ""
+
+#: lms/djangoapps/instructor/views/api.py
+msgid "Code Redeemed Count"
+msgstr ""
+
+#: lms/djangoapps/instructor/views/api.py
+msgid "Total Discounted Seats"
+msgstr ""
+
+#: lms/djangoapps/instructor/views/api.py
+msgid "Total Discounted Amount"
+msgstr ""
+
+#: lms/djangoapps/instructor/views/api.py
+#: lms/djangoapps/instructor_task/api_helper.py
+msgid "detailed enrollment"
+msgstr ""
+
+#: lms/djangoapps/instructor/views/api.py
+#: lms/djangoapps/instructor_task/api_helper.py
+msgid "executive summary"
+msgstr ""
+
+#: lms/djangoapps/instructor/views/api.py
 #: lms/djangoapps/instructor_task/api_helper.py
 msgid "survey"
 msgstr ""
@@ -6516,6 +6591,14 @@ msgstr ""
 #: lms/djangoapps/instructor/views/api.py
 #: lms/djangoapps/instructor_task/api_helper.py
 msgid "proctored exam results"
+msgstr ""
+
+#: lms/djangoapps/instructor/views/api.py
+msgid "Could not parse amount as a decimal"
+msgstr ""
+
+#: lms/djangoapps/instructor/views/api.py
+msgid "Unable to generate redeem codes because of course misconfiguration."
 msgstr ""
 
 #: lms/djangoapps/instructor/views/api.py
@@ -6730,6 +6813,63 @@ msgid ""
 " try again."
 msgstr ""
 
+#: lms/djangoapps/instructor/views/coupons.py
+msgid "coupon id is None"
+msgstr ""
+
+#: lms/djangoapps/instructor/views/coupons.py
+#, python-brace-format
+msgid "coupon with the coupon id ({coupon_id}) DoesNotExist"
+msgstr ""
+
+#: lms/djangoapps/instructor/views/coupons.py
+#, python-brace-format
+msgid "coupon with the coupon id ({coupon_id}) is already inactive"
+msgstr ""
+
+#: lms/djangoapps/instructor/views/coupons.py
+#, python-brace-format
+msgid "coupon with the coupon id ({coupon_id}) updated successfully"
+msgstr ""
+
+#: lms/djangoapps/instructor/views/coupons.py
+#, python-brace-format
+msgid ""
+"The code ({code}) that you have tried to define is already in use as a "
+"registration code"
+msgstr ""
+
+#: lms/djangoapps/instructor/views/coupons.py
+msgid "Please Enter the Integer Value for Coupon Discount"
+msgstr ""
+
+#: lms/djangoapps/instructor/views/coupons.py
+msgid "Please Enter the Coupon Discount Value Less than or Equal to 100"
+msgstr ""
+
+#: lms/djangoapps/instructor/views/coupons.py
+msgid "Please enter the date in this format i-e month/day/year"
+msgstr ""
+
+#: lms/djangoapps/instructor/views/coupons.py
+#, python-brace-format
+msgid "coupon with the coupon code ({code}) added successfully"
+msgstr ""
+
+#: lms/djangoapps/instructor/views/coupons.py
+#, python-brace-format
+msgid "coupon with the coupon code ({code}) already exists for this course"
+msgstr ""
+
+#: lms/djangoapps/instructor/views/coupons.py
+msgid "coupon id not found"
+msgstr ""
+
+#: lms/djangoapps/instructor/views/coupons.py
+#, python-brace-format
+msgid "coupon with the coupon id ({coupon_id}) updated Successfully"
+msgstr ""
+
 #: lms/djangoapps/instructor/views/instructor_dashboard.py
 msgid "Instructor"
 msgstr "Inštruktor"
@@ -6739,6 +6879,10 @@ msgstr "Inštruktor"
 msgid ""
 "To gain insights into student enrollment and participation {link_start}visit"
 " {analytics_dashboard_name}, our new course analytics product{link_end}."
+msgstr ""
+
+#: lms/djangoapps/instructor/views/instructor_dashboard.py
+msgid "E-Commerce"
 msgstr ""
 
 #: lms/djangoapps/instructor/views/instructor_dashboard.py
@@ -6838,6 +6982,29 @@ msgstr ""
 msgid "Incomplete"
 msgstr ""
 
+#: lms/djangoapps/instructor/views/registration_codes.py
+#, python-brace-format
+msgid ""
+"The enrollment code ({code}) was not found for the {course_name} course."
+msgstr ""
+
+#: lms/djangoapps/instructor/views/registration_codes.py
+msgid "This enrollment code has been canceled. It can no longer be used."
+msgstr ""
+
+#: lms/djangoapps/instructor/views/registration_codes.py
+msgid "This enrollment code has been marked as unused."
+msgstr ""
+
+#: lms/djangoapps/instructor/views/registration_codes.py
+msgid "The enrollment code has been restored."
+msgstr ""
+
+#: lms/djangoapps/instructor/views/registration_codes.py
+#, python-brace-format
+msgid "The redemption does not exist against enrollment code ({code})."
+msgstr ""
+
 #: lms/djangoapps/instructor/views/tools.py
 #, python-brace-format
 msgid "Could not find student matching identifier: {student_identifier}"
@@ -6869,6 +7036,7 @@ msgstr ""
 #. Translators: This label appears above a field on the registration form
 #. meant to hold the user's full name.
 #: lms/djangoapps/instructor/views/tools.py
+#: lms/djangoapps/instructor_task/tasks_helper/enrollments.py
 #: openedx/core/djangoapps/user_authn/views/registration_form.py
 #: lms/templates/signup_modal.html lms/templates/sysadmin_dashboard.html
 #: themes/stanford-style/lms/templates/register-form.html
@@ -6896,10 +7064,6 @@ msgstr ""
 
 #: lms/djangoapps/instructor_task/api_helper.py
 msgid "Error occured. Please try again later."
-msgstr ""
-
-#: lms/djangoapps/instructor_task/api_helper.py
-msgid "detailed enrollment"
 msgstr ""
 
 #: lms/djangoapps/instructor_task/api_helper.py
@@ -6982,6 +7146,12 @@ msgstr ""
 #. Translators: This is a past-tense verb that is inserted into task progress
 #. messages as {action}.
 #: lms/djangoapps/instructor_task/tasks.py
+msgid "generating_enrollment_report"
+msgstr ""
+
+#. Translators: This is a past-tense verb that is inserted into task progress
+#. messages as {action}.
+#: lms/djangoapps/instructor_task/tasks.py
 msgid "certificates generated"
 msgstr ""
 
@@ -6991,6 +7161,86 @@ msgstr ""
 #. {attempted} so far"
 #: lms/djangoapps/instructor_task/tasks.py
 msgid "cohorted"
+msgstr ""
+
+#. Translators: This label appears above a field on the registration form
+#. which allows the user to input the First Name
+#: lms/djangoapps/instructor_task/tasks_helper/enrollments.py
+#: openedx/core/djangoapps/user_api/accounts/settings_views.py
+#: openedx/core/djangoapps/user_authn/views/registration_form.py
+msgid "First Name"
+msgstr ""
+
+#. Translators: This label appears above a field on the registration form
+#. which allows the user to input the First Name
+#: lms/djangoapps/instructor_task/tasks_helper/enrollments.py
+#: openedx/core/djangoapps/user_api/accounts/settings_views.py
+#: openedx/core/djangoapps/user_authn/views/registration_form.py
+msgid "Last Name"
+msgstr ""
+
+#: lms/djangoapps/instructor_task/tasks_helper/enrollments.py
+#: lms/templates/shoppingcart/receipt.html
+msgid "Company Name"
+msgstr ""
+
+#. #-#-#-#-#  django-partial.po (edx-platform)  #-#-#-#-#
+#. Translators: This label appears above a field on the registration form
+#. which allows the user to input the Title
+#: lms/djangoapps/instructor_task/tasks_helper/enrollments.py
+#: openedx/core/djangoapps/user_api/accounts/settings_views.py
+#: openedx/core/djangoapps/user_authn/views/registration_form.py wiki/forms.py
+#: wiki/templates/wiki/dir.html
+msgid "Title"
+msgstr "Nadpis"
+
+#: lms/djangoapps/instructor_task/tasks_helper/enrollments.py
+#: themes/stanford-style/lms/templates/register-form.html
+msgid "Year of Birth"
+msgstr ""
+
+#: lms/djangoapps/instructor_task/tasks_helper/enrollments.py
+msgid "Enrollment Date"
+msgstr ""
+
+#: lms/djangoapps/instructor_task/tasks_helper/enrollments.py
+msgid "Currently Enrolled"
+msgstr ""
+
+#: lms/djangoapps/instructor_task/tasks_helper/enrollments.py
+msgid "Enrollment Source"
+msgstr ""
+
+#: lms/djangoapps/instructor_task/tasks_helper/enrollments.py
+msgid "Manual (Un)Enrollment Reason"
+msgstr ""
+
+#: lms/djangoapps/instructor_task/tasks_helper/enrollments.py
+msgid "Enrollment Role"
+msgstr ""
+
+#: lms/djangoapps/instructor_task/tasks_helper/enrollments.py
+msgid "List Price"
+msgstr ""
+
+#: lms/djangoapps/instructor_task/tasks_helper/enrollments.py
+msgid "Payment Amount"
+msgstr ""
+
+#: lms/djangoapps/instructor_task/tasks_helper/enrollments.py
+msgid "Coupon Codes Used"
+msgstr ""
+
+#: lms/djangoapps/instructor_task/tasks_helper/enrollments.py
+msgid "Registration Code Used"
+msgstr ""
+
+#: lms/djangoapps/instructor_task/tasks_helper/enrollments.py
+msgid "Payment Status"
+msgstr ""
+
+#: lms/djangoapps/instructor_task/tasks_helper/enrollments.py
+msgid "Transaction Reference Number"
 msgstr ""
 
 #: lms/djangoapps/instructor_task/views.py
@@ -7151,8 +7401,8 @@ msgstr ""
 #: lms/djangoapps/learner_dashboard/programs.py
 #: lms/templates/header/navbar-authenticated.html
 #: lms/templates/learner_dashboard/programs.html
-#: lms/templates/navigation/bootstrap/navbar-authenticated.html
 #: lms/templates/navigation/navbar-authenticated.html
+#: lms/templates/navigation/bootstrap/navbar-authenticated.html
 #: themes/edx.org/lms/templates/header/navbar-authenticated.html
 msgid "Programs"
 msgstr ""
@@ -7327,11 +7577,9 @@ msgid "{mode_name} for course {course}"
 msgstr ""
 
 #: lms/djangoapps/shoppingcart/models.py
-#, python-brace-format
 msgid ""
-"To receive a refund you may unenroll from the course on your edX Dashboard "
-"({dashboard_url}) up to 14 days after your payment or 14 days after your "
-"course starts (up to six months after your payment).\n"
+"You can unenroll in the course and receive a full refund for 14 days after "
+"the course start date. "
 msgstr ""
 
 #: lms/djangoapps/shoppingcart/models.py
@@ -7344,14 +7592,15 @@ msgstr ""
 #: lms/djangoapps/shoppingcart/models.py
 msgid ""
 "You can unenroll in the course and receive a full refund for 2 days after "
-"the course start date.\n"
+"the course start date. "
 msgstr ""
 
 #: lms/djangoapps/shoppingcart/models.py
 #, python-brace-format
 msgid ""
-"{refund_reminder_msg}For help unenrolling, Please see How do I unenroll from"
-" a course? ({how_to_unenroll_link}) in our edX HelpCenter."
+"{refund_reminder_msg}To receive your refund, contact {billing_email}. Please"
+" include your order number in your email. Please do NOT include your credit "
+"card information."
 msgstr ""
 
 #: lms/djangoapps/shoppingcart/models.py
@@ -7765,14 +8014,6 @@ msgid "Currency"
 msgstr "Mena"
 
 #: lms/djangoapps/shoppingcart/reports.py
-#: lms/templates/instructor/instructor_dashboard_2/add_coupon_modal.html
-#: lms/templates/instructor/instructor_dashboard_2/edit_coupon_modal.html
-#: wiki/plugins/attachments/forms.py
-#: wiki/plugins/attachments/templates/wiki/plugins/attachments/history.html
-msgid "Description"
-msgstr "Popis"
-
-#: lms/djangoapps/shoppingcart/reports.py
 msgid "Comments"
 msgstr "Komentáre"
 
@@ -7784,7 +8025,8 @@ msgstr ""
 msgid "Course Announce Date"
 msgstr ""
 
-#: lms/djangoapps/shoppingcart/reports.py
+#: lms/djangoapps/shoppingcart/reports.py cms/templates/settings.html
+#: lms/templates/instructor/instructor_dashboard_2/executive_summary.html
 msgid "Course Start Date"
 msgstr "Dátum začiatku kurzu"
 
@@ -7813,6 +8055,7 @@ msgid "Verified Enrollment"
 msgstr "Overený zápis"
 
 #: lms/djangoapps/shoppingcart/reports.py
+#: lms/templates/instructor/instructor_dashboard_2/executive_summary.html
 msgid "Gross Revenue"
 msgstr ""
 
@@ -7913,6 +8156,14 @@ msgstr ""
 msgid "View and regenerate certificates."
 msgstr ""
 
+#: lms/djangoapps/support/views/index.py lms/templates/support/refund.html
+msgid "Manual Refund"
+msgstr ""
+
+#: lms/djangoapps/support/views/index.py
+msgid "Track refunds issued directly through CyberSource."
+msgstr ""
+
 #: lms/djangoapps/support/views/index.py
 #: lms/templates/ccx/coach_dashboard.html lms/templates/ccx/enrollment.html
 #: lms/templates/support/enrollment.html
@@ -7991,8 +8242,43 @@ msgstr ""
 msgid "User Disabled Successfully"
 msgstr ""
 
-#: lms/djangoapps/survey/utils.py
-msgid "You must complete a survey"
+#: lms/djangoapps/support/views/refund.py
+#: lms/templates/shoppingcart/billing_details.html
+msgid "Email Address"
+msgstr ""
+
+#: lms/djangoapps/support/views/refund.py
+#: openedx/core/djangoapps/schedules/admin.py
+#: cms/templates/maintenance/_force_publish_course.html
+#: lms/templates/sysadmin_dashboard_gitlogs.html
+#: lms/templates/instructor/instructor_dashboard_2/add_coupon_modal.html
+#: lms/templates/instructor/instructor_dashboard_2/edit_coupon_modal.html
+#: lms/templates/support/feature_based_enrollments.html
+msgid "Course ID"
+msgstr "ID kurzu"
+
+#: lms/djangoapps/support/views/refund.py
+msgid "User not found"
+msgstr ""
+
+#: lms/djangoapps/support/views/refund.py
+#, python-brace-format
+msgid "Course {course_id} not past the refund window."
+msgstr ""
+
+#: lms/djangoapps/support/views/refund.py
+#, python-brace-format
+msgid "No order found for {user} in course {course_id}"
+msgstr ""
+
+#: lms/djangoapps/support/views/refund.py
+#, python-brace-format
+msgid "Unenrolled {user} from {course_id}"
+msgstr ""
+
+#: lms/djangoapps/support/views/refund.py
+#, python-brace-format
+msgid "Refunded {cost} for order id {order_id}"
 msgstr ""
 
 #: lms/djangoapps/teams/models.py
@@ -8041,15 +8327,11 @@ msgid "The supplied course_id {course_id} is not valid."
 msgstr ""
 
 #: lms/djangoapps/teams/views.py
-msgid "topic_id is required"
+msgid "You are already in a team in this course."
 msgstr ""
 
 #: lms/djangoapps/teams/views.py
 msgid "You can't create a team in an instructor managed topic."
-msgstr ""
-
-#: lms/djangoapps/teams/views.py
-msgid "You are already in a team in this teamset."
 msgstr ""
 
 #: lms/djangoapps/teams/views.py
@@ -8086,7 +8368,7 @@ msgstr ""
 
 #: lms/djangoapps/teams/views.py
 #, python-brace-format
-msgid "The user {username} is already a member of a team in this teamset."
+msgid "The user {username} is already a member of a team in this course."
 msgstr ""
 
 #: lms/djangoapps/teams/views.py
@@ -8179,6 +8461,16 @@ msgstr ""
 
 #: lms/djangoapps/verify_student/views.py
 msgid "Image data is not valid."
+msgstr ""
+
+#: lms/djangoapps/verify_student/views.py
+#, python-brace-format
+msgid "{platform_name} ID Verification Photos Received"
+msgstr ""
+
+#: lms/djangoapps/verify_student/views.py
+#, python-brace-format
+msgid "Your {platform_name} ID Verification Approved"
 msgstr ""
 
 #: lms/djangoapps/verify_student/views.py
@@ -8591,6 +8883,9 @@ msgstr ""
 
 #: lms/templates/oauth2_provider/authorize.html
 #: openedx/core/djangoapps/user_api/admin.py
+#: cms/templates/course-create-rerun.html cms/templates/index.html
+#: cms/templates/manage_users.html cms/templates/manage_users_lib.html
+#: cms/templates/videos_index_pagination.html
 msgid "Cancel"
 msgstr "Zrušiť"
 
@@ -8599,67 +8894,20 @@ msgid "Allow"
 msgstr ""
 
 #: lms/templates/oauth2_provider/authorize.html
-#: lms/templates/ccx/schedule.html
 #: lms/templates/sysadmin_dashboard_gitlogs.html
+#: lms/templates/ccx/schedule.html
 msgid "Error"
 msgstr "Chyba"
 
-#: lms/templates/verify_student/edx_ace/verificationapproved/email/body.html
-msgid "ID Verification Approved"
+#: lms/templates/verify_student/edx_ace/verificationexpiry/email/body.html
+msgid "Expired ID Verification"
 msgstr ""
 
-#: lms/templates/verify_student/edx_ace/verificationapproved/email/body.html
 #: lms/templates/verify_student/edx_ace/verificationexpiry/email/body.html
-#: lms/templates/verify_student/edx_ace/verificationsubmitted/email/body.html
 #: openedx/core/djangoapps/user_api/templates/user_api/edx_ace/deletionnotificationmessage/email/body.html
 #: openedx/core/djangoapps/user_api/templates/user_api/edx_ace/deletionnotificationmessage/email/body.txt
 #, python-format
 msgid "Hello %(full_name)s,"
-msgstr ""
-
-#: lms/templates/verify_student/edx_ace/verificationapproved/email/body.html
-#: lms/templates/verify_student/edx_ace/verificationapproved/email/body.txt
-#, python-format
-msgid "Your %(platform_name)s ID verification photos have been approved."
-msgstr ""
-
-#: lms/templates/verify_student/edx_ace/verificationapproved/email/body.html
-#: lms/templates/verify_student/edx_ace/verificationapproved/email/body.txt
-#, python-format
-msgid ""
-"Your approval status remains valid for one year, and it will expire "
-"%(expiry_date)s."
-msgstr ""
-
-#: lms/templates/verify_student/edx_ace/verificationapproved/email/body.html
-#: lms/templates/verify_student/edx_ace/verificationapproved/email/body.txt
-msgid "Enjoy your studies,"
-msgstr ""
-
-#: lms/templates/verify_student/edx_ace/verificationapproved/email/body.html
-#: lms/templates/verify_student/edx_ace/verificationapproved/email/body.txt
-#: lms/templates/verify_student/edx_ace/verificationexpiry/email/body.html
-#: lms/templates/verify_student/edx_ace/verificationexpiry/email/body.txt
-#: lms/templates/verify_student/edx_ace/verificationsubmitted/email/body.html
-#: lms/templates/verify_student/edx_ace/verificationsubmitted/email/body.txt
-#, python-format
-msgid "The %(platform_name)s Team "
-msgstr ""
-
-#: lms/templates/verify_student/edx_ace/verificationapproved/email/body.txt
-#: lms/templates/verify_student/edx_ace/verificationexpiry/email/body.txt
-#: lms/templates/verify_student/edx_ace/verificationsubmitted/email/body.txt
-#, python-format
-msgid "Hello %(full_name)s, "
-msgstr ""
-
-#: lms/templates/verify_student/edx_ace/verificationapproved/email/subject.txt
-#, python-format
-msgid "Your %(platform_name)s ID verification was approved!"
-msgstr ""
-
-#: lms/templates/verify_student/edx_ace/verificationexpiry/email/body.html
-msgid "Expired ID Verification"
 msgstr ""
 
 #: lms/templates/verify_student/edx_ace/verificationexpiry/email/body.html
@@ -8707,42 +8955,20 @@ msgstr ""
 msgid "Thank you,"
 msgstr ""
 
+#: lms/templates/verify_student/edx_ace/verificationexpiry/email/body.html
+#: lms/templates/verify_student/edx_ace/verificationexpiry/email/body.txt
+#, python-format
+msgid "The %(platform_name)s Team "
+msgstr ""
+
+#: lms/templates/verify_student/edx_ace/verificationexpiry/email/body.txt
+#, python-format
+msgid "Hello %(full_name)s, "
+msgstr ""
+
 #: lms/templates/verify_student/edx_ace/verificationexpiry/email/subject.txt
 #, python-format
 msgid "Your %(platform_name)s Verification has Expired"
-msgstr ""
-
-#: lms/templates/verify_student/edx_ace/verificationsubmitted/email/body.html
-msgid "ID Verification Submitted"
-msgstr ""
-
-#: lms/templates/verify_student/edx_ace/verificationsubmitted/email/body.html
-#: lms/templates/verify_student/edx_ace/verificationsubmitted/email/body.txt
-#, python-format
-msgid ""
-"Thank you for submitting your photos for identity verification with "
-"%(platform_name)s. "
-msgstr ""
-
-#: lms/templates/verify_student/edx_ace/verificationsubmitted/email/body.html
-#: lms/templates/verify_student/edx_ace/verificationsubmitted/email/body.txt
-msgid ""
-"We have received your photos and they will be reviewed within 5-7 days."
-msgstr ""
-
-#: lms/templates/verify_student/edx_ace/verificationsubmitted/email/body.html
-#: lms/templates/verify_student/edx_ace/verificationsubmitted/email/body.txt
-#, python-format
-msgid "You may check the status on your dashboard: %(dashboard_link)s "
-msgstr ""
-
-#: lms/templates/verify_student/edx_ace/verificationsubmitted/email/body.html
-#: lms/templates/verify_student/edx_ace/verificationsubmitted/email/body.txt
-msgid "Best regards,"
-msgstr ""
-
-#: lms/templates/verify_student/edx_ace/verificationsubmitted/email/subject.txt
-msgid "Thank you for submitting your photos!"
 msgstr ""
 
 #: lms/templates/wiki/article.html
@@ -8753,19 +8979,26 @@ msgstr "Naposledy upravené:"
 msgid "See all children"
 msgstr ""
 
-#: lms/templates/wiki/article.html
+#: lms/templates/wiki/article.html wiki/templates/wiki/article.html
 msgid "This article was last modified:"
 msgstr "Tento článok bol naposledy upravený:"
 
-#: lms/templates/wiki/create.html
+#: lms/templates/wiki/create.html wiki/templates/wiki/create.html
 msgid "Add new article"
 msgstr "Pridať nový článok:"
 
-#: lms/templates/wiki/create.html
+#: lms/templates/wiki/create.html wiki/templates/wiki/create.html
 msgid "Create article"
 msgstr "Vytvoriť článok"
 
 #: lms/templates/wiki/create.html lms/templates/wiki/delete.html
+#: wiki/plugins/attachments/templates/wiki/plugins/attachments/delete.html
+#: wiki/plugins/attachments/templates/wiki/plugins/attachments/history.html
+#: wiki/plugins/attachments/templates/wiki/plugins/attachments/replace.html
+#: wiki/plugins/attachments/templates/wiki/plugins/attachments/search.html
+#: wiki/plugins/images/templates/wiki/plugins/images/purge.html
+#: wiki/plugins/images/templates/wiki/plugins/images/revision_add.html
+#: wiki/templates/wiki/create.html wiki/templates/wiki/delete.html
 msgid "Go back"
 msgstr "Späť"
 
@@ -8777,6 +9010,9 @@ msgstr ""
 #: lms/templates/wiki/delete.html
 #: lms/templates/wiki/plugins/attachments/index.html
 #: cms/templates/component.html cms/templates/studio_xblock_wrapper.html
+#: wiki/plugins/attachments/templates/wiki/plugins/attachments/delete.html
+#: wiki/plugins/attachments/templates/wiki/plugins/attachments/index.html
+#: wiki/templates/wiki/delete.html
 msgid "Delete"
 msgstr "Odstrániť"
 
@@ -8800,7 +9036,7 @@ msgstr ""
 msgid "Articles that will be deleted"
 msgstr ""
 
-#: lms/templates/wiki/delete.html
+#: lms/templates/wiki/delete.html wiki/templates/wiki/delete.html
 msgid "...and more!"
 msgstr "...a viac!"
 
@@ -8810,15 +9046,19 @@ msgstr ""
 
 #: lms/templates/wiki/edit.html cms/templates/component.html
 #: cms/templates/container.html cms/templates/studio_xblock_wrapper.html
-#: lms/templates/wiki/includes/article_menu.html
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+#: lms/templates/wiki/includes/article_menu.html wiki/templates/wiki/edit.html
+#: wiki/templates/wiki/includes/article_menu.html
 msgid "Edit"
 msgstr "Upraviť"
 
 #: lms/templates/wiki/edit.html lms/templates/ccx/schedule.html
+#: wiki/templates/wiki/edit.html wiki/templates/wiki/settings.html
 msgid "Save changes"
 msgstr "Uložiť zmeny"
 
 #: lms/templates/wiki/edit.html cms/templates/container.html
+#: wiki/templates/wiki/edit.html
 msgid "Preview"
 msgstr "Zobrazenie náhľadu"
 
@@ -9037,16 +9277,18 @@ msgid ""
 msgstr ""
 
 #: lms/templates/wiki/plugins/attachments/index.html
-#: wiki/plugins/attachments/templates/wiki/plugins/attachments/index.html
 #: wiki/plugins/attachments/wiki_plugin.py
+#: wiki/plugins/attachments/templates/wiki/plugins/attachments/index.html
 msgid "Attachments"
 msgstr "Prílohy"
 
 #: lms/templates/wiki/plugins/attachments/index.html
+#: wiki/plugins/attachments/templates/wiki/plugins/attachments/index.html
 msgid "Upload new file"
 msgstr "Nahrať nový súbor"
 
 #: lms/templates/wiki/plugins/attachments/index.html
+#: wiki/plugins/attachments/templates/wiki/plugins/attachments/index.html
 msgid "Search and add file"
 msgstr "Hľadať a pridať súbor"
 
@@ -9055,6 +9297,7 @@ msgid "Upload File"
 msgstr "Nahrať súbor"
 
 #: lms/templates/wiki/plugins/attachments/index.html
+#: wiki/plugins/attachments/templates/wiki/plugins/attachments/index.html
 msgid "Upload file"
 msgstr "Nahrať súbor"
 
@@ -9071,15 +9314,17 @@ msgid ""
 msgstr ""
 
 #: lms/templates/wiki/plugins/attachments/index.html
+#: lms/templates/dashboard.html lms/templates/index.html
 #: lms/templates/api_admin/catalogs/search.html
 #: lms/templates/courseware/courses.html
-#: lms/templates/courseware/courseware.html lms/templates/dashboard.html
-#: lms/templates/edxnotes/edxnotes.html lms/templates/index.html
+#: lms/templates/courseware/courseware.html
+#: lms/templates/edxnotes/edxnotes.html
 #: lms/templates/ux/reference/bootstrap/course-skeleton.html
 #: openedx/features/course_experience/templates/course_experience/course-home-fragment.html
 #: openedx/features/course_search/templates/course_search/course-search-fragment.html
 #: themes/edx.org/lms/templates/dashboard.html
 #: themes/stanford-style/lms/templates/index.html
+#: wiki/plugins/attachments/templates/wiki/plugins/attachments/index.html
 msgid "Search"
 msgstr "Hľadať"
 
@@ -9104,6 +9349,10 @@ msgid "Uploaded by"
 msgstr ""
 
 #: lms/templates/wiki/plugins/attachments/index.html
+#: wiki/plugins/attachments/templates/wiki/plugins/attachments/history.html
+#: wiki/plugins/attachments/templates/wiki/plugins/attachments/index.html
+#: wiki/plugins/attachments/templates/wiki/plugins/attachments/search.html
+#: wiki/plugins/images/templates/wiki/plugins/images/index.html
 msgid "Size"
 msgstr "Veľkosť"
 
@@ -9117,10 +9366,15 @@ msgid "Detach"
 msgstr ""
 
 #: lms/templates/wiki/plugins/attachments/index.html
+#: wiki/plugins/attachments/templates/wiki/plugins/attachments/index.html
+#: wiki/plugins/attachments/templates/wiki/plugins/attachments/replace.html
+#: wiki/plugins/images/templates/wiki/plugins/images/sidebar.html
 msgid "Replace"
 msgstr "Nahradiť"
 
 #: lms/templates/wiki/plugins/attachments/index.html
+#: wiki/plugins/attachments/templates/wiki/plugins/attachments/index.html
+#: wiki/templates/wiki/deleted.html
 msgid "Restore"
 msgstr "Obnoviť"
 
@@ -9472,14 +9726,6 @@ msgstr ""
 msgid "Configuration may not be specified at more than one level at once."
 msgstr ""
 
-#: openedx/core/djangoapps/content/learning_sequences/apps.py
-msgid "Learning Sequences"
-msgstr ""
-
-#: openedx/core/djangoapps/content_libraries/api.py
-msgid "Library cannot have more than {} XBlocks"
-msgstr ""
-
 #: openedx/core/djangoapps/content_libraries/models.py
 msgid "Administer users and author content"
 msgstr ""
@@ -9703,10 +9949,6 @@ msgstr ""
 msgid "Community TA"
 msgstr ""
 
-#: openedx/core/djangoapps/django_comment_common/models.py
-msgid "Student"
-msgstr "Študent"
-
 #: openedx/core/djangoapps/embargo/forms.py
 #: openedx/core/djangoapps/verified_track_content/forms.py
 msgid "COURSE NOT FOUND.  Please check that the course ID is valid."
@@ -9856,25 +10098,8 @@ msgid "Schedule start < course start"
 msgstr ""
 
 #: openedx/core/djangoapps/schedules/admin.py
-msgid "Course Id"
-msgstr ""
-
-#: openedx/core/djangoapps/schedules/admin.py
-msgid "All"
-msgstr ""
-
-#: openedx/core/djangoapps/schedules/admin.py
 msgid "Experience"
 msgstr ""
-
-#: openedx/core/djangoapps/schedules/admin.py
-#: cms/templates/maintenance/_force_publish_course.html
-#: lms/templates/instructor/instructor_dashboard_2/add_coupon_modal.html
-#: lms/templates/instructor/instructor_dashboard_2/edit_coupon_modal.html
-#: lms/templates/support/feature_based_enrollments.html
-#: lms/templates/sysadmin_dashboard_gitlogs.html
-msgid "Course ID"
-msgstr "ID kurzu"
 
 #: openedx/core/djangoapps/schedules/apps.py
 #: openedx/core/djangoapps/schedules/models.py
@@ -10077,7 +10302,6 @@ msgid ""
 msgstr ""
 
 #: openedx/core/djangoapps/schedules/templates/schedules/edx_ace/upgradereminder/email/body.html
-#: lms/templates/dates_banner.html
 msgid "Upgrade now"
 msgstr ""
 
@@ -10246,20 +10470,6 @@ msgid "The '{field_name}' field cannot be edited."
 msgstr ""
 
 #. Translators: This label appears above a field on the registration form
-#. which allows the user to input the First Name
-#: openedx/core/djangoapps/user_api/accounts/settings_views.py
-#: openedx/core/djangoapps/user_authn/views/registration_form.py
-msgid "First Name"
-msgstr ""
-
-#. Translators: This label appears above a field on the registration form
-#. which allows the user to input the First Name
-#: openedx/core/djangoapps/user_api/accounts/settings_views.py
-#: openedx/core/djangoapps/user_authn/views/registration_form.py
-msgid "Last Name"
-msgstr ""
-
-#. Translators: This label appears above a field on the registration form
 #. which allows the user to input the State/Province/Region in which they
 #. live.
 #: openedx/core/djangoapps/user_api/accounts/settings_views.py
@@ -10273,15 +10483,6 @@ msgstr ""
 #: openedx/core/djangoapps/user_authn/views/registration_form.py
 msgid "Company"
 msgstr ""
-
-#. #-#-#-#-#  django-partial.po (edx-platform)  #-#-#-#-#
-#. Translators: This label appears above a field on the registration form
-#. which allows the user to input the Title
-#: openedx/core/djangoapps/user_api/accounts/settings_views.py
-#: openedx/core/djangoapps/user_authn/views/registration_form.py wiki/forms.py
-#: wiki/templates/wiki/dir.html
-msgid "Title"
-msgstr "Nadpis"
 
 #. Translators: This label appears above a field on the registration form
 #. which allows the user to input the Job Title
@@ -10330,6 +10531,7 @@ msgid ""
 msgstr ""
 
 #: openedx/core/djangoapps/user_api/accounts/views.py
+#: openedx/core/djangoapps/user_authn/views/login.py
 msgid ""
 "This account has been temporarily locked due to excessive login failures. "
 "Try again later."
@@ -10357,6 +10559,7 @@ msgstr ""
 
 #: openedx/core/djangoapps/user_api/admin.py
 #: lms/templates/staff_problem_info.html
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
 msgid "Actions"
 msgstr "Akcie"
 
@@ -10520,14 +10723,6 @@ msgstr ""
 #: openedx/core/djangoapps/user_authn/views/login.py
 #, python-brace-format
 msgid ""
-"To protect your account, it’s been temporarily locked. Try again in "
-"{locked_out_period} minutes.{li_start}To be on the safe side, you can reset "
-"your password {link_start}here{link_end} before you try again."
-msgstr ""
-
-#: openedx/core/djangoapps/user_authn/views/login.py
-#, python-brace-format
-msgid ""
 "In order to sign in, you need to activate your account.{blank_lines}We just "
 "sent an activation link to {email_strong}. If you do not receive an email, "
 "check your spam folders or {link_start}contact {platform_name} "
@@ -10541,17 +10736,17 @@ msgstr ""
 #: openedx/core/djangoapps/user_authn/views/login.py
 #, python-brace-format
 msgid ""
-"Email or password is incorrect.{li_start}You have {remaining_attempts} more "
-"sign-in attempts before your account is temporarily "
-"locked.{li_end}{li_start}If you've forgotten your password, click "
-"{link_start}here{link_end} to reset.{li_end}"
-msgstr ""
-
-#: openedx/core/djangoapps/user_authn/views/login.py
-#, python-brace-format
-msgid ""
 "As {allowed_domain} user, You must login with your {allowed_domain} "
 "{link_start}{provider} account{link_end}."
+msgstr ""
+
+#. Translators: This example email address is used as a placeholder in
+#. a field on the login form meant to hold the user's email address.
+#. Translators: This example email address is used as a placeholder in
+#. a field on the password reset form meant to hold the user's email address.
+#: openedx/core/djangoapps/user_authn/views/login_form.py
+#: openedx/core/djangoapps/user_authn/views/password_reset.py
+msgid "username@domain.com"
 msgstr ""
 
 #. Translators: These instructions appear on the login form, immediately
@@ -10569,12 +10764,6 @@ msgstr ""
 msgid "Create Account"
 msgstr ""
 
-#. Translators: This example email address is used as a placeholder in
-#. a field on the password reset form meant to hold the user's email address.
-#: openedx/core/djangoapps/user_authn/views/password_reset.py
-msgid "username@domain.com"
-msgstr ""
-
 #: openedx/core/djangoapps/user_authn/views/password_reset.py
 msgid ""
 "That e-mail address doesn't have an associated user account. Are you sure "
@@ -10585,11 +10774,6 @@ msgstr ""
 msgid ""
 "The user account associated with this e-mail address cannot reset the "
 "password."
-msgstr ""
-
-#: openedx/core/djangoapps/user_authn/views/password_reset.py
-msgid ""
-"Your previous request is in progress, please try again in a few moments."
 msgstr ""
 
 #: openedx/core/djangoapps/user_authn/views/password_reset.py
@@ -10609,6 +10793,11 @@ msgstr ""
 msgid ""
 "{html_start}Password Creation Complete{html_end}Your password has been "
 "created. {bold_start}{email}{bold_end} is now your primary login email."
+msgstr ""
+
+#: openedx/core/djangoapps/user_authn/views/password_reset.py
+msgid ""
+"Your previous request is in progress, please try again in a few moments."
 msgstr ""
 
 #: openedx/core/djangoapps/user_authn/views/password_reset.py
@@ -10838,22 +11027,6 @@ msgid ""
 "Username created for Video Pipeline Integration, e.g. veda_service_user."
 msgstr ""
 
-#: openedx/core/djangoapps/video_pipeline/models.py
-msgid "Oauth client name of VEM service."
-msgstr ""
-
-#: openedx/core/djangoapps/video_pipeline/models.py
-msgid "video encode manager API URL."
-msgstr ""
-
-#: openedx/core/djangoapps/video_pipeline/models.py
-msgid "Username created for VEM Integration, e.g. vem_service_user."
-msgstr ""
-
-#: openedx/core/djangoapps/video_pipeline/models.py
-msgid "Percentage of courses allowed to use VEM pipeline"
-msgstr ""
-
 #: openedx/core/djangoapps/waffle_utils/models.py
 msgid "Force On"
 msgstr ""
@@ -10870,10 +11043,6 @@ msgstr ""
 
 #: openedx/core/djangoapps/xblock/runtime/mixin.py
 msgid "This content is only accessible to enrolled learners. "
-msgstr ""
-
-#: openedx/core/lib/api/view_utils.py
-msgid "The about me field must be at most {} characters long."
 msgstr ""
 
 #: openedx/core/lib/api/view_utils.py
@@ -10951,35 +11120,36 @@ msgstr ""
 msgid "Subscribe to calendar updates"
 msgstr ""
 
-#: openedx/features/calendar_sync/utils.py
+#: openedx/features/calendar_sync/views/management.py
 #, python-brace-format
-msgid "Sync {course} to your calendar"
+msgid "Updates for Your {course} Schedule"
 msgstr ""
 
-#: openedx/features/calendar_sync/utils.py
+#: openedx/features/calendar_sync/views/management.py
+msgid "Update Your Calendar"
+msgstr ""
+
+#: openedx/features/calendar_sync/views/management.py
+#, python-brace-format
+msgid ""
+"Your assignment due dates for {course} were recently adjusted. Update your "
+"calendarwith your new schedule to ensure that you stay on track!"
+msgstr ""
+
+#: openedx/features/calendar_sync/views/management.py
+msgid "Stay on Track"
+msgstr ""
+
+#: openedx/features/calendar_sync/views/management.py
+msgid "Mark Your Calendar"
+msgstr ""
+
+#: openedx/features/calendar_sync/views/management.py
 #, python-brace-format
 msgid ""
 "Sticking to a schedule is the best way to ensure that you successfully "
-"complete your self-paced course. This schedule for {course} will help you "
-"stay on track!"
-msgstr ""
-
-#: openedx/features/calendar_sync/utils.py
-msgid ""
-"Once you sync your course schedule to your calendar, any updates to the "
-"course from your instructor will be automatically reflected. You can remove "
-"the course from your calendar at any time."
-msgstr ""
-
-#: openedx/features/calendar_sync/utils.py
-#, python-brace-format
-msgid "{course} dates have been updated on your calendar"
-msgstr ""
-
-#: openedx/features/calendar_sync/utils.py
-msgid ""
-"You have successfully shifted your course schedule and your calendar is up "
-"to date."
+"complete your self-paced course. This schedule of assignment due dates for "
+"{course} will help you stay on track!"
 msgstr ""
 
 #: openedx/features/content_type_gating/models.py
@@ -11179,23 +11349,6 @@ msgid ""
 "checkout! {a_open}Upgrade Now{a_close}{div_close}"
 msgstr ""
 
-#: openedx/features/enterprise_support/admin/forms.py
-msgid "CSV File"
-msgstr ""
-
-#: openedx/features/enterprise_support/admin/forms.py
-msgid ""
-"CSV file should have 3 columns having names lms_user_id, course_id, "
-"opportunity_id"
-msgstr ""
-
-#: openedx/features/enterprise_support/admin/views.py
-#, python-brace-format
-msgid ""
-"Enrollment attributes were not updated for records at following line numbers"
-" in csv because no enrollment found for these records: {error_line_numbers}"
-msgstr ""
-
 #: openedx/features/enterprise_support/api.py
 #, python-brace-format
 msgid "Enrollment in {course_title} was not complete."
@@ -11206,18 +11359,6 @@ msgstr ""
 msgid ""
 "If you have concerns about sharing your data, please contact your "
 "administrator at {enterprise_customer_name}."
-msgstr ""
-
-#: openedx/features/enterprise_support/templates/enterprise_support/admin/enrollment_attributes_override.html
-msgid "Enterprise Course Enrollments"
-msgstr ""
-
-#: openedx/features/enterprise_support/templates/enterprise_support/admin/enrollment_attributes_override.html
-msgid "Override Enrollment Attributes"
-msgstr ""
-
-#: openedx/features/enterprise_support/templates/enterprise_support/admin/enrollment_attributes_override.html
-msgid "Upload CSV to override enrollment attributes for learners"
 msgstr ""
 
 #: openedx/features/enterprise_support/utils.py
@@ -11265,6 +11406,7 @@ msgid ""
 "Dashboard."
 msgstr ""
 
+#: cms/djangoapps/contentstore/course_group_config.py
 #: cms/templates/group_configurations.html
 msgid "Content Groups"
 msgstr "Obsahové skupiny"
@@ -11395,7 +11537,7 @@ msgstr "Podporujeme len odovzdanie súboru typu .tar.gz."
 
 #: cms/djangoapps/contentstore/tasks.py
 msgid "Tar file not found"
-msgstr ""
+msgstr "Súbor tar nenajdený"
 
 #: cms/djangoapps/contentstore/tasks.py
 msgid "Unsafe tar file. Aborting import."
@@ -11406,7 +11548,7 @@ msgstr ""
 msgid "Could not find the {0} file in the package."
 msgstr "Nebolo možné nájsť súbor {0} v balíku."
 
-#: cms/templates/visibility_editor.html
+#: cms/djangoapps/contentstore/utils.py cms/templates/visibility_editor.html
 msgid "Deleted Group"
 msgstr "Zmazaná skupina"
 
@@ -11594,8 +11736,9 @@ msgstr "Kurz bol úspešne exportovaný do git repozitára"
 msgid "Vertical"
 msgstr "Zvislý"
 
-#: cms/templates/course_outline.html lms/templates/ccx/schedule.html
-#: lms/templates/seq_module.html
+#: cms/djangoapps/contentstore/views/helpers.py
+#: cms/templates/course_outline.html lms/templates/seq_module.html
+#: lms/templates/ccx/schedule.html
 msgid "Section"
 msgstr "Sekcia"
 
@@ -11607,11 +11750,6 @@ msgstr ""
 #: cms/djangoapps/contentstore/views/import_export.py
 msgid "File upload corrupted. Please try again"
 msgstr "Súbor bol odovzdaný poškodený. Skúste to znovu"
-
-#: cms/djangoapps/contentstore/views/item.py
-#, python-brace-format
-msgid "Libraries cannot have more than {limit} components"
-msgstr ""
 
 #: cms/djangoapps/contentstore/views/item.py
 msgid "Invalid data"
@@ -11727,7 +11865,7 @@ msgstr ""
 
 #: cms/djangoapps/contentstore/views/transcripts_ajax.py
 msgid "Transcripts are supported only for \"video\" modules."
-msgstr "Textové prepisy sú podporované len pre \"video\" moduly."
+msgstr "Textové prepisy sú podporované len pre \"video\" kurzy."
 
 #: cms/djangoapps/contentstore/views/transcripts_ajax.py
 msgid "Cannot find item by locator."
@@ -11879,18 +12017,6 @@ msgstr ""
 msgid "Transcript Ready"
 msgstr ""
 
-#. Translators: This is the status for a video whose transcription job was
-#. failed for some languages
-#: cms/djangoapps/contentstore/views/videos.py
-msgid "Partial Failure"
-msgstr ""
-
-#. Translators: This is the status for a video whose transcription job has
-#. failed altogether
-#: cms/djangoapps/contentstore/views/videos.py
-msgid "Transcript Failed"
-msgstr ""
-
 #: cms/djangoapps/contentstore/views/videos.py
 msgid "An image file is required."
 msgstr ""
@@ -12036,6 +12162,8 @@ msgstr "Obsah"
 #: cms/templates/settings.html cms/templates/settings_advanced.html
 #: cms/templates/settings_graders.html cms/templates/widgets/header.html
 #: lms/templates/wiki/includes/article_menu.html
+#: wiki/templates/wiki/settings.html
+#: wiki/templates/wiki/includes/article_menu.html
 msgid "Settings"
 msgstr "Nastavenia"
 
@@ -12060,10 +12188,9 @@ msgid "Course Outline"
 msgstr "Prehľad kurzu"
 
 #: cms/templates/course_outline.html
-#: cms/templates/widgets/deprecated-course-key-warning.html
 #: lms/templates/dashboard/_dashboard_status_verification.html
 msgid "Warning"
-msgstr ""
+msgstr "Upozornenie"
 
 #: cms/templates/html_error.html lms/templates/module-error.html
 msgid "Error:"
@@ -12084,14 +12211,14 @@ msgstr "Číslo kurzu:"
 msgid "Course Run:"
 msgstr ""
 
-#: cms/templates/index.html lms/templates/courseware/courses.html
+#: cms/templates/index.html lms/templates/sysadmin_dashboard.html
+#: lms/templates/sysadmin_dashboard_gitlogs.html
+#: lms/templates/courseware/courses.html
 #: lms/templates/header/navbar-authenticated.html
 #: lms/templates/header/navbar-not-authenticated.html
-#: lms/templates/navigation/bootstrap/navbar-authenticated.html
 #: lms/templates/navigation/navbar-authenticated.html
 #: lms/templates/navigation/navbar-not-authenticated.html
-#: lms/templates/sysadmin_dashboard.html
-#: lms/templates/sysadmin_dashboard_gitlogs.html
+#: lms/templates/navigation/bootstrap/navbar-authenticated.html
 #: themes/edx.org/lms/templates/header/navbar-authenticated.html
 msgid "Courses"
 msgstr "Kurzy"
@@ -12102,6 +12229,11 @@ msgstr "Kurzy"
 msgid "example: username@domain.com"
 msgstr "príklad: username@domain.com"
 
+#: cms/templates/settings.html
+#: lms/templates/instructor/instructor_dashboard_2/executive_summary.html
+msgid "Course End Date"
+msgstr "Dátum ukončenia kurzu:"
+
 #: cms/templates/settings.html lms/templates/courseware/program_marketing.html
 msgid "Instructors"
 msgstr ""
@@ -12110,15 +12242,16 @@ msgstr ""
 msgid "Requirements"
 msgstr "Požiadavky"
 
-#: cms/templates/studio_xblock_wrapper.html
+#: cms/templates/studio_xblock_wrapper.html lms/templates/module-error.html
 #: lms/templates/instructor/instructor_dashboard_2/certificates.html
-#: lms/templates/module-error.html
 msgid "Details"
 msgstr "Podrobnosti"
 
+#. #-#-#-#-#  mako.po (edx-platform)  #-#-#-#-#
 #. Translators: this is a verb describing the action of viewing more details
 #: cms/templates/studio_xblock_wrapper.html
 #: lms/templates/wiki/includes/article_menu.html
+#: wiki/templates/wiki/includes/article_menu.html
 msgid "View"
 msgstr "Zobraziť"
 
@@ -12135,7 +12268,7 @@ msgstr ""
 #: cms/templates/maintenance/_announcement_index.html
 #: lms/templates/sysadmin_dashboard_gitlogs.html
 msgid "next"
-msgstr ""
+msgstr "Ďalej"
 
 #: cms/templates/maintenance/_force_publish_course.html
 #: lms/templates/problem.html lms/templates/shoppingcart/shopping_cart.html
@@ -12164,15 +12297,15 @@ msgstr ""
 msgid "Choose Language"
 msgstr ""
 
-#: cms/templates/widgets/header.html lms/templates/header/user_dropdown.html
-#: lms/templates/user_dropdown.html
+#: cms/templates/widgets/header.html lms/templates/user_dropdown.html
+#: lms/templates/header/user_dropdown.html
 msgid "Account"
 msgstr "Účet"
 
 #: cms/templates/widgets/header.html
 #: lms/templates/header/navbar-authenticated.html
-#: lms/templates/navigation/bootstrap/navbar-authenticated.html
 #: lms/templates/navigation/navbar-authenticated.html
+#: lms/templates/navigation/bootstrap/navbar-authenticated.html
 #: lms/templates/static_templates/help.html
 #: themes/edx.org/lms/templates/header/navbar-authenticated.html
 #: wiki/plugins/help/wiki_plugin.py
@@ -12244,8 +12377,8 @@ msgstr ""
 msgid "Usermenu dropdown"
 msgstr ""
 
-#: cms/templates/widgets/user_dropdown.html
-#: lms/templates/header/user_dropdown.html lms/templates/user_dropdown.html
+#: cms/templates/widgets/user_dropdown.html lms/templates/user_dropdown.html
+#: lms/templates/header/user_dropdown.html
 msgid "Sign Out"
 msgstr "Odhlásiť sa"
 
@@ -12411,8 +12544,8 @@ msgstr ""
 msgid "View all Courses"
 msgstr "Zobraziť všetky kurzy"
 
-#: lms/templates/dashboard.html lms/templates/header/user_dropdown.html
-#: lms/templates/user_dropdown.html
+#: lms/templates/dashboard.html lms/templates/user_dropdown.html
+#: lms/templates/header/user_dropdown.html
 #: themes/edx.org/lms/templates/dashboard.html
 msgid "Dashboard"
 msgstr "Panel"
@@ -12431,8 +12564,8 @@ msgstr ""
 
 #: lms/templates/dashboard.html
 #: lms/templates/header/navbar-not-authenticated.html
-#: lms/templates/navigation/bootstrap/navbar-authenticated.html
 #: lms/templates/navigation/navbar-authenticated.html
+#: lms/templates/navigation/bootstrap/navbar-authenticated.html
 #: themes/edx.org/lms/templates/dashboard.html
 msgid "Explore courses"
 msgstr ""
@@ -12450,7 +12583,7 @@ msgstr ""
 msgid "Search Your Courses"
 msgstr "Hľadať v kurzoch"
 
-#: lms/templates/courseware/courseware.html lms/templates/dashboard.html
+#: lms/templates/dashboard.html lms/templates/courseware/courseware.html
 #: themes/edx.org/lms/templates/dashboard.html
 msgid "Clear search"
 msgstr "Vyčistiť hľadanie"
@@ -12475,7 +12608,7 @@ msgstr "Prijímať e-maily z kurzu"
 msgid "Save Settings"
 msgstr "Uložiť nastavenia"
 
-#: lms/templates/ccx/enrollment.html lms/templates/dashboard.html
+#: lms/templates/dashboard.html lms/templates/ccx/enrollment.html
 #: lms/templates/dashboard/_dashboard_course_listing.html
 #: lms/templates/dashboard/_dashboard_entitlement_actions.html
 #: lms/templates/dashboard/_dashboard_entitlement_unenrollment_modal.html
@@ -12485,86 +12618,8 @@ msgstr "Uložiť nastavenia"
 msgid "Unenroll"
 msgstr "Odregistrovať"
 
-#: lms/templates/dates_banner.html
-msgid ""
-"It looks like you missed some important deadlines based on our suggested "
-"schedule. "
-msgstr ""
-
-#: lms/templates/dates_banner.html
-msgid ""
-"To keep yourself on track, you can update this schedule and shift the past "
-"due assignments into the future by visiting "
-msgstr ""
-
-#: lms/templates/dates_banner.html
-msgid ""
-" Don't worry—you won't lose any of the progress you've made when you shift "
-"your due dates."
-msgstr ""
-
-#: lms/templates/dates_banner.html
-msgid ""
-"It looks like you missed some important deadlines based on our suggested "
-"schedule."
-msgstr ""
-
-#: lms/templates/dates_banner.html
-msgid ""
-"To keep yourself on track, you can update this schedule and shift the past "
-"due assignments into the future. Don't worry—you won't lose any of the "
-"progress you've made when you shift your due dates."
-msgstr ""
-
-#: lms/templates/dates_banner.html
-msgid "Shift due dates"
-msgstr ""
-
-#: lms/templates/dates_banner.html
-msgid "You are auditing this course,"
-msgstr ""
-
-#: lms/templates/dates_banner.html
-msgid " which means that you are unable to participate in graded assignments."
-msgstr ""
-
-#: lms/templates/dates_banner.html
-msgid ""
-" It looks like you missed some important deadlines based on our suggested "
-"schedule. Graded assignments and schedule adjustment are available to "
-"Verified Track learners."
-msgstr ""
-
-#: lms/templates/dates_banner.html
-msgid ""
-" It looks like you missed some important deadlines based on our suggested "
-"schedule. To complete graded assignments as part of this course and shift "
-"the past due assignments into the future, you can upgrade today."
-msgstr ""
-
-#: lms/templates/dates_banner.html
-msgid "Upgrade to shift due dates"
-msgstr ""
-
-#: lms/templates/dates_banner.html
-msgid "Graded assignments are available to Verified Track learners."
-msgstr ""
-
-#: lms/templates/dates_banner.html
-msgid ""
-" To complete graded assignments as part of this course, you can upgrade "
-"today."
-msgstr ""
-
-#: lms/templates/dates_banner.html
-msgid "We've built a suggested schedule to help you stay on track."
-msgstr ""
-
-#: lms/templates/dates_banner.html
-msgid ""
-"But don't worry—it's flexible so you can learn at your own pace. If you "
-"happen to fall behind on our suggested dates, you'll be able to adjust them "
-"to keep yourself on track."
+#: lms/templates/edit_unit_link.html
+msgid "View Unit in Studio"
 msgstr ""
 
 #: lms/templates/email_change_failed.html lms/templates/email_exists.html
@@ -12597,7 +12652,7 @@ msgstr ""
 msgid "You should Register before trying to access the Unit"
 msgstr ""
 
-#: lms/templates/courseware/course_about.html lms/templates/enroll_staff.html
+#: lms/templates/enroll_staff.html lms/templates/courseware/course_about.html
 msgctxt "self"
 msgid "Enroll"
 msgstr ""
@@ -12697,7 +12752,7 @@ msgid ""
 "available on the {link_start}progress page{link_end}."
 msgstr ""
 
-#: lms/templates/courseware/courses.html lms/templates/index.html
+#: lms/templates/index.html lms/templates/courseware/courses.html
 #: themes/stanford-style/lms/templates/index.html
 msgid "Search for a course"
 msgstr "Vyhľadať kurz"
@@ -12835,15 +12890,18 @@ msgstr ""
 msgid "working"
 msgstr ""
 
-#: lms/templates/courseware/courseware-error.html
 #: lms/templates/module-error.html
+#: lms/templates/courseware/courseware-error.html
 msgid "There has been an error on the {platform_name} servers"
 msgstr ""
 
 #: lms/templates/module-error.html
+#: lms/templates/courseware/courseware-error.html
+#: lms/templates/courseware/error-message.html
 msgid ""
 "We're sorry, this module is temporarily unavailable. Our staff is working to"
-" fix it as soon as possible. "
+" fix it as soon as possible. Please email us at {tech_support_email} to "
+"report any problems or downtime."
 msgstr ""
 
 #: lms/templates/module-error.html
@@ -12857,11 +12915,6 @@ msgstr ""
 #: lms/templates/preview_menu.html
 msgid "View this course as:"
 msgstr ""
-
-#: lms/templates/instructor/instructor_dashboard_2/membership.html
-#: lms/templates/preview_menu.html
-msgid "Staff"
-msgstr "Personál"
 
 #: lms/templates/preview_menu.html
 msgid "Learner"
@@ -12888,15 +12941,7 @@ msgid "You are now viewing the course as {i_start}{user_name}{i_end}."
 msgstr ""
 
 #: lms/templates/preview_menu.html
-msgid "View in the new experience"
-msgstr ""
-
-#: lms/templates/preview_menu.html
-msgid "View in Studio"
-msgstr ""
-
-#: lms/templates/preview_menu.html
-msgid "View in Insights"
+msgid "View this unit in the new experience"
 msgstr ""
 
 #: lms/templates/problem.html
@@ -12960,6 +13005,16 @@ msgstr "E-mail"
 msgid "Return To %s"
 msgstr ""
 
+#: lms/templates/reset_deadlines_banner.html
+msgid ""
+"It looks like you've missed some important deadlines. Reset your deadlines "
+"and get started today."
+msgstr ""
+
+#: lms/templates/reset_deadlines_banner.html
+msgid "Reset my deadlines"
+msgstr ""
+
 #: lms/templates/resubscribe.html
 msgid "Re-subscribe Successful!"
 msgstr ""
@@ -12996,22 +13051,15 @@ msgstr ""
 #: lms/templates/seq_module.html
 msgctxt "unit"
 msgid "Previous"
-msgstr ""
+msgstr "Predchádzajúci "
 
 #. Translators: A button for showing the Next Unit
 #: lms/templates/seq_module.html
-msgctxt "unit"
 msgid "Next"
-msgstr ""
+msgstr "Ďalej"
 
 #: lms/templates/seq_module.html
 msgid "Sequence"
-msgstr ""
-
-#: lms/templates/courseware/dates.html lms/templates/seq_module.html
-#: lms/templates/vert_module.html
-#: openedx/features/course_experience/templates/course_experience/course-outline-fragment.html
-msgid "Completed"
 msgstr ""
 
 #: lms/templates/signup_modal.html
@@ -13138,18 +13186,18 @@ msgstr ""
 msgid "Reset Learner's Attempts to Zero"
 msgstr ""
 
-#: lms/templates/instructor/instructor_dashboard_2/student_admin.html
 #: lms/templates/staff_problem_info.html
+#: lms/templates/instructor/instructor_dashboard_2/student_admin.html
 msgid "Delete Learner's State"
 msgstr ""
 
-#: lms/templates/instructor/instructor_dashboard_2/student_admin.html
 #: lms/templates/staff_problem_info.html
+#: lms/templates/instructor/instructor_dashboard_2/student_admin.html
 msgid "Rescore Learner's Submission"
 msgstr ""
 
-#: lms/templates/instructor/instructor_dashboard_2/student_admin.html
 #: lms/templates/staff_problem_info.html
+#: lms/templates/instructor/instructor_dashboard_2/student_admin.html
 msgid "Rescore Only If Score Improves"
 msgstr ""
 
@@ -13187,7 +13235,7 @@ msgstr ""
 msgid "Textbook Navigation"
 msgstr ""
 
-#: lms/templates/courseware/gradebook.html lms/templates/staticbook.html
+#: lms/templates/staticbook.html lms/templates/courseware/gradebook.html
 msgid "Page"
 msgstr ""
 
@@ -13298,9 +13346,11 @@ msgstr ""
 msgid "Recent git load activity for {course_id}"
 msgstr ""
 
+#: lms/templates/sysadmin_dashboard_gitlogs.html
 #: lms/templates/ccx/schedule.html
 #: lms/templates/instructor/instructor_dashboard_2/certificates.html
-#: lms/templates/sysadmin_dashboard_gitlogs.html
+#: wiki/plugins/attachments/templates/wiki/plugins/attachments/history.html
+#: wiki/plugins/attachments/templates/wiki/plugins/attachments/search.html
 msgid "Date"
 msgstr "Dátum"
 
@@ -13354,7 +13404,7 @@ msgid ""
 " not mean to do this, {undo_link_start}you can re-subscribe{link_end}."
 msgstr ""
 
-#: lms/templates/header/user_dropdown.html lms/templates/user_dropdown.html
+#: lms/templates/user_dropdown.html lms/templates/header/user_dropdown.html
 msgid "Dashboard for:"
 msgstr "Panel pre :"
 
@@ -13362,8 +13412,8 @@ msgstr "Panel pre :"
 msgid "More options"
 msgstr ""
 
-#: lms/templates/header/header.html lms/templates/header/user_dropdown.html
-#: lms/templates/user_dropdown.html
+#: lms/templates/user_dropdown.html lms/templates/header/header.html
+#: lms/templates/header/user_dropdown.html
 msgid "More Options"
 msgstr ""
 
@@ -13389,11 +13439,6 @@ msgid ""
 "If you need bigger or smaller fonts, use your browsers settings to scale "
 "them up or down. Under Google Chrome, this is done by pressing ctrl-plus, or"
 " ctrl-minus at the same time."
-msgstr ""
-
-#: lms/templates/vert_module.html
-#: openedx/features/course_experience/templates/course_experience/course-outline-fragment.html
-msgid "{subsection_format} due {{date}}"
 msgstr ""
 
 #: lms/templates/video.html
@@ -14540,20 +14585,37 @@ msgid ""
 "technical support."
 msgstr ""
 
-#: lms/templates/certificates/url_unsupported.html
-msgid "URL Not Supported"
-msgstr ""
-
-#: lms/templates/certificates/url_unsupported.html
-msgid ""
-"This link is no longer valid. But don’t worry—this Verified Certificate is "
-"still valid and available to share. If this is your certificate, please "
-"visit your dashboard to get a new shareable link. If you're viewing someone "
-"else's certificate, please contact them to get an updated link."
-msgstr ""
-
 #: lms/templates/certificates/valid.html
 msgid "About edX Certificates"
+msgstr ""
+
+#: lms/templates/commerce/checkout_cancel.html
+msgid "Checkout Cancelled"
+msgstr ""
+
+#: lms/templates/commerce/checkout_cancel.html
+msgid ""
+"Your transaction has been cancelled. If you feel an error has occurred, "
+"contact {email}."
+msgstr ""
+
+#: lms/templates/commerce/checkout_error.html
+msgid "Checkout Error"
+msgstr ""
+
+#: lms/templates/commerce/checkout_error.html
+msgid ""
+"An error has occurred with your payment. {b_start}You have not been "
+"charged.{b_end} Please try to submit your payment again. If this problem "
+"persists, contact {email}."
+msgstr ""
+
+#: lms/templates/commerce/checkout_receipt.html
+msgid "Loading Order Data..."
+msgstr ""
+
+#: lms/templates/commerce/checkout_receipt.html
+msgid "Please wait while we retrieve your order details."
 msgstr ""
 
 #: lms/templates/course_modes/_upgrade_button.html
@@ -14754,11 +14816,11 @@ msgid "This content is graded"
 msgstr ""
 
 #: lms/templates/courseware/course_about.html
-msgid "An error has occurred. Please ensure that you are logged in to enroll."
+msgid "An error occurred. Please try again later."
 msgstr ""
 
 #: lms/templates/courseware/course_about.html
-msgid "An error occurred. Please try again later."
+msgid "An error has occurred. Please ensure that you are logged in to enroll."
 msgstr ""
 
 #: lms/templates/courseware/course_about.html
@@ -14766,11 +14828,14 @@ msgid "You are enrolled in this course"
 msgstr ""
 
 #: lms/templates/courseware/course_about.html
-#: lms/templates/dashboard/_dashboard_course_resume.html
+#: lms/templates/dashboard/_dashboard_course_listing.html
 #: lms/templates/shoppingcart/registration_code_receipt.html
-#: themes/edx.org/lms/templates/dashboard/_dashboard_course_resume.html
 msgid "View Course"
 msgstr "Pozrieť kury"
+
+#: lms/templates/courseware/course_about.html
+msgid "This course is in your {start_cart_link}cart{end_cart_link}."
+msgstr ""
 
 #: lms/templates/courseware/course_about.html
 msgid "Course is full"
@@ -14782,6 +14847,10 @@ msgstr ""
 
 #: lms/templates/courseware/course_about.html
 msgid "Enrollment is Closed"
+msgstr ""
+
+#: lms/templates/courseware/course_about.html
+msgid "Add {course_name} to Cart {start_span}({price} USD){end_span}"
 msgstr ""
 
 #: lms/templates/courseware/course_about.html
@@ -14905,13 +14974,6 @@ msgstr ""
 msgid "Courseware"
 msgstr "Výuka"
 
-#: lms/templates/courseware/courseware-error.html
-#: lms/templates/courseware/error-message.html
-msgid ""
-"We're sorry, this module is temporarily unavailable. Our staff is working to"
-" fix it as soon as possible."
-msgstr ""
-
 #: lms/templates/courseware/courseware.html
 msgid "Course Search"
 msgstr ""
@@ -14940,7 +15002,7 @@ msgid "Important Dates"
 msgstr ""
 
 #: lms/templates/courseware/dates.html
-msgid "Today"
+msgid "Due Today"
 msgstr ""
 
 #: lms/templates/courseware/dates.html
@@ -14948,11 +15010,8 @@ msgid "Verified Only"
 msgstr ""
 
 #: lms/templates/courseware/dates.html
-msgid "Due Next"
-msgstr ""
-
-#: lms/templates/courseware/dates.html
-msgid "Not yet released"
+msgid ""
+"{a_start}Upgrade{a_end}{space}to a Verified Certificate for full access."
 msgstr ""
 
 #: lms/templates/courseware/gradebook.html
@@ -15005,9 +15064,8 @@ msgid "Welcome to {course_title}!"
 msgstr ""
 
 #: lms/templates/courseware/info.html
-#: lms/templates/dashboard/_dashboard_course_resume.html
+#: lms/templates/dashboard/_dashboard_course_listing.html
 #: openedx/features/course_experience/templates/course_experience/course-home-fragment.html
-#: themes/edx.org/lms/templates/dashboard/_dashboard_course_resume.html
 msgid "Resume Course"
 msgstr ""
 
@@ -15537,18 +15595,27 @@ msgid "Available Actions"
 msgstr ""
 
 #: lms/templates/dashboard/_dashboard_course_listing.html
-msgid ""
-"You are enrolled by your institution and you should reach out to your "
-"institution to drop this course."
-msgstr ""
-
-#: lms/templates/dashboard/_dashboard_course_listing.html
 #: lms/templates/dashboard/_dashboard_entitlement_actions.html
 msgid "Email Settings"
 msgstr ""
 
 #: lms/templates/dashboard/_dashboard_course_listing.html
 msgid "Related Programs"
+msgstr ""
+
+#: lms/templates/dashboard/_dashboard_course_listing.html
+msgid ""
+"You can no longer access this course because payment has not yet been "
+"received. You can contact the account holder to request payment, or you can "
+"unenroll from this course"
+msgstr ""
+
+#: lms/templates/dashboard/_dashboard_course_listing.html
+msgid ""
+"You can no longer access this course because payment has not yet been "
+"received. You can {contact_link_start}contact the account "
+"holder{contact_link_end} to request payment, or you can "
+"{unenroll_link_start}unenroll{unenroll_link_end} from this course"
 msgstr ""
 
 #: lms/templates/dashboard/_dashboard_course_listing.html
@@ -15582,7 +15649,7 @@ msgstr ""
 #: lms/templates/dashboard/_dashboard_course_listing.html
 msgid ""
 "You will see a message on your dashboard when the verification process is "
-"complete (usually within 5-7 days)."
+"complete (usually within 1-2 days)."
 msgstr ""
 
 #: lms/templates/dashboard/_dashboard_course_listing.html
@@ -15593,7 +15660,7 @@ msgstr ""
 msgid ""
 "You have submitted your reverification information. You will see a message "
 "on your dashboard when the verification process is complete (usually within "
-"5-7 days)."
+"1-2 days)."
 msgstr ""
 
 #: lms/templates/dashboard/_dashboard_course_listing.html
@@ -16268,6 +16335,129 @@ msgid ""
 "verification process on your dashboard."
 msgstr ""
 
+#: lms/templates/emails/registration_codes_sale_email.txt
+msgid "Thank you for purchasing enrollments in {course_name}."
+msgstr ""
+
+#: lms/templates/emails/registration_codes_sale_email.txt
+msgid ""
+"An invoice for {currency_symbol}{total_price} is attached. Payment is due "
+"upon receipt. You can find information about payment methods on the invoice."
+msgstr ""
+
+#: lms/templates/emails/registration_codes_sale_email.txt
+msgid ""
+"A .csv file that lists your enrollment codes is attached. You can use the "
+"email template below to distribute enrollment codes to your students. Each "
+"student must use a separate enrollment code."
+msgstr ""
+
+#. Translators: This is the signature of an email.  "\n" is a newline
+#. character
+#. and should be placed between the closing word and the signature.
+#: lms/templates/emails/registration_codes_sale_email.txt
+msgid ""
+"Thanks,\n"
+"The {platform_name} Team"
+msgstr ""
+
+#. Translators: please translate the text inside [[ ]]. This is meant as a
+#. template for course teams to use.
+#: lms/templates/emails/registration_codes_sale_email.txt
+msgid "Dear [[Name]]:"
+msgstr ""
+
+#. Translators: please translate the text inside [[ ]]. This is meant as a
+#. template for course teams to use.
+#: lms/templates/emails/registration_codes_sale_email.txt
+msgid ""
+"We have provided a course enrollment code for you in {course_name}. To "
+"enroll in the course, click the following link:"
+msgstr ""
+
+#: lms/templates/emails/registration_codes_sale_email.txt
+msgid "HTML link from the attached CSV file"
+msgstr ""
+
+#: lms/templates/emails/registration_codes_sale_email.txt
+msgid ""
+"After you enroll, you can see the course on your student dashboard. You can "
+"see course materials after the course start date."
+msgstr ""
+
+#. Translators: please translate the text inside [[ ]]. This is meant as a
+#. template for course teams to use.
+#. This is the signature of an email.  "\n" is a newline character
+#. and should be placed between the closing word and the signature.
+#: lms/templates/emails/registration_codes_sale_email.txt
+msgid ""
+"Sincerely,\n"
+"[[Your Signature]]"
+msgstr ""
+
+#: lms/templates/emails/registration_codes_sale_invoice_attachment.txt
+msgid "INVOICE"
+msgstr ""
+
+#: lms/templates/emails/registration_codes_sale_invoice_attachment.txt
+msgid "Date: {date}"
+msgstr ""
+
+#: lms/templates/emails/registration_codes_sale_invoice_attachment.txt
+msgid "Invoice No: {invoice_number}"
+msgstr ""
+
+#: lms/templates/emails/registration_codes_sale_invoice_attachment.txt
+msgid "Terms: Due Upon Receipt"
+msgstr ""
+
+#: lms/templates/emails/registration_codes_sale_invoice_attachment.txt
+msgid "Due Date: {date}"
+msgstr ""
+
+#: lms/templates/emails/registration_codes_sale_invoice_attachment.txt
+msgid "Bill to:"
+msgstr ""
+
+#: lms/templates/emails/registration_codes_sale_invoice_attachment.txt
+msgid "Customer Reference Number: {reference_number}"
+msgstr ""
+
+#: lms/templates/emails/registration_codes_sale_invoice_attachment.txt
+msgid "Balance Due: {currency_symbol}{sale_price}"
+msgstr ""
+
+#: lms/templates/emails/registration_codes_sale_invoice_attachment.txt
+msgid "Course: {course_name}"
+msgstr ""
+
+#: lms/templates/emails/registration_codes_sale_invoice_attachment.txt
+msgid ""
+"Price:        {currency_symbol}{course_price}  Quantity:      {quantity}  "
+"Sub-Total:    {currency_symbol}{sub_total}  Discount:  "
+"{currency_symbol}{discount}"
+msgstr ""
+
+#: lms/templates/emails/registration_codes_sale_invoice_attachment.txt
+msgid "Total:      {currency_symbol}{sale_price}"
+msgstr ""
+
+#: lms/templates/emails/registration_codes_sale_invoice_attachment.txt
+msgid "Payment Instructions"
+msgstr ""
+
+#: lms/templates/emails/registration_codes_sale_invoice_attachment.txt
+msgid ""
+"If we do not receive payment, the learner enrollments that use these codes "
+"will be canceled and learners will not be able to access course materials. "
+"All purchases are final. For more information, see the {site_name} "
+"cancellation policy."
+msgstr ""
+
+#: lms/templates/emails/registration_codes_sale_invoice_attachment.txt
+msgid "For payment questions, contact {contact_email}"
+msgstr ""
+
 #: lms/templates/emails/reject_name_change.txt
 msgid ""
 "We are sorry. Our course staff did not approve your request to change your "
@@ -16430,8 +16620,8 @@ msgstr ""
 
 #: lms/templates/header/brand.html
 #: lms/templates/header/navbar-logo-header.html
-#: lms/templates/navigation/bootstrap/navbar-logo-header.html
 #: lms/templates/navigation/navbar-logo-header.html
+#: lms/templates/navigation/bootstrap/navbar-logo-header.html
 msgid "{platform_name} Home Page"
 msgstr ""
 
@@ -16452,14 +16642,17 @@ msgstr ""
 
 #. Translators: This is short for "System administration".
 #: lms/templates/header/navbar-authenticated.html
-#: lms/templates/navigation/bootstrap/navbar-authenticated.html
 #: lms/templates/navigation/navbar-authenticated.html
+#: lms/templates/navigation/bootstrap/navbar-authenticated.html
 msgid "Sysadmin"
 msgstr ""
 
-#: lms/templates/header/navbar-logo-header.html
-#: lms/templates/header/user_dropdown.html
-msgid "{name} Dashboard"
+#: lms/templates/header/navbar-authenticated.html
+#: lms/templates/navigation/navbar-authenticated.html
+#: lms/templates/navigation/bootstrap/navbar-authenticated.html
+#: lms/templates/shoppingcart/shopping_cart.html
+#: themes/edx.org/lms/templates/header/navbar-authenticated.html
+msgid "Shopping Cart"
 msgstr ""
 
 #: lms/templates/header/navbar-not-authenticated.html
@@ -16490,15 +16683,12 @@ msgid "Order History"
 msgstr "História objednávok"
 
 #: lms/templates/instructor/instructor_dashboard_2/add_coupon_modal.html
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
 msgid "Add Coupon Code"
 msgstr ""
 
 #: lms/templates/instructor/instructor_dashboard_2/add_coupon_modal.html
 msgid "Enter information about the coupon code below."
-msgstr ""
-
-#: lms/templates/instructor/instructor_dashboard_2/add_coupon_modal.html
-msgid "Coupon Code"
 msgstr ""
 
 #: lms/templates/instructor/instructor_dashboard_2/add_coupon_modal.html
@@ -16579,6 +16769,7 @@ msgstr ""
 #: lms/templates/instructor/instructor_dashboard_2/certificates.html
 #: lms/templates/instructor/instructor_dashboard_2/course_info.html
 #: lms/templates/instructor/instructor_dashboard_2/data_download.html
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
 #: lms/templates/instructor/instructor_dashboard_2/send_email.html
 #: lms/templates/instructor/instructor_dashboard_2/student_admin.html
 msgid "Pending Tasks"
@@ -16587,6 +16778,7 @@ msgstr ""
 #: lms/templates/instructor/instructor_dashboard_2/certificates.html
 #: lms/templates/instructor/instructor_dashboard_2/course_info.html
 #: lms/templates/instructor/instructor_dashboard_2/data_download.html
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
 #: lms/templates/instructor/instructor_dashboard_2/student_admin.html
 msgid "The status for any active tasks appears in a table below."
 msgstr ""
@@ -16746,6 +16938,7 @@ msgid "Get Student Anonymized IDs CSV"
 msgstr ""
 
 #: lms/templates/instructor/instructor_dashboard_2/data_download.html
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
 msgid "Reports"
 msgstr "Oznámenia"
 
@@ -16891,6 +17084,260 @@ msgid ""
 "policies.{li_end}{ul_end}"
 msgstr ""
 
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Enrollment Codes"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid ""
+"Create one or more pre-paid course enrollment codes. Students can use these "
+"codes to enroll in the course."
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+#: lms/templates/instructor/instructor_dashboard_2/generate_registarion_codes_modal.html
+msgid "Create Enrollment Codes"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Cancel, restore, or mark an enrollment code as unused."
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Change Enrollment Code Status"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Download a .csv file of all enrollment codes for this course."
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Download All Enrollment Codes"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Download a .csv file of all unused enrollment codes for this course."
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Download Unused Enrollment Codes"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Download a .csv file of all used enrollment codes for this course."
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Download Used Enrollment Codes"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+#: lms/templates/instructor/instructor_dashboard_2/set_course_mode_price_modal.html
+msgid "Course Price"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Course price per seat: "
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Edit Price"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Course Seat Purchases"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Total Credit Card Purchases: "
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid ""
+"Download a .csv file for all credit card purchases or for all invoices, "
+"regardless of status."
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Download All Invoices"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Download All Credit Card Purchases"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "To cancel or resubmit an invoice, enter the invoice number below."
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Invoice Number"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Cancel Invoice"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Resubmit Invoice"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid ""
+"Create a .csv file that contains enrollment information for your course."
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Create Enrollment Report"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid ""
+"Create an HTML file that contains an executive summary for this course."
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Create Executive Summary"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Available Reports"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid ""
+"The following reports are available for download. Reports are not deleted. A"
+" link to every report remains available on this page, identified by the date"
+" and time (in UTC) that the report was generated."
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid ""
+"{strong_start}Note{strong_end}: To help protect learner data, links to these"
+" reports that you save outside of this page or that you send or receive in "
+"email expire after five minutes."
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Coupon Code List"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Download a .csv file of all coupon codes for this course."
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Download Coupon Codes"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Coupon Codes"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Coupon (%)"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Number Redeemed"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "{code}"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "{description}"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "{discount}"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "The Invoice Number field cannot be empty."
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "No Expiration Date"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Enter the company name."
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "The company name cannot be a number."
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Enter the company contact name."
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "The company contact name cannot be a number."
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Enter the email address for the company contact."
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Enter a valid email address."
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Enter the recipient name."
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "The recipient name cannot be a number."
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Enter the recipient email address."
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Enter the billing address."
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Enter the price per course seat."
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid ""
+"Enter a numeric value for the price per course seat. Do not include currency"
+" symbols."
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Enter the number of enrollment codes."
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Enter a numeric value for the number of enrollment codes."
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Select a currency."
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "Enter a coupon code."
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid "The discount percentage must be less than or equal to 100."
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/e-commerce.html
+msgid ""
+"Enter a numeric value for the discount amount. Do not include the percent "
+"sign."
+msgstr ""
+
 #: lms/templates/instructor/instructor_dashboard_2/edit_coupon_modal.html
 msgid "Edit Coupon Code"
 msgstr ""
@@ -16912,11 +17359,95 @@ msgid "Percentage Discount"
 msgstr ""
 
 #: lms/templates/instructor/instructor_dashboard_2/edit_coupon_modal.html
-msgid "Expiration Date"
+msgid "Update Coupon Code"
 msgstr ""
 
-#: lms/templates/instructor/instructor_dashboard_2/edit_coupon_modal.html
-msgid "Update Coupon Code"
+#: lms/templates/instructor/instructor_dashboard_2/executive_summary.html
+msgid "Executive Summary for {display_name}"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/executive_summary.html
+msgid "Report Creation Date"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/executive_summary.html
+msgid "Number of Seats"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/executive_summary.html
+msgid "Number of Enrollments"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/executive_summary.html
+msgid "Gross Revenue Collected"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/executive_summary.html
+msgid "Gross Revenue Pending"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/executive_summary.html
+msgid "Number of Enrollment Refunds"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/executive_summary.html
+msgid "Amount Refunded"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/executive_summary.html
+msgid "Average Price per Seat"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/executive_summary.html
+msgid "Frequently Used Coupon Codes"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/executive_summary.html
+msgid "Number of seats purchased using coupon codes"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/executive_summary.html
+msgid "Rank"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/executive_summary.html
+msgid "Percent Discount"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/executive_summary.html
+msgid "Times Used"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/executive_summary.html
+msgid "Bulk and Single Seat Purchases"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/executive_summary.html
+msgid "Number of seats purchased individually"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/executive_summary.html
+msgid "Number of seats purchased in bulk"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/executive_summary.html
+msgid "Number of seats purchased with invoices"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/executive_summary.html
+msgid "Unused bulk purchase seats (revenue at risk)"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/executive_summary.html
+msgid "Percentage of seats purchased individually"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/executive_summary.html
+msgid "Percentage of seats purchased in bulk"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/executive_summary.html
+msgid "Percentage of seats purchased with invoices"
 msgstr ""
 
 #: lms/templates/instructor/instructor_dashboard_2/extensions.html
@@ -17009,10 +17540,6 @@ msgstr ""
 
 #: lms/templates/instructor/instructor_dashboard_2/generate_registarion_codes_modal.html
 msgid "Generate Registration Code Modal"
-msgstr ""
-
-#: lms/templates/instructor/instructor_dashboard_2/generate_registarion_codes_modal.html
-msgid "Create Enrollment Codes"
 msgstr ""
 
 #: lms/templates/instructor/instructor_dashboard_2/generate_registarion_codes_modal.html
@@ -17481,15 +18008,7 @@ msgid "Please enter Course Mode detail below"
 msgstr ""
 
 #: lms/templates/instructor/instructor_dashboard_2/set_course_mode_price_modal.html
-msgid "Course Price"
-msgstr ""
-
-#: lms/templates/instructor/instructor_dashboard_2/set_course_mode_price_modal.html
 msgid "Set Price"
-msgstr ""
-
-#: lms/templates/instructor/instructor_dashboard_2/special_exams.html
-msgid "Proctortrack Escalation Email:"
 msgstr ""
 
 #: lms/templates/instructor/instructor_dashboard_2/special_exams.html
@@ -17973,10 +18492,6 @@ msgid "Purchase order number (if any)"
 msgstr ""
 
 #: lms/templates/shoppingcart/billing_details.html
-msgid "Email Address"
-msgstr ""
-
-#: lms/templates/shoppingcart/billing_details.html
 msgid "email@example.com"
 msgstr ""
 
@@ -18116,10 +18631,6 @@ msgstr ""
 
 #: lms/templates/shoppingcart/receipt.html
 msgid "Billed To Details"
-msgstr ""
-
-#: lms/templates/shoppingcart/receipt.html
-msgid "Company Name"
 msgstr ""
 
 #: lms/templates/shoppingcart/receipt.html
@@ -18274,10 +18785,6 @@ msgstr[2] ""
 msgstr[3] ""
 
 #: lms/templates/shoppingcart/shopping_cart.html
-msgid "Shopping Cart"
-msgstr ""
-
-#: lms/templates/shoppingcart/shopping_cart.html
 msgid "Cover Image"
 msgstr ""
 
@@ -18298,6 +18805,7 @@ msgid "Decrease"
 msgstr ""
 
 #: lms/templates/shoppingcart/shopping_cart.html
+#: wiki/plugins/attachments/templates/wiki/plugins/attachments/delete.html
 msgid "Remove"
 msgstr "Vymazať"
 
@@ -18361,7 +18869,8 @@ msgstr ""
 #: lms/templates/static_templates/404.html
 msgid ""
 "The page that you were looking for was not found. Go back to the "
-"{link_start}homepage{link_end} ."
+"{link_start}homepage{link_end} or let us know about any pages that may have "
+"been moved at {email}."
 msgstr ""
 
 #: lms/templates/static_templates/about.html
@@ -18384,9 +18893,8 @@ msgstr ""
 msgid ""
 "Our system indicates that you are trying to access this {platform_name} "
 "course from a country or region currently subject to U.S. economic and trade"
-" sanctions. Unfortunately, because {platform_name} is required to comply "
-"with export controls, we cannot allow you to access this course at this "
-"time."
+" sanctions.Unfortunately, because {platform_name} is required to comply with"
+" export controls,we cannot allow you to access this course at this time."
 msgstr ""
 
 #: lms/templates/static_templates/faq.html
@@ -18412,6 +18920,7 @@ msgstr ""
 #: lms/templates/static_templates/server-overloaded.html
 msgid ""
 "Our staff is currently working to get the site back up as soon as possible. "
+"Please email us at {tech_support_email} to report any problems or downtime."
 msgstr ""
 
 #: lms/templates/static_templates/server-error.html
@@ -18419,7 +18928,9 @@ msgid "There has been a 500 error on the {platform_name} servers"
 msgstr ""
 
 #: lms/templates/static_templates/server-error.html
-msgid "Please wait a few seconds and then reload the page."
+msgid ""
+"Please wait a few seconds and then reload the page. If the problem persists,"
+" please email us at {email}."
 msgstr ""
 
 #: lms/templates/static_templates/server-overloaded.html
@@ -18486,6 +18997,46 @@ msgstr ""
 
 #: lms/templates/support/program_enrollments_inspector.html
 msgid "Program Enrollments Inspector"
+msgstr ""
+
+#: lms/templates/support/refund.html
+msgid "About to refund this order:"
+msgstr ""
+
+#: lms/templates/support/refund.html
+msgid "Order Id:"
+msgstr ""
+
+#: lms/templates/support/refund.html
+msgid "Enrollment:"
+msgstr ""
+
+#: lms/templates/support/refund.html
+msgid "enrolled"
+msgstr ""
+
+#: lms/templates/support/refund.html
+msgid "unenrolled"
+msgstr ""
+
+#: lms/templates/support/refund.html
+msgid "Cost:"
+msgstr ""
+
+#: lms/templates/support/refund.html
+msgid "CertificateItem Status:"
+msgstr ""
+
+#: lms/templates/support/refund.html
+msgid "Order Status:"
+msgstr ""
+
+#: lms/templates/support/refund.html
+msgid "Fulfilled Time:"
+msgstr ""
+
+#: lms/templates/support/refund.html
+msgid "Refund Request Time:"
 msgstr ""
 
 #: lms/templates/survey/survey.html
@@ -18622,7 +19173,7 @@ msgstr ""
 msgid ""
 "You have already submitted your verification information. You will see a "
 "message on your dashboard when the verification process is complete (usually"
-" within 5-7 days)."
+" within 1-2 days)."
 msgstr ""
 
 #: lms/templates/verify_student/reverify_not_allowed.html
@@ -18749,6 +19300,10 @@ msgstr[3] ""
 msgid "Prerequisite: "
 msgstr ""
 
+#: openedx/features/course_experience/templates/course_experience/course-outline-fragment.html
+msgid "{subsection_format} due {{date}}"
+msgstr ""
+
 #: openedx/features/course_experience/templates/course_experience/course-sock-fragment.html
 msgid "Learn About Verified Certificates"
 msgstr ""
@@ -18837,10 +19392,6 @@ msgstr ""
 msgid "Get started on what's next: "
 msgstr ""
 
-#: openedx/features/course_experience/templates/course_experience/welcome-message-fragment.html
-msgid "Show More"
-msgstr ""
-
 #: openedx/features/course_search/templates/course_search/course-search-fragment.html
 msgid "Search Results"
 msgstr "Výsledky vyhľadávania"
@@ -18917,14 +19468,6 @@ msgstr ""
 
 #: themes/edx.org/cms/templates/widgets/sock.html
 msgid "edX Partner Portal"
-msgstr ""
-
-#: themes/edx.org/lms/templates/dashboard.html
-msgid "Want to make edX better for everyone?"
-msgstr ""
-
-#: themes/edx.org/lms/templates/dashboard.html
-msgid "Get started"
 msgstr ""
 
 #: themes/edx.org/lms/templates/dashboard.html
@@ -19149,10 +19692,6 @@ msgid "Highest Level of Education Completed"
 msgstr ""
 
 #: themes/stanford-style/lms/templates/register-form.html
-msgid "Year of Birth"
-msgstr ""
-
-#: themes/stanford-style/lms/templates/register-form.html
 msgid "Please share with us your reasons for registering with {platform_name}"
 msgstr ""
 
@@ -19196,8 +19735,8 @@ msgid "Already registered?"
 msgstr ""
 
 #: themes/stanford-style/lms/templates/register-sidebar.html
-#: wiki/templates/wiki/accounts/login.html
-#: wiki/templates/wiki/accounts/signup.html wiki/templates/wiki/base.html
+#: wiki/templates/wiki/base.html wiki/templates/wiki/accounts/login.html
+#: wiki/templates/wiki/accounts/signup.html
 msgid "Log in"
 msgstr ""
 
@@ -19292,7 +19831,9 @@ msgid "The page that you were looking for was not found."
 msgstr "Stránka, ktorú ste hľadali, nebola nájdená."
 
 #: cms/templates/404.html
-msgid "Go back to the {homepage}."
+msgid ""
+"Go back to the {homepage} or let us know about any pages that may have been "
+"moved at {email}."
 msgstr ""
 
 #: cms/templates/500.html
@@ -19314,6 +19855,10 @@ msgid ""
 "We've logged the error and our staff is currently working to resolve this "
 "error as soon as possible."
 msgstr ""
+
+#: cms/templates/500.html
+msgid "If the problem persists, please email us at {email_link}."
+msgstr "Pokiaľ problém pretrváva, pošlite nám email na {email_link}. "
 
 #: cms/templates/accessibility.html
 msgid "Studio Accessibility Policy"
@@ -19387,7 +19932,7 @@ msgid "Learn more about certificates"
 msgstr ""
 
 #: cms/templates/certificates.html cms/templates/group_configurations.html
-#: cms/templates/settings_advanced.html cms/templates/settings_graders.html
+#: cms/templates/settings_advanced.html
 msgid "Details & Schedule"
 msgstr ""
 
@@ -19408,12 +19953,6 @@ msgstr ""
 #: cms/templates/settings.html cms/templates/settings_advanced.html
 #: cms/templates/settings_graders.html cms/templates/widgets/header.html
 msgid "Advanced Settings"
-msgstr ""
-
-#: cms/templates/certificates.html cms/templates/group_configurations.html
-#: cms/templates/settings.html cms/templates/settings_advanced.html
-#: cms/templates/settings_graders.html cms/templates/widgets/header.html
-msgid "Proctored Exam Settings"
 msgstr ""
 
 #: cms/templates/checklists.html cms/templates/widgets/header.html
@@ -19927,7 +20466,9 @@ msgstr ""
 #: cms/templates/error.html
 msgid ""
 "We're sorry. We couldn't find the {studio_name} page you're looking for. You"
-" may want to return to the {studio_name} Dashboard and try again."
+" may want to return to the {studio_name} Dashboard and try again. If you are"
+" still having problems accessing things, please feel free to "
+"{link_start}contact {studio_name} support{link_end} for further help."
 msgstr ""
 
 #: cms/templates/error.html
@@ -19938,7 +20479,9 @@ msgstr ""
 msgid ""
 "We're sorry. There was a problem with the server while trying to process "
 "your last request. You may want to return to the {studio_name} Dashboard or "
-"try this request again."
+"try this request again. If you are still having problems accessing things, "
+"please feel free to {link_start}contact {studio_name} support{link_end} for "
+"further help."
 msgstr ""
 
 #: cms/templates/error.html
@@ -21388,10 +21931,6 @@ msgid "(UTC)"
 msgstr ""
 
 #: cms/templates/settings.html
-msgid "Course End Date"
-msgstr ""
-
-#: cms/templates/settings.html
 msgid "Last day your course is active"
 msgstr ""
 
@@ -21820,7 +22359,7 @@ msgid "Must be greater than or equal to the course passing grade"
 msgstr ""
 
 #: cms/templates/settings_graders.html
-msgid "Grading Rules & Policies"
+msgid "Grading Rules &amp; Policies"
 msgstr ""
 
 #: cms/templates/settings_graders.html
@@ -21869,6 +22408,10 @@ msgid ""
 "You can also create assignment types, such as homework, labs, quizzes, and "
 "exams, and specify how much of a student's grade each assignment type is "
 "worth."
+msgstr ""
+
+#: cms/templates/settings_graders.html
+msgid "Details &amp; Schedule"
 msgstr ""
 
 #: cms/templates/studio_xblock_wrapper.html
@@ -22134,24 +22677,6 @@ msgstr ""
 msgid "Return to the {link_start}home page{link_end}."
 msgstr ""
 
-#: cms/templates/widgets/deprecated-course-key-warning.html
-msgid "Support will be removed in an upcoming release."
-msgstr ""
-
-#: cms/templates/widgets/deprecated-course-key-warning.html
-msgid "Support will be removed on {expiration_date}."
-msgstr ""
-
-#: cms/templates/widgets/deprecated-course-key-warning.html
-msgid "This course uses a legacy storage format."
-msgstr ""
-
-#: cms/templates/widgets/deprecated-course-key-warning.html
-msgid ""
-"Please reach out to your support team contact, if you have any additional "
-"questions or concerns."
-msgstr ""
-
 #: cms/templates/widgets/footer.html
 msgid "Policies"
 msgstr ""
@@ -22307,7 +22832,7 @@ msgid ""
 "articles etc..."
 msgstr ""
 "Toto je len počiatočný obsah vášho článku. Potom ako ho vytvoríte, je možné "
-"využiť zložitejšie funkcie, ako napríklad pridávanie zásuvných modulov, "
+"využiť zložitejšie funkcie, ako napríklad pridávanie zásuvných kurzov, "
 "metadát, súvisiacich článkov atď..."
 
 #: wiki/forms.py
@@ -22457,7 +22982,7 @@ msgstr "Článok bol odomknutý z úpravy"
 
 #: wiki/forms.py
 msgid "Filter"
-msgstr ""
+msgstr "Filter"
 
 #: wiki/core/plugins/base.py
 msgid "Settings for plugin"
@@ -22593,14 +23118,14 @@ msgstr "Povolenia sa prevezmú z tohto článku"
 
 #: wiki/models/pluginbase.py
 msgid "A plugin was changed"
-msgstr "Zásuvný modul bol zmenený"
+msgstr "Zásuvný kurz bol zmenený"
 
 #: wiki/models/pluginbase.py
 msgid ""
 "The revision being displayed for this plugin.If you need to do a roll-back, "
 "simply change the value of this field."
 msgstr ""
-"Revízia, ktorá sa zobrazí pre tento zásuvný modul. V prípade, že sa chcete "
+"Revízia, ktorá sa zobrazí pre tento zásuvný kurz. V prípade, že sa chcete "
 "vrátiť k niektorej z predchádzajúcich verzií, jednoducho zmeňte hodnotu "
 "tohto poľa."
 
@@ -22787,12 +23312,12 @@ msgstr ""
 
 #: wiki/plugins/attachments/templates/wiki/plugins/attachments/history.html
 msgid "User"
-msgstr ""
+msgstr "Používateľ"
 
 #: wiki/plugins/attachments/templates/wiki/plugins/attachments/history.html
 #: wiki/plugins/attachments/templates/wiki/plugins/attachments/search.html
 msgid "File"
-msgstr ""
+msgstr "Súbor"
 
 #: wiki/plugins/attachments/templates/wiki/plugins/attachments/history.html
 #: wiki/plugins/attachments/templates/wiki/plugins/attachments/search.html
@@ -22807,7 +23332,7 @@ msgstr ""
 #: wiki/plugins/attachments/templates/wiki/plugins/attachments/history.html
 #: wiki/plugins/attachments/templates/wiki/plugins/attachments/search.html
 msgid "Download"
-msgstr ""
+msgstr "Prevziať"
 
 #: wiki/plugins/attachments/templates/wiki/plugins/attachments/history.html
 msgid "Use this!"
@@ -22873,7 +23398,7 @@ msgstr ""
 
 #: wiki/plugins/help/templates/wiki/plugins/help/sidebar.html
 msgid "Headers"
-msgstr ""
+msgstr "Hlavičky"
 
 #: wiki/plugins/help/templates/wiki/plugins/help/sidebar.html
 msgid ""
@@ -22952,8 +23477,8 @@ msgstr "%(file)s bol zmenený na revíziu #%(revision)d"
 msgid "%(file)s has been saved."
 msgstr "%(file)s bol uložený."
 
-#: wiki/plugins/images/templates/wiki/plugins/images/index.html
 #: wiki/plugins/images/wiki_plugin.py
+#: wiki/plugins/images/templates/wiki/plugins/images/index.html
 msgid "Images"
 msgstr "Obrázky"
 
@@ -23032,7 +23557,7 @@ msgstr ""
 #: wiki/plugins/images/templates/wiki/plugins/images/sidebar.html
 #: wiki/plugins/links/templates/wiki/plugins/links/sidebar.html
 msgid "Insert"
-msgstr ""
+msgstr "Vložiť"
 
 #: wiki/plugins/images/templates/wiki/plugins/images/sidebar.html
 msgid "No images found for this article"
@@ -23143,10 +23668,10 @@ msgstr ""
 
 #: wiki/templates/wiki/base.html
 msgid "Search..."
-msgstr ""
+msgstr "Hľadať..."
 
-#: wiki/templates/wiki/accounts/login.html
-#: wiki/templates/wiki/accounts/signup.html wiki/templates/wiki/base.html
+#: wiki/templates/wiki/base.html wiki/templates/wiki/accounts/login.html
+#: wiki/templates/wiki/accounts/signup.html
 msgid "Sign up"
 msgstr ""
 
@@ -23240,7 +23765,7 @@ msgstr ""
 
 #: wiki/templates/wiki/accounts/login.html
 msgid "Please log in"
-msgstr ""
+msgstr "Prosím, prihláste sa"
 
 #: wiki/templates/wiki/accounts/login.html
 msgid "Log me in..."
@@ -23414,26 +23939,1074 @@ msgid ""
 "#%(r2)d"
 msgstr "Bola vytvorená nová revízia: Zlúčiť revíziu #%(r1)d a revíziu #%(r2)d"
 
-#: edx_proctoring_proctortrack/backends/proctortrack_rest.py
-msgid ""
-"Click on the \"Start System Check\" link below to download and run the "
-"proctoring software."
-msgstr ""
 
-#: edx_proctoring_proctortrack/backends/proctortrack_rest.py
-msgid ""
-"Once you have verified your identity and reviewed the exam guidelines in "
-"Proctortrack, you will be redirected back to this page."
-msgstr ""
-"Po overení svojej totožnosti a kontrole pokynov pre skúšky v programe "
-"Proctortrack budete presmerovaní späť na túto stránku."
+#ATP TMA
+msgid "MY ACCOUNT"
+msgstr "MOJ ÚČET"
 
-#: edx_proctoring_proctortrack/backends/proctortrack_rest.py
-msgid ""
-"To confirm that proctoring has started, make sure your webcam feed and the "
-"blue Proctortrack box are both visible on your screen."
-msgstr ""
+msgid "My account"
+msgstr "Môj účet"
 
-#: edx_proctoring_proctortrack/backends/proctortrack_rest.py
-msgid "Click on the \"Start Proctored Exam\" button below to continue."
+msgid "my account"
+msgstr "môj účet"
+
+msgid "my modules"
+msgstr "moje kurzy"
+
+msgid "My modules"
+msgstr "Moje kurzy"
+
+msgid "IN PROGRESS"
+msgstr "ROZPRACOVANÉ"
+
+msgid "in progress"
+msgstr "rozpracované"
+
+msgid "In progress"
+msgstr "Rozpracované"
+
+msgid "TO DO"
+msgstr "OTVORENÉ"
+
+msgid "to do"
+msgstr "otvorené"
+
+msgid "To do"
+msgstr "Otvorené"
+
+msgid "MY CATEGORIES"
+msgstr "MOJE KATEGÓRIE"
+
+msgid "My Categories"
+msgstr "Moje kategórie"
+
+msgid "categories"
+msgstr "kategórie"
+
+msgid "FUNDAMENTALS"
+msgstr "VŠEOBECNÉ ZÁKLADY"
+
+msgid "Fundamentals"
+msgstr "Všeobecné základy"
+
+msgid "fundamentals"
+msgstr "všeobecné základy"
+
+msgid "FUNDAMENTAL"
+msgstr "VŠEOBECNÉ ZÁKLADY"
+
+msgid "Fundamental"
+msgstr "Všeobecné základy"
+
+msgid "fundamental"
+msgstr "všeobecné základy"
+
+msgid "BUSINESS APPROACH"
+msgstr "PREDAJNÉ ZRUČNOSTI"
+
+msgid "Business approach"
+msgstr "Predajné zručnosti"
+
+msgid "SALES APPROACH"
+msgstr "PREDAJNÉ ZRUČNOSTI"
+
+msgid "Sales approach"
+msgstr "Predajné zručnosti"
+
+msgid "REGULATORY"
+msgstr "DOPLNKOVÉ RIEŠENIA"
+
+msgid "Regulatory"
+msgstr "Doplnkové riešenia"
+
+msgid "regulatory"
+msgstr "doplnkové riešenia"
+
+msgid "Develop your knowledge and skills on asset management: financial culture and products and offers marketed"
+msgstr "Rozvjíjaj svoje znalosti a zručnosti správy majetku: finančná kultúra, produkty a ponuky"
+
+#: lms/templates/dashboard.html
+msgid "To follow a training module, select the thumbnail of your choice!"
+msgstr "Pre výber výcvikového kurzu prosím kliknite na vybraný náhľad!"
+
+#: lms/templates/dashboard.html
+msgid "Each training module belongs to a category and can take"
+msgstr "Každý výcvikový kurz patrí do kategórie a môže obsahovať"
+
+msgid "different formats"
+msgstr "rôznorodé formáty"
+
+msgid "Training modules"
+msgstr "Výcvikové kurzy"
+
+msgid "Find all the information related to the training on the thumbnails below"
+msgstr "Najdite všetky informácie súvisiace s výcvikom na náhľade nižšie"
+
+msgid "timing of the module"
+msgstr "načasovanie kurzu"
+
+msgid "if the module is mandatory or not and formats of the module"
+msgstr "pokiaľ je tento kurz povinný a jeho formáty"
+
+msgid "TRAINING MODULES CATEGORIES"
+msgstr "KATEGÓRIE VÝCVIKOVÝCH kurzov"
+
+#: lms/templates/dashboard.html
+msgid "Your training modules are classified into 4 categories"
+msgstr "Vaše výcvikové kurzy sú zaradené do 4 kategórií"
+
+#: lms/templates/dashboard.html
+msgid "Know the essentials of financial markets"
+msgstr "Poznajte základy finančných trhov"
+
+#: lms/templates/dashboard.html
+msgid "Improve your soft skills"
+msgstr "Zlepšite svoje mäkké zručnosti"
+
+#: lms/templates/dashboard.html
+msgid "Learn about products and offers that are sold"
+msgstr "Poznajte produkty a ponuky pre predaj"
+
+#: lms/templates/dashboard.html
+msgid "Understanding regulatory decisions"
+msgstr "Detailné regulačné rozhodnutie"
+
+#: lms/templates/dashboard.html
+msgid "FORMATS"
+msgstr "FORMÁTY"
+
+#: lms/templates/dashboard.html
+msgid "Each module is composed of different interactive formats:"
+msgstr "Každý kurz je zložený z niekoľkých interaktívnych formátov:"
+
+#: lms/templates/dashboard.html
+msgid "texts & images"
+msgstr "text a obrázky"
+
+#: lms/templates/dashboard.html
+msgid "Infography"
+msgstr "Infografika"
+
+#: lms/templates/dashboard.html
+msgid "pedagogical videos"
+msgstr "edukačné videa"
+
+#: lms/templates/dashboard.html
+msgid "quizzes"
+msgstr "kvíz"
+
+#: lms/templates/dashboard.html
+msgid "pdf"
+msgstr "pdf"
+
+msgid "You have started the training module"
+msgstr "Práve ste spustili výcvikový modul"
+
+msgid "To complete your course"
+msgstr "Dokončenie vašeho kurzu"
+
+msgid "you can click on"
+msgstr "môžete kliknúť na"
+
+msgid "More course covers"
+msgstr "Viac kurzov pokrýva"
+
+msgid "You have not yet started the training course cover"
+msgstr "Ešte ste nespustili výcvikový kurz"
+
+msgid "Click on"
+msgstr "Kliknite na"
+
+msgid "Show more"
+msgstr "Zobraziť viac"
+
+msgid "to discover the course cover"
+msgstr "objaviť kurz"
+
+msgid "Course covers completed"
+msgstr "Dokončenie kurzu"
+
+msgid "Completed"
+msgstr "Ukončené"
+
+msgid "You have completed the training course cover"
+msgstr "Práve ste dokončili výcvikový kurz"
+
+msgid "to access your result"
+msgstr "k výsledkom"
+
+msgid "welcome to"
+msgstr "vítajte u"
+
+msgid "Restart"
+msgstr "Reštart"
+
+msgid "Download the certificate"
+msgstr "Stiahnite si certifikát"
+
+msgid "To start"
+msgstr "Štart"
+
+msgid "Starting date"
+msgstr "Začiatok dátum"
+
+msgid "Ending date"
+msgstr "Konečný dátum"
+
+msgid "Disclaimer"
+msgstr "Upozornenie"
+
+msgid "disclaimer"
+msgstr "upozornenie"
+
+msgid "Results"
+msgstr "Výsledky"
+
+msgid "Back to course about page"
+msgstr "Späť na stránku s výberom kurzov"
+
+msgid "To end this training module, you have to access every chapters and finish the validation knowledge test."
+msgstr "Pre ukončenie tohto výcvikového kurzu musíte prejsť všetky kapitoly a dokončiť vedomostný test."
+
+msgid "You started the training module "
+msgstr "Práve ste spustili výcvikový modul"
+
+msgid "Congratulation"
+msgstr "Blahoželáme"
+
+msgid "You have acomplished the course "
+msgstr "Dokončili ste kurz"
+
+msgid "Your total score :"
+msgstr "Vaše celkové skóre:"
+
+#: lms/templates/dashboard.html
+msgid "TO DO TRAINING MODULES"
+msgstr "NEDOKONČENÉ VÝCVIKOVÉ kurzy"
+
+#: lms/templates/dashboard.html
+msgid "You haven't started yet the following training modules. Click on"
+msgstr "Ešte ste nezačali následujúci výcvikový kurz. Kliknite prosím na"
+
+#: lms/templates/dashboard.html
+#: lms/templates/dashboard/_dashboard_course_listing.html
+msgid "More information"
+msgstr "Viac informácií"
+
+#: lms/templates/dashboard.html
+msgid "to access the training module description"
+msgstr "pre zobrazenie popisu tréningových kurzov"
+
+#: lms/templates/dashboard.html
+msgid "IN PROGRESS TRAINING MODULES"
+msgstr "PREBIEHAJÚCE TRÉNINGOVÉ kurzy"
+
+#: lms/templates/dashboard.html
+msgid "You have started but haven't completed yet the following training modules. To go on, please click on"
+msgstr "Máte rozpracované následujúce tréningové kurzy. Pre pokračovanie kliknite na"
+
+#: lms/templates/dashboard.html
+#: lms/templates/dashboard/_dashboard_course_listing.html
+msgid "Proceed"
+msgstr "Pokračovať"
+
+#: lms/templates/dashboard.html
+msgid "COMPLETED TRAINING MODULES"
+msgstr "Absolvované tréningové kurzy"
+
+#: lms/templates/dashboard.html
+msgid "You have completed the following training modules. Click on"
+msgstr "Dokončili ste nasledujúce tréningové kurzy. Kliknite na"
+
+#: lms/templates/dashboard.html
+msgid "to access your results and scores"
+msgstr "pre zobrazenie vašich výsledkov"
+
+#: lms/templates/dashboard.html
+msgid "More modules"
+msgstr "Viac kurzov"
+
+#: lms/templates/dashboard.html
+msgid "Welcome on"
+msgstr "Vítajte v"
+
+#: lms/templates/dashboard.html
+msgid "Develop your knowledge and skills on asset management: financial culture and offers."
+msgstr "Rozvíjajte svoje znalosti v oblasti správy majetku: finančná kultúra a ponuky."
+
+#: lms/templates/dashboard.html
+msgid "More"
+msgstr "Viac"
+
+#: lms/templates/navigation.html
+msgid "All"
+msgstr "Všetky"
+
+#: lms/templates/courseware/course_about.html
+msgid "Download certificate"
+msgstr "Stiahnúť certifikát"
+
+#: lms/templates/courseware/courseware.html
+msgid "Back to training module description"
+msgstr "Späť na popis vzdelávacieho kurzu"
+
+#: lms/templates/courseware/courseware.html
+msgid "The training campaign is over. You can access the training module content. However, you can't do the test to validate your knowledge."
+msgstr "Tréningová kampaň už skončila. Môžete si zobraziť obsah tréningového kurzu, avšak nie je možné vyplniť test pre overenie vaších znalostí."
+
+#: lms/templates/courseware/courseware.html
+msgid "Go to studio"
+msgstr "Prejsť do administratívnej sekcie"
+
+#: cms/templates/index.html
+msgid "No training campaign has been set"
+msgstr "Nebola vybraná žiadna tréningová kampaň"
+
+#: cms/templates/index.html
+msgid "To create a training campaign"
+msgstr "Pre vytvorenie tréningovej kampane"
+
+#: cms/templates/index.html
+msgid "select a training module in"
+msgstr "Vyberte tréningový kurz v"
+
+#: cms/templates/index.html
+msgid "then click on"
+msgstr "potom kliknite na"
+
+#: cms/templates/index.html
+msgid "Create my campaign"
+msgstr "Vytvoriť vlastnú kampaň"
+
+#: cms/templates/index.html
+msgid "My Modules"
+msgstr "Moje kurzy"
+
+#: cms/templates/index.html
+msgid "Welcome to your training modules management interface"
+msgstr "Vítajte vo svojom rozhraní pre správu tréningových kurzov"
+
+#: cms/templates/index.html
+msgid "You can browse within two separate universes"
+msgstr "Môžete prechádzať dvomi odlišnými oblasťami"
+
+#: cms/templates/index.html
+msgid "MY CAMPAIGNS"
+msgstr "MOJE KAMPANE"
+
+#: cms/templates/index.html
+msgid "MY MODULES"
+msgstr "MOJE kurzy"
+
+#: cms/templates/index.html
+msgid "MICRO SITES"
+msgstr "MICRO STRÁNKY"
+
+#: cms/templates/index.html
+msgid "SCHEDULED TRAINING CAMPAIGNS"
+msgstr "NAPLÁNOVANÉ TRÉNINGOVÉ KAMPANE"
+
+#: cms/templates/index.html
+msgid "Manage my campaign"
+msgstr "Spravovať moju kampaň"
+
+#: cms/templates/index.html
+msgid "To add new participants, please click on"
+msgstr "Pre pridanie ďalších účastníkov kliknite na"
+
+#: cms/templates/index.html
+msgid "Invite participants"
+msgstr "Prizvať účastníkov"
+
+#: cms/templates/index.html
+msgid "In progress training campaigns"
+msgstr "Prebiehajúce tréningové kampane"
+
+#: cms/templates/index.html
+msgid "To access statistics, please click on"
+msgstr "Pre zobrazenie štatistík kliknite na"
+
+#: cms/templates/index.html
+msgid "COMPLETED TRAINING CAMPAIGNS"
+msgstr "DOKONČENÉ TRÉNINGOVÉ KAMPANE"
+
+#: cms/templates/index.html
+msgid "The following training campaigns have not been launched yet (starting date not exceeded).To modify starting/ending date, please click on"
+msgstr "Následujúce tréningové kampane zatiaľ neboli spustené. Pre zmenu začiatočného/koncového dátumu kliknite na"
+
+#: cms/templates/index.html
+msgid "The following training campaigns have not been launched yet (starting date not exceeded). To modify ending date, please click on"
+msgstr "Následujúce tréningové kampane zatiaľ neboli spustené. Pre zmenu koncového dátumu kliknite na"
+
+#: cms/templates/index.html
+msgid "The following training campaigns are completed (ending date is exceeded).To access statistics, please click on"
+msgstr "Následujúce tréningové kampane už skončili. Pre zobrazenie štatistík kliknite na"
+
+#: cms/templates/index.html
+msgid "The following training campaigns have not been launched yet (starting date not exceeded)."
+msgstr "Následujúce tréningové kampane zatiaľ neboli spustené."
+
+#: cms/templates/index.html
+msgid "To launch your campaign, please click on "
+msgstr "Pre začiatok vašej kampane kliknite na"
+
+#: cms/templates/index.html
+msgid "and set up starting date at today."
+msgstr "a nastavte dnešný dátum ako začiatočný."
+
+#: cms/templates/index.html
+msgid "To modify starting/ending date, please click on"
+msgstr "Pre zmenu začiatočného/koncového dátumu kliknite na"
+
+#: cms/templates/index.html
+msgid "To modify ending date, please click on"
+msgstr "Pre zmenu koncového dátumu kliknite na"
+
+#: cms/templates/index.html
+msgid "To access statistics, please click on."
+msgstr "Pre zobrazenie štatistík kliknite na."
+
+#: cms/templates/index.html
+msgid "The following training campaigns are completed (ending date is exceeded)."
+msgstr "Nasledujúce tréningové kampane už skončili."
+
+#: cms/templates/index.html
+#lms stat.html
+msgid "Statistics"
+msgstr "Štatistiky"
+
+#: cms/templates/index.html
+msgid "About the training module"
+msgstr "Informácie o tréningovom kurze"
+
+#: cms/templates/index.html
+msgid "My campaigns"
+msgstr "Moje kampane"
+
+#: cms/templates/index.html
+msgid "You have at your disposal a library of training modules made available by Amundi. Select the module of your choice and launch the associated training campaign."
+msgstr "Máte k dispozícii knižnicu tréningových kurzov od Amundi. Vyberte si kurz a spusťte príslušnú tréningovú kampaň."
+
+#: cms/templates/manage_course.html
+msgid "Provide all the information required to launch your training campaign: starting/ending date, minimum percentage of success required, and campaign type."
+msgstr "Vyplňte požadované informácie pre začiatok tréningovej kampane: začiatočný/koncový dátum, minimálne hranice úspešnosti a typ kampane."
+
+#: cms/templates/manage_course.html
+msgid "campaign id"
+msgstr "ID kampane"
+
+#: cms/templates/manage_course.html
+msgid "Create your campagne id"
+msgstr "vytvorte vlastné ID kampane"
+
+#: cms/templates/manage_course.html
+msgid "This id is indicated in statistic reports."
+msgstr "Toto ID je súčásťou štatistických reportov."
+
+#: cms/templates/manage_course.html
+msgid "Precise your target and/or campaign period."
+msgstr "Upresnite svoj cieľ a/alebo obdobie kampane."
+
+#: cms/templates/manage_course.html
+msgid "Your id"
+msgstr "Vaše ID"
+
+#: cms/templates/manage_course.html
+msgid "Rules to create your campaign id: no space, no  punctuation mark"
+msgstr "Pravidlá pre vytvorenie ID: žiadne medzery, žiadná interpunkcia"
+
+#: cms/templates/manage_course.html
+msgid "PERIOD OF THE TRAINING CAMPAIGN"
+msgstr "OBDOBIE TRÉNINGOVEJ KAMPANE"
+
+#: cms/templates/manage_course.html
+msgid "Schedule your training campaign"
+msgstr "Naplánujte si svoju tréningovú kampaň"
+
+#: cms/templates/manage_course.html
+msgid "Time for email invitation dispatch UTC"
+msgstr "Čas e-mailových pozvánok (UTC)"
+
+#: cms/templates/manage_course.html
+msgid "The day the first invitations are dispatched when launching the training campaign"
+msgstr "Deň rozoslania prvých pozvánok pri začiatku kampane"
+
+#: cms/templates/manage_course.html
+msgid "Ending time UTC"
+msgstr "Čas ukončenia (UTC)"
+
+#: cms/templates/manage_course.html
+msgid "Starting and ending dates of the training campaign"
+msgstr "Začiatočný a koncový dátum tréningovej kampane"
+
+#: cms/templates/manage_course.html
+msgid "Closing day of the training campaign"
+msgstr "Posledný deň tréningovej kampane"
+
+#: cms/templates/manage_course.html
+msgid "MINIMUM PERCENTAGE OF SUCCESS REQUIRED"
+msgstr "MINIMÁLNA POŽADOVANÁ MIERA ÚSPEŠNOSTI"
+
+#: cms/templates/manage_course.html
+msgid "Define the minimum score required to validate the training module"
+msgstr "Zadajte minimálnu hranicu úspešnosti pre úspešné absolvovanie tréningového kurzu"
+
+#: cms/templates/manage_course.html
+msgid "Minimum score required to validate the training module and receive the certificate of achievement"
+msgstr "Minimálne skóre požadované pre úspešné absolvovanie tréningového kurzu a jeho následné získanie"
+
+#: cms/templates/manage_course.html
+msgid "CAMPAIGN TYPE"
+msgstr "TYP KAMPANE"
+
+#: cms/templates/manage_course.html
+msgid "Specify whether the training campaign is mandatory or optional"
+msgstr "Zadajte či je kampaň povinná alebo voliteľná"
+
+#: cms/templates/manage_course.html
+msgid "mandatory"
+msgstr "povinná"
+
+#: cms/templates/manage_course.html
+msgid "optional"
+msgstr "voliteľná"
+
+#: cms/templates/manage_course.html
+msgid "Add participants to your training campaign and customize the invitation email"
+msgstr "Pridať účastníkov do tréningovej kampane a upraviť emailovú pozvánku"
+
+#: cms/templates/manage_course.html
+msgid "PARTICIPANTS"
+msgstr "ÚČASTNÍCI"
+
+#: cms/templates/manage_course.html
+msgid "Invite participants to your training campaign"
+msgstr "Pozvať účastníkov do svojej tréningovej kampane"
+
+#: cms/templates/manage_course.html
+msgid "Upload participants list"
+msgstr "Nahrať zoznam účastníkov"
+
+#: cms/templates/manage_course.html
+msgid "EMAIL TO PARTICIPANTS"
+msgstr "EMAIL PRE ÚČASTNÍKOV"
+
+#: cms/templates/manage_course.html
+msgid "Edit and send the invitation email to participants of your choice."
+msgstr "Upravit a rozoslať emailovú pozvánku účastníkom podľa vlastného výberu."
+
+#: cms/templates/manage_course.html
+msgid "Send the invitation email to :"
+msgstr "Poslať emailovú pozvánku:"
+
+#: cms/templates/manage_course.html
+msgid "Admin Team"
+msgstr "Tím administrátorov"
+
+#: cms/templates/manage_course.html
+msgid "Every participants"
+msgstr "Všetci účastníci"
+
+#: cms/templates/manage_course.html
+msgid "Customized list of participants"
+msgstr "Upravený zoznam účastníkov"
+
+#: cms/templates/manage_course.html
+msgid "If you want to send the invitation email to the training campaign to a customized list of participants, please copy/paste the email recipients above. Remember that invitation emails can be sent only to the participants who have been invited to participate to the training campaign in the section 1/2 PARTICIPANTS."
+msgstr "Ak chcete rozoslať emailom pozvánku k tréningovej kampani upravenému zoznamu účastníkov, prosím skopírujte a vložte príjemcu hore. Nezabudnite, že pozvánku môžete odoslať iba tým, ktorí boli pozvaní k tréningovej kampani v sekcii 1/2 ÚČASTNÍCI."
+
+#: cms/templates/manage_course.html
+msgid "Object"
+msgstr "Objekt"
+
+#: cms/templates/manage_course.html
+msgid "128 characters maximum"
+msgstr "Maximum 128 znakov"
+
+#: cms/templates/manage_course.html
+msgid "Contenu du mail"
+msgstr "Obsah emailu"
+
+#: cms/templates/manage_course.html
+msgid "WARNING : Don’t hesitate to validate the email invitation by sending a test invitation to yourself. It will allow you to validate content and links included in the email invitation."
+msgstr "UPOZORNENIE: je vhodné najprv rozoslanie pozvánok otestovat na sebe. Overíte si tak, že obsah aj linky sú správne."
+
+#: cms/templates/manage_course.html
+msgid "CTA : Send"
+msgstr "CTA: Odoslať"
+
+#: cms/templates/manage_course.html
+msgid "Don't hesitate to validate the email invitation by sending a test invitation to yourself. It will allow you to validate content and links included in the email invitation."
+msgstr "Je vhodné najprv rozoslanie pozvánok otestovať na sebe. Overíte si tak, že obsah aj linky sú správne."
+
+#: cms/templates/index.html
+msgid "WHAT YOU CAN DO"
+msgstr "ČO MOŽETE UROBIŤ"
+
+#: cms/templates/index.html
+msgid "Schedules training campaigns:"
+msgstr "Rozvrh tréningových kampaní:"
+
+#: cms/templates/index.html
+msgid "Update your settings: starting/ending dates, minimum percentage of success"
+msgstr "Upravte vaše nastavenia: začiatočný/koncový dátum, minimálne hranice úspešnosti"
+
+#: cms/templates/index.html
+msgid "Add new participants"
+msgstr "Pridať nových účastníkov"
+
+#: cms/templates/index.html
+msgid "Update the text of the email invitation and test your email invitation"
+msgstr "Upravte text pozvánky a vyskúšajte ju cez svoj email"
+
+#: cms/templates/index.html
+msgid "In progress training campaigns:"
+msgstr "Prebiehajúce tréningové kampane:"
+
+#: cms/templates/index.html
+msgid "Update ending date"
+msgstr "Upraviť koncový dátum"
+
+#: cms/templates/index.html
+msgid "Access statistics: participation rate, success by participant, etc."
+msgstr "Zobraziť štatistiky: miera účasti, úspešnosť účastníkov, atď."
+
+#: cms/templates/index.html
+msgid "Completed training campaigns:"
+msgstr "Dokončené tréningové kampane:"
+
+#: cms/templates/index.html
+msgid "Completed training campaigns"
+msgstr "Dokončené tréningové kampane"
+
+#: cms/templates/index.html
+msgid "Access a training modules library provided by Amundi"
+msgstr "Prejdite do knižnice tréningových kurzov od Amundi"
+
+#: cms/templates/index.html
+msgid "Launch a training campaign"
+msgstr "Spustiť tréningovú kampaň"
+
+#: cms/templates/index.html
+msgid "My modules:"
+msgstr "Moje kurzy:"
+
+#log
+msgid "logout"
+msgstr "Odhlásiť"
+
+#log
+msgid "login"
+msgstr "Prihlásiť sa"
+
+#cms index.html
+
+msgid "No training campaign has been launched yet."
+msgstr "Zatiaľ nemáte žiadne spustené kampane."
+
+# lms dashboard.html
+
+msgid "No training modules available in this section."
+msgstr "V tejto časti nie sú k dispozícii žiadne vzdelávacie kurzy."
+
+# lms dashboard.html
+
+msgid "Welcome on Amundi Academy platform"
+msgstr "Vitajte v KB Investičnej akadémii"
+
+# lms dashboard.html
+
+msgid "You successfully registered"
+msgstr "Registrácia prebehla úspešne"
+
+# lms dashboard.html
+
+msgid "The training module"
+msgstr "Tréningový modul"
+
+# lms dashboard.html
+
+msgid "is available in the section"
+msgstr "je dostupný v tejto sekcii"
+
+# cms index.html
+
+msgid "Send email to participants"
+msgstr "Odoslať email účastníkom"
+
+#cms send email
+
+msgid "Send"
+msgstr "odoslať"
+
+msgid "You can send a new email or go back to the page MY CAMPAIGNS"
+msgstr "Môžete poslať nový email alebo prejsť späť na stránku MOJE KAMPANE"
+
+msgid "Your email was sent"
+msgstr "Email bol odoslaný"
+
+#cms index.html
+msgid "Access Trainee interface"
+msgstr "Prejsť do tréningového rozhrania"
+
+#lms dashboard.html
+msgid "Access Admin interface"
+msgstr "Prístup pre administrátora"
+
+#lms stat.html
+msgid "editor"
+msgstr "editor"
+
+#lms stat.html
+msgid "Results on "
+msgstr "Výsledky na"
+
+#lms stat.html
+msgid "Statistical training campaign"
+msgstr "Štatistická tréningová kampaň"
+
+#lms stat.html
+msgid "training campaign info"
+msgstr "Informácie o tréningovej kampani"
+
+#lms stat.html
+msgid "Download participants' list"
+msgstr "Stiahnuť zoznam účastníkov"
+
+#lms stat.html
+msgid "starting date"
+msgstr "začiatočný dátum"
+
+#lms stat.html
+msgid "ending date"
+msgstr "koncový dátum"
+
+#lms stat.html
+msgid "Number of questions"
+msgstr "Počet otázok"
+
+#lms stat.html
+msgid "Percentage for success"
+msgstr "Hranice úspešnosti"
+
+#lms stat.html
+msgid "users stats"
+msgstr "uživateľské štatistiky"
+
+#lms stat.html
+msgid "Network"
+msgstr "Sieť"
+
+#lms stat.html
+msgid "Target"
+msgstr "Cieľ"
+
+#lms stat.html
+msgid "Guests"
+msgstr "Hostia"
+
+#lms stat.html
+msgid "Certified"
+msgstr "Certifikovaný"
+
+#lms stat.html
+msgid "Average result"
+msgstr "Priemerný výsledok"
+
+#lms stat.html
+msgid "Average score"
+msgstr "Priemerné skóre"
+
+#lms stat.html
+msgid "per question"
+msgstr "na otázku"
+
+#lms stat.html
+msgid "per participant"
+msgstr "per partecipante"
+
+#lms stat.html
+msgid "Download all participants' detailled results"
+msgstr "Stiahnuť detailné výsledky všetkých účastníkov"
+
+#lms stat.html
+msgid "First name"
+msgstr "Meno"
+
+#lms stat.html
+msgid "Last name"
+msgstr "Priezvisko"
+
+#cms create_course.html
+msgid "create my campaign"
+msgstr "vytvoriť vlastnú kampaň"
+
+#cms create_course.html
+msgid "To launch your training campaign, you have to specify an unique ID and the target of your training campaign. Please, note that the target wording will be indicated in the statistics of this training campaign."
+msgstr "pre vytvorenie vlastnej tréningovej kampane je nutné zadať unikátne ID a cieľ tréningovej kampane. Vami zadaný cieľ bude uvedený v štatistikách tejto tréningovej kampani."
+
+#cms create_course.html
+msgid "Specify unique ID and target"
+msgstr "zadajte unikátne ID a cieľ"
+
+#cms create_course.html
+msgid "Specify an unique campaign title as long as a target for your training campaign"
+msgstr "Zadajte unikátny názov kampane a cieľ kampane"
+
+#cms create_course.html
+msgid "Unique ID"
+msgstr "Unikátne ID"
+
+#cms create_course.html
+msgid "Campaign title (unique id)"
+msgstr "Názov kampane (unikátne ID)"
+
+#cms create_course.html
+msgid "Rules for unique ID and target : no space, no punctuation, no special characters"
+msgstr "Pravidlá pre unikátne ID a cieľ: žiadne medzery, interpunkcie a špeciálne znaky"
+
+#cms create_course.html
+msgid "Create an identifier"
+msgstr "Vytvorte identifikátor"
+
+#cms create_course.html
+msgid "This identifier is reflected in the statistical dashboards"
+msgstr "tento identifikátor je zohľadnený v štatistických dashboardoch"
+
+#cms create_course.html
+msgid "This allows you to specify the target and / or training period"
+msgstr "Toto vám umožňuje zadať cieľ a/alebo tréningové obdobie"
+
+#cms create_course.html
+msgid "identifying your campaign"
+msgstr "identifikujúce vašu kampaň"
+
+#cms create_course.html
+msgid "Rules for unique ID and target"
+msgstr "Pravidlá pre unikátne ID a cieľ"
+
+#cms create_course.html
+msgid "no space, no punctuation, no special characters"
+msgstr "bez medzier, interpunkcie a špeciálnych znakov"
+
+#cms invite.html
+msgid "INVITE PARTICIPANTS"
+msgstr "POZVAŤ ÚČASTNÍKOV"
+
+#cms invite.html
+msgid "In order to invite participants to your training campaign, it is imperative that starting date of the training session is set before the current date."
+msgstr "Pre pozvanie účastníkov je nutné, aby začiatočný datum kampane predchádzalo dnešnému dátumu."
+
+#cms mail.html
+msgid "SEND EMAIL TO PARTICIPANTS"
+msgstr "ODOSLAŤ EMAIL ÚČASTNÍKOM"
+
+#cms mail.html
+msgid "During the training campaign, you can send a personalized e-mail to your participants or to targeted receivers."
+msgstr "v  priebehu tréningovej kampane môžete rozoslať personalizované emaily účastníkom alebo cieleným príjemcom."
+
+#cms mail.html
+msgid "It can be an email to remind them the training campaign will end soon, the training campaign is mandatory, etc"
+msgstr "Môžete ich emailom upozorniť na blížiaci sa koniec kampane, pripomenúť im, že sú povinní sa zúčastniť, atď."
+
+#cms mail.html
+msgid "Send email to:"
+msgstr "Poslať email:"
+
+#cms mail.html
+msgid "Team and administrator"
+msgstr "Tím a administrátor"
+
+#cms mail.html
+msgid "All participants (invited and accepted)"
+msgstr "Všetci účastníci (pozvaní a schválení)"
+
+#cms mail.html
+msgid "Customized mailing list"
+msgstr "Upravený zoznam príjemcov"
+
+#cms mail.html
+msgid "If you want to send an email to a customized mailing list, please copy/paste email addresses above. Emails will only be sent to receivers that have been invited to participate to the training campaign in the section 'Invite participants'."
+msgstr "Ak chcete odoslať email upravenému zoznamu príjemcov, skopírujte a vložte emailové adresy hore. Emaily budú odoslané iba tím, ktorí boli prizvání k tréningovej kampani v sekcii 'Pozvať účastníkov'."
+
+#cms mail.html
+msgid "Object of the email"
+msgstr "Predmet emailu"
+
+#cms mail.html
+msgid "WARNING : Before clicking on 'Send', please read your text carefully and send an email to yourself. This will allow you to validate text and links are correct."
+msgstr "UPOZORNENIE: Pred odoslaním si starostlivo skontrolujte text a odošlite email sám sebe. Vďaka tomu si overíte, že je všetko správne."
+
+msgid "Body of the email"
+msgstr "Telo emailu"
+
+msgid "We recommend sending only one message per week to learners. Before sending your e-mail, read your text carefully and send it to your email address. You will be able to verify that all the links work and that the content is good."
+msgstr "Odporúčame odoslať iba jednu správu týždenne. Pred odoslaním si starostlivo skontrolujte text a odošlite email sám sebe. Vďaka tomu si overíte, že je všetko správne."
+
+msgid "legal notices"
+msgstr "Právne upozornenie"
+
+msgid "File preview"
+msgstr "Náhľad súboru"
+
+msgid "Access Trainee Interface"
+msgstr "Prejsť do tréningového rozhrania"
+
+msgid "The participants' list is successfully uploaded."
+msgstr "Zoznam účastníkov bol úspešne nahraný."
+
+msgid "An email invitation to participate to the training module has been sent to the participants."
+msgstr "Emailová pozvánka k tréningovému kurzu bola odoslaná, účastníkom."
+
+msgid "OUR SOLUTIONS"
+msgstr "NAŠE RIEŠENIE"
+
+msgid "Our solutions"
+msgstr "Naše riešenie"
+
+msgid "our solutions"
+msgstr "Naše riešenie"
+
+msgid "OUR SOLUTION"
+msgstr "NAŠE RIEŠENIE"
+
+msgid "Our solution"
+msgstr "Naše riešenie"
+
+msgid "our solution"
+msgstr "Naše riešenie"
+
+msgid "To create your training campaign, you have to specify an unique ID and the target of your training campaign. Please, note that the target wording will be indicated in the statistics of this training campaign."
+msgstr "pre vytvorenie kampane je nutné zadať unikátne ID a cieľ kampane. Uvedený cieľ bude zobrazený v štatistikách tejto tréningovej kampane."
+
+msgid "To create your training campaign, you have to specify an unique campaign title as long as a target for your training campaign."
+msgstr "Pre vytvorenie kampane je nutné zadať unikátny názov rovnako ako cieľ kampane."
+
+msgid "Please, note that these will be indicated in the statistics dashboard of this training campaign."
+msgstr "majte na pamäti, že tieto údaje budú uvedené v štatistikách tejto tréningovej kampane."
+
+msgid "Created training campaigns"
+msgstr "Vytvorené tréningové kampane"
+
+msgid "The training campaign is over."
+msgstr "Tréningová kampaň už skončila."
+
+msgid "Starting time UTC"
+msgstr "Čas začiatku UTC"
+
+msgid "Define the minimum score required to validate the training module and receive the certificate of achievement"
+msgstr "Zadejte minimálnu hranicu úspešnosti pre absolvovanie kurzu a získania certifikátu"
+
+#cms:index.html
+msgid "To launch a training campaign"
+msgstr "Začiatok tréningovej kampane"
+
+#validate translate
+msgid "Validated"
+msgstr "Schválené"
+
+msgid "Not validated"
+msgstr "Neschválené"
+
+msgid "SEARCH IN MY MODULES"
+msgstr "PREHĽADAŤ MOJE kurzy"
+
+msgid "Search in a module"
+msgstr "prehľadať modul"
+
+msgid "SEARCH IN MY CAMPAIGNS"
+msgstr "PREHĽADAŤ MOJE KAMPANE"
+
+msgid "Search for a campaign"
+msgstr "vyhľadať kampaň"
+
+msgid "No match! Please, try a new search"
+msgstr "Žiadny výsledok. Skúste to znova"
+
+msgid "New search"
+msgstr "nové hľadanie"
+
+msgid "results found in your modules"
+msgstr "výsledky najdené vo vašich kurzoch"
+
+msgid "results found in your campaigns"
+msgstr "výsledky najdené vo vašich kampaniach"
+
+#fail cms invite.html
+msgid "The structure of the file loaded is incorrect. Please, modify your file and load it again"
+msgstr "Štruktúra vami nahraného súboru je chybná. Prosím upravte ju a nahrajte súbor znova"
+
+#cms manage.html
+msgid "You already have invited participants to this training campaign. Starting date can no longer be edited."
+msgstr "Už ste pozval účastníkov k tejto tréningovej kampani. Začiatočný dátum už nemôže byť zmenený."
+
+msgid "Congratulations"
+msgstr "Blahoželanie"
+
+msgid "Unfortunately, you haven't achieved the minimum score ({score}%) required to validate the training module."
+msgstr "Bohužiaľ, nedosiahli ste minimálny počet bodov ({score}%) potrebný na zvládnutie tréningového kurzu"
+
+msgid "Start again"
+msgstr "Začnite ešte raz"
+
+#: lms/templates/dashboard.html
+msgid "Welcome to the Academy platform"
+msgstr "Vitajte v platforme akadémie!"
+
+#: lms/templates/dashboard.html
+msgid "Your registration has been successful"
+msgstr "Vaša registrácia bola úspešná"
+
+#: lms/templates/dashboard.html
+msgid ""
+"Below are training modules you have started but not yet completed. Click "
+"\"Proceed\" to continue."
 msgstr ""
+"Nižšie sú uvedené vzdelávacie kurzy, s ktorými ste začali, ale ešte ste ich neukončili."
+" Pokračujte kliknutím na tlačidlo \"Pokračovať\"."
+
+#: lms/templates/dashboard.html
+msgid "Below, access training modules you have yet to complete. Click"
+msgstr "Nižšie nájdete prístup k vzdelávacím kurzom, ktoré musíte ešte dokončiť. Kliknutím na "
+
+#: lms/templates/dashboard.html
+msgid "Click"
+msgstr "Kliknutím na"
+
+#: lms/templates/dashboard.html
+msgid ""
+"to access the result of modules you passed. Below you can also find training"
+" modules you have not passed, and are no longer accessible"
+msgstr ""
+"získate prístup k výsledkom z kurzov, ktoré ste absolvovali. Nižšie nájdete tiež vzdelávacie kurzy," 
+" ktoré ste ešte neabsolvovali a už nie sú prístupné"
+
+#: lms/templates/dashboard.html
+msgid "to continue"
+msgstr "budete pokračovať ďalej"
+
+msgid "You have completed the training module"
+msgstr "Teljesítetted a kurzust"
+
+msgid "Soft skills"
+msgstr "Predajné zručnosti"
+
+msgid "soft skills"
+msgstr "predajné zručnosti"
+
+msgid "SOFT SKILLS"
+msgstr "PREDAJNÉ ZRUČNOSTI"
+
+msgid "Expert"
+msgstr "Doplnkové riešenia"
+
+msgid "expert"
+msgstr "doplnkové riešenia"
+
+msgid "EXPERT"
+msgstr "DOPLNKOVÉ RIEŠENIA"
+
+msgid "Start"
+msgstr "Štart"
+
+## Use this file

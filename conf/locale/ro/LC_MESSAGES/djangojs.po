@@ -56,16 +56,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: edx-platform\n"
 "Report-Msgid-Bugs-To: openedx-translation@googlegroups.com\n"
-"POT-Creation-Date: 2020-07-26 20:42+0000\n"
-"PO-Revision-Date: 2020-07-06 14:11+0000\n"
-"Last-Translator: Lucian Horga <lucian.horga@devtelsoftware.com>\n"
+"POT-Creation-Date: 2020-01-19 20:42+0000\n"
+"PO-Revision-Date: 2019-09-29 20:43+0000\n"
+"Last-Translator: edx_transifex_bot <i18n-working-group+edx-transifex-bot@edx.org>\n"
 "Language-Team: Romanian (http://www.transifex.com/open-edx/edx-platform/language/ro/)\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
-"Generated-By: Babel 2.8.0\n"
+"Generated-By: Babel 1.3\n"
 
 #: cms/static/cms/js/xblock/cms.runtime.v1.js
 #: cms/static/js/certificates/views/signatory_details.js
@@ -101,7 +101,6 @@ msgstr "Se salvează"
 #: cms/templates/js/signatory-editor.underscore
 #: cms/templates/js/video-transcripts.underscore
 #: cms/templates/js/xblock-outline.underscore
-#: common/static/common/templates/discussion/templates.underscore
 msgid "Delete"
 msgstr "Șterge"
 
@@ -130,7 +129,6 @@ msgstr "Șterge"
 #: cms/templates/js/section-name-edit.underscore
 #: cms/templates/js/signatory-actions.underscore
 #: cms/templates/js/xblock-string-field-editor.underscore
-#: common/static/common/templates/discussion/templates.underscore
 #: lms/djangoapps/support/static/support/templates/enrollment-modal.underscore
 #: lms/djangoapps/teams/static/teams/templates/edit-team.underscore
 #: lms/templates/instructor/instructor_dashboard_2/cohort-form.underscore
@@ -153,7 +151,6 @@ msgstr "Încarcă"
 #: common/lib/xmodule/xmodule/js/src/html/edit.js
 #: lms/static/js/student_account/tos_modal.js
 #: cms/templates/js/course-video-settings.underscore
-#: common/static/common/templates/discussion/templates.underscore
 #: common/static/common/templates/image-modal.underscore
 #: openedx/features/learner_profile/static/learner_profile/templates/share_modal.underscore
 msgid "Close"
@@ -183,7 +180,6 @@ msgstr "Alege fișier"
 #: cms/static/js/views/course_info_update.js cms/static/js/views/tabs.js
 #: common/lib/xmodule/xmodule/js/src/html/edit.js
 #: lms/static/js/Markdown.Editor.js
-#: common/static/common/templates/discussion/templates.underscore
 #: lms/templates/learner_dashboard/verification_popover.underscore
 msgid "OK"
 msgstr "OK"
@@ -278,7 +274,7 @@ msgstr "Schimbările tale au fost salvate."
 #: cms/static/js/views/xblock_validation.js
 #: common/static/common/js/discussion/views/discussion_inline_view.js
 msgid "Warning"
-msgstr "Atenție"
+msgstr ""
 
 #. Translators: This message will be added to the front of messages of type
 #. error,
@@ -778,6 +774,7 @@ msgstr "Șterge tabel"
 #: common/lib/xmodule/xmodule/js/src/html/edit.js
 #: cms/templates/js/certificate-editor.underscore
 #: cms/templates/js/group-configuration-editor.underscore
+#: lms/templates/commerce/receipt.underscore
 #: lms/templates/verify_student/payment_confirmation_step.underscore
 msgid "Description"
 msgstr "Descriere"
@@ -824,7 +821,6 @@ msgstr "Editează HTML"
 #: cms/templates/js/show-textbook.underscore
 #: cms/templates/js/signatory-details.underscore
 #: cms/templates/js/xblock-string-field-editor.underscore
-#: common/static/common/templates/discussion/templates.underscore
 msgid "Edit"
 msgstr "Editează"
 
@@ -1227,7 +1223,6 @@ msgstr "Fereastra noua"
 #: common/lib/xmodule/xmodule/js/src/html/edit.js
 #: cms/templates/js/paging-header.underscore
 #: common/static/common/templates/components/paging-footer.underscore
-#: common/static/common/templates/discussion/templates.underscore
 msgid "Next"
 msgstr "Următor"
 
@@ -1577,7 +1572,6 @@ msgstr ""
 #: common/lib/xmodule/xmodule/js/src/html/edit.js
 #: cms/templates/js/course-instructor-details.underscore
 #: cms/templates/js/signatory-details.underscore
-#: common/static/common/templates/discussion/templates.underscore
 msgid "Title"
 msgstr "Titlu"
 
@@ -1689,7 +1683,7 @@ msgstr ""
 #. displayed in the browser when a user needs to edit HTML
 #: common/lib/xmodule/xmodule/js/src/html/edit.js
 msgid "Insert/Edit Image"
-msgstr "Adaugă/Editează Imagine"
+msgstr ""
 
 #: common/lib/xmodule/xmodule/js/src/lti/lti.js
 msgid ""
@@ -1899,9 +1893,6 @@ msgid ""
 "Click on this button to mute or unmute this video or press UP or DOWN "
 "buttons to increase or decrease volume level."
 msgstr ""
-"Faceți clic pe acest buton pentru a activa sau dezactiva volumul acestui "
-"videoclip sau apăsați butoanele SUS sau JOS pentru a crește sau a scădea "
-"nivelul volumului."
 
 #: common/lib/xmodule/xmodule/js/src/video/07_video_volume_control.js
 msgid "Adjust video volume"
@@ -1940,7 +1931,7 @@ msgstr "Deschide setări limbă"
 
 #: common/lib/xmodule/xmodule/js/src/video/09_video_caption.js
 msgid "Transcript will be displayed when you start playing the video."
-msgstr "Subtitrarea va fi afișată când veți porni videoclipul."
+msgstr ""
 
 #: common/lib/xmodule/xmodule/js/src/video/09_video_caption.js
 msgid ""
@@ -2026,17 +2017,14 @@ msgid ""
 "Your request could not be completed. Reload the page and try again. If the "
 "issue persists, click the Help tab to report the problem."
 msgstr ""
-"Solicitarea dumneavoastră nu a putut fi finalizată. Reîncărcați pagina și "
-"încercați din nou. Dacă problema persistă, faceți clic pe Ajutor pentru a "
-"raporta problema."
 
 #: common/static/common/js/components/views/paging_header.js
 msgid "Showing {firstIndex} out of {numItems} total"
-msgstr "Afișarea {firstIndex} din totalul {numItems}"
+msgstr ""
 
 #: common/static/common/js/components/views/paging_header.js
 msgid "Showing {firstIndex}-{lastIndex} out of {numItems} total"
-msgstr "Afișarea {firstIndex}-{lastIndex} din totalul {numItems}"
+msgstr ""
 
 #: common/static/common/js/discussion/utils.js
 msgid "Loading content"
@@ -2045,11 +2033,8 @@ msgstr "Se încarcă conținutul"
 #: common/static/common/js/discussion/utils.js
 msgid "Your request could not be processed. Refresh the page and try again."
 msgstr ""
-"Cererea dumneavoastră nu a putut fi procesată. Reîmprospătați pagina și "
-"încercați din nou."
 
 #: common/static/common/js/discussion/utils.js
-#: common/static/common/templates/discussion/templates.underscore
 msgid "…"
 msgstr "..."
 
@@ -2079,24 +2064,18 @@ msgstr[2] "{numVotes} de voturi"
 msgid ""
 "You could not be subscribed to this post. Refresh the page and try again."
 msgstr ""
-"Nu ați putut fi abonat la acestă postare. Reîmprospătați pagina și încercați"
-" din nou."
 
 #: common/static/common/js/discussion/views/discussion_content_view.js
 msgid ""
 "You could not be unsubscribed from this post. Refresh the page and try "
 "again."
 msgstr ""
-"Nu ați putut fi dezabonat de la acestă postare. Reîmprospătați pagina și "
-"încercați din nou."
 
 #: common/static/common/js/discussion/views/discussion_content_view.js
 msgid ""
 "This response could not be marked as an answer. Refresh the page and try "
 "again."
 msgstr ""
-"Acestă replică nu a putut fi marcată ca răspuns. Reîmprospătați pagina și "
-"încercați din nou."
 
 #: common/static/common/js/discussion/views/discussion_content_view.js
 msgid ""
@@ -2245,7 +2224,6 @@ msgid "Your post will be discarded."
 msgstr "Postarea ta va fi eliminată"
 
 #: common/static/common/js/discussion/views/response_comment_show_view.js
-#: common/static/common/templates/discussion/templates.underscore
 msgid "anonymous"
 msgstr "anonim"
 
@@ -2256,8 +2234,6 @@ msgstr "Ești sigur/ă că vrei să ștergi acest comentariu?"
 #: common/static/common/js/discussion/views/response_comment_view.js
 msgid "This comment could not be deleted. Refresh the page and try again."
 msgstr ""
-"Acest comentariu nu a putut fi șters. Reîmprospătați pagina și încercați din"
-" nou."
 
 #: common/static/common/js/discussion/views/thread_response_view.js
 msgid "Are you sure you want to delete this response?"
@@ -2407,20 +2383,17 @@ msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/errors_list.jsx
 msgid "Please fix the following errors:"
-msgstr "Vă rugăm reparați următoarele erori:"
+msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/file_upload.jsx
 msgid "Files that you upload must be smaller than 5MB in size."
 msgstr ""
-"Fișierele pe care le încărcați trebuie să aibă mărimea mai mică decât 5MB."
 
 #: lms/djangoapps/support/static/support/jsx/file_upload.jsx
 msgid ""
 "Files that you upload must be PDFs or image files in .gif, .jpg, .jpeg, or "
 ".png format."
 msgstr ""
-"Fișierele pe care le încărcați trebuie să fie în format PDF sau imagini în "
-"format .gif, .jpg, .jpeg, sau .png."
 
 #: lms/djangoapps/support/static/support/jsx/file_upload.jsx
 #: lms/djangoapps/support/static/support/jsx/single_support_form.jsx
@@ -2429,15 +2402,15 @@ msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/file_upload.jsx
 msgid "Add Attachment"
-msgstr "Adăugați Atașament"
+msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/file_upload.jsx
 msgid "(Optional)"
-msgstr "(Optional)"
+msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/file_upload.jsx
 msgid "Remove file"
-msgstr "Șterge fișier"
+msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
 msgid "Course Name"
@@ -2451,7 +2424,7 @@ msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
 msgid "Not specific to a course"
-msgstr "Nu este specific unui curs"
+msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
 #: lms/static/js/instructor_dashboard/util.js
@@ -2492,10 +2465,6 @@ msgid "Masters"
 msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
-msgid "MicroMasters"
-msgstr ""
-
-#: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
 msgid "MicroBachelors"
 msgstr ""
 
@@ -2517,15 +2486,7 @@ msgid "Other"
 msgstr "Altele"
 
 #: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
-msgid "Course Discussion Forum"
-msgstr ""
-
-#: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
-msgid ""
-"While our support team is happy to assist with the edX platform, the course "
-"staff has the expertise for specific assignment questions, grading or the "
-"proper procedures in each course. Please post all course related questions "
-"within the Discussion Forum where the Course Staff can directly respond."
+msgid "What can we help you with, {username}?"
 msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
@@ -2533,23 +2494,21 @@ msgid "Details"
 msgstr "Detalii"
 
 #: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
-msgid "the more quickly and helpfully we can respond!"
+msgid "The more you tell us, the more quickly and helpfully we can respond!"
 msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
-msgid "Create Support Ticket"
-msgstr ""
-
-#: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
-msgid "What can we help you with, {username}?"
-msgstr "Cu ce vă putem ajuta, {username}?"
+#: lms/templates/verify_student/incourse_reverify.underscore
+msgid "Submit"
+msgstr "Trimite"
 
 #: lms/djangoapps/support/static/support/jsx/logged_out_user.jsx
 msgid "Sign in to {platform} so we can help you better."
-msgstr "Conectați-vă la {platform} pentru a vă putea ajuta mai bine."
+msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/logged_out_user.jsx
-msgid "Need help logging in?"
+msgid ""
+"If you are unable to access your account contact us via email using {email}."
 msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/single_support_form.jsx
@@ -2557,8 +2516,6 @@ msgid ""
 "Select a course or select \"Not specific to a course\" for your support "
 "request."
 msgstr ""
-"Selectați un curs sau selectați \" Nu este specific unui curs\" pentru "
-"solicitarea dumneavoastră de asistență."
 
 #: lms/djangoapps/support/static/support/jsx/single_support_form.jsx
 msgid "Select a subject for your support request."
@@ -2566,18 +2523,6 @@ msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/single_support_form.jsx
 msgid "Enter some details for your support request."
-msgstr "Introduceți câteva detalii pentru cererea dumneavoastră de asistență."
-
-#: lms/djangoapps/support/static/support/jsx/single_support_form.jsx
-msgid ""
-"Due to the recent increase in interest in online education and edX, we are "
-"currently experiencing an unusually high volume of support requests. We "
-"appreciate your patience as we work to review each request. Please check the"
-" "
-msgstr ""
-
-#: lms/djangoapps/support/static/support/jsx/single_support_form.jsx
-msgid " as many questions may have already been answered."
 msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/single_support_form.jsx
@@ -2587,11 +2532,11 @@ msgstr "Contactează-ne"
 
 #: lms/djangoapps/support/static/support/jsx/single_support_form.jsx
 msgid "Find answers to the top questions asked by learners."
-msgstr "Găsiți răspunsuri la principalele întrebări adresate de elevi."
+msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/single_support_form.jsx
 msgid "Search the {platform} Help Center"
-msgstr "Căutați {platform} Centrul de Ajutor"
+msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/success.jsx
 msgid "Go to my Dashboard"
@@ -2599,17 +2544,16 @@ msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/success.jsx
 msgid "Go to {platform} Home"
-msgstr "Mergi la {platform} Acasă"
+msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/success.jsx
 msgid ""
-"Thank you for submitting a request! We appreciate your patience while we "
-"work to review your request."
+"Thank you for submitting a request! We will contact you within 24 hours."
 msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/upload_progress.jsx
 msgid "Cancel upload"
-msgstr "Anulați încărcare"
+msgstr ""
 
 #: lms/djangoapps/teams/static/teams/js/collections/team.js
 msgid "last activity"
@@ -2757,7 +2701,7 @@ msgstr ""
 
 #: lms/djangoapps/teams/static/teams/js/views/instructor_tools.js
 msgid "Team \"{team}\" successfully deleted."
-msgstr "Echipa \"{team}\"a fost ștearsă cu succes."
+msgstr ""
 
 #: lms/djangoapps/teams/static/teams/js/views/manage.js
 #: lms/djangoapps/teams/static/teams/js/views/teams_tab.js
@@ -2790,10 +2734,6 @@ msgid "An error occurred. Try again."
 msgstr "A avut loc o eroare. Încearcă din nou."
 
 #: lms/djangoapps/teams/static/teams/js/views/team_profile.js
-msgid "No assignments for team"
-msgstr ""
-
-#: lms/djangoapps/teams/static/teams/js/views/team_profile.js
 msgid "Leave this team?"
 msgstr "Părăsești această echipă?"
 
@@ -2810,8 +2750,8 @@ msgid "Confirm"
 msgstr "Confirmă"
 
 #: lms/djangoapps/teams/static/teams/js/views/team_profile_header_actions.js
-msgid "You already belong to another team in this team set."
-msgstr ""
+msgid "You already belong to another team."
+msgstr "Deja aparții unei alte echipe."
 
 #: lms/djangoapps/teams/static/teams/js/views/team_profile_header_actions.js
 msgid "This team is full."
@@ -2822,8 +2762,8 @@ msgid "Cannot join instructor managed team"
 msgstr ""
 
 #: lms/djangoapps/teams/static/teams/js/views/team_utils.js
-msgid " Member"
-msgid_plural " Members"
+msgid "{memberCount} / {maxMemberCount} Member"
+msgid_plural "{memberCount} / {maxMemberCount} Members"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
@@ -2834,20 +2774,29 @@ msgstr "Toate echipele"
 
 #: lms/djangoapps/teams/static/teams/js/views/teams.js
 msgid "Teams Pagination"
-msgstr "Numerotarea Echipelor"
+msgstr ""
 
 #: lms/djangoapps/teams/static/teams/js/views/teams_tab.js
 msgid "Topics"
 msgstr "Subiecte"
 
 #: lms/djangoapps/teams/static/teams/js/views/teams_tab.js
-msgid "My Teams"
-msgstr ""
+msgid "My Team"
+msgstr "Echipa Mea"
 
 #: lms/djangoapps/teams/static/teams/js/views/teams_tab.js
 #: lms/templates/instructor/instructor_dashboard_2/certificate-bulk-white-list.underscore
 msgid "Browse"
 msgstr "Răsfoiește"
+
+#: lms/djangoapps/teams/static/teams/js/views/teams_tab.js
+msgid ""
+"See all teams in your course, organized by topic. Join a team to collaborate"
+" with other learners who are interested in the same topic as you are."
+msgstr ""
+"Vezi toate echipele din cursul tău, organizate pe subiecte. Alătură-te unei "
+"echipe pentru a colabora cu alți studenți care sunt interesați de aceleași "
+"subiecte ca și tine. "
 
 #: lms/djangoapps/teams/static/teams/js/views/teams_tab.js
 msgid "Your request could not be completed. Reload the page and try again."
@@ -2870,7 +2819,7 @@ msgstr "Caută Echipa"
 
 #: lms/djangoapps/teams/static/teams/js/views/teams_tab.js
 msgid "Showing results for \"{searchString}\""
-msgstr "Se afișează rezultatele pentru \"{searchString}\""
+msgstr ""
 
 #: lms/djangoapps/teams/static/teams/js/views/teams_tab.js
 msgid "Create a New Team"
@@ -2914,38 +2863,21 @@ msgid "Search teams"
 msgstr "Caută echipe"
 
 #: lms/djangoapps/teams/static/teams/js/views/teams_tab.js
-msgid ""
-"See all teams you belong to and all public teams in your course, organized "
-"by topic. Join an open public team to collaborate with other learners who "
-"are interested in the same topic as you are."
-msgstr ""
-
-#: lms/djangoapps/teams/static/teams/js/views/teams_tab.js
-msgid ""
-"See all teams you belong to and all public teams in your course, organized "
-"by topic."
-msgstr ""
-
-#: lms/djangoapps/teams/static/teams/js/views/teams_tab.js
-msgid "See all teams you belong to."
-msgstr ""
-
-#: lms/djangoapps/teams/static/teams/js/views/teams_tab.js
 #: lms/djangoapps/discussion/static/discussion/templates/fake-breadcrumbs.underscore
 msgid "All Topics"
 msgstr "Toate Subiectele"
 
 #: lms/djangoapps/teams/static/teams/js/views/teams_tab.js
 msgid "The page \"{route}\" could not be found."
-msgstr "Pagina \"{route}\" nu a putut fi găsită."
+msgstr ""
 
 #: lms/djangoapps/teams/static/teams/js/views/teams_tab.js
 msgid "The topic \"{topic}\" could not be found."
-msgstr "Subiectul \"{topic}\" nu a putut fi găsit."
+msgstr ""
 
 #: lms/djangoapps/teams/static/teams/js/views/teams_tab.js
 msgid "The team \"{team}\" could not be found."
-msgstr "Echipa \"{team}\" nu a putut fi găsită."
+msgstr ""
 
 #: lms/djangoapps/teams/static/teams/js/views/topic_card.js
 msgid "{team_count} Team"
@@ -2974,11 +2906,6 @@ msgstr ""
 "poți găsi o echipă căreia să i te alături, {create_span_start}creează o "
 "echipă nouă pentru acest subiect{span_end}."
 
-#: lms/djangoapps/teams/static/teams/js/views/topic_teams.js
-msgid ""
-"An error occurred while looking up team membership. Try refreshing the page."
-msgstr ""
-
 #: lms/djangoapps/teams/static/teams/js/views/topics.js
 msgid "All topics"
 msgstr "Toate subiectele"
@@ -2989,7 +2916,7 @@ msgstr "Inserează Hyperlink"
 
 #: lms/static/js/Markdown.Editor.js
 msgid "e.g. 'http://google.com'"
-msgstr "ex: 'http://google.com'"
+msgstr ""
 
 #: lms/static/js/Markdown.Editor.js
 msgid "Link Description"
@@ -3005,20 +2932,17 @@ msgstr ""
 
 #: lms/static/js/Markdown.Editor.js
 msgid "Insert Image (upload file or type URL)"
-msgstr "Adăugați Imagine ( încărcați fișier sau tastați URL)"
+msgstr ""
 
 #: lms/static/js/Markdown.Editor.js
 msgid ""
 "Type in a URL or use the \"Choose File\" button to upload a file from your "
 "machine. (e.g. 'http://example.com/img/clouds.jpg')"
 msgstr ""
-"Tastați un URL sau folosiți butonul \"Adaugă Fișier\" pentru a încărca un "
-"fișier din calculatorul dumneavoastră. (ex: "
-"'http://example.com/img/clouds.jpg')"
 
 #: lms/static/js/Markdown.Editor.js
 msgid "Image Description"
-msgstr "Descrierea Imaginii"
+msgstr ""
 
 #: lms/static/js/Markdown.Editor.js
 msgid ""
@@ -3147,7 +3071,7 @@ msgstr ""
 
 #: lms/static/js/api_admin/views/catalog_preview.js
 msgid "Preview this query"
-msgstr "Previzualizați această căutare"
+msgstr ""
 
 #: lms/static/js/calculator.js
 msgid "Open Calculator"
@@ -3159,7 +3083,7 @@ msgstr "Închide calculatorul"
 
 #: lms/static/js/ccx/schedule.js
 msgid "All subsections"
-msgstr "Toate subsecțiunile"
+msgstr ""
 
 #: lms/static/js/ccx/schedule.js
 msgid "All units"
@@ -3183,24 +3107,21 @@ msgstr ""
 
 #: lms/static/js/ccx/schedule.js
 msgid "Due date cannot be before start date."
-msgstr "Data limită nu poate fi setată înainte de data de început."
+msgstr ""
 
 #: lms/static/js/ccx/schedule.js
 msgid "Enter Due Date and Time"
-msgstr "Introduceți Data Limită și Ora"
+msgstr ""
 
 #: lms/static/js/ccx/schedule.js
 msgid "Enter Start Date and Time"
-msgstr "Introduceți Data de Început și Ora"
+msgstr ""
 
 #: lms/static/js/certificates/models/certificate_exception.js
 msgid ""
 "Student username/email field is required and can not be empty. Kindly fill "
 "in username/email and then press \"Add to Exception List\" button."
 msgstr ""
-"Numele de utilizator a elevului/ câmpul e-mail este obligatoriu și nu poate "
-"fi gol. Vă rugăm completați numele de utilizator/email-ul și apăsați butonul"
-" \"Adăugați la Lista Excepții\". "
 
 #: lms/static/js/certificates/models/certificate_invalidation.js
 msgid ""
@@ -3306,7 +3227,6 @@ msgid "There has been an error processing your survey."
 msgstr ""
 
 #: lms/static/js/courseware/credit_progress.js
-#: common/static/common/templates/discussion/templates.underscore
 #: lms/templates/discovery/facet.underscore
 #: lms/templates/edxnotes/note-item.underscore
 msgid "More"
@@ -3323,7 +3243,6 @@ msgid "HTML preview of post"
 msgstr ""
 
 #: lms/static/js/customwmd.js
-#: common/static/common/templates/discussion/templates.underscore
 msgid "Your question or idea (required)"
 msgstr ""
 
@@ -3377,8 +3296,6 @@ msgid ""
 "Unable to determine whether we should give you a refund because of System "
 "Error. Please try again later."
 msgstr ""
-"Nu se poate stabili dacă trebuie să vă oferim o rambursare din cauza Erorii "
-"de Sistem. Vă rugăm încercați din nou mai târziu."
 
 #: lms/static/js/discovery/views/search_form.js
 #, javascript-format
@@ -3410,7 +3327,7 @@ msgstr ""
 
 #: lms/static/js/discussions_management/views/discussions.js
 msgid "Enrollment Tracks"
-msgstr "Înregistrările Elevilor"
+msgstr ""
 
 #: lms/static/js/discussions_management/views/discussions.js
 msgid ""
@@ -4380,97 +4297,92 @@ msgstr ""
 
 #: lms/static/js/learner_dashboard/models/course_card_model.js
 msgid "(Self-paced) Starts {start}"
-msgstr "(Self-paced) Începe {start}"
+msgstr ""
 
 #: lms/static/js/learner_dashboard/models/course_card_model.js
 msgid "(Self-paced) Started {start}"
-msgstr "(Self-paced) A început {start}"
+msgstr ""
 
 #: lms/static/js/learner_dashboard/models/course_card_model.js
 msgid "(Self-paced) Ends {end}"
-msgstr "(Self-paced) Se termină {end}"
+msgstr ""
 
 #: lms/static/js/learner_dashboard/models/course_card_model.js
 msgid "(Self-paced) Ended {end}"
-msgstr "(Self-paced) S-a încheiat {end}"
+msgstr ""
 
 #: lms/static/js/learner_dashboard/models/course_card_model.js
 msgid "Starts {start}"
-msgstr "Începe {start}"
+msgstr ""
 
 #: lms/static/js/learner_dashboard/models/course_card_model.js
 msgid "Started {start}"
-msgstr "A început {start}"
+msgstr ""
 
 #: lms/static/js/learner_dashboard/models/course_card_model.js
 msgid "Ends {end}"
-msgstr "Se încheie {end}"
+msgstr ""
 
 #: lms/static/js/learner_dashboard/views/course_entitlement_view.js
 msgid "You must select a session to access the course."
-msgstr "Trebuie să selectați o sesiune pentru a accesa cursul."
+msgstr ""
 
 #: lms/static/js/learner_dashboard/views/course_entitlement_view.js
 msgid "There was an error. Please reload the page and try again."
-msgstr "A apărut o eroare. Vă rugăm reîncărcați pagina și încercați din nou."
+msgstr ""
 
 #: lms/static/js/learner_dashboard/views/course_entitlement_view.js
 #: lms/templates/learner_dashboard/course_entitlement.underscore
 msgid "Change Session"
-msgstr "Schimbă Lecția"
+msgstr ""
 
 #: lms/static/js/learner_dashboard/views/course_entitlement_view.js
 #: lms/templates/learner_dashboard/course_entitlement.underscore
 msgid "Select Session"
-msgstr "Selectează Lecție"
+msgstr ""
 
 #: lms/static/js/learner_dashboard/views/course_entitlement_view.js
 msgid "Leave Current Session"
-msgstr "Ieși din Lecția Curentă"
+msgstr ""
 
 #: lms/static/js/learner_dashboard/views/course_entitlement_view.js
 msgid "Are you sure you want to select this session?"
-msgstr "Sunteți sigur că doriți să selectați această lecție?"
+msgstr ""
 
 #: lms/static/js/learner_dashboard/views/course_entitlement_view.js
 msgid "Are you sure you want to change to a different session?"
-msgstr "Sunteți sigur că doriți să accesați o lecție diferită?"
+msgstr ""
 
 #: lms/static/js/learner_dashboard/views/course_entitlement_view.js
 msgid "Any course progress or grades from your current session will be lost."
 msgstr ""
-"Orice progres al cursului sau notele de la lecția curentă, vor fi pierdute."
 
 #: lms/static/js/learner_dashboard/views/course_entitlement_view.js
 msgid "Are you sure that you want to leave this session?"
-msgstr "Sunteți sigur că doriți să părăsiți această lecție?"
+msgstr ""
 
 #: lms/static/js/learner_dashboard/views/entitlement_unenrollment_view.js
 msgid ""
 "Your unenrollment request could not be processed. Please try again later."
 msgstr ""
-"Cererea dumneavoastră de înscriere nu a putut fi procesată. Vă rugăm "
-"încercați din nou mai târziu."
 
 #: lms/static/js/learner_dashboard/views/entitlement_unenrollment_view.js
 msgid ""
 "Are you sure you want to unenroll from {courseName} ({courseNumber})? You "
 "will be refunded the amount you paid."
 msgstr ""
-"Sunteți sigur că doriți să vă anulați înscrierea la {courseName} "
-"({courseNumber})? Veți primi rambursarea sumei plătite. "
 
 #: lms/static/js/learner_dashboard/views/program_details_sidebar_view.js
 msgid "{type} Progress"
-msgstr "{type} Progres"
+msgstr ""
 
 #: lms/static/js/learner_dashboard/views/program_details_sidebar_view.js
 msgid "Earned Certificates"
-msgstr "Certificări obținute"
+msgstr ""
 
 #: lms/static/js/learner_dashboard/views/program_details_view.js
 msgid "Enrolled"
-msgstr "Înscris"
+msgstr ""
 
 #: lms/static/js/staff_debug_actions.js
 msgid "Successfully reset the attempts for user {user}"
@@ -4514,19 +4426,19 @@ msgstr ""
 
 #: lms/static/js/student_account/components/PasswordResetConfirmation.jsx
 msgid "Enter and confirm your new password."
-msgstr "Introduceți și confirmați noua parolă."
+msgstr ""
 
 #: lms/static/js/student_account/components/PasswordResetConfirmation.jsx
 msgid "New Password"
-msgstr "Parolă Nouă"
+msgstr ""
 
 #: lms/static/js/student_account/components/PasswordResetConfirmation.jsx
 msgid "Confirm Password"
-msgstr "Confirmați Parola"
+msgstr ""
 
 #: lms/static/js/student_account/components/PasswordResetConfirmation.jsx
 msgid "Passwords do not match."
-msgstr "Parolele nu se potrivesc."
+msgstr ""
 
 #: lms/static/js/student_account/components/PasswordResetConfirmation.jsx
 msgid "Reset My Password"
@@ -4535,11 +4447,11 @@ msgstr "Resetează parola"
 #: lms/static/js/student_account/components/PasswordResetConfirmation.jsx
 #: lms/static/js/student_account/views/account_settings_factory.js
 msgid "Reset Your Password"
-msgstr "Resetați-vă Parola"
+msgstr ""
 
 #: lms/static/js/student_account/components/PasswordResetInput.jsx
 msgid "Error: "
-msgstr "Eroare:"
+msgstr ""
 
 #: lms/static/js/student_account/components/StudentAccountDeletion.jsx
 #: lms/static/js/student_account/components/StudentAccountDeletionModal.jsx
@@ -4555,13 +4467,10 @@ msgid ""
 "Before proceeding, please {htmlStart}unlink all social media "
 "accounts{htmlEnd}."
 msgstr ""
-"Înainte de a continua, vă rugăm  {htmlStart}deconectați toate conturile "
-"rețelelor sociale{htmlEnd}."
 
 #: lms/static/js/student_account/components/StudentAccountDeletion.jsx
 msgid "Before proceeding, please {htmlStart}activate your account{htmlEnd}."
 msgstr ""
-"Înainte de a continua, vă rugăm {htmlStart}activați-vă contul{htmlEnd}."
 
 #: lms/static/js/student_account/components/StudentAccountDeletion.jsx
 msgid ""
@@ -4607,7 +4516,7 @@ msgstr "Șterge contul meu"
 
 #: lms/static/js/student_account/components/StudentAccountDeletionModal.jsx
 msgid "Password is incorrect"
-msgstr "Parola este incorectă"
+msgstr ""
 
 #: lms/static/js/student_account/components/StudentAccountDeletionModal.jsx
 msgid "Unable to delete account"
@@ -4615,7 +4524,7 @@ msgstr "Contul nu a putut fi șters"
 
 #: lms/static/js/student_account/components/StudentAccountDeletionModal.jsx
 msgid "Please re-enter your password."
-msgstr "Vă rugăm reintroduceți parola."
+msgstr ""
 
 #: lms/static/js/student_account/components/StudentAccountDeletionModal.jsx
 msgid ""
@@ -4627,7 +4536,7 @@ msgstr ""
 
 #: lms/static/js/student_account/components/StudentAccountDeletionModal.jsx
 msgid "A Password is required"
-msgstr "Este necesară o Parolă"
+msgstr ""
 
 #: lms/static/js/student_account/components/StudentAccountDeletionModal.jsx
 msgid ""
@@ -4864,7 +4773,7 @@ msgstr "Implicit (Fus orar local)"
 
 #: lms/static/js/student_account/views/account_settings_factory.js
 msgid "Additional Information"
-msgstr "Informații Suplimentare"
+msgstr ""
 
 #: lms/static/js/student_account/views/account_settings_factory.js
 msgid "Education Completed"
@@ -5062,7 +4971,7 @@ msgstr ""
 #: openedx/features/course_bookmarks/static/course_bookmarks/js/views/bookmark_button.js
 #: openedx/features/course_bookmarks/static/course_bookmarks/js/views/bookmarks_list.js
 msgid "An error has occurred. Please try again."
-msgstr "A apărut o eroare. Vă rugăm încercați din nou."
+msgstr ""
 
 #: lms/static/js/verify_student/views/make_payment_step_view.js
 msgid "Could not submit order"
@@ -5207,6 +5116,31 @@ msgid ""
 "release date."
 msgstr ""
 
+#: lms/templates/class_dashboard/d3_stacked_bar_graph.js
+msgid "%(num_students)s student opened Subsection"
+msgid_plural "%(num_students)s students opened Subsection"
+msgstr[0] "%(num_students)s student a deschis Subsecțiunea"
+msgstr[1] "%(num_students)s studenți au deschis Subsecțiunea"
+msgstr[2] "%(num_students)s studenți au deschis Subsecțiunea"
+
+#: lms/templates/class_dashboard/d3_stacked_bar_graph.js
+msgid "%(num_students)s student"
+msgid_plural "%(num_students)s students"
+msgstr[0] "%(num_students)s student"
+msgstr[1] "%(num_students)s studenți"
+msgstr[2] "%(num_students)s de studenți"
+
+#: lms/templates/class_dashboard/d3_stacked_bar_graph.js
+msgid "%(num_questions)s question"
+msgid_plural "%(num_questions)s questions"
+msgstr[0] "%(num_questions)s întrebare"
+msgstr[1] "%(num_questions)s întrebări"
+msgstr[2] "%(num_questions)s de întrebări"
+
+#: lms/templates/class_dashboard/d3_stacked_bar_graph.js
+msgid "Number of Students"
+msgstr "Numărul de studenți"
+
 #: lms/templates/courseware/progress_graph.js
 msgid "Overall Score"
 msgstr ""
@@ -5217,15 +5151,15 @@ msgstr "Salvează această pagină"
 
 #: openedx/features/course_experience/static/course_experience/js/CourseGoals.js
 msgid "Thank you for setting your course goal to {goal}!"
-msgstr "Vă mulțumim că ați stabilit obiectivul cursului la {goal}!"
+msgstr ""
 
 #: openedx/features/course_experience/static/course_experience/js/CourseHome.js
 msgid "You have successfully updated your goal."
-msgstr "V-ați actualizat cu succes obiectivul"
+msgstr ""
 
 #: openedx/features/course_experience/static/course_experience/js/CourseHome.js
 msgid "There was an error updating your goal."
-msgstr "A existat o eroare la actualizarea obiectivului dumneavoastră."
+msgstr ""
 
 #: openedx/features/course_experience/static/course_experience/js/CourseOutline.js
 #: lms/templates/ccx/schedule.underscore
@@ -5235,16 +5169,6 @@ msgstr ""
 #: openedx/features/course_experience/static/course_experience/js/CourseOutline.js
 #: lms/templates/ccx/schedule.underscore
 msgid "Collapse All"
-msgstr ""
-
-#: openedx/features/course_experience/static/course_experience/js/WelcomeMessage.js
-#: lms/templates/courseware/proctored-exam-status.underscore
-msgid "Show More"
-msgstr ""
-
-#: openedx/features/course_experience/static/course_experience/js/WelcomeMessage.js
-#: lms/templates/courseware/proctored-exam-status.underscore
-msgid "Show Less"
 msgstr ""
 
 #: openedx/features/course_search/static/course_search/js/views/search_results_view.js
@@ -5391,10 +5315,6 @@ msgstr ""
 msgid "certificate"
 msgstr "certificat"
 
-#: cms/static/js/certificates/views/certificate_preview.js
-msgid "Deactivating"
-msgstr ""
-
 #: cms/static/js/certificates/views/certificates_list.js
 msgid "Set up your certificate"
 msgstr ""
@@ -5406,7 +5326,7 @@ msgid "You have not created any certificates yet."
 msgstr ""
 
 #: cms/static/js/certificates/views/signatory_editor.js
-msgid "Delete \"<%- signatoryName %>\" from the list of signatories?"
+msgid "Delete \"<%= signatoryName %>\" from the list of signatories?"
 msgstr ""
 
 #: cms/static/js/certificates/views/signatory_editor.js
@@ -5457,9 +5377,8 @@ msgstr ""
 
 #: cms/static/js/factories/manage_users.js
 #: cms/static/js/factories/manage_users_lib.js
-#: common/static/common/templates/discussion/templates.underscore
 msgid "Staff"
-msgstr "Personal"
+msgstr ""
 
 #: cms/static/js/factories/manage_users.js
 #: cms/static/js/factories/manage_users_lib.js
@@ -5557,7 +5476,7 @@ msgstr "Numărul cursului:"
 
 #: cms/static/js/features_jsx/studio/CourseOrLibraryListing.jsx
 msgid "Course Run:"
-msgstr "Desfășurarea Cursului:"
+msgstr ""
 
 #: cms/static/js/features_jsx/studio/CourseOrLibraryListing.jsx
 msgid "(Read-only)"
@@ -5599,7 +5518,7 @@ msgstr ""
 
 #: cms/static/js/models/chapter.js
 msgid "Chapter name is required"
-msgstr "Este necesar numele capitolului"
+msgstr ""
 
 #: cms/static/js/models/chapter.js
 msgid "asset_path is required"
@@ -5711,11 +5630,11 @@ msgstr ""
 
 #: cms/static/js/models/textbook.js
 msgid "Textbook name is required"
-msgstr "Este necesar numele manualului"
+msgstr ""
 
 #: cms/static/js/models/textbook.js
 msgid "Please add at least one chapter"
-msgstr "Vă rugăm adăugați cel puțin un capitol"
+msgstr ""
 
 #: cms/static/js/models/textbook.js
 msgid "All chapters must have a name and asset"
@@ -5723,9 +5642,11 @@ msgstr ""
 
 #: cms/static/js/models/uploads.js
 msgid ""
-"Only <%- fileTypes %> files can be uploaded. Please select a file ending in "
-"<%- (fileExtensions) %> to upload."
+"Only <%= fileTypes %> files can be uploaded. Please select a file ending in "
+"<%= fileExtensions %> to upload."
 msgstr ""
+"Doar fișierele  <%= fileTypes %> pot fi uploadate. Va rugăm selectați un "
+"sfarsit "
 
 #: cms/static/js/models/uploads.js
 #: lms/templates/student_account/hinted_login.underscore
@@ -5736,11 +5657,11 @@ msgstr "sau"
 
 #: cms/static/js/models/xblock_validation.js
 msgid "This unit has validation issues."
-msgstr "Acest element are probleme de validare."
+msgstr ""
 
 #: cms/static/js/models/xblock_validation.js
 msgid "This component has validation issues."
-msgstr "Această componentă are probleme de validare."
+msgstr ""
 
 #: cms/static/js/views/active_video_upload.js cms/static/js/views/assets.js
 msgid "Your file could not be uploaded"
@@ -5901,8 +5822,8 @@ msgid "{selectedProvider} credentials saved"
 msgstr ""
 
 #: cms/static/js/views/edit_chapter.js
-msgid "Upload a new PDF to “<%- name %>”"
-msgstr ""
+msgid "Upload a new PDF to “<%= name %>”"
+msgstr "Uploadează un nou PDF la “<%= name %>”"
 
 #: cms/static/js/views/edit_chapter.js
 msgid "Please select a PDF file to upload."
@@ -6008,11 +5929,11 @@ msgstr "Fișierele trebuie sa fie in format JPEG sau PNG."
 
 #: cms/static/js/views/license.js cms/templates/js/license-selector.underscore
 msgid "All Rights Reserved"
-msgstr "Toate Drepturile Rezervate"
+msgstr ""
 
 #: cms/static/js/views/license.js
 msgid "You reserve all rights for your work"
-msgstr "Rezervați toate drepturile pentru munca dumneavoastră"
+msgstr ""
 
 #: cms/static/js/views/license.js
 msgid "Creative Commons"
@@ -6024,11 +5945,11 @@ msgstr ""
 
 #: cms/static/js/views/license.js
 msgid "Version"
-msgstr "Versiune"
+msgstr ""
 
 #: cms/static/js/views/license.js
 msgid "Attribution"
-msgstr "Acordare"
+msgstr ""
 
 #: cms/static/js/views/license.js
 msgid ""
@@ -6161,7 +6082,7 @@ msgstr ""
 
 #: cms/static/js/views/modals/course_outline_modals.js
 msgid "Basic"
-msgstr "Fundamental"
+msgstr ""
 
 #: cms/static/js/views/modals/course_outline_modals.js
 msgid "Visibility"
@@ -6211,28 +6132,28 @@ msgstr "Modificare manuală"
 
 #: cms/static/js/views/move_xblock_list.js
 msgid "Sections"
-msgstr "Secțiuni"
+msgstr ""
 
 #: cms/static/js/views/move_xblock_list.js
 msgid "Subsections"
-msgstr "Subsecțiuni"
+msgstr ""
 
 #: cms/static/js/views/move_xblock_list.js
 msgid "Units"
-msgstr "Unități"
+msgstr ""
 
 #: cms/static/js/views/move_xblock_list.js
 msgid "Components"
-msgstr "Componente"
+msgstr ""
 
 #: cms/static/js/views/move_xblock_list.js
 #: cms/templates/js/group-configuration-editor.underscore
 msgid "Groups"
-msgstr "Grupuri"
+msgstr ""
 
 #: cms/static/js/views/move_xblock_list.js
 msgid "This {parentCategory} has no {childCategory}"
-msgstr "Acest {parentCategory} nu are {childCategory}"
+msgstr ""
 
 #: cms/static/js/views/move_xblock_list.js
 #: cms/templates/js/group-configuration-details.underscore
@@ -6242,7 +6163,7 @@ msgstr "Planul cursului "
 
 #: cms/static/js/views/paged_container.js
 msgid "Date added"
-msgstr "Data adăugată"
+msgstr ""
 
 #. Translators: "title" is the name of the current component or unit being
 #. edited.
@@ -6252,7 +6173,7 @@ msgstr ""
 
 #: cms/static/js/views/pages/container_subviews.js
 msgid "Publishing"
-msgstr "Editare"
+msgstr ""
 
 #: cms/static/js/views/pages/container_subviews.js
 #: cms/templates/js/course-video-settings-update-org-credentials-footer.underscore
@@ -6301,7 +6222,7 @@ msgstr ""
 
 #: cms/static/js/views/pages/container_subviews.js
 msgid "Making Visible to Students"
-msgstr "Vizibil pentru Elevi"
+msgstr ""
 
 #: cms/static/js/views/pages/course_outline.js
 msgid "Course Index"
@@ -6313,11 +6234,11 @@ msgstr ""
 
 #: cms/static/js/views/pages/paged_container.js
 msgid "Hide Previews"
-msgstr "Ascunde Previzualizări"
+msgstr ""
 
 #: cms/static/js/views/pages/paged_container.js
 msgid "Show Previews"
-msgstr "Arată Previzualizări"
+msgstr ""
 
 #. Translators: sample result:
 #. "Showing 0-9 out of 25 total, filtered by Images, sorted by Date Added
@@ -6357,7 +6278,7 @@ msgstr ""
 #. "Showing 0-9 out of 25 total".
 #: cms/static/js/views/paging_header.js
 msgid "{totalItems} total"
-msgstr "{totalItems} total"
+msgstr ""
 
 #. Translators: This refers to a content group that can be linked to a student
 #. cohort.
@@ -6471,13 +6392,13 @@ msgstr "Ne pare rău, a fost o eroare."
 #: cms/static/js/views/utils/create_course_utils.js
 msgid ""
 "The combined length of the organization, course number, and course run "
-"fields cannot be more than <%- limit %> characters."
+"fields cannot be more than <%=limit%> characters."
 msgstr ""
 
 #: cms/static/js/views/utils/create_library_utils.js
 msgid ""
 "The combined length of the organization and library code fields cannot be "
-"more than <%- limit %> characters."
+"more than <%=limit%> characters."
 msgstr ""
 
 #: cms/static/js/views/utils/move_xblock_utils.js
@@ -6492,7 +6413,7 @@ msgstr ""
 
 #: cms/static/js/views/utils/move_xblock_utils.js
 msgid "Undo move"
-msgstr "Anulare acțiune"
+msgstr ""
 
 #: cms/static/js/views/utils/move_xblock_utils.js
 msgid "Take me to the new location"
@@ -6500,20 +6421,19 @@ msgstr ""
 
 #: cms/static/js/views/utils/xblock_utils.js
 msgid "Duplicating"
-msgstr "Duplicare"
+msgstr ""
 
 #: cms/static/js/views/utils/xblock_utils.js
 msgid "Undo moving"
-msgstr "Anulează acțiunea"
+msgstr ""
 
 #: cms/static/js/views/utils/xblock_utils.js
 msgid "Moving"
-msgstr "Acțiunea"
+msgstr ""
 
 #: cms/static/js/views/utils/xblock_utils.js
 msgid "Deleting this {xblock_type} is permanent and cannot be undone."
 msgstr ""
-"Ștergerea acestui {xblock_type} este permanentă și nu poate fi anulată."
 
 #: cms/static/js/views/utils/xblock_utils.js
 msgid ""
@@ -6527,11 +6447,11 @@ msgstr ""
 
 #: cms/static/js/views/utils/xblock_utils.js
 msgid "Yes, delete this {xblock_type}"
-msgstr "Da, șterge acest {xblock_type}"
+msgstr ""
 
 #: cms/static/js/views/utils/xblock_utils.js
 msgid "Delete this {xblock_type}?"
-msgstr "Ștergeți  {xblock_type}?"
+msgstr ""
 
 #: cms/static/js/views/utils/xblock_utils.js
 msgid "section"
@@ -6571,27 +6491,27 @@ msgstr "Salvează schimbările"
 
 #: cms/static/js/views/video/transcripts/file_uploader.js
 msgid "Please select a file in .srt format."
-msgstr "Vă rugăm selectați un fișier în format .srt."
+msgstr ""
 
 #: cms/static/js/views/video/transcripts/file_uploader.js
 msgid "Error: Uploading failed."
-msgstr "Eroare: Încărcarea a eșuat."
+msgstr ""
 
 #: cms/static/js/views/video/transcripts/message_manager.js
 msgid "Error: Import failed."
-msgstr "Eroare: Importarea a eșuat."
+msgstr ""
 
 #: cms/static/js/views/video/transcripts/message_manager.js
 msgid "Error: Replacing failed."
-msgstr "Eroare: Înlocuirea a eșuat."
+msgstr ""
 
 #: cms/static/js/views/video/transcripts/message_manager.js
 msgid "Error: Choosing failed."
-msgstr "Eroare: Selectarea a eșuat."
+msgstr ""
 
 #: cms/static/js/views/video/transcripts/metadata_videolist.js
 msgid "Error: Connection with server failed."
-msgstr "Eroare: Conectarea la server a eșuat."
+msgstr ""
 
 #: cms/static/js/views/video/transcripts/metadata_videolist.js
 msgid "Link types should be unique."
@@ -6603,7 +6523,7 @@ msgstr ""
 
 #: cms/static/js/views/video/transcripts/metadata_videolist.js
 msgid "Incorrect url format."
-msgstr "Format url incorect."
+msgstr ""
 
 #: cms/static/js/views/video/translations_editor.js
 msgid ""
@@ -6616,19 +6536,17 @@ msgstr ""
 #: cms/static/js/views/video/translations_editor.js
 #: cms/static/js/views/video_transcripts.js
 msgid "Are you sure you want to remove this transcript?"
-msgstr "Sunteți sigur că doriți să ștergeți acestă copie?"
+msgstr ""
 
 #: cms/static/js/views/video/translations_editor.js
 msgid ""
 "If you remove this transcript, the transcript will not be available for this"
 " component."
 msgstr ""
-"Dacă eliminați această transcriere, transcrierea nu va fi valabilă pentru "
-"această componentă."
 
 #: cms/static/js/views/video/translations_editor.js
 msgid "Remove Transcript"
-msgstr "Eliminați Transcriere"
+msgstr ""
 
 #: cms/static/js/views/video/translations_editor.js
 msgid "Upload translation"
@@ -6785,7 +6703,7 @@ msgstr "Setări"
 
 #: cms/static/js/views/xblock_outline.js
 msgid "New {component_type}"
-msgstr "Nou {component_type}"
+msgstr ""
 
 #: cms/static/js/xblock_asides/structured_tags.js
 msgid "Updating Tags"
@@ -6828,13 +6746,13 @@ msgid "Unscheduled"
 msgstr ""
 
 #: cms/templates/js/course_info_update.underscore
+#: lms/templates/commerce/receipt.underscore
 #: lms/templates/verify_student/payment_confirmation_step.underscore
 msgid "Date"
 msgstr "Data"
 
 #: cms/templates/js/paging-header.underscore
 #: common/static/common/templates/components/paging-footer.underscore
-#: common/static/common/templates/discussion/templates.underscore
 msgid "Previous"
 msgstr "Anterior"
 
@@ -6881,311 +6799,6 @@ msgstr "Resetează căutare"
 #: lms/djangoapps/support/static/support/templates/manage_user.underscore
 msgid "Search"
 msgstr "Caută"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Add a Response"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "This thread is closed."
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Add a response:"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-#: lms/templates/verify_student/incourse_reverify.underscore
-msgid "Submit"
-msgstr "Trimite"
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "discussion posted %(time_ago)s by %(author)s"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "question posted %(time_ago)s by %(author)s"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Pinned"
-msgstr "Agățat"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Reported"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Closed"
-msgstr "Închis"
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "Related to: %(courseware_title_linked)s"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "This post is visible only to %(group_name)s."
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "This post is visible to everyone."
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Editing post"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid ""
-"Add a clear and descriptive title to encourage participation. (Required)"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Edit your post below."
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Update post"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "Show Comment (%(num_comments)s)"
-msgid_plural "Show Comments (%(num_comments)s)"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Add a comment"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "marked as answer %(time_ago)s by %(user)s"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "marked as answer %(time_ago)s"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "endorsed %(time_ago)s by %(user)s"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "endorsed %(time_ago)s"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Editing response"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Update response"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "posted %(time_ago)s by %(author)s"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Editing comment"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Update comment"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "discussion"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "answered question"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "unanswered question"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Following"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Community TA"
-msgstr "Asistent din comunitate"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "{unread_comments_count} new"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid ""
-"%(comments_count)s %(span_sr_open)scomments (%(unread_comments_count)s "
-"unread comments)%(span_close)s"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "%(comments_count)s %(span_sr_open)scomments %(span_close)s"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Add a Post"
-msgstr "Adaugă o postare"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Visible to"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid ""
-"Discussion admins, moderators, and TAs can make their posts visible to all "
-"students or specify a single group."
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "All Groups"
-msgstr "Toate grupurile"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "follow this post"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "post anonymously"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "post anonymously to classmates"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Error posting your message."
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "This post will be visible only to %(group_name)s."
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "This post will be visible to everyone."
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Topic area"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Add your post to a relevant topic to help others find it. (Required)"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "(Community TA)"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "(Staff)"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-#: lms/djangoapps/discussion/static/discussion/templates/user-profile.underscore
-msgid "All Posts"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Return to all posts"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "View discussion"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Load more"
-msgstr "Încarcă mai mult"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Post type"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid ""
-"Questions raise issues that need answers. Discussions share ideas and start "
-"conversations. (Required)"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Question"
-msgstr "Întrebare"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Discussion"
-msgstr "Discuţie"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Endorse"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Unendorse"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Mark as Answer"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Unmark as Answer"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Follow"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Unfollow"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Vote for this post,"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Report abuse"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Report"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Unreport"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Pin"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Unpin"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Open"
-msgstr "Deschide"
 
 #: lms/djangoapps/discussion/static/discussion/templates/discussion-home.underscore
 msgid "Discussion Home"
@@ -7243,6 +6856,10 @@ msgid ""
 "new, unread activity from posts you are following."
 msgstr ""
 
+#: lms/djangoapps/discussion/static/discussion/templates/user-profile.underscore
+msgid "All Posts"
+msgstr ""
+
 #: lms/djangoapps/support/static/support/templates/certificates.underscore
 msgid "username or email"
 msgstr ""
@@ -7271,7 +6888,7 @@ msgstr ""
 
 #: lms/djangoapps/support/static/support/templates/certificates_results.underscore
 msgid "Grade"
-msgstr "Notă"
+msgstr ""
 
 #: lms/djangoapps/support/static/support/templates/certificates_results.underscore
 msgid "Last Updated"
@@ -7356,7 +6973,7 @@ msgstr ""
 
 #: lms/djangoapps/support/static/support/templates/enrollment.underscore
 msgid "Enrollment Mode"
-msgstr "Modalitatea de înscriere"
+msgstr ""
 
 #: lms/djangoapps/support/static/support/templates/enrollment.underscore
 msgid "Verified mode price"
@@ -7377,7 +6994,7 @@ msgstr "Activ"
 #: lms/djangoapps/support/static/support/templates/enrollment.underscore
 #: lms/templates/ccx/schedule.underscore
 msgid "N/A"
-msgstr "N/A"
+msgstr ""
 
 #: lms/djangoapps/support/static/support/templates/enrollment.underscore
 msgid "Change Enrollment"
@@ -7464,20 +7081,12 @@ msgstr ""
 msgid "Upload Memberships"
 msgstr ""
 
-#: lms/djangoapps/teams/static/teams/templates/manage.underscore
-msgid "Error assigning team memberships"
-msgstr ""
-
 #: lms/djangoapps/teams/static/teams/templates/team-actions.underscore
 msgid "Are you having trouble finding a team to join?"
 msgstr ""
 
 #: lms/djangoapps/teams/static/teams/templates/team-profile-header-actions.underscore
 msgid "Join Team"
-msgstr ""
-
-#: lms/djangoapps/teams/static/teams/templates/team-profile.underscore
-msgid "Team Assignments"
 msgstr ""
 
 #: lms/djangoapps/teams/static/teams/templates/team-profile.underscore
@@ -7503,7 +7112,7 @@ msgstr ""
 #: lms/static/js/fixtures/donation.underscore
 #: lms/templates/dashboard/donation.underscore
 msgid "Donate"
-msgstr "Donează"
+msgstr ""
 
 #: lms/templates/api_admin/catalog-error.underscore
 msgid ""
@@ -7517,11 +7126,11 @@ msgstr ""
 
 #: lms/templates/ccx/schedule.underscore
 msgid "Start Date"
-msgstr "Data de început"
+msgstr ""
 
 #: lms/templates/ccx/schedule.underscore
 msgid "Due Date"
-msgstr "Data Scadentă"
+msgstr ""
 
 #: lms/templates/ccx/schedule.underscore
 msgid "remove all"
@@ -7564,6 +7173,94 @@ msgstr ""
 msgid "Remove unit %(unitName)s"
 msgstr ""
 
+#: lms/templates/commerce/provider.underscore
+#, python-format
+msgid ""
+"You still need to visit the %(display_name)s website to complete the credit "
+"process."
+msgstr ""
+
+#: lms/templates/commerce/provider.underscore
+#, python-format
+msgid ""
+"To finalize course credit, %(display_name)s requires %(platform_name)s "
+"learners to submit a credit request."
+msgstr ""
+
+#: lms/templates/commerce/provider.underscore
+msgid "Get Credit"
+msgstr ""
+
+#: lms/templates/commerce/receipt.underscore
+#, python-format
+msgid ""
+"Thank you %(full_name)s! We have received your payment for %(course_name)s."
+msgstr ""
+
+#: lms/templates/commerce/receipt.underscore
+#: lms/templates/verify_student/payment_confirmation_step.underscore
+msgid ""
+"Please print this page for your records; it serves as your receipt. You will"
+" also receive an email with the same information."
+msgstr ""
+
+#: lms/templates/commerce/receipt.underscore
+#: lms/templates/verify_student/payment_confirmation_step.underscore
+msgid "Order No."
+msgstr "Comanda Nr."
+
+#: lms/templates/commerce/receipt.underscore
+#: lms/templates/verify_student/payment_confirmation_step.underscore
+msgid "Amount"
+msgstr ""
+
+#: lms/templates/commerce/receipt.underscore
+#: lms/templates/verify_student/make_payment_step_ab_testing.underscore
+#: lms/templates/verify_student/payment_confirmation_step.underscore
+msgid "Total"
+msgstr ""
+
+#: lms/templates/commerce/receipt.underscore
+#: lms/templates/verify_student/payment_confirmation_step.underscore
+msgid "Please Note"
+msgstr ""
+
+#: lms/templates/commerce/receipt.underscore
+#: lms/templates/verify_student/payment_confirmation_step.underscore
+msgid "Crossed out items have been refunded."
+msgstr ""
+
+#: lms/templates/commerce/receipt.underscore
+#: lms/templates/verify_student/payment_confirmation_step.underscore
+msgid "Billed to"
+msgstr ""
+
+#: lms/templates/commerce/receipt.underscore
+#: lms/templates/verify_student/payment_confirmation_step.underscore
+msgid "No receipt available"
+msgstr ""
+
+#: lms/templates/commerce/receipt.underscore
+#: lms/templates/financial-assistance/financial_assessment_submitted.underscore
+msgid "Go to Dashboard"
+msgstr ""
+
+#: lms/templates/commerce/receipt.underscore
+msgid ""
+"If you don't verify your identity now, you can still explore your course "
+"from your dashboard. You will receive periodic reminders from {platformName}"
+" to verify your identity."
+msgstr ""
+
+#: lms/templates/commerce/receipt.underscore
+#: lms/templates/verify_student/payment_confirmation_step.underscore
+msgid "Want to confirm your identity later?"
+msgstr ""
+
+#: lms/templates/commerce/receipt.underscore
+msgid "Verify Now"
+msgstr ""
+
 #: lms/templates/courseware/proctored-exam-controls.underscore
 msgid "Mark Exam As Completed"
 msgstr ""
@@ -7584,6 +7281,14 @@ msgstr ""
 msgid ""
 "To receive credit for problems, you must select \"Submit\" for each problem "
 "before you select \"End My Exam\"."
+msgstr ""
+
+#: lms/templates/courseware/proctored-exam-status.underscore
+msgid "Show More"
+msgstr ""
+
+#: lms/templates/courseware/proctored-exam-status.underscore
+msgid "Show Less"
 msgstr ""
 
 #: lms/templates/courseware/proctored-exam-status.underscore
@@ -7691,7 +7396,7 @@ msgstr ""
 #: lms/templates/financial-assistance/financial_assessment_form.underscore
 msgid ""
 "The following information is already a part of your {platform} profile. "
-"We've included it here for your application."
+"We\\'ve included it here for your application."
 msgstr ""
 
 #: lms/templates/financial-assistance/financial_assessment_form.underscore
@@ -7718,10 +7423,6 @@ msgstr ""
 msgid ""
 "Thank you for submitting your financial assistance application for "
 "{course_name}! You can expect a response in 2-4 business days."
-msgstr ""
-
-#: lms/templates/financial-assistance/financial_assessment_submitted.underscore
-msgid "Go to Dashboard"
 msgstr ""
 
 #: lms/templates/instructor/instructor_dashboard_2/certificate-bulk-white-list.underscore
@@ -8062,6 +7763,14 @@ msgid "You can change sessions until {expiration_date}."
 msgstr ""
 
 #: lms/templates/learner_dashboard/course_enroll.underscore
+msgid "Final Grade"
+msgstr ""
+
+#: lms/templates/learner_dashboard/course_enroll.underscore
+msgid "for {courseName}"
+msgstr ""
+
+#: lms/templates/learner_dashboard/course_enroll.underscore
 msgid "View Archived Course"
 msgstr "Vezi arhivă curs"
 
@@ -8183,7 +7892,7 @@ msgstr ""
 
 #: lms/templates/learner_dashboard/program_details_sidebar.underscore
 msgid "View Program Record"
-msgstr "Vezi rezultatele programului"
+msgstr ""
 
 #: lms/templates/learner_dashboard/program_details_sidebar.underscore
 msgid "Additional Credit Opportunities"
@@ -8254,7 +7963,7 @@ msgstr ""
 
 #: lms/templates/learner_dashboard/upgrade_message.underscore
 msgid "Upgrade to Verified"
-msgstr "Treceți la Verificat"
+msgstr ""
 
 #: lms/templates/student_account/account.underscore
 msgid "New Address"
@@ -8277,33 +7986,13 @@ msgid "An error occurred. Please reload the page."
 msgstr ""
 
 #: lms/templates/student_account/form_field.underscore
-msgid "Need help signing in?"
-msgstr ""
-
-#: lms/templates/student_account/form_field.underscore
-msgid "Forgot my password"
-msgstr ""
-
-#: lms/templates/student_account/form_field.underscore
-msgid "Other sign-in issues"
-msgstr ""
-
-#: lms/templates/student_account/form_field.underscore
-msgid "Sign in with your company or school"
-msgstr ""
-
-#: lms/templates/student_account/form_field.underscore
-msgid "Need other help signing in?"
-msgstr ""
-
-#: lms/templates/student_account/form_field.underscore
-msgid "Create an account"
+msgid "Need help logging in?"
 msgstr ""
 
 #: lms/templates/student_account/hinted_login.underscore
 #: lms/templates/student_account/login.underscore
 msgid "Sign in"
-msgstr "Conectați-vă"
+msgstr ""
 
 #: lms/templates/student_account/hinted_login.underscore
 #, python-format
@@ -8495,13 +8184,17 @@ msgid "What You Need for Verification"
 msgstr ""
 
 #: lms/templates/verify_student/face_photo_step.underscore
-msgid "Device with Camera"
+#: lms/templates/verify_student/intro_step.underscore
+#: lms/templates/verify_student/make_payment_step.underscore
+#: lms/templates/verify_student/make_payment_step_ab_testing.underscore
+#: lms/templates/verify_student/payment_confirmation_step.underscore
+msgid "Webcam"
 msgstr ""
 
 #: lms/templates/verify_student/face_photo_step.underscore
 msgid ""
-"You need a device that has a webcam. If you receive a browser prompt for "
-"access to your camera, please make sure to click 'Allow'."
+"You need a computer that has a webcam. When you receive a browser prompt, "
+"make sure that you allow access to the camera."
 msgstr ""
 
 #: lms/templates/verify_student/face_photo_step.underscore
@@ -8509,7 +8202,9 @@ msgid "Photo Identification"
 msgstr ""
 
 #: lms/templates/verify_student/face_photo_step.underscore
-msgid "You need a valid ID that contains your full name and photo."
+msgid ""
+"You need a driver's license, passport, or other government-issued ID that "
+"has your name and photo."
 msgstr ""
 
 #: lms/templates/verify_student/face_photo_step.underscore
@@ -8519,8 +8214,8 @@ msgstr ""
 
 #: lms/templates/verify_student/face_photo_step.underscore
 msgid ""
-"When your face is in position, use the Take Photo button {icon} below to "
-"take your photo."
+"When your face is in position, use the camera button {icon} below to take "
+"your photo."
 msgstr ""
 
 #: lms/templates/verify_student/face_photo_step.underscore
@@ -8536,9 +8231,13 @@ msgid "Your entire face fits inside the frame."
 msgstr ""
 
 #: lms/templates/verify_student/face_photo_step.underscore
+msgid "The photo of your face matches the photo on your ID."
+msgstr ""
+
+#: lms/templates/verify_student/face_photo_step.underscore
 msgid ""
-"To take the photo of your face, click on the camera button {icon}. If you "
-"need to try again, click 'Retake Photo'."
+"To use the current photo, select the camera button {icon}. To take another "
+"photo, select the retake button {icon}."
 msgstr ""
 
 #: lms/templates/verify_student/face_photo_step.underscore
@@ -8555,9 +8254,12 @@ msgid "Why does %(platformName)s need my photo?"
 msgstr ""
 
 #: lms/templates/verify_student/face_photo_step.underscore
+#: lms/templates/verify_student/id_photo_step.underscore
+#: lms/templates/verify_student/incourse_reverify.underscore
 msgid ""
-"We use your verification photos to confirm your identity and ensure the "
-"validity of your certificate."
+"As part of the verification process, you take a photo of both your face and "
+"a government-issued photo ID. Our authorization service confirms your "
+"identity by comparing the photo you take with the photo on your ID."
 msgstr ""
 
 #: lms/templates/verify_student/face_photo_step.underscore
@@ -8569,55 +8271,13 @@ msgstr ""
 
 #: lms/templates/verify_student/face_photo_step.underscore
 #: lms/templates/verify_student/id_photo_step.underscore
-#, python-format
-msgid ""
-"We securely encrypt your photo and send it to our authorization service for "
-"review. Your photo and information are not saved or visible anywhere on "
-"%(platformName)s after the verification process is complete."
-msgstr ""
-
-#: lms/templates/verify_student/face_photo_step.underscore
-#: lms/templates/verify_student/id_photo_step.underscore
-#: lms/templates/verify_student/incourse_reverify.underscore
-msgid ""
-"What if I can't see the camera image, or if I can't see my photo do "
-"determine which side is visible?"
-msgstr ""
-
-#: lms/templates/verify_student/face_photo_step.underscore
-#: lms/templates/verify_student/incourse_reverify.underscore
-msgid ""
-"You may be able to complete the image capture procedure without assistance, "
-"but it may take a couple of submission attempts to get the camera "
-"positioning right.  Optimal camera positioning varies with each computer, "
-"but generally the best position for a headshot is approximately 12-18 inches"
-" (30-45 centimeters) from the camera, with your head centered relative to "
-"the computer screen. "
-msgstr ""
-
-#: lms/templates/verify_student/face_photo_step.underscore
-#: lms/templates/verify_student/id_photo_step.underscore
-#: lms/templates/verify_student/incourse_reverify.underscore
-msgid ""
-"If the photos you submit are rejected, try moving the computer or camera "
-"orientation to change the lighting angle.  The most common reason for "
-"rejection is inability to read the text on the ID card."
-msgstr ""
-
-#: lms/templates/verify_student/face_photo_step.underscore
-#: lms/templates/verify_student/incourse_reverify.underscore
-msgid ""
-"What if I have difficulty holding my head in position relative to the "
-"camera?"
-msgstr ""
-
-#: lms/templates/verify_student/face_photo_step.underscore
-#: lms/templates/verify_student/id_photo_step.underscore
 #: lms/templates/verify_student/incourse_reverify.underscore
 #, python-format
 msgid ""
-"If you require assistance with taking either photo for submission, contact "
-"%(platformName)s support for additional suggestions."
+"We use the highest levels of security available to encrypt your photo and "
+"send it to our authorization service for review. Your photo and information "
+"are not saved or visible anywhere on %(platformName)s after the verification"
+" process is complete."
 msgstr ""
 
 #: lms/templates/verify_student/face_photo_step.underscore
@@ -8633,13 +8293,15 @@ msgid "Take a Photo of Your ID"
 msgstr ""
 
 #: lms/templates/verify_student/id_photo_step.underscore
-msgid "Use your webcam to take a photo of your ID."
+msgid ""
+"Use your webcam to take a photo of your ID. We will match this photo with "
+"the photo of your face and the name on your account."
 msgstr ""
 
 #: lms/templates/verify_student/id_photo_step.underscore
 msgid ""
-"You need an ID with your name and photo. A driver's license, passport, or ID"
-" are all acceptable."
+"You need an ID with your name and photo. A driver's license, passport, or "
+"other government-issued IDs are all acceptable."
 msgstr ""
 
 #: lms/templates/verify_student/id_photo_step.underscore
@@ -8656,34 +8318,12 @@ msgid "Make sure your ID is well-lit"
 msgstr ""
 
 #: lms/templates/verify_student/id_photo_step.underscore
-msgid "Once in position, use the Take Photo button {icon} to capture your ID"
+msgid "Once in position, use the camera button {icon} to capture your ID"
 msgstr ""
 
 #: lms/templates/verify_student/id_photo_step.underscore
 #: lms/templates/verify_student/incourse_reverify.underscore
-msgid "Use the Retake Photo button if you are not pleased with your photo"
-msgstr ""
-
-#: lms/templates/verify_student/id_photo_step.underscore
-msgid ""
-"As part of the verification process, you take a photo of both your face and "
-"a photo ID. Our authorization service confirms your identity by comparing "
-"the photo you take with the photo on your ID."
-msgstr ""
-
-#: lms/templates/verify_student/id_photo_step.underscore
-msgid ""
-"You may be able to complete the image capture procedure without assistance, "
-"but it may take a couple of submission attempts to get the camera "
-"positioning right.  Optimal camera positioning varies with each computer, "
-"but generally, the best position for a photo of an ID card is 8-12 inches "
-"(20-30 centimeters) from the camera, with the ID card centered relative to "
-"the camera. "
-msgstr ""
-
-#: lms/templates/verify_student/id_photo_step.underscore
-msgid ""
-"What if I have difficulty holding my ID in position relative to the camera?"
+msgid "Use the retake photo button if you are not pleased with your photo"
 msgstr ""
 
 #: lms/templates/verify_student/image_input.underscore
@@ -8709,28 +8349,11 @@ msgid "Be sure your entire face is inside the frame"
 msgstr ""
 
 #: lms/templates/verify_student/incourse_reverify.underscore
-msgid ""
-"Once in position, use the Take Photo button {icon} to capture your photo"
+msgid "Once in position, use the camera button {icon} to capture your photo"
 msgstr ""
 
 #: lms/templates/verify_student/incourse_reverify.underscore
 msgid "Can we match the photo you took with the one on your ID?"
-msgstr ""
-
-#: lms/templates/verify_student/incourse_reverify.underscore
-msgid ""
-"As part of the verification process, you take a photo of both your face and "
-"a government-issued photo ID. Our authorization service confirms your "
-"identity by comparing the photo you take with the photo on your ID."
-msgstr ""
-
-#: lms/templates/verify_student/incourse_reverify.underscore
-#, python-format
-msgid ""
-"We use the highest levels of security available to encrypt your photo and "
-"send it to our authorization service for review. Your photo and information "
-"are not saved or visible anywhere on %(platformName)s after the verification"
-" process is complete."
 msgstr ""
 
 #: lms/templates/verify_student/intro_step.underscore
@@ -8759,13 +8382,6 @@ msgstr ""
 msgid ""
 "A driver's license, passport, or other government-issued ID with your name "
 "and photo"
-msgstr ""
-
-#: lms/templates/verify_student/intro_step.underscore
-#: lms/templates/verify_student/make_payment_step.underscore
-#: lms/templates/verify_student/make_payment_step_ab_testing.underscore
-#: lms/templates/verify_student/payment_confirmation_step.underscore
-msgid "Webcam"
 msgstr ""
 
 #: lms/templates/verify_student/make_payment_step.underscore
@@ -8856,11 +8472,6 @@ msgid "Check your email for an activation message."
 msgstr ""
 
 #: lms/templates/verify_student/make_payment_step_ab_testing.underscore
-#: lms/templates/verify_student/payment_confirmation_step.underscore
-msgid "Total"
-msgstr "Total"
-
-#: lms/templates/verify_student/make_payment_step_ab_testing.underscore
 msgid "Professional Certificate for {courseName}"
 msgstr ""
 
@@ -8898,36 +8509,6 @@ msgid "Thank you! We have received your payment for {courseName}."
 msgstr ""
 
 #: lms/templates/verify_student/payment_confirmation_step.underscore
-msgid ""
-"Please print this page for your records; it serves as your receipt. You will"
-" also receive an email with the same information."
-msgstr ""
-
-#: lms/templates/verify_student/payment_confirmation_step.underscore
-msgid "Order No."
-msgstr "Comanda Nr."
-
-#: lms/templates/verify_student/payment_confirmation_step.underscore
-msgid "Amount"
-msgstr ""
-
-#: lms/templates/verify_student/payment_confirmation_step.underscore
-msgid "Please Note"
-msgstr ""
-
-#: lms/templates/verify_student/payment_confirmation_step.underscore
-msgid "Crossed out items have been refunded."
-msgstr ""
-
-#: lms/templates/verify_student/payment_confirmation_step.underscore
-msgid "Billed to"
-msgstr ""
-
-#: lms/templates/verify_student/payment_confirmation_step.underscore
-msgid "No receipt available"
-msgstr ""
-
-#: lms/templates/verify_student/payment_confirmation_step.underscore
 msgid "Next Step: Confirm your identity"
 msgstr ""
 
@@ -8955,10 +8536,6 @@ msgid ""
 "%(platformName)s to verify your identity."
 msgstr ""
 
-#: lms/templates/verify_student/payment_confirmation_step.underscore
-msgid "Want to confirm your identity later?"
-msgstr ""
-
 #: lms/templates/verify_student/reverify_success_step.underscore
 msgid "Identity Verification In Progress"
 msgstr ""
@@ -8967,7 +8544,7 @@ msgstr ""
 msgid ""
 "We have received your information and are verifying your identity. You will "
 "see a message on your dashboard when the verification process is complete "
-"(usually within 5-7 days). In the meantime, you can still access all "
+"(usually within 1-2 days). In the meantime, you can still access all "
 "available course content."
 msgstr ""
 
@@ -9001,6 +8578,10 @@ msgstr ""
 
 #: lms/templates/verify_student/review_photos_step.underscore
 msgid "Does the photo of you show your whole face?"
+msgstr ""
+
+#: lms/templates/verify_student/review_photos_step.underscore
+msgid "Does the photo of you match your ID photo?"
 msgstr ""
 
 #: lms/templates/verify_student/review_photos_step.underscore
@@ -9085,7 +8666,7 @@ msgstr ""
 
 #: openedx/features/learner_profile/static/learner_profile/templates/badge.underscore
 msgid "Share"
-msgstr "Distribuie"
+msgstr ""
 
 #: openedx/features/learner_profile/static/learner_profile/templates/badge.underscore
 #, python-format
@@ -9221,11 +8802,11 @@ msgstr ""
 
 #: cms/templates/js/add-xblock-component-support-level.underscore
 msgid "Fully Supported"
-msgstr "Pe deplin susținută"
+msgstr ""
 
 #: cms/templates/js/add-xblock-component-support-level.underscore
 msgid "Provisionally Supported"
-msgstr "Susținută provizoriu"
+msgstr ""
 
 #: cms/templates/js/add-xblock-component.underscore
 msgid "Add New Component"
@@ -9505,7 +9086,7 @@ msgstr ""
 #: cms/templates/js/course-instructor-details.underscore
 #: cms/templates/js/signatory-details.underscore
 msgid "Organization"
-msgstr "Organizație"
+msgstr ""
 
 #: cms/templates/js/course-instructor-details.underscore
 msgid "Organization Name"
@@ -9724,7 +9305,7 @@ msgstr ""
 
 #: cms/templates/js/course-video-transcript-preferences.underscore
 msgid "Transcript Languages"
-msgstr "Transcriere Limbi"
+msgstr ""
 
 #: cms/templates/js/course-video-transcript-preferences.underscore
 #: cms/templates/js/metadata-dict-entry.underscore
@@ -9805,7 +9386,7 @@ msgstr ""
 
 #: cms/templates/js/course_info_handouts.underscore
 msgid "Course Handouts"
-msgstr "Notițele Cursului"
+msgstr ""
 
 #: cms/templates/js/course_info_handouts.underscore
 msgid "You have no handouts defined"
@@ -10413,21 +9994,6 @@ msgid "Exam Types"
 msgstr ""
 
 #: cms/templates/js/timed-examination-preference-editor.underscore
-msgid ""
-"This subsection was released to learners as a special exam, but was reverted"
-" back to a basic exam. You may not configure it as a special exam now. "
-"Contact edX Support for assistance."
-msgstr ""
-
-#: cms/templates/js/timed-examination-preference-editor.underscore
-msgid ""
-"This special exam has been released to learners. You may not convert it to "
-"another type of special exam. You may revert this subsection back to being a"
-" basic exam by selecting 'None', but you will NOT be able to configure it as"
-" a special exam in the future."
-msgstr ""
-
-#: cms/templates/js/timed-examination-preference-editor.underscore
 msgid "Timed"
 msgstr ""
 
@@ -10547,7 +10113,7 @@ msgstr ""
 
 #: cms/templates/js/unit-access-editor.underscore
 msgid "Deleted Group"
-msgstr "Grup șters"
+msgstr ""
 
 #: cms/templates/js/unit-access-editor.underscore
 msgid ""
@@ -10595,11 +10161,11 @@ msgid "Read more"
 msgstr ""
 
 #: cms/templates/js/video-transcripts.underscore
-msgid "No transcript uploaded."
+msgid "Show transcripts ({totalTranscripts})"
 msgstr ""
 
 #: cms/templates/js/video-transcripts.underscore
-msgid "Show transcripts ({totalTranscripts})"
+msgid "No transcript uploaded."
 msgstr ""
 
 #: cms/templates/js/xblock-access-editor.underscore

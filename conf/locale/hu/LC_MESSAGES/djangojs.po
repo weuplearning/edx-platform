@@ -53,8 +53,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: edx-platform\n"
 "Report-Msgid-Bugs-To: openedx-translation@googlegroups.com\n"
-"POT-Creation-Date: 2020-07-26 20:42+0000\n"
-"PO-Revision-Date: 2020-06-14 20:45+0000\n"
+"POT-Creation-Date: 2020-02-16 20:42+0000\n"
+"PO-Revision-Date: 2019-09-29 20:43+0000\n"
 "Last-Translator: edx_transifex_bot <i18n-working-group+edx-transifex-bot@edx.org>\n"
 "Language-Team: Hungarian (http://www.transifex.com/open-edx/edx-platform/language/hu/)\n"
 "Language: hu\n"
@@ -62,7 +62,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Generated-By: Babel 2.8.0\n"
+"Generated-By: Babel 1.3\n"
 
 #: cms/static/cms/js/xblock/cms.runtime.v1.js
 #: cms/static/js/certificates/views/signatory_details.js
@@ -98,7 +98,6 @@ msgstr "Mentés"
 #: cms/templates/js/signatory-editor.underscore
 #: cms/templates/js/video-transcripts.underscore
 #: cms/templates/js/xblock-outline.underscore
-#: common/static/common/templates/discussion/templates.underscore
 msgid "Delete"
 msgstr "Törlés"
 
@@ -127,7 +126,6 @@ msgstr "Törlés"
 #: cms/templates/js/section-name-edit.underscore
 #: cms/templates/js/signatory-actions.underscore
 #: cms/templates/js/xblock-string-field-editor.underscore
-#: common/static/common/templates/discussion/templates.underscore
 #: lms/djangoapps/support/static/support/templates/enrollment-modal.underscore
 #: lms/djangoapps/teams/static/teams/templates/edit-team.underscore
 #: lms/templates/instructor/instructor_dashboard_2/cohort-form.underscore
@@ -150,7 +148,6 @@ msgstr "Feltöltés"
 #: common/lib/xmodule/xmodule/js/src/html/edit.js
 #: lms/static/js/student_account/tos_modal.js
 #: cms/templates/js/course-video-settings.underscore
-#: common/static/common/templates/discussion/templates.underscore
 #: common/static/common/templates/image-modal.underscore
 #: openedx/features/learner_profile/static/learner_profile/templates/share_modal.underscore
 msgid "Close"
@@ -180,7 +177,6 @@ msgstr "Fájl kiválasztása"
 #: cms/static/js/views/course_info_update.js cms/static/js/views/tabs.js
 #: common/lib/xmodule/xmodule/js/src/html/edit.js
 #: lms/static/js/Markdown.Editor.js
-#: common/static/common/templates/discussion/templates.underscore
 #: lms/templates/learner_dashboard/verification_popover.underscore
 msgid "OK"
 msgstr "OK"
@@ -766,6 +762,7 @@ msgstr "Táblázat törlése"
 #: common/lib/xmodule/xmodule/js/src/html/edit.js
 #: cms/templates/js/certificate-editor.underscore
 #: cms/templates/js/group-configuration-editor.underscore
+#: lms/templates/commerce/receipt.underscore
 #: lms/templates/verify_student/payment_confirmation_step.underscore
 msgid "Description"
 msgstr "Leírás"
@@ -812,7 +809,6 @@ msgstr "HTML szerkesztése"
 #: cms/templates/js/show-textbook.underscore
 #: cms/templates/js/signatory-details.underscore
 #: cms/templates/js/xblock-string-field-editor.underscore
-#: common/static/common/templates/discussion/templates.underscore
 msgid "Edit"
 msgstr "Szerkesztés"
 
@@ -1215,7 +1211,6 @@ msgstr "Új ablak"
 #: common/lib/xmodule/xmodule/js/src/html/edit.js
 #: cms/templates/js/paging-header.underscore
 #: common/static/common/templates/components/paging-footer.underscore
-#: common/static/common/templates/discussion/templates.underscore
 msgid "Next"
 msgstr "Következő"
 
@@ -1563,7 +1558,6 @@ msgstr ""
 #: common/lib/xmodule/xmodule/js/src/html/edit.js
 #: cms/templates/js/course-instructor-details.underscore
 #: cms/templates/js/signatory-details.underscore
-#: common/static/common/templates/discussion/templates.underscore
 msgid "Title"
 msgstr "Cím"
 
@@ -2031,7 +2025,6 @@ msgid "Your request could not be processed. Refresh the page and try again."
 msgstr ""
 
 #: common/static/common/js/discussion/utils.js
-#: common/static/common/templates/discussion/templates.underscore
 msgid "…"
 msgstr "…"
 
@@ -2216,7 +2209,6 @@ msgid "Your post will be discarded."
 msgstr "Az üzeneted törlődött."
 
 #: common/static/common/js/discussion/views/response_comment_show_view.js
-#: common/static/common/templates/discussion/templates.underscore
 msgid "anonymous"
 msgstr "névtelen"
 
@@ -2476,15 +2468,7 @@ msgid "Other"
 msgstr "Egyéb"
 
 #: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
-msgid "Course Discussion Forum"
-msgstr ""
-
-#: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
-msgid ""
-"While our support team is happy to assist with the edX platform, the course "
-"staff has the expertise for specific assignment questions, grading or the "
-"proper procedures in each course. Please post all course related questions "
-"within the Discussion Forum where the Course Staff can directly respond."
+msgid "What can we help you with, {username}?"
 msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
@@ -2492,23 +2476,21 @@ msgid "Details"
 msgstr "Részletek"
 
 #: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
-msgid "the more quickly and helpfully we can respond!"
+msgid "The more you tell us, the more quickly and helpfully we can respond!"
 msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
-msgid "Create Support Ticket"
-msgstr ""
-
-#: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
-msgid "What can we help you with, {username}?"
-msgstr ""
+#: lms/templates/verify_student/incourse_reverify.underscore
+msgid "Submit"
+msgstr "Küldés"
 
 #: lms/djangoapps/support/static/support/jsx/logged_out_user.jsx
 msgid "Sign in to {platform} so we can help you better."
 msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/logged_out_user.jsx
-msgid "Need help logging in?"
+msgid ""
+"If you are unable to access your account contact us via email using {email}."
 msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/single_support_form.jsx
@@ -2523,18 +2505,6 @@ msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/single_support_form.jsx
 msgid "Enter some details for your support request."
-msgstr ""
-
-#: lms/djangoapps/support/static/support/jsx/single_support_form.jsx
-msgid ""
-"Due to the recent increase in interest in online education and edX, we are "
-"currently experiencing an unusually high volume of support requests. We "
-"appreciate your patience as we work to review each request. Please check the"
-" "
-msgstr ""
-
-#: lms/djangoapps/support/static/support/jsx/single_support_form.jsx
-msgid " as many questions may have already been answered."
 msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/single_support_form.jsx
@@ -2560,8 +2530,7 @@ msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/success.jsx
 msgid ""
-"Thank you for submitting a request! We appreciate your patience while we "
-"work to review your request."
+"Thank you for submitting a request! We will contact you within 24 hours."
 msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/upload_progress.jsx
@@ -2742,10 +2711,6 @@ msgid "An error occurred. Try again."
 msgstr ""
 
 #: lms/djangoapps/teams/static/teams/js/views/team_profile.js
-msgid "No assignments for team"
-msgstr ""
-
-#: lms/djangoapps/teams/static/teams/js/views/team_profile.js
 msgid "Leave this team?"
 msgstr ""
 
@@ -2762,7 +2727,7 @@ msgid "Confirm"
 msgstr "Jóváhagyás"
 
 #: lms/djangoapps/teams/static/teams/js/views/team_profile_header_actions.js
-msgid "You already belong to another team in this team set."
+msgid "You already belong to another team."
 msgstr ""
 
 #: lms/djangoapps/teams/static/teams/js/views/team_profile_header_actions.js
@@ -2774,8 +2739,8 @@ msgid "Cannot join instructor managed team"
 msgstr ""
 
 #: lms/djangoapps/teams/static/teams/js/views/team_utils.js
-msgid " Member"
-msgid_plural " Members"
+msgid "{memberCount} / {maxMemberCount} Member"
+msgid_plural "{memberCount} / {maxMemberCount} Members"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -2792,13 +2757,19 @@ msgid "Topics"
 msgstr ""
 
 #: lms/djangoapps/teams/static/teams/js/views/teams_tab.js
-msgid "My Teams"
-msgstr "Csapataim"
+msgid "My Team"
+msgstr ""
 
 #: lms/djangoapps/teams/static/teams/js/views/teams_tab.js
 #: lms/templates/instructor/instructor_dashboard_2/certificate-bulk-white-list.underscore
 msgid "Browse"
 msgstr "Böngészd"
+
+#: lms/djangoapps/teams/static/teams/js/views/teams_tab.js
+msgid ""
+"See all teams in your course, organized by topic. Join a team to collaborate"
+" with other learners who are interested in the same topic as you are."
+msgstr ""
 
 #: lms/djangoapps/teams/static/teams/js/views/teams_tab.js
 msgid "Your request could not be completed. Reload the page and try again."
@@ -2855,23 +2826,6 @@ msgid "Search teams"
 msgstr ""
 
 #: lms/djangoapps/teams/static/teams/js/views/teams_tab.js
-msgid ""
-"See all teams you belong to and all public teams in your course, organized "
-"by topic. Join an open public team to collaborate with other learners who "
-"are interested in the same topic as you are."
-msgstr ""
-
-#: lms/djangoapps/teams/static/teams/js/views/teams_tab.js
-msgid ""
-"See all teams you belong to and all public teams in your course, organized "
-"by topic."
-msgstr ""
-
-#: lms/djangoapps/teams/static/teams/js/views/teams_tab.js
-msgid "See all teams you belong to."
-msgstr ""
-
-#: lms/djangoapps/teams/static/teams/js/views/teams_tab.js
 #: lms/djangoapps/discussion/static/discussion/templates/fake-breadcrumbs.underscore
 msgid "All Topics"
 msgstr ""
@@ -2908,11 +2862,6 @@ msgid ""
 "{search_span_start}search teams{span_end} in this topic. If you still can't "
 "find a team to join, {create_span_start}create a new team in this "
 "topic{span_end}."
-msgstr ""
-
-#: lms/djangoapps/teams/static/teams/js/views/topic_teams.js
-msgid ""
-"An error occurred while looking up team membership. Try refreshing the page."
 msgstr ""
 
 #: lms/djangoapps/teams/static/teams/js/views/topics.js
@@ -3235,7 +3184,6 @@ msgid "There has been an error processing your survey."
 msgstr "Hiba történt a kérdőív feldolgozása közben"
 
 #: lms/static/js/courseware/credit_progress.js
-#: common/static/common/templates/discussion/templates.underscore
 #: lms/templates/discovery/facet.underscore
 #: lms/templates/edxnotes/note-item.underscore
 msgid "More"
@@ -3252,7 +3200,6 @@ msgid "HTML preview of post"
 msgstr ""
 
 #: lms/static/js/customwmd.js
-#: common/static/common/templates/discussion/templates.underscore
 msgid "Your question or idea (required)"
 msgstr ""
 
@@ -5139,6 +5086,28 @@ msgstr ""
 "Nem nézheted meg a kurzust tanulóként, vagy béta tesztelőként a kurzus "
 "nyilvánosságra hozásáig."
 
+#: lms/templates/class_dashboard/d3_stacked_bar_graph.js
+msgid "%(num_students)s student opened Subsection"
+msgid_plural "%(num_students)s students opened Subsection"
+msgstr[0] "%(num_students)s tanuló nyitott alszakaszt"
+msgstr[1] "%(num_students)s tanuló nyitott alszakaszt"
+
+#: lms/templates/class_dashboard/d3_stacked_bar_graph.js
+msgid "%(num_students)s student"
+msgid_plural "%(num_students)s students"
+msgstr[0] "%(num_students)s tanuló"
+msgstr[1] "%(num_students)s tanuló"
+
+#: lms/templates/class_dashboard/d3_stacked_bar_graph.js
+msgid "%(num_questions)s question"
+msgid_plural "%(num_questions)s questions"
+msgstr[0] "%(num_questions)s kérdés"
+msgstr[1] "%(num_questions)s kérdés"
+
+#: lms/templates/class_dashboard/d3_stacked_bar_graph.js
+msgid "Number of Students"
+msgstr "Tanulók száma"
+
 #: lms/templates/courseware/progress_graph.js
 msgid "Overall Score"
 msgstr ""
@@ -5167,16 +5136,6 @@ msgstr ""
 #: openedx/features/course_experience/static/course_experience/js/CourseOutline.js
 #: lms/templates/ccx/schedule.underscore
 msgid "Collapse All"
-msgstr ""
-
-#: openedx/features/course_experience/static/course_experience/js/WelcomeMessage.js
-#: lms/templates/courseware/proctored-exam-status.underscore
-msgid "Show More"
-msgstr ""
-
-#: openedx/features/course_experience/static/course_experience/js/WelcomeMessage.js
-#: lms/templates/courseware/proctored-exam-status.underscore
-msgid "Show Less"
 msgstr ""
 
 #: openedx/features/course_search/static/course_search/js/views/search_results_view.js
@@ -5328,10 +5287,6 @@ msgstr "Igen, engedélyezze a szerkesztéseket az aktív bizonyítványhoz."
 msgid "certificate"
 msgstr "bizonyítvány"
 
-#: cms/static/js/certificates/views/certificate_preview.js
-msgid "Deactivating"
-msgstr ""
-
 #: cms/static/js/certificates/views/certificates_list.js
 msgid "Set up your certificate"
 msgstr "Bizonyítványod elkészítése"
@@ -5343,8 +5298,8 @@ msgid "You have not created any certificates yet."
 msgstr "Még nem készítettel bizonyítványt."
 
 #: cms/static/js/certificates/views/signatory_editor.js
-msgid "Delete \"<%- signatoryName %>\" from the list of signatories?"
-msgstr ""
+msgid "Delete \"<%= signatoryName %>\" from the list of signatories?"
+msgstr "Törölni akarja <%= signatoryName %> nevét az aláírások közül?"
 
 #: cms/static/js/certificates/views/signatory_editor.js
 #: cms/static/js/views/course_info_update.js
@@ -5396,7 +5351,6 @@ msgstr ""
 
 #: cms/static/js/factories/manage_users.js
 #: cms/static/js/factories/manage_users_lib.js
-#: common/static/common/templates/discussion/templates.underscore
 msgid "Staff"
 msgstr "Stáb"
 
@@ -5653,9 +5607,11 @@ msgstr "Minden fejezetnek kell egy név és tartalom."
 
 #: cms/static/js/models/uploads.js
 msgid ""
-"Only <%- fileTypes %> files can be uploaded. Please select a file ending in "
-"<%- (fileExtensions) %> to upload."
+"Only <%= fileTypes %> files can be uploaded. Please select a file ending in "
+"<%= fileExtensions %> to upload."
 msgstr ""
+"Csak <%= fileTypes %> formátumú fájl tölthető fel. Kérjük válasszon <%= "
+"fileExtensions %> végződésű fájlokat."
 
 #: cms/static/js/models/uploads.js
 #: lms/templates/student_account/hinted_login.underscore
@@ -5835,8 +5791,8 @@ msgid "{selectedProvider} credentials saved"
 msgstr ""
 
 #: cms/static/js/views/edit_chapter.js
-msgid "Upload a new PDF to “<%- name %>”"
-msgstr ""
+msgid "Upload a new PDF to “<%= name %>”"
+msgstr "Új PDF dokumentum feltöltése  “<%= name %>”"
 
 #: cms/static/js/views/edit_chapter.js
 msgid "Please select a PDF file to upload."
@@ -6436,14 +6392,18 @@ msgstr "Sajnáljuk, de hiba történt"
 #: cms/static/js/views/utils/create_course_utils.js
 msgid ""
 "The combined length of the organization, course number, and course run "
-"fields cannot be more than <%- limit %> characters."
+"fields cannot be more than <%=limit%> characters."
 msgstr ""
+"A szervezet, a kurzusszám és a kurzusidő mezők összesített betűszáma nem "
+"lehet több, mint <%= limit %> karakter."
 
 #: cms/static/js/views/utils/create_library_utils.js
 msgid ""
 "The combined length of the organization and library code fields cannot be "
-"more than <%- limit %> characters."
+"more than <%=limit%> characters."
 msgstr ""
+"A szervezet és könyvtár azonosító mezők összesített betűszáma nem lehet "
+"több, mint <%= limit %> karakter."
 
 #: cms/static/js/views/utils/move_xblock_utils.js
 msgid "Success! \"{displayName}\" has been moved."
@@ -6786,13 +6746,13 @@ msgid "Unscheduled"
 msgstr "Nincs ütemezve"
 
 #: cms/templates/js/course_info_update.underscore
+#: lms/templates/commerce/receipt.underscore
 #: lms/templates/verify_student/payment_confirmation_step.underscore
 msgid "Date"
 msgstr "Dátum"
 
 #: cms/templates/js/paging-header.underscore
 #: common/static/common/templates/components/paging-footer.underscore
-#: common/static/common/templates/discussion/templates.underscore
 msgid "Previous"
 msgstr "Elózó"
 
@@ -6839,313 +6799,6 @@ msgstr "Keresés törlése"
 #: lms/djangoapps/support/static/support/templates/manage_user.underscore
 msgid "Search"
 msgstr "Keresés"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Add a Response"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "This thread is closed."
-msgstr "Ez a folyamat lezárult."
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Add a response:"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-#: lms/templates/verify_student/incourse_reverify.underscore
-msgid "Submit"
-msgstr "Küldés"
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "discussion posted %(time_ago)s by %(author)s"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "question posted %(time_ago)s by %(author)s"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Pinned"
-msgstr "Rögzített"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Reported"
-msgstr "Jelentett"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Closed"
-msgstr "Lezárt"
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "Related to: %(courseware_title_linked)s"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "This post is visible only to %(group_name)s."
-msgstr ""
-"Az alábbi üzenet csak a következő csoport számára látható: %(group_name)s."
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "This post is visible to everyone."
-msgstr "Ez az üzenet mindenki számára látható."
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Editing post"
-msgstr "Üzenet szerkesztése"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid ""
-"Add a clear and descriptive title to encourage participation. (Required)"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Edit your post below."
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Update post"
-msgstr "Üzenet frissítése"
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "Show Comment (%(num_comments)s)"
-msgid_plural "Show Comments (%(num_comments)s)"
-msgstr[0] ""
-msgstr[1] ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Add a comment"
-msgstr "Megjegyzés hozzáadása"
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "marked as answer %(time_ago)s by %(user)s"
-msgstr "válasznak jelölve %(time_ago)s, %(user)s által"
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "marked as answer %(time_ago)s"
-msgstr "válasznak jelölve %(time_ago)s"
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "endorsed %(time_ago)s by %(user)s"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "endorsed %(time_ago)s"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Editing response"
-msgstr "Válasz szerkesztése"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Update response"
-msgstr "Válasz frissítése"
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "posted %(time_ago)s by %(author)s"
-msgstr "létrehozva %(time_ago)s,  %(author)s által"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Editing comment"
-msgstr "Hozzászólás szerkesztése"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Update comment"
-msgstr "Megjegyzés frissítése"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "discussion"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "answered question"
-msgstr "megválaszolt kérdés"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "unanswered question"
-msgstr "megválaszolatlan kérdés"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Following"
-msgstr "Követés"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Community TA"
-msgstr "Közösségi oktató"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "{unread_comments_count} new"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid ""
-"%(comments_count)s %(span_sr_open)scomments (%(unread_comments_count)s "
-"unread comments)%(span_close)s"
-msgstr ""
-"%(comments_count)s %(span_sr_open)shosszászólás (%(unread_comments_count)s "
-"olvasatlan hozzászólás)%(span_close)s"
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "%(comments_count)s %(span_sr_open)scomments %(span_close)s"
-msgstr "%(comments_count)s %(span_sr_open)shozzászólás %(span_close)s"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Add a Post"
-msgstr "Poszt hozzáadása"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Visible to"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid ""
-"Discussion admins, moderators, and TAs can make their posts visible to all "
-"students or specify a single group."
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "All Groups"
-msgstr "Összes csoport"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "follow this post"
-msgstr "üzenet nyomonkövetése"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "post anonymously"
-msgstr "küldés névtelenül"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "post anonymously to classmates"
-msgstr "osztálytársak számára névtelenül küldés"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Error posting your message."
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "This post will be visible only to %(group_name)s."
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "This post will be visible to everyone."
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Topic area"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Add your post to a relevant topic to help others find it. (Required)"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "(Community TA)"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "(Staff)"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-#: lms/djangoapps/discussion/static/discussion/templates/user-profile.underscore
-msgid "All Posts"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Return to all posts"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "View discussion"
-msgstr "Vitafórum megtekintése"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Load more"
-msgstr "Továbbiak betöltése"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Post type"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid ""
-"Questions raise issues that need answers. Discussions share ideas and start "
-"conversations. (Required)"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Question"
-msgstr "Kérdés"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Discussion"
-msgstr "Vitafórum"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Endorse"
-msgstr "Támogassa"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Unendorse"
-msgstr "Ne támogassa"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Mark as Answer"
-msgstr "Megjelölés válasznak"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Unmark as Answer"
-msgstr "Válasznak jelölés eltávolítása"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Follow"
-msgstr "Követés"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Unfollow"
-msgstr "Nem követem"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Vote for this post,"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Report abuse"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Report"
-msgstr "Jelentés"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Unreport"
-msgstr "Jelentés visszavonása"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Pin"
-msgstr "Rögzít"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Unpin"
-msgstr "Rögzítés felold"
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Open"
-msgstr "Megnyitás"
 
 #: lms/djangoapps/discussion/static/discussion/templates/discussion-home.underscore
 msgid "Discussion Home"
@@ -7204,6 +6857,10 @@ msgid ""
 msgstr ""
 "A jelölőnégyzetre kattintva naponta email összefoglalót kaphatsz az új, nem "
 "olvasott vagy követett vitatémákról."
+
+#: lms/djangoapps/discussion/static/discussion/templates/user-profile.underscore
+msgid "All Posts"
+msgstr ""
 
 #: lms/djangoapps/support/static/support/templates/certificates.underscore
 msgid "username or email"
@@ -7439,10 +7096,6 @@ msgid "Join Team"
 msgstr ""
 
 #: lms/djangoapps/teams/static/teams/templates/team-profile.underscore
-msgid "Team Assignments"
-msgstr ""
-
-#: lms/djangoapps/teams/static/teams/templates/team-profile.underscore
 msgid "Team Details"
 msgstr ""
 
@@ -7526,6 +7179,94 @@ msgstr ""
 msgid "Remove unit %(unitName)s"
 msgstr ""
 
+#: lms/templates/commerce/provider.underscore
+#, python-format
+msgid ""
+"You still need to visit the %(display_name)s website to complete the credit "
+"process."
+msgstr ""
+
+#: lms/templates/commerce/provider.underscore
+#, python-format
+msgid ""
+"To finalize course credit, %(display_name)s requires %(platform_name)s "
+"learners to submit a credit request."
+msgstr ""
+
+#: lms/templates/commerce/provider.underscore
+msgid "Get Credit"
+msgstr "Kapj kreditet"
+
+#: lms/templates/commerce/receipt.underscore
+#, python-format
+msgid ""
+"Thank you %(full_name)s! We have received your payment for %(course_name)s."
+msgstr ""
+
+#: lms/templates/commerce/receipt.underscore
+#: lms/templates/verify_student/payment_confirmation_step.underscore
+msgid ""
+"Please print this page for your records; it serves as your receipt. You will"
+" also receive an email with the same information."
+msgstr ""
+
+#: lms/templates/commerce/receipt.underscore
+#: lms/templates/verify_student/payment_confirmation_step.underscore
+msgid "Order No."
+msgstr "Rendelés szám"
+
+#: lms/templates/commerce/receipt.underscore
+#: lms/templates/verify_student/payment_confirmation_step.underscore
+msgid "Amount"
+msgstr "Összeg"
+
+#: lms/templates/commerce/receipt.underscore
+#: lms/templates/verify_student/make_payment_step_ab_testing.underscore
+#: lms/templates/verify_student/payment_confirmation_step.underscore
+msgid "Total"
+msgstr "Teljes"
+
+#: lms/templates/commerce/receipt.underscore
+#: lms/templates/verify_student/payment_confirmation_step.underscore
+msgid "Please Note"
+msgstr ""
+
+#: lms/templates/commerce/receipt.underscore
+#: lms/templates/verify_student/payment_confirmation_step.underscore
+msgid "Crossed out items have been refunded."
+msgstr ""
+
+#: lms/templates/commerce/receipt.underscore
+#: lms/templates/verify_student/payment_confirmation_step.underscore
+msgid "Billed to"
+msgstr ""
+
+#: lms/templates/commerce/receipt.underscore
+#: lms/templates/verify_student/payment_confirmation_step.underscore
+msgid "No receipt available"
+msgstr ""
+
+#: lms/templates/commerce/receipt.underscore
+#: lms/templates/financial-assistance/financial_assessment_submitted.underscore
+msgid "Go to Dashboard"
+msgstr ""
+
+#: lms/templates/commerce/receipt.underscore
+msgid ""
+"If you don't verify your identity now, you can still explore your course "
+"from your dashboard. You will receive periodic reminders from {platformName}"
+" to verify your identity."
+msgstr ""
+
+#: lms/templates/commerce/receipt.underscore
+#: lms/templates/verify_student/payment_confirmation_step.underscore
+msgid "Want to confirm your identity later?"
+msgstr ""
+
+#: lms/templates/commerce/receipt.underscore
+msgid "Verify Now"
+msgstr "Erősítsd meg most"
+
 #: lms/templates/courseware/proctored-exam-controls.underscore
 msgid "Mark Exam As Completed"
 msgstr ""
@@ -7546,6 +7287,14 @@ msgstr ""
 msgid ""
 "To receive credit for problems, you must select \"Submit\" for each problem "
 "before you select \"End My Exam\"."
+msgstr ""
+
+#: lms/templates/courseware/proctored-exam-status.underscore
+msgid "Show More"
+msgstr ""
+
+#: lms/templates/courseware/proctored-exam-status.underscore
+msgid "Show Less"
 msgstr ""
 
 #: lms/templates/courseware/proctored-exam-status.underscore
@@ -7653,7 +7402,7 @@ msgstr ""
 #: lms/templates/financial-assistance/financial_assessment_form.underscore
 msgid ""
 "The following information is already a part of your {platform} profile. "
-"We've included it here for your application."
+"We\\'ve included it here for your application."
 msgstr ""
 
 #: lms/templates/financial-assistance/financial_assessment_form.underscore
@@ -7680,10 +7429,6 @@ msgstr ""
 msgid ""
 "Thank you for submitting your financial assistance application for "
 "{course_name}! You can expect a response in 2-4 business days."
-msgstr ""
-
-#: lms/templates/financial-assistance/financial_assessment_submitted.underscore
-msgid "Go to Dashboard"
 msgstr ""
 
 #: lms/templates/instructor/instructor_dashboard_2/certificate-bulk-white-list.underscore
@@ -8023,6 +7768,14 @@ msgid "You can change sessions until {expiration_date}."
 msgstr ""
 
 #: lms/templates/learner_dashboard/course_enroll.underscore
+msgid "Final Grade"
+msgstr ""
+
+#: lms/templates/learner_dashboard/course_enroll.underscore
+msgid "for {courseName}"
+msgstr ""
+
+#: lms/templates/learner_dashboard/course_enroll.underscore
 msgid "View Archived Course"
 msgstr "Arhív kurzusok megtekintése"
 
@@ -8237,27 +7990,7 @@ msgid "An error occurred. Please reload the page."
 msgstr ""
 
 #: lms/templates/student_account/form_field.underscore
-msgid "Need help signing in?"
-msgstr ""
-
-#: lms/templates/student_account/form_field.underscore
-msgid "Forgot my password"
-msgstr ""
-
-#: lms/templates/student_account/form_field.underscore
-msgid "Other sign-in issues"
-msgstr ""
-
-#: lms/templates/student_account/form_field.underscore
-msgid "Sign in with your company or school"
-msgstr ""
-
-#: lms/templates/student_account/form_field.underscore
-msgid "Need other help signing in?"
-msgstr ""
-
-#: lms/templates/student_account/form_field.underscore
-msgid "Create an account"
+msgid "Need help logging in?"
 msgstr ""
 
 #: lms/templates/student_account/hinted_login.underscore
@@ -8455,13 +8188,17 @@ msgid "What You Need for Verification"
 msgstr ""
 
 #: lms/templates/verify_student/face_photo_step.underscore
-msgid "Device with Camera"
-msgstr ""
+#: lms/templates/verify_student/intro_step.underscore
+#: lms/templates/verify_student/make_payment_step.underscore
+#: lms/templates/verify_student/make_payment_step_ab_testing.underscore
+#: lms/templates/verify_student/payment_confirmation_step.underscore
+msgid "Webcam"
+msgstr "Webkamera"
 
 #: lms/templates/verify_student/face_photo_step.underscore
 msgid ""
-"You need a device that has a webcam. If you receive a browser prompt for "
-"access to your camera, please make sure to click 'Allow'."
+"You need a computer or cell phone that has a webcam. When you receive a "
+"browser prompt, make sure that you allow access to the camera."
 msgstr ""
 
 #: lms/templates/verify_student/face_photo_step.underscore
@@ -8469,7 +8206,9 @@ msgid "Photo Identification"
 msgstr ""
 
 #: lms/templates/verify_student/face_photo_step.underscore
-msgid "You need a valid ID that contains your full name and photo."
+msgid ""
+"You need a driver's license, passport, or other government-issued ID that "
+"has your name and photo."
 msgstr ""
 
 #: lms/templates/verify_student/face_photo_step.underscore
@@ -8496,9 +8235,13 @@ msgid "Your entire face fits inside the frame."
 msgstr ""
 
 #: lms/templates/verify_student/face_photo_step.underscore
+msgid "The photo of your face matches the photo on your ID."
+msgstr ""
+
+#: lms/templates/verify_student/face_photo_step.underscore
 msgid ""
-"To take the photo of your face, click on the camera button {icon}. If you "
-"need to try again, click 'Retake Photo'."
+"To use the current photo, select the Take Photo button {icon}. To take "
+"another photo, select the Retake Photo button {icon}."
 msgstr ""
 
 #: lms/templates/verify_student/face_photo_step.underscore
@@ -8515,9 +8258,12 @@ msgid "Why does %(platformName)s need my photo?"
 msgstr ""
 
 #: lms/templates/verify_student/face_photo_step.underscore
+#: lms/templates/verify_student/id_photo_step.underscore
+#: lms/templates/verify_student/incourse_reverify.underscore
 msgid ""
-"We use your verification photos to confirm your identity and ensure the "
-"validity of your certificate."
+"As part of the verification process, you take a photo of both your face and "
+"a government-issued photo ID. Our authorization service confirms your "
+"identity by comparing the photo you take with the photo on your ID."
 msgstr ""
 
 #: lms/templates/verify_student/face_photo_step.underscore
@@ -8529,11 +8275,13 @@ msgstr ""
 
 #: lms/templates/verify_student/face_photo_step.underscore
 #: lms/templates/verify_student/id_photo_step.underscore
+#: lms/templates/verify_student/incourse_reverify.underscore
 #, python-format
 msgid ""
-"We securely encrypt your photo and send it to our authorization service for "
-"review. Your photo and information are not saved or visible anywhere on "
-"%(platformName)s after the verification process is complete."
+"We use the highest levels of security available to encrypt your photo and "
+"send it to our authorization service for review. Your photo and information "
+"are not saved or visible anywhere on %(platformName)s after the verification"
+" process is complete."
 msgstr ""
 
 #: lms/templates/verify_student/face_photo_step.underscore
@@ -8593,13 +8341,15 @@ msgid "Take a Photo of Your ID"
 msgstr ""
 
 #: lms/templates/verify_student/id_photo_step.underscore
-msgid "Use your webcam to take a photo of your ID."
+msgid ""
+"Use your webcam to take a photo of your ID. We will match this photo with "
+"the photo of your face and the name on your account."
 msgstr ""
 
 #: lms/templates/verify_student/id_photo_step.underscore
 msgid ""
-"You need an ID with your name and photo. A driver's license, passport, or ID"
-" are all acceptable."
+"You need an ID with your name and photo. A driver's license, passport, or "
+"other government-issued IDs are all acceptable."
 msgstr ""
 
 #: lms/templates/verify_student/id_photo_step.underscore
@@ -8622,13 +8372,6 @@ msgstr ""
 #: lms/templates/verify_student/id_photo_step.underscore
 #: lms/templates/verify_student/incourse_reverify.underscore
 msgid "Use the Retake Photo button if you are not pleased with your photo"
-msgstr ""
-
-#: lms/templates/verify_student/id_photo_step.underscore
-msgid ""
-"As part of the verification process, you take a photo of both your face and "
-"a photo ID. Our authorization service confirms your identity by comparing "
-"the photo you take with the photo on your ID."
 msgstr ""
 
 #: lms/templates/verify_student/id_photo_step.underscore
@@ -8677,22 +8420,6 @@ msgstr ""
 msgid "Can we match the photo you took with the one on your ID?"
 msgstr ""
 
-#: lms/templates/verify_student/incourse_reverify.underscore
-msgid ""
-"As part of the verification process, you take a photo of both your face and "
-"a government-issued photo ID. Our authorization service confirms your "
-"identity by comparing the photo you take with the photo on your ID."
-msgstr ""
-
-#: lms/templates/verify_student/incourse_reverify.underscore
-#, python-format
-msgid ""
-"We use the highest levels of security available to encrypt your photo and "
-"send it to our authorization service for review. Your photo and information "
-"are not saved or visible anywhere on %(platformName)s after the verification"
-" process is complete."
-msgstr ""
-
 #: lms/templates/verify_student/intro_step.underscore
 msgid "Thanks for returning to verify your ID in: {courseName}"
 msgstr ""
@@ -8720,13 +8447,6 @@ msgid ""
 "A driver's license, passport, or other government-issued ID with your name "
 "and photo"
 msgstr ""
-
-#: lms/templates/verify_student/intro_step.underscore
-#: lms/templates/verify_student/make_payment_step.underscore
-#: lms/templates/verify_student/make_payment_step_ab_testing.underscore
-#: lms/templates/verify_student/payment_confirmation_step.underscore
-msgid "Webcam"
-msgstr "Webkamera"
 
 #: lms/templates/verify_student/make_payment_step.underscore
 #: lms/templates/verify_student/make_payment_step_ab_testing.underscore
@@ -8816,11 +8536,6 @@ msgid "Check your email for an activation message."
 msgstr ""
 
 #: lms/templates/verify_student/make_payment_step_ab_testing.underscore
-#: lms/templates/verify_student/payment_confirmation_step.underscore
-msgid "Total"
-msgstr "Teljes"
-
-#: lms/templates/verify_student/make_payment_step_ab_testing.underscore
 msgid "Professional Certificate for {courseName}"
 msgstr ""
 
@@ -8858,36 +8573,6 @@ msgid "Thank you! We have received your payment for {courseName}."
 msgstr ""
 
 #: lms/templates/verify_student/payment_confirmation_step.underscore
-msgid ""
-"Please print this page for your records; it serves as your receipt. You will"
-" also receive an email with the same information."
-msgstr ""
-
-#: lms/templates/verify_student/payment_confirmation_step.underscore
-msgid "Order No."
-msgstr "Rendelés szám"
-
-#: lms/templates/verify_student/payment_confirmation_step.underscore
-msgid "Amount"
-msgstr "Összeg"
-
-#: lms/templates/verify_student/payment_confirmation_step.underscore
-msgid "Please Note"
-msgstr ""
-
-#: lms/templates/verify_student/payment_confirmation_step.underscore
-msgid "Crossed out items have been refunded."
-msgstr ""
-
-#: lms/templates/verify_student/payment_confirmation_step.underscore
-msgid "Billed to"
-msgstr ""
-
-#: lms/templates/verify_student/payment_confirmation_step.underscore
-msgid "No receipt available"
-msgstr ""
-
-#: lms/templates/verify_student/payment_confirmation_step.underscore
 msgid "Next Step: Confirm your identity"
 msgstr ""
 
@@ -8915,10 +8600,6 @@ msgid ""
 "%(platformName)s to verify your identity."
 msgstr ""
 
-#: lms/templates/verify_student/payment_confirmation_step.underscore
-msgid "Want to confirm your identity later?"
-msgstr ""
-
 #: lms/templates/verify_student/reverify_success_step.underscore
 msgid "Identity Verification In Progress"
 msgstr ""
@@ -8927,7 +8608,7 @@ msgstr ""
 msgid ""
 "We have received your information and are verifying your identity. You will "
 "see a message on your dashboard when the verification process is complete "
-"(usually within 5-7 days). In the meantime, you can still access all "
+"(usually within 1-2 days). In the meantime, you can still access all "
 "available course content."
 msgstr ""
 
@@ -8961,6 +8642,10 @@ msgstr ""
 
 #: lms/templates/verify_student/review_photos_step.underscore
 msgid "Does the photo of you show your whole face?"
+msgstr ""
+
+#: lms/templates/verify_student/review_photos_step.underscore
+msgid "Does the photo of you match your ID photo?"
 msgstr ""
 
 #: lms/templates/verify_student/review_photos_step.underscore
@@ -10386,21 +10071,6 @@ msgid "Exam Types"
 msgstr ""
 
 #: cms/templates/js/timed-examination-preference-editor.underscore
-msgid ""
-"This subsection was released to learners as a special exam, but was reverted"
-" back to a basic exam. You may not configure it as a special exam now. "
-"Contact edX Support for assistance."
-msgstr ""
-
-#: cms/templates/js/timed-examination-preference-editor.underscore
-msgid ""
-"This special exam has been released to learners. You may not convert it to "
-"another type of special exam. You may revert this subsection back to being a"
-" basic exam by selecting 'None', but you will NOT be able to configure it as"
-" a special exam in the future."
-msgstr ""
-
-#: cms/templates/js/timed-examination-preference-editor.underscore
 msgid "Timed"
 msgstr ""
 
@@ -10568,11 +10238,11 @@ msgid "Read more"
 msgstr ""
 
 #: cms/templates/js/video-transcripts.underscore
-msgid "No transcript uploaded."
+msgid "Show transcripts ({totalTranscripts})"
 msgstr ""
 
 #: cms/templates/js/video-transcripts.underscore
-msgid "Show transcripts ({totalTranscripts})"
+msgid "No transcript uploaded."
 msgstr ""
 
 #: cms/templates/js/xblock-access-editor.underscore

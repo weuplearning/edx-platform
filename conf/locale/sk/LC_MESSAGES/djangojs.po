@@ -1,25 +1,25 @@
 # #-#-#-#-#  djangojs-partial.po (edx-platform)  #-#-#-#-#
-# edX community translations have been downloaded from Slovak (http://www.transifex.com/open-edx/edx-platform/language/sk/).
+# edX translation file.
 # Copyright (C) 2020 EdX
 # This file is distributed under the GNU AFFERO GENERAL PUBLIC LICENSE.
 #
 # Translators:
 # Livia Meskova <liviameskova@hotmail.com>, 2014
 # Marcel Miklosik <marcel.miklosik@gmail.com>, 2015
-# adb712fb58d87c74cf0f50ac3f74745f_5787dfc <f5bd2e80de1f49ebcbfb1ada57f8da8f_182912>, 2014
-# Vladimír Záhradník <vladimir@zahradnik.io>, 2013-2014
-# Vladimír Záhradník <vladimir@zahradnik.io>, 2013,2015
+# veronika.bundzikova <inactive+veronika.bundzikova@transifex.com>, 2014
+# Vladimír Záhradník <vladimir.zahradnik@protonmail.com>, 2013-2014
+# Vladimír Záhradník <vladimir.zahradnik@protonmail.com>, 2013,2015
 # #-#-#-#-#  djangojs-studio.po (edx-platform)  #-#-#-#-#
-# edX community translations have been downloaded from Slovak (http://www.transifex.com/open-edx/edx-platform/language/sk/).
+# edX translation file.
 # Copyright (C) 2020 EdX
 # This file is distributed under the GNU AFFERO GENERAL PUBLIC LICENSE.
 #
 # Translators:
 # Livia Meskova <liviameskova@hotmail.com>, 2015
 # seliga.adam <seliga.adam@gmail.com>, 2014
-# adb712fb58d87c74cf0f50ac3f74745f_5787dfc <f5bd2e80de1f49ebcbfb1ada57f8da8f_182912>, 2014
-# Vladimír Záhradník <vladimir@zahradnik.io>, 2014
-# Vladimír Záhradník <vladimir@zahradnik.io>, 2013,2015
+# veronika.bundzikova <inactive+veronika.bundzikova@transifex.com>, 2014
+# Vladimír Záhradník <vladimir.zahradnik@protonmail.com>, 2014
+# Vladimír Záhradník <vladimir.zahradnik@protonmail.com>, 2013,2015
 # #-#-#-#-#  djangojs-account-settings-view.po (0.1a)  #-#-#-#-#
 # edX community translations have been downloaded from Slovak (https://www.transifex.com/open-edx/teams/6205/sk/).
 # Copyright (C) 2020 EdX
@@ -30,14 +30,14 @@
 # Marcel Miklosik <marcel.miklosik@gmail.com>, 2019
 #
 # #-#-#-#-#  underscore.po (edx-platform)  #-#-#-#-#
-# edX community translations have been downloaded from Slovak (http://www.transifex.com/open-edx/edx-platform/language/sk/)
+# edX translation file
 # Copyright (C) 2020 edX
 # This file is distributed under the GNU AFFERO GENERAL PUBLIC LICENSE.
 #
 # Translators:
-# Vladimír Záhradník <vladimir@zahradnik.io>, 2015
+# Vladimír Záhradník <vladimir.zahradnik@protonmail.com>, 2015
 # #-#-#-#-#  underscore-studio.po (edx-platform)  #-#-#-#-#
-# edX community translations have been downloaded from Slovak (http://www.transifex.com/open-edx/edx-platform/language/sk/)
+# edX translation file
 # Copyright (C) 2020 edX
 # This file is distributed under the GNU AFFERO GENERAL PUBLIC LICENSE.
 #
@@ -46,8 +46,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: edx-platform\n"
 "Report-Msgid-Bugs-To: openedx-translation@googlegroups.com\n"
-"POT-Creation-Date: 2020-07-26 20:42+0000\n"
-"PO-Revision-Date: 2020-06-14 20:45+0000\n"
+"POT-Creation-Date: 2020-03-29 20:42+0000\n"
+"PO-Revision-Date: 2019-09-29 20:43+0000\n"
 "Last-Translator: edx_transifex_bot <i18n-working-group+edx-transifex-bot@edx.org>\n"
 "Language-Team: Slovak (http://www.transifex.com/open-edx/edx-platform/language/sk/)\n"
 "Language: sk\n"
@@ -55,7 +55,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);\n"
-"Generated-By: Babel 2.8.0\n"
+"Generated-By: Babel 1.3\n"
 
 #: cms/static/cms/js/xblock/cms.runtime.v1.js
 #: cms/static/js/certificates/views/signatory_details.js
@@ -76,6 +76,21 @@ msgstr "Ukladá sa"
 #: cms/static/js/views/manage_users_and_roles.js
 #: cms/static/js/views/show_textbook.js
 #: lms/djangoapps/teams/static/teams/js/views/instructor_tools.js
+#: cms/templates/js/certificate-details.underscore
+#: cms/templates/js/certificate-editor.underscore
+#: cms/templates/js/content-group-editor.underscore
+#: cms/templates/js/course-instructor-details.underscore
+#: cms/templates/js/course-outline.underscore
+#: cms/templates/js/course-settings-learning-fields.underscore
+#: cms/templates/js/course_grade_policy.underscore
+#: cms/templates/js/course_info_update.underscore
+#: cms/templates/js/group-configuration-details.underscore
+#: cms/templates/js/group-configuration-editor.underscore
+#: cms/templates/js/partition-group-details.underscore
+#: cms/templates/js/show-textbook.underscore
+#: cms/templates/js/signatory-editor.underscore
+#: cms/templates/js/video-transcripts.underscore
+#: cms/templates/js/xblock-outline.underscore
 msgid "Delete"
 msgstr "Odstrániť"
 
@@ -104,7 +119,6 @@ msgstr "Odstrániť"
 #: cms/templates/js/section-name-edit.underscore
 #: cms/templates/js/signatory-actions.underscore
 #: cms/templates/js/xblock-string-field-editor.underscore
-#: common/static/common/templates/discussion/templates.underscore
 #: lms/djangoapps/support/static/support/templates/enrollment-modal.underscore
 #: lms/djangoapps/teams/static/teams/templates/edit-team.underscore
 #: lms/templates/instructor/instructor_dashboard_2/cohort-form.underscore
@@ -118,6 +132,7 @@ msgstr "Zrušiť"
 msgid "Uploading"
 msgstr "Odovzdáva sa"
 
+#. #-#-#-#-#  djangojs-partial.po (edx-platform)  #-#-#-#-#
 #. Translators: this is a message from the raw HTML editor displayed in the
 #. browser when a user needs to edit HTML
 #: cms/static/js/views/active_video_upload.js
@@ -125,13 +140,22 @@ msgstr "Odovzdáva sa"
 #: cms/static/js/views/video_transcripts.js
 #: common/lib/xmodule/xmodule/js/src/html/edit.js
 #: lms/static/js/student_account/tos_modal.js
+#: cms/templates/js/course-video-settings.underscore
+#: common/static/common/templates/image-modal.underscore
+#: openedx/features/learner_profile/static/learner_profile/templates/share_modal.underscore
 msgid "Close"
 msgstr "Zavrieť"
 
+#. #-#-#-#-#  djangojs-partial.po (edx-platform)  #-#-#-#-#
 #. Translators: this is a message from the raw HTML editor displayed in the
 #. browser when a user needs to edit HTML
 #: cms/static/js/views/assets.js
 #: common/lib/xmodule/xmodule/js/src/html/edit.js
+#: cms/templates/js/asset-library.underscore
+#: cms/templates/js/course-instructor-details.underscore
+#: cms/templates/js/previous-video-upload-list.underscore
+#: cms/templates/js/signatory-details.underscore
+#: lms/templates/instructor/instructor_dashboard_2/certificate-white-list.underscore
 msgid "Name"
 msgstr "Názov"
 
@@ -140,11 +164,13 @@ msgstr "Názov"
 msgid "Choose File"
 msgstr "Vybrať súbor"
 
+#. #-#-#-#-#  djangojs-partial.po (edx-platform)  #-#-#-#-#
 #. Translators: this is a message from the raw HTML editor displayed in the
 #. browser when a user needs to edit HTML
 #: cms/static/js/views/course_info_update.js cms/static/js/views/tabs.js
 #: common/lib/xmodule/xmodule/js/src/html/edit.js
 #: lms/static/js/Markdown.Editor.js
+#: lms/templates/learner_dashboard/verification_popover.underscore
 msgid "OK"
 msgstr "OK"
 
@@ -163,6 +189,8 @@ msgstr "Žiadne"
 #: cms/static/js/views/video_transcripts.js
 #: lms/djangoapps/teams/static/teams/js/views/edit_team_members.js
 #: lms/static/js/views/image_field.js
+#: cms/templates/js/video/metadata-translations-item.underscore
+#: lms/djangoapps/teams/static/teams/templates/edit-team-member.underscore
 msgid "Remove"
 msgstr "Vymazať"
 
@@ -236,7 +264,7 @@ msgstr "Vaše zmeny boli uložené."
 #: cms/static/js/views/xblock_validation.js
 #: common/static/common/js/discussion/views/discussion_inline_view.js
 msgid "Warning"
-msgstr ""
+msgstr "Upozornenie"
 
 #. Translators: This message will be added to the front of messages of type
 #. error,
@@ -625,9 +653,11 @@ msgstr "Čisté formátovanie"
 msgid "Code block"
 msgstr "Kód bloku"
 
+#. #-#-#-#-#  djangojs-partial.po (edx-platform)  #-#-#-#-#
 #. Translators: this is a message from the raw HTML editor displayed in the
 #. browser when a user needs to edit HTML
 #: common/lib/xmodule/xmodule/js/src/html/edit.js
+#: lms/templates/instructor/instructor_dashboard_2/enrollment-code-lookup-links.underscore
 msgid "Code"
 msgstr "Kód"
 
@@ -739,6 +769,7 @@ msgstr "Vymazať tabuľku"
 #: common/lib/xmodule/xmodule/js/src/html/edit.js
 #: cms/templates/js/certificate-editor.underscore
 #: cms/templates/js/group-configuration-editor.underscore
+#: lms/templates/commerce/receipt.underscore
 #: lms/templates/verify_student/payment_confirmation_step.underscore
 msgid "Description"
 msgstr "Popis"
@@ -773,9 +804,18 @@ msgstr "Vlastnosti dokumentu"
 msgid "Edit HTML"
 msgstr "Editovať HTML"
 
+#. #-#-#-#-#  djangojs-partial.po (edx-platform)  #-#-#-#-#
 #. Translators: this is a message from the raw HTML editor displayed in the
 #. browser when a user needs to edit HTML
 #: common/lib/xmodule/xmodule/js/src/html/edit.js
+#: cms/templates/js/certificate-details.underscore
+#: cms/templates/js/course_info_handouts.underscore
+#: cms/templates/js/course_info_update.underscore
+#: cms/templates/js/group-configuration-details.underscore
+#: cms/templates/js/partition-group-details.underscore
+#: cms/templates/js/show-textbook.underscore
+#: cms/templates/js/signatory-details.underscore
+#: cms/templates/js/xblock-string-field-editor.underscore
 msgid "Edit"
 msgstr "Upraviť"
 
@@ -1172,9 +1212,12 @@ msgstr "Nový dokument"
 msgid "New window"
 msgstr "Nové okno"
 
+#. #-#-#-#-#  djangojs-partial.po (edx-platform)  #-#-#-#-#
 #. Translators: this is a message from the raw HTML editor displayed in the
 #. browser when a user needs to edit HTML
 #: common/lib/xmodule/xmodule/js/src/html/edit.js
+#: cms/templates/js/paging-header.underscore
+#: common/static/common/templates/components/paging-footer.underscore
 msgid "Next"
 msgstr "Ďalej"
 
@@ -1510,9 +1553,12 @@ msgid ""
 "required http:// prefix?"
 msgstr ""
 
+#. #-#-#-#-#  djangojs-partial.po (edx-platform)  #-#-#-#-#
 #. Translators: this is a message from the raw HTML editor displayed in the
 #. browser when a user needs to edit HTML
 #: common/lib/xmodule/xmodule/js/src/html/edit.js
+#: cms/templates/js/course-instructor-details.underscore
+#: cms/templates/js/signatory-details.underscore
 msgid "Title"
 msgstr "Nadpis"
 
@@ -2423,20 +2469,13 @@ msgstr ""
 msgid "Security"
 msgstr ""
 
+#: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
 #: cms/templates/js/asset-library.underscore
 msgid "Other"
 msgstr "Iné"
 
 #: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
-msgid "Course Discussion Forum"
-msgstr ""
-
-#: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
-msgid ""
-"While our support team is happy to assist with the edX platform, the course "
-"staff has the expertise for specific assignment questions, grading or the "
-"proper procedures in each course. Please post all course related questions "
-"within the Discussion Forum where the Course Staff can directly respond."
+msgid "What can we help you with, {username}?"
 msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
@@ -2444,23 +2483,21 @@ msgid "Details"
 msgstr "Podrobnosti"
 
 #: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
-msgid "the more quickly and helpfully we can respond!"
+msgid "The more you tell us, the more quickly and helpfully we can respond!"
 msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
-msgid "Create Support Ticket"
-msgstr ""
-
-#: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
-msgid "What can we help you with, {username}?"
-msgstr ""
+#: lms/templates/verify_student/incourse_reverify.underscore
+msgid "Submit"
+msgstr "Odoslať"
 
 #: lms/djangoapps/support/static/support/jsx/logged_out_user.jsx
 msgid "Sign in to {platform} so we can help you better."
 msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/logged_out_user.jsx
-msgid "Need help logging in?"
+msgid ""
+"If you are unable to access your account contact us via email using {email}."
 msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/single_support_form.jsx
@@ -2475,18 +2512,6 @@ msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/single_support_form.jsx
 msgid "Enter some details for your support request."
-msgstr ""
-
-#: lms/djangoapps/support/static/support/jsx/single_support_form.jsx
-msgid ""
-"Due to the recent increase in interest in online education and edX, we are "
-"currently experiencing an unusually high volume of support requests. We "
-"appreciate your patience as we work to review each request. Please check the"
-" "
-msgstr ""
-
-#: lms/djangoapps/support/static/support/jsx/single_support_form.jsx
-msgid " as many questions may have already been answered."
 msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/single_support_form.jsx
@@ -2512,8 +2537,7 @@ msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/success.jsx
 msgid ""
-"Thank you for submitting a request! We appreciate your patience while we "
-"work to review your request."
+"Thank you for submitting a request! We will contact you within 24 hours."
 msgstr ""
 
 #: lms/djangoapps/support/static/support/jsx/upload_progress.jsx
@@ -2666,7 +2690,7 @@ msgstr ""
 #: lms/djangoapps/teams/static/teams/js/views/manage.js
 #: lms/djangoapps/teams/static/teams/js/views/teams_tab.js
 msgid "Manage"
-msgstr ""
+msgstr "Riadiť"
 
 #: lms/djangoapps/teams/static/teams/js/views/my_teams.js
 msgid "You are not currently a member of any team."
@@ -2691,10 +2715,6 @@ msgstr ""
 #: lms/djangoapps/teams/static/teams/js/views/team_profile.js
 #: lms/djangoapps/teams/static/teams/js/views/team_profile_header_actions.js
 msgid "An error occurred. Try again."
-msgstr ""
-
-#: lms/djangoapps/teams/static/teams/js/views/team_profile.js
-msgid "No assignments for team"
 msgstr ""
 
 #: lms/djangoapps/teams/static/teams/js/views/team_profile.js
@@ -2784,6 +2804,7 @@ msgid ""
 msgstr ""
 
 #: lms/djangoapps/teams/static/teams/js/views/teams_tab.js
+#: lms/djangoapps/teams/static/teams/templates/team-profile-header-actions.underscore
 msgid "Edit Team"
 msgstr "Upraviť  tím"
 
@@ -2825,6 +2846,7 @@ msgid "See all teams you belong to."
 msgstr ""
 
 #: lms/djangoapps/teams/static/teams/js/views/teams_tab.js
+#: lms/djangoapps/discussion/static/discussion/templates/fake-breadcrumbs.underscore
 msgid "All Topics"
 msgstr "Všetky témy"
 
@@ -2862,11 +2884,6 @@ msgid ""
 "{search_span_start}search teams{span_end} in this topic. If you still can't "
 "find a team to join, {create_span_start}create a new team in this "
 "topic{span_end}."
-msgstr ""
-
-#: lms/djangoapps/teams/static/teams/js/views/topic_teams.js
-msgid ""
-"An error occurred while looking up team membership. Try refreshing the page."
 msgstr ""
 
 #: lms/djangoapps/teams/static/teams/js/views/topics.js
@@ -3191,7 +3208,6 @@ msgid "There has been an error processing your survey."
 msgstr ""
 
 #: lms/static/js/courseware/credit_progress.js
-#: common/static/common/templates/discussion/templates.underscore
 #: lms/templates/discovery/facet.underscore
 #: lms/templates/edxnotes/note-item.underscore
 msgid "More"
@@ -3208,7 +3224,6 @@ msgid "HTML preview of post"
 msgstr ""
 
 #: lms/static/js/customwmd.js
-#: common/static/common/templates/discussion/templates.underscore
 msgid "Your question or idea (required)"
 msgstr ""
 
@@ -3387,6 +3402,8 @@ msgid "No results found for \"%(query_string)s\". Please try searching again."
 msgstr ""
 
 #: lms/static/js/edxnotes/views/tabs/search_results.js
+#: openedx/features/course_search/static/course_search/templates/course_search_results.underscore
+#: openedx/features/course_search/static/course_search/templates/dashboard_search_results.underscore
 msgid "Search Results"
 msgstr "Výsledky vyhľadávania"
 
@@ -3684,10 +3701,14 @@ msgstr ""
 #: lms/static/js/instructor_dashboard/membership.js
 #: lms/static/js/student_account/views/account_settings_factory.js
 #: openedx/features/learner_profile/static/learner_profile/js/learner_profile_factory.js
+#: cms/templates/js/transcript-organization-credentials.underscore
+#: lms/djangoapps/support/static/support/templates/manage_user.underscore
+#: lms/templates/financial-assistance/financial_assessment_form.underscore
 msgid "Username"
 msgstr "Meno používateľa"
 
 #: lms/static/js/instructor_dashboard/membership.js
+#: lms/djangoapps/support/static/support/templates/manage_user.underscore
 msgid "Email"
 msgstr "Email"
 
@@ -4666,6 +4687,7 @@ msgid ""
 msgstr ""
 
 #: lms/static/js/student_account/views/account_settings_factory.js
+#: lms/templates/student_account/account.underscore
 msgid "Password"
 msgstr "Heslo"
 
@@ -4966,6 +4988,7 @@ msgid "Validation Error"
 msgstr ""
 
 #: lms/static/js/views/fields.js
+#: lms/templates/learner_dashboard/program_card.underscore
 msgid "In Progress"
 msgstr "Spracúva sa"
 
@@ -5069,16 +5092,6 @@ msgstr ""
 msgid "Collapse All"
 msgstr ""
 
-#: openedx/features/course_experience/static/course_experience/js/WelcomeMessage.js
-#: lms/templates/courseware/proctored-exam-status.underscore
-msgid "Show More"
-msgstr ""
-
-#: openedx/features/course_experience/static/course_experience/js/WelcomeMessage.js
-#: lms/templates/courseware/proctored-exam-status.underscore
-msgid "Show Less"
-msgstr ""
-
 #: openedx/features/course_search/static/course_search/js/views/search_results_view.js
 msgid "{total_results} result"
 msgid_plural "{total_results} results"
@@ -5175,22 +5188,25 @@ msgid ""
 "This may be happening because of an error with our server or your internet "
 "connection. Try refreshing the page or making sure you are online."
 msgstr ""
+"Táto situácia mohla nastať chybou na našom serveri alebo vašom internetovom "
+"pripojení. Skúste opätovne načítať túto stránku, prípadne sa uistite, že "
+"vaše pripojenie k internetu funguje."
 
 #: cms/static/cms/js/main.js
 msgid "Studio's having trouble saving your work"
-msgstr ""
+msgstr "Štúdio má problémy pri ukladaní vašej práce"
 
 #: cms/static/cms/js/xblock/cms.runtime.v1.js
 msgid "OpenAssessment Save Error"
-msgstr ""
+msgstr "Chyba pri ukladaní otvorených hodnotení"
 
 #: cms/static/js/base.js
 msgid "This link will open in a new browser window/tab"
-msgstr ""
+msgstr "Tento odkaz sa otvorí v novom okne/karte prehľadávača"
 
 #: cms/static/js/base.js
 msgid "This link will open in a modal window"
-msgstr ""
+msgstr "Tento odkaz sa otvorí v dialógovom okne"
 
 #: cms/static/js/certificates/models/certificate.js
 msgid "Certificate name is required."
@@ -5223,10 +5239,6 @@ msgstr "Áno, umožniť úpravy aktívneho certifikátu"
 msgid "certificate"
 msgstr "certifikát"
 
-#: cms/static/js/certificates/views/certificate_preview.js
-msgid "Deactivating"
-msgstr ""
-
 #: cms/static/js/certificates/views/certificates_list.js
 msgid "Set up your certificate"
 msgstr "Nastavenie vášho certifikátu"
@@ -5238,8 +5250,8 @@ msgid "You have not created any certificates yet."
 msgstr "Zatiaľ ste nevytvorili žiadny certifikát."
 
 #: cms/static/js/certificates/views/signatory_editor.js
-msgid "Delete \"<%- signatoryName %>\" from the list of signatories?"
-msgstr ""
+msgid "Delete \"<%= signatoryName %>\" from the list of signatories?"
+msgstr "Odstrániť \"<%= signatoryName %>\" zo zoznamu signatárov?"
 
 #: cms/static/js/certificates/views/signatory_editor.js
 #: cms/static/js/views/course_info_update.js
@@ -5251,7 +5263,7 @@ msgstr "Túto akciu nie je možné vrátiť späť."
 #: cms/static/js/views/show_textbook.js cms/static/js/views/tabs.js
 #: cms/static/js/views/utils/xblock_utils.js
 msgid "Deleting"
-msgstr ""
+msgstr "Odstraňuje sa"
 
 #: cms/static/js/certificates/views/signatory_editor.js
 msgid "Upload signature image."
@@ -5322,23 +5334,23 @@ msgstr "Zobraziť zastarané nastavenia"
 #: cms/static/js/factories/textbooks.js
 #: cms/static/js/views/pages/group_configurations.js
 msgid "You have unsaved changes. Do you really want to leave this page?"
-msgstr ""
+msgstr "Máte neuložené zmeny. Skutočne chcete opustiť túto stránku?"
 
 #: cms/static/js/features/import/factories/import.js
 msgid "There was an error during the upload process."
-msgstr ""
+msgstr "Nastala chyba počas odovzdávania súboru."
 
 #: cms/static/js/features/import/factories/import.js
 msgid "There was an error while unpacking the file."
-msgstr ""
+msgstr "Nastala chyba počas rozbaľovania súboru."
 
 #: cms/static/js/features/import/factories/import.js
 msgid "There was an error while verifying the file you submitted."
-msgstr ""
+msgstr "Nastala chyba počas overovania vami poslaného súboru."
 
 #: cms/static/js/features/import/factories/import.js
 msgid "Choose new file"
-msgstr ""
+msgstr "Vybrať nový súbor"
 
 #: cms/static/js/features/import/factories/import.js
 msgid ""
@@ -5347,35 +5359,35 @@ msgstr ""
 
 #: cms/static/js/features/import/factories/import.js
 msgid "There was an error while importing the new library to our database."
-msgstr ""
+msgstr "Počas importovania novej knižnice do našej databázy nastala chyba."
 
 #: cms/static/js/features/import/factories/import.js
 msgid "There was an error while importing the new course to our database."
-msgstr ""
+msgstr "Počas importovania nového kurzu do našej databázy nastala chyba."
 
 #: cms/static/js/features/import/factories/import.js
 msgid "Your import has failed."
-msgstr ""
+msgstr "Import zlyhal."
 
 #: cms/static/js/features/import/views/import.js
 msgid "Your import is in progress; navigating away will abort it."
-msgstr ""
+msgstr "Práve prebieha import; navigovanie preč z tejto stránky ho preruší."
 
 #: cms/static/js/features/import/views/import.js
 msgid "Error importing course"
-msgstr ""
+msgstr "Chyba pri importovaní kurzu"
 
 #: cms/static/js/features/import/views/import.js
 msgid "There was an error with the upload"
-msgstr ""
+msgstr "Počas odovzdávania súboru nastala chyba"
 
 #: cms/static/js/features_jsx/studio/CourseOrLibraryListing.jsx
 msgid "Organization:"
-msgstr ""
+msgstr "Organizácia"
 
 #: cms/static/js/features_jsx/studio/CourseOrLibraryListing.jsx
 msgid "Course Number:"
-msgstr ""
+msgstr "Číslo kurzu:"
 
 #: cms/static/js/features_jsx/studio/CourseOrLibraryListing.jsx
 msgid "Course Run:"
@@ -5389,6 +5401,7 @@ msgstr ""
 msgid "Re-run Course"
 msgstr ""
 
+#: cms/static/js/features_jsx/studio/CourseOrLibraryListing.jsx
 #: cms/templates/js/show-textbook.underscore
 msgid "View Live"
 msgstr "Zobraziť aktuálne údaje"
@@ -5428,7 +5441,7 @@ msgstr ""
 
 #: cms/static/js/models/course.js cms/static/js/models/section.js
 msgid "You must specify a name"
-msgstr ""
+msgstr "Musíte zadať názov"
 
 #: cms/static/js/models/course_update.js
 msgid "Action required: Enter a valid date."
@@ -5542,16 +5555,18 @@ msgstr ""
 
 #: cms/static/js/models/uploads.js
 msgid ""
-"Only <%- fileTypes %> files can be uploaded. Please select a file ending in "
-"<%- (fileExtensions) %> to upload."
+"Only <%= fileTypes %> files can be uploaded. Please select a file ending in "
+"<%= fileExtensions %> to upload."
 msgstr ""
+"Je možné odovzdať iba súbory typu <%= fileTypes %>. Pre odovzdanie súboru "
+"vyberte, prosím, súbor s príponou <%= fileExtensions %>."
 
 #: cms/static/js/models/uploads.js
 #: lms/templates/student_account/hinted_login.underscore
 #: lms/templates/student_account/institution_login.underscore
 #: lms/templates/student_account/institution_register.underscore
 msgid "or"
-msgstr ""
+msgstr "alebo"
 
 #: cms/static/js/models/xblock_validation.js
 msgid "This unit has validation issues."
@@ -5559,7 +5574,7 @@ msgstr ""
 
 #: cms/static/js/models/xblock_validation.js
 msgid "This component has validation issues."
-msgstr ""
+msgstr "Táto súčasť má problémy s validáciou."
 
 #: cms/static/js/views/active_video_upload.js cms/static/js/views/assets.js
 msgid "Your file could not be uploaded"
@@ -5634,7 +5649,8 @@ msgstr "Súbor bol odstránený."
 msgid "Date Added"
 msgstr "Doplnený dátum"
 
-#: cms/static/js/views/assets.js
+#: cms/static/js/views/assets.js cms/templates/js/asset-library.underscore
+#: lms/djangoapps/support/static/support/templates/certificates_results.underscore
 msgid "Type"
 msgstr "Typ"
 
@@ -5666,7 +5682,7 @@ msgstr "Načítať ďalší súbor"
 #: cms/static/js/views/components/add_xblock.js
 #: cms/static/js/views/utils/xblock_utils.js
 msgid "Adding"
-msgstr ""
+msgstr "Pridáva sa"
 
 #: cms/static/js/views/course_info_update.js
 msgid "Are you sure you want to delete this update?"
@@ -5711,7 +5727,7 @@ msgstr ""
 
 #: cms/static/js/views/course_video_settings.js
 msgid "Required"
-msgstr ""
+msgstr "Požadované"
 
 #: cms/static/js/views/course_video_settings.js
 msgid "Automatic transcripts are disabled."
@@ -5722,12 +5738,12 @@ msgid "{selectedProvider} credentials saved"
 msgstr ""
 
 #: cms/static/js/views/edit_chapter.js
-msgid "Upload a new PDF to “<%- name %>”"
-msgstr ""
+msgid "Upload a new PDF to “<%= name %>”"
+msgstr "Odovzdať nový PDF do “<%= name %>”"
 
 #: cms/static/js/views/edit_chapter.js
 msgid "Please select a PDF file to upload."
-msgstr ""
+msgstr "Vyberte, prosím, PDF súbor pre odovzdanie."
 
 #: cms/static/js/views/export.js
 msgid "There has been an error while exporting."
@@ -5740,6 +5756,10 @@ msgid ""
 "attempting another export. Please check that all components on the page are "
 "valid and do not display any error messages."
 msgstr ""
+"Počas exportu do XML sa aspoň u jednej súčasti vyskytla chyba. V takomto "
+"prípade sa odporúča prejsť na stránku úpravy a opraviť túto chybu predtým "
+"ako sa pokúsite o ďalší export. Skontrolujte, prosím, že sú všetky súčasti "
+"na stránke platné a nezobrazujú žiadne chybové správy."
 
 #: cms/static/js/views/export.js
 msgid "Correct failed component"
@@ -5755,6 +5775,10 @@ msgid ""
 "to identify the failed component. Inspect your library to identify any "
 "problematic components and try again."
 msgstr ""
+"Vašu knižnicu nebolo možné exportovať do XML. K dispozícii nie je dostatok "
+"informácii na identifikáciu súčasti, ktorej export zlyhal. Skontrolujte vašu"
+" knižnicu a pokúste sa identifikovať problematické súčasti predtým, ako sa o"
+" export pokúsite opäť."
 
 #: cms/static/js/views/export.js
 msgid "Take me to the main library page"
@@ -5766,6 +5790,10 @@ msgid ""
 " identify the failed component. Inspect your course to identify any "
 "problematic components and try again."
 msgstr ""
+"Váš kurz nebolo možné exportovať do XML. K dispozícii nie je dostatok "
+"informácii na identifikáciu súčasti, ktorej export zlyhal. Skontrolujte váš "
+"kurz a pokúste sa identifikovať problematické súčasti predtým, ako sa o "
+"export pokúsite opäť."
 
 #: cms/static/js/views/export.js
 msgid "Take me to the main course page"
@@ -5829,29 +5857,31 @@ msgstr ""
 msgid "Files must be in JPEG or PNG format."
 msgstr "Súbory musia byť vo formáte JPEG alebo PNG."
 
-#: cms/templates/js/license-selector.underscore
+#: cms/static/js/views/license.js cms/templates/js/license-selector.underscore
 msgid "All Rights Reserved"
 msgstr "Všetky práva vyhradené"
 
 #: cms/static/js/views/license.js
 msgid "You reserve all rights for your work"
-msgstr ""
+msgstr "Vyhradzujete si všetky práva na vaše dielo"
 
 #: cms/static/js/views/license.js
 msgid "Creative Commons"
-msgstr ""
+msgstr "Creative Commons"
 
 #: cms/static/js/views/license.js
 msgid "You waive some rights for your work, such that others can use it too"
 msgstr ""
+"Zriekate sa nejakých práv na vaše dielo, napr. že ho môžu používať aj "
+"ostatní"
 
 #: cms/static/js/views/license.js
 msgid "Version"
-msgstr ""
+msgstr "Verzia"
 
 #: cms/static/js/views/license.js
 msgid "Attribution"
-msgstr ""
+msgstr "Prisúdenie"
 
 #: cms/static/js/views/license.js
 msgid ""
@@ -5859,20 +5889,25 @@ msgid ""
 "but only if they give credit the way you request. Currently, this option is "
 "required."
 msgstr ""
+"Umožniť ostatným kopírovať, distribuovať, ukazovať a predvádzať vaše dielo "
+"chránené autorským právom, ale len za predpokladu, že uvedú zásluhy "
+"spôsobom, akým to požadujete. Aktuálne je táto voľba povinná."
 
 #: cms/static/js/views/license.js
 msgid "Noncommercial"
-msgstr ""
+msgstr "Nekomerčné"
 
 #: cms/static/js/views/license.js
 msgid ""
 "Allow others to copy, distribute, display and perform your work - and "
 "derivative works based upon it - but for noncommercial purposes only."
 msgstr ""
+"Umožniť ostatným kopírovať, distribuovať, ukazovať a predvádzať vaše dielo -"
+" a z neho odvodené diela - no len na nekomerčné účely."
 
 #: cms/static/js/views/license.js
 msgid "No Derivatives"
-msgstr ""
+msgstr "Žiadne odvodeniny"
 
 #: cms/static/js/views/license.js
 msgid ""
@@ -5880,10 +5915,13 @@ msgid ""
 "of your work, not derivative works based upon it. This option is "
 "incompatible with \"Share Alike\"."
 msgstr ""
+"Umožniť ostatným kopírovať, distribuovať, ukazovať alebo predvádzať iba "
+"doslovné kópie vášho diela, nie odvodené diela na ňom založené. Táto voľba "
+"nie je kompatibilná s voľbou \"Zdieľať podobné\"."
 
 #: cms/static/js/views/license.js
 msgid "Share Alike"
-msgstr ""
+msgstr "Zdieľať podobné"
 
 #: cms/static/js/views/license.js
 msgid ""
@@ -5891,6 +5929,9 @@ msgid ""
 "to the license that governs your work. This option is incompatible with \"No"
 " Derivatives\"."
 msgstr ""
+"Umožniť ostatným distribuovať odvodené diela iba v súlade s licenciou "
+"identickou s tou, ktorou sa riadi vaše dielo. Táto voľba nie je kompatibilná"
+" s voľbou \"Žiadne odvodeniny\"."
 
 #. Translators: "item_display_name" is the name of the item to be deleted.
 #: cms/static/js/views/list_item.js
@@ -6004,13 +6045,14 @@ msgstr ""
 msgid "Plugins"
 msgstr ""
 
+#: cms/static/js/views/modals/edit_xblock.js
 #: lms/templates/ccx/schedule.underscore
 msgid "Unit"
 msgstr "Oddiel"
 
 #: cms/static/js/views/modals/edit_xblock.js
 msgid "Component"
-msgstr ""
+msgstr "Súčasť"
 
 #: cms/static/js/views/modals/move_xblock_modal.js
 msgid "Move"
@@ -6061,6 +6103,7 @@ msgstr ""
 msgid "This {parentCategory} has no {childCategory}"
 msgstr ""
 
+#: cms/static/js/views/move_xblock_list.js
 #: cms/templates/js/group-configuration-details.underscore
 #: cms/templates/js/partition-group-details.underscore
 msgid "Course Outline"
@@ -6068,7 +6111,7 @@ msgstr "Prehľad kurzu"
 
 #: cms/static/js/views/paged_container.js
 msgid "Date added"
-msgstr ""
+msgstr "Bol doplnený dátum"
 
 #. Translators: "title" is the name of the current component or unit being
 #. edited.
@@ -6078,8 +6121,9 @@ msgstr ""
 
 #: cms/static/js/views/pages/container_subviews.js
 msgid "Publishing"
-msgstr ""
+msgstr "Publikuje sa"
 
+#: cms/static/js/views/pages/container_subviews.js
 #: cms/templates/js/course-video-settings-update-org-credentials-footer.underscore
 #: cms/templates/js/course-video-settings-update-settings-footer.underscore
 #: cms/templates/js/publish-xblock.underscore
@@ -6091,26 +6135,28 @@ msgid ""
 "Are you sure you want to revert to the last published version of the unit? "
 "You cannot undo this action."
 msgstr ""
+"Skutočne sa chcete opäť vrátiť k naposledy publikovanej verzii oddielu? Túto"
+" akciu nie je možné vrátiť späť."
 
 #: cms/static/js/views/pages/container_subviews.js
 msgid "Discarding Changes"
-msgstr ""
+msgstr "Zahadzujú sa zmeny"
 
 #: cms/static/js/views/pages/container_subviews.js
 msgid "Hiding from Students"
-msgstr ""
+msgstr "Skrýva sa pred študentmi"
 
 #: cms/static/js/views/pages/container_subviews.js
 msgid "Explicitly Hiding from Students"
-msgstr ""
+msgstr "Výlučne sa skrýva pred študentmi"
 
 #: cms/static/js/views/pages/container_subviews.js
 msgid "Inheriting Student Visibility"
-msgstr ""
+msgstr "Preberá sa viditeľnosť študentov"
 
 #: cms/static/js/views/pages/container_subviews.js
 msgid "Make Visible to Students"
-msgstr ""
+msgstr "Zviditeľniť pre študentov"
 
 #: cms/static/js/views/pages/container_subviews.js
 msgid ""
@@ -6118,10 +6164,13 @@ msgid ""
 "you made to the unit when it was hidden will now be visible to students. Do "
 "you want to proceed?"
 msgstr ""
+"Ak už bol oddiel predtým publikovaný a sprístupnený pre študentov, tak "
+"akékoľvek zmeny, ktoré ste v oddiele urobili, kým bol skrytý, budú teraz "
+"viditeľné pre študentov. Chcete pokračovať?"
 
 #: cms/static/js/views/pages/container_subviews.js
 msgid "Making Visible to Students"
-msgstr ""
+msgstr "Zviditeľnenie pre študentov"
 
 #: cms/static/js/views/pages/course_outline.js
 msgid "Course Index"
@@ -6133,11 +6182,11 @@ msgstr "Pri preindexovaní kurzu sa vyskytli chyby."
 
 #: cms/static/js/views/pages/paged_container.js
 msgid "Hide Previews"
-msgstr ""
+msgstr "Skryť ukážky"
 
 #: cms/static/js/views/pages/paged_container.js
 msgid "Show Previews"
-msgstr ""
+msgstr "Zobraziť ukážky"
 
 #. Translators: sample result:
 #. "Showing 0-9 out of 25 total, filtered by Images, sorted by Date Added
@@ -6264,16 +6313,21 @@ msgid ""
 "Deleting a textbook cannot be undone and once deleted any reference to it in"
 " your courseware's navigation will also be removed."
 msgstr ""
+"Odstránenie učebnice nie je možné vrátiť späť a po jej odstránení sa tiež "
+"odstráni akýkoľvek odkaz na ňu v navigácii kurzu."
 
 #: cms/static/js/views/tabs.js
 msgid "Delete Page Confirmation"
-msgstr ""
+msgstr "Potvrdenie odstránenia stránky"
 
 #: cms/static/js/views/tabs.js
 msgid ""
 "Are you sure you want to delete this page? This action cannot be undone."
 msgstr ""
+"Skutočne si prajete túto stránku odstrániť? Túto akciu nie je možné vrátiť "
+"späť."
 
+#: cms/static/js/views/uploads.js
 #: cms/templates/js/metadata-file-uploader-item.underscore
 #: cms/templates/js/video/metadata-translations-item.underscore
 msgid "Upload"
@@ -6281,19 +6335,23 @@ msgstr "Odovzdať"
 
 #: cms/static/js/views/uploads.js
 msgid "We're sorry, there was an error"
-msgstr ""
+msgstr "Ospravedlňujeme sa, ale vyskytla sa chyba"
 
 #: cms/static/js/views/utils/create_course_utils.js
 msgid ""
 "The combined length of the organization, course number, and course run "
-"fields cannot be more than <%- limit %> characters."
+"fields cannot be more than <%=limit%> characters."
 msgstr ""
+"Celková dĺžka polí pre organizáciu, číslo kurzu a dĺžku kurzu nemôže byť "
+"dlhšia ako <%=limit%> znakov."
 
 #: cms/static/js/views/utils/create_library_utils.js
 msgid ""
 "The combined length of the organization and library code fields cannot be "
-"more than <%- limit %> characters."
+"more than <%=limit%> characters."
 msgstr ""
+"Celková dĺžka polí pre organizáciu a kódu knižnice nemôže byť dlhšia ako "
+"<%=limit%> znakov."
 
 #: cms/static/js/views/utils/move_xblock_utils.js
 msgid "Success! \"{displayName}\" has been moved."
@@ -6315,7 +6373,7 @@ msgstr ""
 
 #: cms/static/js/views/utils/xblock_utils.js
 msgid "Duplicating"
-msgstr ""
+msgstr "Duplikuje sa"
 
 #: cms/static/js/views/utils/xblock_utils.js
 msgid "Undo moving"
@@ -6349,12 +6407,13 @@ msgstr ""
 
 #: cms/static/js/views/utils/xblock_utils.js
 msgid "section"
-msgstr ""
+msgstr "sekcia"
 
 #: cms/static/js/views/utils/xblock_utils.js
 msgid "subsection"
-msgstr ""
+msgstr "podsekcia"
 
+#: cms/static/js/views/utils/xblock_utils.js
 #: cms/templates/js/container-access.underscore
 msgid "unit"
 msgstr "oddiel"
@@ -6384,45 +6443,47 @@ msgstr "Uložiť zmeny"
 
 #: cms/static/js/views/video/transcripts/file_uploader.js
 msgid "Please select a file in .srt format."
-msgstr ""
+msgstr "Vyberte, prosím, súbor vo formáte .srt."
 
 #: cms/static/js/views/video/transcripts/file_uploader.js
 msgid "Error: Uploading failed."
-msgstr ""
+msgstr "Chyba: Odovzdávanie zlyhalo."
 
 #: cms/static/js/views/video/transcripts/message_manager.js
 msgid "Error: Import failed."
-msgstr ""
+msgstr "Chyba: Import zlyhal."
 
 #: cms/static/js/views/video/transcripts/message_manager.js
 msgid "Error: Replacing failed."
-msgstr ""
+msgstr "Chyba: Nahradzovanie zlyhalo."
 
 #: cms/static/js/views/video/transcripts/message_manager.js
 msgid "Error: Choosing failed."
-msgstr ""
+msgstr "Chyba: Zvolenie zlyhalo."
 
 #: cms/static/js/views/video/transcripts/metadata_videolist.js
 msgid "Error: Connection with server failed."
-msgstr ""
+msgstr "Chyba: Pripojenie k serveru zlyhalo."
 
 #: cms/static/js/views/video/transcripts/metadata_videolist.js
 msgid "Link types should be unique."
-msgstr ""
+msgstr "Typy odkazov by mali byť jedinečné."
 
 #: cms/static/js/views/video/transcripts/metadata_videolist.js
 msgid "Links should be unique."
-msgstr ""
+msgstr "Odkazy by mali byť jedinečné."
 
 #: cms/static/js/views/video/transcripts/metadata_videolist.js
 msgid "Incorrect url format."
-msgstr ""
+msgstr "Nesprávny formát url."
 
 #: cms/static/js/views/video/translations_editor.js
 msgid ""
 "Sorry, there was an error parsing the subtitles that you uploaded. Please "
 "check the format and try again."
 msgstr ""
+"Ospravedlňujeme sa, nastala chyba pri rozbore titulkov, ktoré ste odovzdali."
+" Overte, prosím, formát a skúste to znovu."
 
 #: cms/static/js/views/video/translations_editor.js
 #: cms/static/js/views/video_transcripts.js
@@ -6441,7 +6502,7 @@ msgstr ""
 
 #: cms/static/js/views/video/translations_editor.js
 msgid "Upload translation"
-msgstr ""
+msgstr "Odovzdať preklad"
 
 #: cms/static/js/views/video_thumbnail.js
 msgid "Add Thumbnail"
@@ -6520,7 +6581,7 @@ msgstr ""
 #. `13 minutes and 45 seconds`
 #: cms/static/js/views/video_thumbnail.js
 msgid " and "
-msgstr ""
+msgstr "a"
 
 #: cms/static/js/views/video_thumbnail.js
 msgid "Video image upload started"
@@ -6585,8 +6646,9 @@ msgstr ""
 
 #: cms/static/js/views/xblock_editor.js
 msgid "Editor"
-msgstr ""
+msgstr "Redaktor"
 
+#: cms/static/js/views/xblock_editor.js
 #: lms/templates/instructor/instructor_dashboard_2/cohort-editor.underscore
 msgid "Settings"
 msgstr "Nastavenia"
@@ -6629,18 +6691,18 @@ msgstr "Akcie"
 #: cms/templates/js/publish-xblock.underscore
 #: lms/templates/ccx/schedule.underscore
 msgid "Unscheduled"
-msgstr ""
+msgstr "Neplánovaný"
 
 #: cms/templates/js/course_info_update.underscore
+#: lms/templates/commerce/receipt.underscore
 #: lms/templates/verify_student/payment_confirmation_step.underscore
 msgid "Date"
 msgstr "Dátum"
 
 #: cms/templates/js/paging-header.underscore
 #: common/static/common/templates/components/paging-footer.underscore
-#: common/static/common/templates/discussion/templates.underscore
 msgid "Previous"
-msgstr ""
+msgstr "Predchádzajúci "
 
 #: cms/templates/js/previous-video-upload-list.underscore
 #: lms/djangoapps/support/static/support/templates/manage_user.underscore
@@ -6676,7 +6738,7 @@ msgstr ""
 
 #: common/static/common/templates/components/search-field.underscore
 msgid "Clear search"
-msgstr ""
+msgstr "Vyčistiť hľadanie"
 
 #: common/static/common/templates/components/search-field.underscore
 #: lms/djangoapps/discussion/static/discussion/templates/search.underscore
@@ -6684,313 +6746,7 @@ msgstr ""
 #: lms/djangoapps/support/static/support/templates/enrollment.underscore
 #: lms/djangoapps/support/static/support/templates/manage_user.underscore
 msgid "Search"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Add a Response"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "This thread is closed."
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Add a response:"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-#: lms/templates/verify_student/incourse_reverify.underscore
-msgid "Submit"
-msgstr "Odoslať"
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "discussion posted %(time_ago)s by %(author)s"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "question posted %(time_ago)s by %(author)s"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Pinned"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Reported"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Closed"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "Related to: %(courseware_title_linked)s"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "This post is visible only to %(group_name)s."
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "This post is visible to everyone."
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Editing post"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid ""
-"Add a clear and descriptive title to encourage participation. (Required)"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Edit your post below."
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Update post"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "Show Comment (%(num_comments)s)"
-msgid_plural "Show Comments (%(num_comments)s)"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Add a comment"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "marked as answer %(time_ago)s by %(user)s"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "marked as answer %(time_ago)s"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "endorsed %(time_ago)s by %(user)s"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "endorsed %(time_ago)s"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Editing response"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Update response"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "posted %(time_ago)s by %(author)s"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Editing comment"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Update comment"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "discussion"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "answered question"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "unanswered question"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Following"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Community TA"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "{unread_comments_count} new"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid ""
-"%(comments_count)s %(span_sr_open)scomments (%(unread_comments_count)s "
-"unread comments)%(span_close)s"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "%(comments_count)s %(span_sr_open)scomments %(span_close)s"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Add a Post"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Visible to"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid ""
-"Discussion admins, moderators, and TAs can make their posts visible to all "
-"students or specify a single group."
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "All Groups"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "follow this post"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "post anonymously"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "post anonymously to classmates"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Error posting your message."
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-#, python-format
-msgid "This post will be visible only to %(group_name)s."
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "This post will be visible to everyone."
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Topic area"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Add your post to a relevant topic to help others find it. (Required)"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "(Community TA)"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "(Staff)"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-#: lms/djangoapps/discussion/static/discussion/templates/user-profile.underscore
-msgid "All Posts"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Return to all posts"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "View discussion"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Load more"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Post type"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid ""
-"Questions raise issues that need answers. Discussions share ideas and start "
-"conversations. (Required)"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Question"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Discussion"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Endorse"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Unendorse"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Mark as Answer"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Unmark as Answer"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Follow"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Unfollow"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Vote for this post,"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Report abuse"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Report"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Unreport"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Pin"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Unpin"
-msgstr ""
-
-#: common/static/common/templates/discussion/templates.underscore
-msgid "Open"
-msgstr ""
+msgstr "Hľadať"
 
 #: lms/djangoapps/discussion/static/discussion/templates/discussion-home.underscore
 msgid "Discussion Home"
@@ -7046,6 +6802,10 @@ msgstr ""
 msgid ""
 "Check this box to receive an email digest once a day notifying you about "
 "new, unread activity from posts you are following."
+msgstr ""
+
+#: lms/djangoapps/discussion/static/discussion/templates/user-profile.underscore
+msgid "All Posts"
 msgstr ""
 
 #: lms/djangoapps/support/static/support/templates/certificates.underscore
@@ -7137,7 +6897,7 @@ msgstr ""
 
 #: lms/djangoapps/support/static/support/templates/enrollment.underscore
 msgid "Course ID"
-msgstr ""
+msgstr "ID kurzu"
 
 #: lms/djangoapps/support/static/support/templates/enrollment.underscore
 msgid "Course Start"
@@ -7153,7 +6913,7 @@ msgstr ""
 
 #: lms/djangoapps/support/static/support/templates/enrollment.underscore
 msgid "Verification Deadline"
-msgstr ""
+msgstr "Termín overenia"
 
 #: lms/djangoapps/support/static/support/templates/enrollment.underscore
 msgid "Enrollment Date"
@@ -7177,7 +6937,7 @@ msgstr ""
 
 #: lms/djangoapps/support/static/support/templates/enrollment.underscore
 msgid "Active"
-msgstr ""
+msgstr "Aktívna"
 
 #: lms/djangoapps/support/static/support/templates/enrollment.underscore
 #: lms/templates/ccx/schedule.underscore
@@ -7282,10 +7042,6 @@ msgid "Join Team"
 msgstr ""
 
 #: lms/djangoapps/teams/static/teams/templates/team-profile.underscore
-msgid "Team Assignments"
-msgstr ""
-
-#: lms/djangoapps/teams/static/teams/templates/team-profile.underscore
 msgid "Team Details"
 msgstr ""
 
@@ -7339,7 +7095,7 @@ msgstr ""
 
 #: lms/templates/ccx/schedule.underscore
 msgid "Section"
-msgstr ""
+msgstr "Prejsť k hlavnému obsahu"
 
 #: lms/templates/ccx/schedule.underscore
 #, python-format
@@ -7369,6 +7125,96 @@ msgstr ""
 msgid "Remove unit %(unitName)s"
 msgstr ""
 
+#: lms/templates/commerce/provider.underscore
+#, python-format
+msgid ""
+"You still need to visit the %(display_name)s website to complete the credit "
+"process."
+msgstr ""
+
+#: lms/templates/commerce/provider.underscore
+#, python-format
+msgid ""
+"To finalize course credit, %(display_name)s requires %(platform_name)s "
+"learners to submit a credit request."
+msgstr ""
+
+#: lms/templates/commerce/provider.underscore
+msgid "Get Credit"
+msgstr ""
+
+#: lms/templates/commerce/receipt.underscore
+#, python-format
+msgid ""
+"Thank you %(full_name)s! We have received your payment for %(course_name)s."
+msgstr ""
+
+#: lms/templates/commerce/receipt.underscore
+#: lms/templates/verify_student/payment_confirmation_step.underscore
+msgid ""
+"Please print this page for your records; it serves as your receipt. You will"
+" also receive an email with the same information."
+msgstr ""
+"Vytlačte si, prosím, túto stránku pre svoju potrebu; slúži ako vaša účtenka."
+" Taktiež dostanete email s tou istou informáciou."
+
+#: lms/templates/commerce/receipt.underscore
+#: lms/templates/verify_student/payment_confirmation_step.underscore
+msgid "Order No."
+msgstr "Číslo objednávky"
+
+#: lms/templates/commerce/receipt.underscore
+#: lms/templates/verify_student/payment_confirmation_step.underscore
+msgid "Amount"
+msgstr "Čiastka"
+
+#: lms/templates/commerce/receipt.underscore
+#: lms/templates/verify_student/make_payment_step_ab_testing.underscore
+#: lms/templates/verify_student/payment_confirmation_step.underscore
+msgid "Total"
+msgstr "Súčet"
+
+#: lms/templates/commerce/receipt.underscore
+#: lms/templates/verify_student/payment_confirmation_step.underscore
+msgid "Please Note"
+msgstr "Všimnite si, prosím"
+
+#: lms/templates/commerce/receipt.underscore
+#: lms/templates/verify_student/payment_confirmation_step.underscore
+msgid "Crossed out items have been refunded."
+msgstr "Vyškrtnuté položky boli refundované."
+
+#: lms/templates/commerce/receipt.underscore
+#: lms/templates/verify_student/payment_confirmation_step.underscore
+msgid "Billed to"
+msgstr "Faktúra pre"
+
+#: lms/templates/commerce/receipt.underscore
+#: lms/templates/verify_student/payment_confirmation_step.underscore
+msgid "No receipt available"
+msgstr "K dispozícii nie je žiadna účtenka"
+
+#: lms/templates/commerce/receipt.underscore
+#: lms/templates/financial-assistance/financial_assessment_submitted.underscore
+msgid "Go to Dashboard"
+msgstr "Prejsť na Palubnú dosku"
+
+#: lms/templates/commerce/receipt.underscore
+msgid ""
+"If you don't verify your identity now, you can still explore your course "
+"from your dashboard. You will receive periodic reminders from {platformName}"
+" to verify your identity."
+msgstr ""
+
+#: lms/templates/commerce/receipt.underscore
+#: lms/templates/verify_student/payment_confirmation_step.underscore
+msgid "Want to confirm your identity later?"
+msgstr "Chcete vašu identitu potvrdiť neskôr?"
+
+#: lms/templates/commerce/receipt.underscore
+msgid "Verify Now"
+msgstr "Overiť teraz"
+
 #: lms/templates/courseware/proctored-exam-controls.underscore
 msgid "Mark Exam As Completed"
 msgstr ""
@@ -7389,6 +7235,14 @@ msgstr ""
 msgid ""
 "To receive credit for problems, you must select \"Submit\" for each problem "
 "before you select \"End My Exam\"."
+msgstr ""
+
+#: lms/templates/courseware/proctored-exam-status.underscore
+msgid "Show More"
+msgstr ""
+
+#: lms/templates/courseware/proctored-exam-status.underscore
+msgid "Show Less"
 msgstr ""
 
 #: lms/templates/courseware/proctored-exam-status.underscore
@@ -7456,7 +7310,7 @@ msgstr "Kliknite sem pre úpravu"
 
 #: lms/templates/fields/field_order_history.underscore
 msgid "Order Number"
-msgstr ""
+msgstr "Číslo objednávky"
 
 #: lms/templates/fields/field_order_history.underscore
 msgid "Date Placed"
@@ -7468,7 +7322,7 @@ msgstr ""
 
 #: lms/templates/fields/field_order_history.underscore
 msgid "Order Details"
-msgstr ""
+msgstr "Podrobnosti o objednávke"
 
 #: lms/templates/fields/field_order_history.underscore
 msgid "for"
@@ -7496,12 +7350,12 @@ msgstr ""
 #: lms/templates/financial-assistance/financial_assessment_form.underscore
 msgid ""
 "The following information is already a part of your {platform} profile. "
-"We've included it here for your application."
+"We\\'ve included it here for your application."
 msgstr ""
 
 #: lms/templates/financial-assistance/financial_assessment_form.underscore
 msgid "Email address"
-msgstr ""
+msgstr "Emailová adresa"
 
 #: lms/templates/financial-assistance/financial_assessment_form.underscore
 msgid "Legal name"
@@ -7524,10 +7378,6 @@ msgid ""
 "Thank you for submitting your financial assistance application for "
 "{course_name}! You can expect a response in 2-4 business days."
 msgstr ""
-
-#: lms/templates/financial-assistance/financial_assessment_submitted.underscore
-msgid "Go to Dashboard"
-msgstr "Prejsť na Palubnú dosku"
 
 #: lms/templates/instructor/instructor_dashboard_2/certificate-bulk-white-list.underscore
 msgid "Bulk Exceptions"
@@ -7567,7 +7417,7 @@ msgstr ""
 
 #: lms/templates/instructor/instructor_dashboard_2/certificate-invalidation.underscore
 msgid "Student"
-msgstr ""
+msgstr "Študent"
 
 #: lms/templates/instructor/instructor_dashboard_2/certificate-invalidation.underscore
 msgid "Invalidated By"
@@ -7580,7 +7430,7 @@ msgstr ""
 #: lms/templates/instructor/instructor_dashboard_2/certificate-invalidation.underscore
 #: lms/templates/instructor/instructor_dashboard_2/certificate-white-list.underscore
 msgid "Notes"
-msgstr ""
+msgstr "Poznámky"
 
 #: lms/templates/instructor/instructor_dashboard_2/certificate-invalidation.underscore
 msgid "Remove from Invalidation Table"
@@ -7868,12 +7718,20 @@ msgid "You can change sessions until {expiration_date}."
 msgstr ""
 
 #: lms/templates/learner_dashboard/course_enroll.underscore
+msgid "Final Grade"
+msgstr ""
+
+#: lms/templates/learner_dashboard/course_enroll.underscore
+msgid "for {courseName}"
+msgstr ""
+
+#: lms/templates/learner_dashboard/course_enroll.underscore
 msgid "View Archived Course"
 msgstr ""
 
 #: lms/templates/learner_dashboard/course_enroll.underscore
 msgid "View Course"
-msgstr ""
+msgstr "Pozrieť kurz"
 
 #: lms/templates/learner_dashboard/course_enroll.underscore
 msgid "Select a session:"
@@ -8084,27 +7942,7 @@ msgid "An error occurred. Please reload the page."
 msgstr ""
 
 #: lms/templates/student_account/form_field.underscore
-msgid "Need help signing in?"
-msgstr ""
-
-#: lms/templates/student_account/form_field.underscore
-msgid "Forgot my password"
-msgstr ""
-
-#: lms/templates/student_account/form_field.underscore
-msgid "Other sign-in issues"
-msgstr ""
-
-#: lms/templates/student_account/form_field.underscore
-msgid "Sign in with your company or school"
-msgstr ""
-
-#: lms/templates/student_account/form_field.underscore
-msgid "Need other help signing in?"
-msgstr ""
-
-#: lms/templates/student_account/form_field.underscore
-msgid "Create an account"
+msgid "Need help logging in?"
 msgstr ""
 
 #: lms/templates/student_account/hinted_login.underscore
@@ -8295,20 +8133,24 @@ msgstr ""
 
 #: lms/templates/verify_student/error.underscore
 msgid "Error:"
-msgstr ""
+msgstr "Chyba:"
 
 #: lms/templates/verify_student/face_photo_step.underscore
 msgid "What You Need for Verification"
 msgstr ""
 
 #: lms/templates/verify_student/face_photo_step.underscore
-msgid "Device with Camera"
+#: lms/templates/verify_student/intro_step.underscore
+#: lms/templates/verify_student/make_payment_step.underscore
+#: lms/templates/verify_student/make_payment_step_ab_testing.underscore
+#: lms/templates/verify_student/payment_confirmation_step.underscore
+msgid "Webcam"
 msgstr ""
 
 #: lms/templates/verify_student/face_photo_step.underscore
 msgid ""
-"You need a device that has a webcam. If you receive a browser prompt for "
-"access to your camera, please make sure to click 'Allow'."
+"You need a computer or cell phone that has a webcam. When you receive a "
+"browser prompt, make sure that you allow access to the camera."
 msgstr ""
 
 #: lms/templates/verify_student/face_photo_step.underscore
@@ -8316,7 +8158,9 @@ msgid "Photo Identification"
 msgstr ""
 
 #: lms/templates/verify_student/face_photo_step.underscore
-msgid "You need a valid ID that contains your full name and photo."
+msgid ""
+"You need a driver's license, passport, or other government-issued ID that "
+"has your name and photo."
 msgstr ""
 
 #: lms/templates/verify_student/face_photo_step.underscore
@@ -8343,9 +8187,13 @@ msgid "Your entire face fits inside the frame."
 msgstr ""
 
 #: lms/templates/verify_student/face_photo_step.underscore
+msgid "The photo of your face matches the photo on your ID."
+msgstr ""
+
+#: lms/templates/verify_student/face_photo_step.underscore
 msgid ""
-"To take the photo of your face, click on the camera button {icon}. If you "
-"need to try again, click 'Retake Photo'."
+"To use the current photo, select the Take Photo button {icon}. To take "
+"another photo, select the Retake Photo button {icon}."
 msgstr ""
 
 #: lms/templates/verify_student/face_photo_step.underscore
@@ -8362,9 +8210,12 @@ msgid "Why does %(platformName)s need my photo?"
 msgstr ""
 
 #: lms/templates/verify_student/face_photo_step.underscore
+#: lms/templates/verify_student/id_photo_step.underscore
+#: lms/templates/verify_student/incourse_reverify.underscore
 msgid ""
-"We use your verification photos to confirm your identity and ensure the "
-"validity of your certificate."
+"As part of the verification process, you take a photo of both your face and "
+"a government-issued photo ID. Our authorization service confirms your "
+"identity by comparing the photo you take with the photo on your ID."
 msgstr ""
 
 #: lms/templates/verify_student/face_photo_step.underscore
@@ -8376,11 +8227,13 @@ msgstr ""
 
 #: lms/templates/verify_student/face_photo_step.underscore
 #: lms/templates/verify_student/id_photo_step.underscore
+#: lms/templates/verify_student/incourse_reverify.underscore
 #, python-format
 msgid ""
-"We securely encrypt your photo and send it to our authorization service for "
-"review. Your photo and information are not saved or visible anywhere on "
-"%(platformName)s after the verification process is complete."
+"We use the highest levels of security available to encrypt your photo and "
+"send it to our authorization service for review. Your photo and information "
+"are not saved or visible anywhere on %(platformName)s after the verification"
+" process is complete."
 msgstr ""
 
 #: lms/templates/verify_student/face_photo_step.underscore
@@ -8440,13 +8293,15 @@ msgid "Take a Photo of Your ID"
 msgstr ""
 
 #: lms/templates/verify_student/id_photo_step.underscore
-msgid "Use your webcam to take a photo of your ID."
+msgid ""
+"Use your webcam to take a photo of your ID. We will match this photo with "
+"the photo of your face and the name on your account."
 msgstr ""
 
 #: lms/templates/verify_student/id_photo_step.underscore
 msgid ""
-"You need an ID with your name and photo. A driver's license, passport, or ID"
-" are all acceptable."
+"You need an ID with your name and photo. A driver's license, passport, or "
+"other government-issued IDs are all acceptable."
 msgstr ""
 
 #: lms/templates/verify_student/id_photo_step.underscore
@@ -8469,13 +8324,6 @@ msgstr ""
 #: lms/templates/verify_student/id_photo_step.underscore
 #: lms/templates/verify_student/incourse_reverify.underscore
 msgid "Use the Retake Photo button if you are not pleased with your photo"
-msgstr ""
-
-#: lms/templates/verify_student/id_photo_step.underscore
-msgid ""
-"As part of the verification process, you take a photo of both your face and "
-"a photo ID. Our authorization service confirms your identity by comparing "
-"the photo you take with the photo on your ID."
 msgstr ""
 
 #: lms/templates/verify_student/id_photo_step.underscore
@@ -8524,22 +8372,6 @@ msgstr ""
 msgid "Can we match the photo you took with the one on your ID?"
 msgstr ""
 
-#: lms/templates/verify_student/incourse_reverify.underscore
-msgid ""
-"As part of the verification process, you take a photo of both your face and "
-"a government-issued photo ID. Our authorization service confirms your "
-"identity by comparing the photo you take with the photo on your ID."
-msgstr ""
-
-#: lms/templates/verify_student/incourse_reverify.underscore
-#, python-format
-msgid ""
-"We use the highest levels of security available to encrypt your photo and "
-"send it to our authorization service for review. Your photo and information "
-"are not saved or visible anywhere on %(platformName)s after the verification"
-" process is complete."
-msgstr ""
-
 #: lms/templates/verify_student/intro_step.underscore
 msgid "Thanks for returning to verify your ID in: {courseName}"
 msgstr ""
@@ -8566,13 +8398,6 @@ msgstr ""
 msgid ""
 "A driver's license, passport, or other government-issued ID with your name "
 "and photo"
-msgstr ""
-
-#: lms/templates/verify_student/intro_step.underscore
-#: lms/templates/verify_student/make_payment_step.underscore
-#: lms/templates/verify_student/make_payment_step_ab_testing.underscore
-#: lms/templates/verify_student/payment_confirmation_step.underscore
-msgid "Webcam"
 msgstr ""
 
 #: lms/templates/verify_student/make_payment_step.underscore
@@ -8663,11 +8488,6 @@ msgid "Check your email for an activation message."
 msgstr ""
 
 #: lms/templates/verify_student/make_payment_step_ab_testing.underscore
-#: lms/templates/verify_student/payment_confirmation_step.underscore
-msgid "Total"
-msgstr "Súčet"
-
-#: lms/templates/verify_student/make_payment_step_ab_testing.underscore
 msgid "Professional Certificate for {courseName}"
 msgstr ""
 
@@ -8705,38 +8525,6 @@ msgid "Thank you! We have received your payment for {courseName}."
 msgstr ""
 
 #: lms/templates/verify_student/payment_confirmation_step.underscore
-msgid ""
-"Please print this page for your records; it serves as your receipt. You will"
-" also receive an email with the same information."
-msgstr ""
-"Vytlačte si, prosím, túto stránku pre svoju potrebu; slúži ako vaša účtenka."
-" Taktiež dostanete email s tou istou informáciou."
-
-#: lms/templates/verify_student/payment_confirmation_step.underscore
-msgid "Order No."
-msgstr "Číslo objednávky"
-
-#: lms/templates/verify_student/payment_confirmation_step.underscore
-msgid "Amount"
-msgstr "Čiastka"
-
-#: lms/templates/verify_student/payment_confirmation_step.underscore
-msgid "Please Note"
-msgstr "Všimnite si, prosím"
-
-#: lms/templates/verify_student/payment_confirmation_step.underscore
-msgid "Crossed out items have been refunded."
-msgstr "Vyškrtnuté položky boli refundované."
-
-#: lms/templates/verify_student/payment_confirmation_step.underscore
-msgid "Billed to"
-msgstr "Faktúra pre"
-
-#: lms/templates/verify_student/payment_confirmation_step.underscore
-msgid "No receipt available"
-msgstr "K dispozícii nie je žiadna účtenka"
-
-#: lms/templates/verify_student/payment_confirmation_step.underscore
 msgid "Next Step: Confirm your identity"
 msgstr ""
 
@@ -8767,10 +8555,6 @@ msgstr ""
 "vašej palubnej dosky. Periodicky budete dostávať pripomienky z "
 "%(platformName)s na overenie vašej identity."
 
-#: lms/templates/verify_student/payment_confirmation_step.underscore
-msgid "Want to confirm your identity later?"
-msgstr "Chcete vašu identitu potvrdiť neskôr?"
-
 #: lms/templates/verify_student/reverify_success_step.underscore
 msgid "Identity Verification In Progress"
 msgstr ""
@@ -8779,9 +8563,12 @@ msgstr ""
 msgid ""
 "We have received your information and are verifying your identity. You will "
 "see a message on your dashboard when the verification process is complete "
-"(usually within 5-7 days). In the meantime, you can still access all "
+"(usually within 1-2 days). In the meantime, you can still access all "
 "available course content."
 msgstr ""
+"Obdržali sme vaše informácie a overujeme vašu identitu. Po skončení "
+"verifikačného procesu uvidíte na vašej palubnej doske správu (zvyčajne do "
+"1-2 dní). Dovtedy však môžete stále pristupovať ku kompletnému obsahu kurzu."
 
 #: lms/templates/verify_student/reverify_success_step.underscore
 msgid "Return to Your Dashboard"
@@ -8813,6 +8600,10 @@ msgstr ""
 
 #: lms/templates/verify_student/review_photos_step.underscore
 msgid "Does the photo of you show your whole face?"
+msgstr ""
+
+#: lms/templates/verify_student/review_photos_step.underscore
+msgid "Does the photo of you match your ID photo?"
 msgstr ""
 
 #: lms/templates/verify_student/review_photos_step.underscore
@@ -10226,21 +10017,6 @@ msgid "Exam Types"
 msgstr ""
 
 #: cms/templates/js/timed-examination-preference-editor.underscore
-msgid ""
-"This subsection was released to learners as a special exam, but was reverted"
-" back to a basic exam. You may not configure it as a special exam now. "
-"Contact edX Support for assistance."
-msgstr ""
-
-#: cms/templates/js/timed-examination-preference-editor.underscore
-msgid ""
-"This special exam has been released to learners. You may not convert it to "
-"another type of special exam. You may revert this subsection back to being a"
-" basic exam by selecting 'None', but you will NOT be able to configure it as"
-" a special exam in the future."
-msgstr ""
-
-#: cms/templates/js/timed-examination-preference-editor.underscore
 msgid "Timed"
 msgstr ""
 
@@ -10408,11 +10184,11 @@ msgid "Read more"
 msgstr ""
 
 #: cms/templates/js/video-transcripts.underscore
-msgid "No transcript uploaded."
+msgid "Show transcripts ({totalTranscripts})"
 msgstr ""
 
 #: cms/templates/js/video-transcripts.underscore
-msgid "Show transcripts ({totalTranscripts})"
+msgid "No transcript uploaded."
 msgstr ""
 
 #: cms/templates/js/xblock-access-editor.underscore
