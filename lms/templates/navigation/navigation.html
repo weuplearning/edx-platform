@@ -11,7 +11,6 @@ from lms.djangoapps.ccx.overrides import get_current_ccx
 from openedx.core.djangolib.markup import HTML, Text
 
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
-
 from urllib.parse import urlencode
 
 # App that handles subdomain specific branding
@@ -20,12 +19,23 @@ from branding import api as branding_api
 from status.status import get_site_status_msg
 #from util.enterprise_helpers import get_enterprise_customer_logo_url
 from student.models import User
-
+from pprint import pformat
 %>
 
 <%
 #Build SEM redirect URI
 sem_logout_uri = configuration_helpers.get_value('logout_uri','')
+%>
+
+%if isinstance(sem_logout_uri,dict):
+  <script>
+    console.log("error on sem_logout_uri: ${pformat(sem_logout_uri)}");
+  </script>
+%endif
+
+<%
+if isinstance(sem_logout_uri,dict):
+  sem_logout_uri = "https://session-manager.amundi.com/v2/en/amundi/academy/user/logout"
 user_language = request.LANGUAGE_CODE
 if '-' in user_language:
   user_language=user_language.split('-')[0]
