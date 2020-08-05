@@ -7,8 +7,6 @@
   from contentstore.context_processors import doc_url
   import os.path
   import logging
-  #from microsite_manager.models import MicrositeAdminManager
-  #from microsite_configuration.models import Microsite
   from student.models import User
   import six
   from six.moves.urllib.parse import quote
@@ -54,19 +52,10 @@ logo='/edx/var/edxapp/media/logo-amundi.png'
 amundi_brand=True
 secondary_color="#00B6ED"
 primary_color="#0C1C49"
+
+course_org=""
 %>
-<%
-#
-#  course_org = ''
-#  try:
-#      microsite_key = MicrositeAdminManager.objects.get(user=user).microsite_id
-#      course_org = microsite = Microsite.objects.get(pk=microsite_key).key+'.'
-#  except:
-#      course_org = ''
-#      pass
-#
-course_org = ''
-%>
+
 <style>
 
 .primary-color-bg{
