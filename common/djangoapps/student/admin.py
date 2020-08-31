@@ -24,6 +24,9 @@ from opaque_keys.edx.keys import CourseKey
 
 from openedx.core.djangoapps.waffle_utils import WaffleSwitch
 from openedx.core.lib.courses import clean_course_id
+
+from import_export.admin import ImportExportMixin,ImportExportModelAdmin
+
 from student import STUDENT_WAFFLE_NAMESPACE
 from student.models import (
     AccountRecovery,
@@ -41,7 +44,8 @@ from student.models import (
     UserProfile,
     UserTestGroup,
     BulkUnenrollConfiguration,
-    AccountRecoveryConfiguration
+    AccountRecoveryConfiguration,
+    UserPreprofile
 )
 from student.roles import REGISTERED_ACCESS_ROLES
 from xmodule.modulestore.django import modulestore
@@ -153,7 +157,7 @@ class CourseAccessRoleForm(forms.ModelForm):
 
 
 @admin.register(CourseAccessRole)
-class CourseAccessRoleAdmin(admin.ModelAdmin):
+class CourseAccessRoleAdmin(ImportExportModelAdmin):
     """Admin panel for the Course Access Role. """
     form = CourseAccessRoleForm
     raw_id_fields = ("user",)
@@ -238,7 +242,7 @@ class CourseEnrollmentForm(forms.ModelForm):
 
 
 @admin.register(CourseEnrollment)
-class CourseEnrollmentAdmin(admin.ModelAdmin):
+class CourseEnrollmentAdmin(ImportExportModelAdmin):
     """ Admin interface for the CourseEnrollment model. """
     list_display = ('id', 'course_id', 'mode', 'user', 'is_active',)
     list_filter = ('mode', 'is_active',)
@@ -299,6 +303,14 @@ class CourseEnrollmentAdmin(admin.ModelAdmin):
         """
         return super(CourseEnrollmentAdmin, self).has_module_permission(request)
 
+@admin.register(UserPreprofile)
+class UserPreprofileAdmin(ImportExportModelAdmin):
+    """ Admin interface for the UserPreprofile model. """
+    list_display = ('email', 'last_name', 'first_name')
+    search_fields = ['email']
+
+    class Meta(object):
+        model = UserPreprofile
 
 class UserProfileInline(admin.StackedInline):
     """ Inline admin interface for UserProfile model. """
@@ -335,7 +347,7 @@ class UserChangeForm(BaseUserChangeForm):
             )
 
 
-class UserAdmin(BaseUserAdmin):
+class UserAdmin(ImportExportMixin, BaseUserAdmin):
     """ Admin interface for the User model. """
     inlines = (UserProfileInline, AccountRecoveryInline)
     form = UserChangeForm
@@ -364,7 +376,7 @@ class UserAttributeAdmin(admin.ModelAdmin):
 
 
 @admin.register(CourseEnrollmentAllowed)
-class CourseEnrollmentAllowedAdmin(admin.ModelAdmin):
+class CourseEnrollmentAllowedAdmin(ImportExportModelAdmin):
     """ Admin interface for the CourseEnrollmentAllowed model. """
     list_display = ('email', 'course_id', 'auto_enroll',)
     search_fields = ('email', 'course_id',)
@@ -518,7 +530,6 @@ admin.site.register(AccountRecoveryConfiguration, ConfigurationModelAdmin)
 admin.site.register(DashboardConfiguration, ConfigurationModelAdmin)
 admin.site.register(RegistrationCookieConfiguration, ConfigurationModelAdmin)
 admin.site.register(BulkUnenrollConfiguration, ConfigurationModelAdmin)
-
 
 # We must first un-register the User model since it may also be registered by the auth app.
 try:

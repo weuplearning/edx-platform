@@ -1485,6 +1485,9 @@ INSTALLED_APPS = [
 
     # Learning Sequence Navigation
     'openedx.core.djangoapps.content.learning_sequences.apps.LearningSequencesConfig',
+
+    # Django Import Export
+    'import_export',
 ]
 
 
