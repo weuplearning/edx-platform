@@ -216,18 +216,16 @@ function course_card(categ,course_id,img_src,course_progression,duration,require
   var categ_lower = categ.replace(/ /g,'').toLowerCase();
   var atp_course_link = '';
   var atp_course_word = '';
-  console.log('sdf sqfd sqfd sqsdf qsf dqds fqd sf')
   if(atp_rank == "cours") {
      atp_course_link = '/courses/'+course_id+'/courseware/';
      atp_course_word = '<span class="proceed">'+wording_proceed+'</span>';
-    console.log(passed)
-    console.log(course_progression)
-     if(!passed && course_progression==100){
+     // Use golden and crossed circle style in any case
+     //if(!passed && course_progression==100){
       _end_add = '<div class="atp_course_progress"><img src="'+picto_error+'" class="validate_img"/><span class="validate" style="color:rgb(220,158,41);">'+wording_notvalidated+' '+percent+'%</span></div>';
-     }
-     else{
-       _end_add = '<div style="min-height:30px;" class="atp_course_progress"> '+wording_notvalidated+' '+percent+'% </div>';
-     }
+     //}
+     //else{
+     //  _end_add = '<div style="min-height:30px;" class="atp_course_progress"> '+wording_notvalidated+' '+percent+'% </div>';
+     //}
   }else if(atp_rank == "invite") {
      atp_course_link = '/courses/'+course_id+'/about';
      atp_course_word = '<span class="more_info">'+wording_morinfo+'</span>';
