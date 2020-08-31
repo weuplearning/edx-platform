@@ -2024,6 +2024,82 @@ def get_course_langue(lang_code):
     return course_language
 
 
+def get_full_course_users_list(course_key):
+    #Get all course-enrollment invited and participants
+    """
+    UserPreprofile
+    CourseEnrollment
+    CourseEnrollmentAllowed
+    """
+    users = []
+    #Check for invited users
+    invited_users = CourseEnrollmentAllowed.objects.all().filter(course_id=course_key)
+    for invited_user in invited_users:
+        email = invited_user.email
+        email_is_in_users = False
+        log.info("invited: "+pformat(email))
+        log.info("inviteds: "+pformat(len(users)))
+        for email_in_users in users:
+            log.info(pformat(email_in_users['email']))
+            if email in email_in_users['email']:
+                email_is_in_users = True
+                break
+        if not email_is_in_users:
+            user_profile={
+            'email':email
+            }
+            users.append(user_profile)
+    log.info("invited users: "+pformat(users))
+
+    #check for enrolled users
+    users_enrolled = CourseEnrollment.objects.all().filter(course_id=course_key)
+    for user_enrolled in users_enrolled:
+        try:
+            email = User.objects.get(pk=user_enrolled.user_id).email
+            log.info("enrolled: "+pformat(email))
+            email_is_in_users = False
+            for email_in_users in users:
+                if email in email_in_users['email']:
+                    email_is_in_users = True
+                    break
+            if not email_is_in_users:
+                user_profile={
+                'email':email
+                }
+                users.append(user_profile)
+        except:
+            pass
+
+    #Get all users infos
+    for user in users:
+        try:
+            email = user['email']
+            profile = UserPreprofile.objects.get(email=email)
+            if profile.first_name is not None and profile.first_name is not '' :
+                user['first_name'] = profile.last_name
+            else :
+                user['first_name'] = "unknown"
+            if  profile.last_name is not None and profile.last_name is not '' :
+                user['last_name'] = profile.first_name
+            else :
+                user['last_name'] = "unknown"
+
+            user['level_1']=profile.level_1
+            user['level_2']=profile.level_2
+            user['level_3']=profile.level_3
+            user['level_4']=profile.level_4
+
+        except:
+            user['first_name']="unknown"
+            user['last_name']="unknown"
+            user['level_1']="unknown"
+            user['level_2']="unknown"
+            user['level_3']="unknown"
+            user['level_4']="unknown"
+    return users
+
+
+
 @login_required
 @ensure_csrf_cookie
 @require_http_methods(("GET", "PUT", "POST"))
