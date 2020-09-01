@@ -7,6 +7,9 @@ echo "Backup Proxy configuration"
 sudo cp -p /edx/app/edxapp/edx-platform/cms/wsgi.py /tmp/wsgi_cms.py.save
 sudo cp -p /edx/app/edxapp/edx-platform/lms/wsgi.py /tmp/wsgi_lms.py.save
 
+echo "Install new dependencies"
+sudo -E -H -u edxapp env "PATH=$PATH" pip install django-import-export==2.3.0
+
 echo "Pull last version"
 sudo -E -H -u edxapp env "PATH=$PATH" git stash
 sudo -E -H -u edxapp env "PATH=$PATH" git checkout atp_juniper
