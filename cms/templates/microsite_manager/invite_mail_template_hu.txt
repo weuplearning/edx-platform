@@ -82,7 +82,7 @@
 				<td style="color:#040b31;">A tréning sikeres teljesítéséhez szükséges minimális pontszám <span style="font-weight:bold;">{{ grade_cutoff }}</span> .</td>
 		</tr>
 		<tr>
-		<td style="color:#040b31;">{{ content }}</td>
+		<td style="color:#040b31;">{{ content | safe }}</td>
 		</tr>
 		<tr>
 		<td style="padding:0 0 10px; color:#040b31;">A <span style="font-weight:bold;">{{ course_title }}</span> tréning modul eléréséhez, kérjük, hogy kattints az alábbi linkre:<a href="{{ link }}">{{ link }}</a></td>

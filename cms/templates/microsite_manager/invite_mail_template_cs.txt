@@ -82,7 +82,7 @@
 				<td style="color:#040b31;">K úspěšnému absolvování kurzu musíte získat minimální skóre <span style="font-weight:bold;">{{ grade_cutoff }}</span>.</td>
 		</tr>
 		<tr>
-		<td style="color:#040b31;">{{ content }}</td>
+		<td style="color:#040b31;">{{ content | safe }}</td>
 		</tr>
 		<tr>
 		<td style="padding:0 0 10px; color:#040b31;">Pro přístup ke vzdělávacímu kurzu <span style="font-weight:bold;">{{ course_title }}</span>, prosím klikněte na odkaz níže: <a href="{{ link }}">{{ link }}</a></td>

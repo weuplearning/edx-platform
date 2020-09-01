@@ -81,7 +81,7 @@
 				<td style="color:#040b31;">Un scor minim de <span style="font-weight:bold;">{{ grade_cutoff }}</span> este necesar pentru validarea modulul de training.</td>
 		</tr>
 		<tr>
-		<td style="color:#040b31;">{{ content }}</td>
+		<td style="color:#040b31;">{{ content | safe }}</td>
 		</tr>
 		<tr>
 		<td style="padding:0 0 10px; color:#040b31;">Pentru a accesa modulul de training <span style="font-weight:bold;">{{ course_title }}</span>, te rugam sa apesi pe urmatorul link: <a href="{{ link }}">{{ link }}</a></td>

@@ -82,7 +82,7 @@
 				<td style="color:#040b31;">Na potvrdenie vzdelavacieho kurzu je potrebné minimálne skóre <span style="font-weight:bold;">{{ grade_cutoff }}</span>.</td>
 		</tr>
 		<tr>
-		<td style="color:#040b31;">{{ content }}</td>
+		<td style="color:#040b31;">{{ content | safe }}</td>
 		</tr>
 		<tr>
 		<td style="padding:0 0 10px; color:#040b31;">Ak chcete získa prístup k vzdelavaciemu kurzu <span style="font-weight:bold;">{{ course_title }}</span>, kliknite na nasledujúci odkaz:<br><a href="{{ link }}">{{ link }}</a></td>
