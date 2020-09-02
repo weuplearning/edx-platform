@@ -164,3 +164,5 @@ xlwt==1.3.0			    # TMA custom import
 img2pdf==0.2.4                      # TMA custom import
 python-resize-image==1.1.19         # TMA custom import
 django-import-export==2.3.0         # TMA custom import
+openedx-scorm-xblock==10.0.1        # TMA custom import
+

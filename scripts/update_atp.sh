@@ -9,6 +9,7 @@ sudo cp -p /edx/app/edxapp/edx-platform/lms/wsgi.py /tmp/wsgi_lms.py.save
 
 echo "Install new dependencies"
 sudo -E -H -u edxapp env "PATH=$PATH" pip install django-import-export==2.3.0
+sudo -E -H -u edxapp env "PATH=$PATH" pip install openedx-scorm-xblock==10.0.1
 
 echo "Pull last version"
 sudo -E -H -u edxapp env "PATH=$PATH" git stash
