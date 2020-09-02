@@ -347,16 +347,12 @@ course_org=""
 <nav id="studio-nav">
   <div id="nav-logo">
     <a id="logo-ms" href="\">
-      %if logo!='':
-        <img class="logo-ms" src="https://qualif-atp.themoocagency.com/media/logo-amundi.png" alt="${settings.STUDIO_NAME}" />
-      %else:
-        <img class="logo-ms" src="https://qualif-atp.themoocagency.com/media/logo-amundi.png" alt="${settings.STUDIO_NAME}" />
-      %endif
+        <img class="logo-ms" src="/media/logo-amundi.png" alt="${settings.STUDIO_NAME}" />
     </a>
     %if amundi_brand:
     <div id="amundi-academy-wrapper">
       <div id="amundi-academy">
-        <img src="https://qualif-atp.themoocagency.com/media/logo-amundiacademy_blanc.png" alt="amundi_academy" id="logo-amundi-academy">
+        <img src="/media/logo-amundiacademy_blanc.png" alt="amundi_academy" id="logo-amundi-academy">
       </div>
     </div>
     %endif

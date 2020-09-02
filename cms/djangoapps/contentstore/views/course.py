@@ -2389,12 +2389,7 @@ def send_enroll_mail(obj,course,overview,course_details, list_email,module_store
     link = microsite_link+'/courses/'+str(course.id)+'/about'
     atp_primary_color = "#0C1C49"
     atp_secondary_color = "ffffff"
-    microsite_logo = "https://qualif-atp.themoocagency.com/media/logo-amundi.png"
-    #log.info('AMUNDI BRAND {}'.format(str(microsite_value.values()[amundi_brand])))
-    #if str(microsite_value.values()[amundi_brand]) =="true" or str(microsite_value.values()[amundi_brand])=="True":
-        #platform_image = '<img src="https://'+site_name+'/media/certificates/images/logo-amundi-academy.jpg" alt="Amundi Academy" width="300" height="68" style="display:block;">'
-    #else :
-        #platform_image=''
+    microsite_logo = "https://"+str(settings.LMS_BASE)+"/media/logo-amundi.png"
 
     platform_image=''
     log.info('send enroll email after microsites values')
