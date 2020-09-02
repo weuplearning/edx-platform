@@ -2450,6 +2450,10 @@ INSTALLED_APPS = [
 
     # edX Mobile API
     'mobile_api',
+
+    # Django Import Export
+    'import_export',
+
     'social_django',
 
     # Surveys
@@ -2587,8 +2591,6 @@ INSTALLED_APPS = [
     # Learning Sequence Navigation
     'openedx.core.djangoapps.content.learning_sequences.apps.LearningSequencesConfig',
 
-    # Django Import Export
-    'import_export',
 ]
 
 ######################### CSRF #########################################
