@@ -568,7 +568,7 @@ border-bottom: 1px solid #c6c6c6 !important;
   }
   #modules_title, #categories_title{
     font-family: "mywebfont";
-    color:white;
+    color:!atp_third_text_color !important;
     font-weight: 700;
     font-size: 16px;
     margin-top: 25px;

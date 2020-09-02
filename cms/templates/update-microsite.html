@@ -53,7 +53,7 @@ textarea{
 .update_part{
   margin-bottom: 30px!important;
 }
-#third_color_preview, #secondary_color_preview, #primary_color_preview{
+#third_text_color_preview, #third_color_preview, #secondary_color_preview, #primary_color_preview{
   height: 20px;
   width:20px;
   display: inline-block;
@@ -65,6 +65,10 @@ textarea{
 #third_color_preview{
   background-color: ${third_color};
 }
+#third_text_color_preview{
+  background-color: ${third_text_color};
+}
+
 #primary_color_preview, .primary-color-bg{
   background-color:${primary_color}
 }
@@ -167,6 +171,36 @@ input[type="text"] {
         <div id="third_color_preview"></div><label data-value="${third_color}">${_('Header and footer color')} : ${third_color}</label>
         <input type="text" value="" name="third_color" id="micro_third_color" placeholder="microsite third color" class="input_update">
       </div>
+
+
+      <!--3nd BG Color -->
+      <div id="pre_third_bg" class="form_update update_part">
+        <div id="third_text_color_preview"></div><label data-value="${third_text_color}">${_('Header and footer text color')} : ${third_text_color}</label>
+        <input type="text" value="" name="third_text_color" id="micro_third_text_color" placeholder="microsite header and footer text color" class="input_update">
+      </div>
+
+      <!-- White or color logo -->
+      <div id="pre_white_or_color_logo" class="form_update update_part">
+        % if white_or_color_logo:
+          %if white_or_color_logo == 'white':
+            <label data-value="${white_or_color_logo}">Use white logo in header and footer</label>
+          %else:
+           <label data-value="${white_or_color_logo}">Use color logo in header and footer</label>
+          %endif
+        %else:
+        <p>${_('Please select which logo to use in header and footer')}</p>
+        %endif
+        <div class="max_width">
+          <select class="input new-microsite-white_or_color_logo select white_or_color_logo-selector input_update" id="white_or_color_logo-value" name="white_or_color_logo">
+            %if white_or_color_logo == 'white':
+            <option value="white" selected>${_('White logo')}</value>
+            <option value="color">${_('Color logo')}</value>
+            %else :
+            <option value="white">${_('White logo')}</value>
+            <option value="color" selected>${_('Color logo')}</value>
+            %endif
+          </select>
+        </div>
 
       <!-- Technical contact address -->
       <div id="pre_contact" class="form_update update_part">

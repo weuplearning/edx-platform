@@ -12,6 +12,10 @@
 <!-- import custom css script -->
 <%
 footer = static.get_value('css_overrides_footer')
+if configuration_helpers.get_value('third_text_color') :
+  third_text_color = configuration_helpers.get_value('third_text_color')
+else:
+  third_text_color = 'white'
 %>
 % if not footer:
   <link rel="stylesheet" type="text/css" href="${static.url('css/footerlo.css')}">
@@ -44,6 +48,12 @@ footer = static.get_value('css_overrides_footer')
     padding: 0 25px;
     height: 100%;
   }
+  #footer_atp ul li a,#footer_atp ul li {
+    font-size: 12px;
+    font-weight: 400;
+    color: ${third_text_color};
+  }
+
 .pop_up_atp h1,.pop_up_atp h2, .pop_up_atp h3,.pop_up_atp p {
   width: 100%;
   margin: 0 !important;

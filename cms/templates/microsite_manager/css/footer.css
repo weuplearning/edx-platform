@@ -88,6 +88,6 @@ body{background-color:#fff}
 #footer_atp ul li a, #footer_atp ul li{
   font-size: 12px;
   font-weight: 400;
-  color: white;
+  color: !atp_third_text_color;
   text-transform: capitalize;
 }
