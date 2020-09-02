@@ -19,7 +19,6 @@
 #Microsite-logo
 
 try:
-  
   microsite_data=SiteConfiguration.get_current_site_configuration()
 
   if microsite_data.get('logo') is not None:
@@ -347,12 +346,12 @@ course_org=""
 <nav id="studio-nav">
   <div id="nav-logo">
     <a id="logo-ms" href="\">
-        <img class="logo-ms" src="/media/logo-amundi.png" alt="${settings.STUDIO_NAME}" />
+        <img class="logo-ms" src="${settings.LMS_ROOT_URL}/media/logo-amundi.png" alt="${settings.STUDIO_NAME}" />
     </a>
     %if amundi_brand:
     <div id="amundi-academy-wrapper">
       <div id="amundi-academy">
-        <img src="/media/logo-amundiacademy_blanc.png" alt="amundi_academy" id="logo-amundi-academy">
+        <img src="${settings.LMS_ROOT_URL}/media/logo-amundiacademy_blanc.png" alt="amundi_academy" id="logo-amundi-academy">
       </div>
     </div>
     %endif
