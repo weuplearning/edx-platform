@@ -160,7 +160,7 @@ class CapaFields(object):
     )
     showanswer = String(
         display_name=_("Show Answer"),
-        help=_("Defines when to show the answer to the problem. "
+        help="THIS SETTING HAS BEEN DEACTIVATED ON ATP - "+_("Defines when to show the answer to the problem. "
                "A default value can be set in Advanced Settings."),
         scope=Scope.settings,
         default=SHOWANSWER.FINISHED,
@@ -927,6 +927,9 @@ class CapaMixin(ScorableXBlockMixin, CapaFields):
         """
         Is the user allowed to see an answer?
         """
+        # Avoid any kind of hassle on ATP, answer is always available !
+        return True
+
         if not self.correctness_available():
             # If correctness is being withheld, then don't show answers either.
             return False
