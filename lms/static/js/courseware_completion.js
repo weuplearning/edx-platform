@@ -9,7 +9,8 @@ function completion_nav_handler(course_id,user,item) {
         check_score()
          //Change unit's title appearance if completed
 
-        $(document).ajaxSuccess(function(event, xhr, settings) {
+        
+         $(document).ajaxSuccess(function(event, xhr, settings) {
             var currentUnit = $(".xblock.xblock-student_view.xblock-student_view-vertical.xblock-initialized").data("usage-id");
             var  url ="/tma_apps/" + course_id +"/" + currentUnit +"/completion/get_unit_completion";
 
@@ -20,11 +21,11 @@ function completion_nav_handler(course_id,user,item) {
               success: function (response) {
                 if(response.success){
                   check_unit_completion(chapter_state(true))
-                  check_score()
+                  //check_score()
                 }
               }
           });
-
+        
         };
       });
 

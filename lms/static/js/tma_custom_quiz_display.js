@@ -32,10 +32,12 @@ function ajax_problem_show(url_show_pb){
            if ($.isArray(value)) {
              for (i = 0, len = value.length; i < len; i++) {
                $('#'+key+'-'+value[i]+'-label').addClass('choicegroup_correct');
+               $('#'+key+'-'+value[i]+'-label').removeClass('choicegroup_incorrect');
              }
            }
            else{
             $('#'+key+'-'+value[i]+'-label').addClass('choicegroup_correct');
+            $('#'+key+'-'+value[i]+'-label').removeClass('choicegroup_incorrect');
            }
          });
       }
@@ -83,9 +85,18 @@ $('.sequence-nav-button').removeAttr('disabled')
 // on next click
 $('.question_next').live("click",function () {
   next_id=$(this).parents('.vert').next('.vert').find('.problems-wrapper').attr('id');
-  scroll_to_ques(next_id);
-  console.log(next_id)
-  $('#'+next_id).find('.hd.hd-2.problem-header').trigger( "click" );
+  if(next_id === undefined) {
+    //if next is undefined then we should open the score panel
+    $('.result-score-title h3').addClass('primary-color-text');
+    $('.result-score h3.disabled_score').removeClass('disabled_score');
+    $('.result-score').removeClass("disabled");
+    $('.result-score').removeAttr("disabled");
+    $('.result-score h3').addClass('secondary-color-text');
+    $('.result-score').trigger( "click" );
+  }else{
+    scroll_to_ques(next_id);
+    $('#'+next_id).find('.hd.d-2.problem-header').trigger( "click" );
+  }
 });
 
 $('.button-next').live("click",function () {
@@ -209,11 +220,9 @@ function insert_info_score(value) {
 
 // Display/Hide score panel on title click
 $('.result-score').live('click', function(){
-  console.log('click')
   $(this).toggleClass('active');
   if($(this).hasClass('active')){
     $("#result-content").html('');
-    console.log('result score active');
     returnScore();
   }
   else{
@@ -234,7 +243,6 @@ function get_completion_status_tma(username,course_key,subsection_id){
       type:'GET',
       dataType:'json',
       success:function(data){
-           console.log('completion state')
            console.log(data)
       },
       error: function(error){
@@ -243,13 +251,11 @@ function get_completion_status_tma(username,course_key,subsection_id){
     });
 }
 function get_completion_status_tma_for_quiz(username,course_key,subsection_id){
-  console.log('entering ajax call')
   $.ajax({
       url:"/api/completion/v1/subsection-completion/"+username+"/"+ course_key +"/"+subsection_id+'/',
       type:'GET',
       dataType:'json',
       success:function(data){
-        console.log('completin state for subsection')
         console.log(data)
       },
       error: function(error){
@@ -263,8 +269,6 @@ function returnScore() {
     type:'GET',
     dataType:'json',
     success:function(data) {
-      console.log('Entering courseware certif')
-      console.log(data)
       var passed = data.passed;
       var is_graded = data.is_graded;
       var score = parseFloat(data.percent);
@@ -304,6 +308,7 @@ function returnScore() {
       });
       $('img.svg').show();
       $('#result-content').show();
+      $(document).scrollTo($('#holding-section-result').offset().top-80+'px',500);
     }
   });
 };
@@ -316,12 +321,13 @@ $('.seq_content_next a').each(function(){
 function enable_score_panel(url_last_question){
   $(".problems-wrapper").each(function(){
     if($(this).attr('data-url')==url_last_question){
-      $(this).find('.next_button').attr('onclick','open_result_panel()');
+      $(this).find('.question_next').attr('onclick','open_result_panel()');
     }
   })
   //Change colors of result section to make it available
   $('.result-score-title h3').addClass('primary-color-text');
   $('.result-score h3.disabled_score').removeClass('disabled_score');
+  $('.result-score').removeClass("disabled");
   $('.result-score').removeAttr("disabled");
   $('.result-score h3').addClass('secondary-color-text');
 };
@@ -331,7 +337,6 @@ function all_questions_answered(){
   // All questions answered only if all have class finished and quiz is accessible
   if($('.problems-wrapper.finished').length==$('.problems-wrapper').length && $('.problems-wrapper').length!=0){
     all_answered=true;
-    console.log(all_answered)
   }
   return all_answered;
 }
@@ -347,10 +352,8 @@ $(document).ready(function() {
         result_enabled=true;
         }
   });
-  //or all questions are answered
+  //if all questions are answered
   if(all_questions_answered()){
-    console.log("all")
-    console.log($('#result-content').offset())
     $(document).scrollTo($('#result-content').offset().top);
     enable_score_panel(url_last_question);
     result_enabled=true;
