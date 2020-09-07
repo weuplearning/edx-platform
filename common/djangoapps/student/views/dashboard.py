@@ -846,25 +846,9 @@ def student_dashboard(request):
         passed = course_grade_factory.passed
         percent = course_grade_factory.percent
 
-        ##MODIFcourse_progression = get_overall_progress(user_id,course_id)
         from course_progress.helpers import get_overall_progress
-        #from lms.djangoapps.tma_apps.completion.completion import get_course_completion
         from openedx.features.course_experience.utils import get_course_outline_block_tree
         from completion.api.v1.views import SubsectionCompletionView
-        #store = modulestore()
-        #course_usage_key = store.make_course_usage_key(course_key)
-        #block_data = get_course_blocks(request.user, course_usage_key, allow_start_dates_in_future=True, include_completion=True)
-        #log.info(block_data)
-        #subsection_key_list = []
-        #for section_key in block_data.get_children(course_usage_key):
-        #    for subsection_key in block_data.get_children(section_key):
-
-        #        log.info(block_data.get_xblock_field(subsection_key, 'id'))
-        #        log.info(subsection_key)
-        #        subsection_key_list.append(subsection_key.block_id)
-        #log.info(request.user.username)
-        #log.info(subsection_key_list[0])
-        #status = get_overall_progress(request.user.username,request,course_id,course_usage_key)
 
         total_blocks=0
         total_blockstma=0
@@ -887,7 +871,7 @@ def student_dashboard(request):
                         unit_completion = SubsectionCompletionView().get(request,request.user,str(course_id),unit.get('id')).data
                         if unit_completion.get('completion'):
                             completed_blocks+=1
-                        if unit.get('graded'):
+                        if unit.get('graded') and unit.get('children'):
                             for component in unit.get('children') :
                                 quiz_total_components+=1
                                 if component.get('complete'):

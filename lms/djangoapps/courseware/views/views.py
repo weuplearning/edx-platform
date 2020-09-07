@@ -1016,7 +1016,7 @@ def course_about(request, course_id):
                         log.info(unit_completion)
                         if unit_completion.get('completion'):
                             completed_blocks+=1
-                        if unit.get('graded'):
+                        if unit.get('graded') and unit.get('children'):
                             for component in unit.get('children') :
                                 quiz_total_components+=1
                                 if component.get('complete'):
