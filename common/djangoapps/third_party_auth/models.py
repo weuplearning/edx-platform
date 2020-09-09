@@ -332,7 +332,8 @@ class ProviderConfig(ConfigurationModel):
         """
         Determines if the provider is able to be used with the current site.
         """
-        return self.enabled and self.site_id == Site.objects.get_current(get_current_request()).id
+        #In ATP no need to check the site, SEM should always be available
+        return self.enabled
 
 
 class OAuth2ProviderConfig(ProviderConfig):
