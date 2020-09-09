@@ -1008,6 +1008,8 @@ def course_about(request, course_id):
             for section in course_sections :
               total_blockstma+=1
               section_completion = SubsectionCompletionView().get(request,request.user,str(course_id),section.get('id')).data
+              if section.get('children') is None:
+                continue
               for subsection in section.get('children') :
                 if subsection.get('children'):
                     for unit in subsection.get('children'):
