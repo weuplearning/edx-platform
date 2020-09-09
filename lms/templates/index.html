@@ -6,7 +6,25 @@ from django.utils.translation import ugettext as _
 from django.urls import reverse
 
 from openedx.core.djangolib.markup import HTML, Text
+
+from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 %>
+
+
+<%
+#Build login page redirect URI
+login_page_uri = configuration_helpers.get_value('login_page_uri','https://preprod.digital.amundi.com/training/amundiacademy/index.html#/en/apprenant/')
+user_language = request.LANGUAGE_CODE
+
+if '-' in user_language:
+  user_language=user_language.split('-')[0]
+if user_language == 'cs':
+  user_language = 'cz'
+
+login_page_uri = login_page_uri.replace("[LANG]",user_language)
+%>
+
+
 %if user.is_authenticated:
 <h2>
 Si vous n'êtes pas redirigé(e), <a href="/dashboard">cliquez ici</a>.
@@ -18,11 +36,11 @@ window.location.replace("/dashboard");
 </script>
 %else:
 <h2>
-Si vous n'êtes pas redirigé(e), <a href="https://preprod.digital.amundi.com/training/amundiacademy/index.html#/fr/apprenant/">cliquez ici</a>.
+Si vous n'êtes pas redirigé(e), <a href="${login_page_uri}">cliquez ici</a>.
 <br/>
-If you are not redirected, <a href="https://preprod.digital.amundi.com/training/amundiacademy/index.html#/en/apprenant/">click here</a>.
+If you are not redirected, <a href="${login_page_uri}">click here</a>.
 </h2>
 <script type="text/javascript">
-window.location.replace("https://preprod.digital.amundi.com/training/amundiacademy/index.html#/fr/apprenant/");
+window.location.replace("${login_page_uri}");
 </script>
 %endif
