@@ -25,15 +25,7 @@ from pprint import pformat
 <%
 #Build SEM redirect URI
 sem_logout_uri = configuration_helpers.get_value('logout_uri','')
-%>
 
-%if isinstance(sem_logout_uri,dict):
-  <script>
-    console.log("error on sem_logout_uri: ${pformat(sem_logout_uri)}");
-  </script>
-%endif
-
-<%
 if isinstance(sem_logout_uri,dict):
   sem_logout_uri = "https://session-manager.amundi.com/v2/en/amundi/academy/user/logout"
 user_language = request.LANGUAGE_CODE
