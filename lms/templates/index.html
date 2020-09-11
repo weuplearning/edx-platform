@@ -13,7 +13,7 @@ from openedx.core.djangoapps.site_configuration import helpers as configuration_
 
 <%
 #Build login page redirect URI
-login_page_uri = configuration_helpers.get_value('login_page_uri','https://preprod.digital.amundi.com/training/amundiacademy/index.html#/en/apprenant/')
+login_page_uri = configuration_helpers.get_value('login_page_uri','https://interface.amundi.com/ret/landing/academy/index.html#/[LANG]/'+configuration_helpers.get_value('course_org_filter','amundi')+'/apprenant')
 user_language = request.LANGUAGE_CODE
 
 if '-' in user_language:
@@ -41,6 +41,7 @@ Si vous n'êtes pas redirigé(e), <a href="${login_page_uri}">cliquez ici</a>.
 If you are not redirected, <a href="${login_page_uri}">click here</a>.
 </h2>
 <script type="text/javascript">
+console.log("${login_page_uri}")
 window.location.replace("${login_page_uri}");
 </script>
 %endif
