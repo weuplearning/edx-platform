@@ -76,7 +76,8 @@ def atp_generate_certificate(request,course_id):
     else:
         logo_path = '/media/certificates/images/logo-amundi.jpg'
     if configuration_helpers.get_value('amundi_brand'):
-        amundi_academy = '/media/certificates/images/logo-amundi-academy.jpg'
+        if configuration_helpers.get_value('amundi_brand').lower() =="true":
+            amundi_academy = '/media/certificates/images/logo-amundi-academy.jpg'
     else:
         amundi_academy=''
     if configuration_helpers.get_value('primary_color') :
