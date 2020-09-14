@@ -9,7 +9,7 @@ from django.utils.translation import ugettext as _
 from openedx.core.djangolib.markup import HTML, Text
 %>
 
-<div class="learner-achievements">
+<div class="learner-achievements" style="visibility:hidden">
     % if course_certificates or own_profile:
         <h3 class="u-field-title">Course Certificates</h3>
         % if course_certificates:

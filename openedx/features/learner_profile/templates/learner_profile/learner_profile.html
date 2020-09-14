@@ -21,11 +21,18 @@ from openedx.core.djangolib.markup import HTML
 <%static:css group='style-course'/>
 </%block>
 
+<style>
+.profile-section-one-fields div.u-field{
+  display:none !important;
+  visiblity:hidden !important;
+}
+</style>
+
 <div class="message-banner" aria-live="polite"></div>
 <main id="main" aria-label="Content" tabindex="-1">
     <div class="wrapper-profile">
         <div class="profile ${'profile-self' if own_profile else 'profile-other'}">
-            <div class="wrapper-profile-field-account-privacy">
+            <div class="wrapper-profile-field-account-privacy" style="visibility:hidden">
                 % if own_profile and records_url:
                     <div class="wrapper-profile-records">
                         <a href="${records_url}">
