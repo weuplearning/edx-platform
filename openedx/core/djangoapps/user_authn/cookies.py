@@ -230,6 +230,9 @@ def _get_user_info_cookie_data(request, user):
         header_urls['resume_block'] = retrieve_last_sitewide_block_completed(user)
     except User.DoesNotExist:
         pass
+    except:
+        header_urls['resume_block'] = None
+        pass
 
     # Convert relative URL paths to absolute URIs
     for url_name, url_path in six.iteritems(header_urls):
