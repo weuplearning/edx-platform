@@ -65,6 +65,10 @@ div.xblock-student_view-scormxblock>div.scormxblock_block>p{
 div.openedxscorm_block > p:first-of-type, div.openedxscorm_block > div.js-scorm-block > div.scorm_button {
     display:none !important;
 }
+.xmodule_display.xmodule_SequenceModule .sequence-nav .sequence-list-wrapper{
+    /*fix ie11*/
+    height: auto !important;
+}
 </style>
 <%block name="title"><title>
     % if section_title:

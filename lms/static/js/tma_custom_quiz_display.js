@@ -72,8 +72,11 @@ $( document ).ready(function() {
   });
 
 });
-function scroll_to_ques(question_id,classNotId = false){
-$('.sequence-nav-button').removeAttr('disabled')
+function scroll_to_ques(question_id,classNotId){
+   if(classNotId === undefined) {
+      classNotId = false;
+   }
+   $('.sequence-nav-button').removeAttr('disabled')
    $('.sequence-nav-button').removeClass('disabled')
 
     if(classNotId){
