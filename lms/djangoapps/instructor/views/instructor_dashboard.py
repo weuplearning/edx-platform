@@ -1302,7 +1302,7 @@ def get_course_users(request,course_id):
         except:
             ws.cell(j, 7).value = ' '
         try:
-            ws.cell(j, 8).value =  users[i]['status']
+            ws.cell(j, 8).value =  users[i]['statut']
         except:
             ws.cell(j, 8).value = ' '
 
