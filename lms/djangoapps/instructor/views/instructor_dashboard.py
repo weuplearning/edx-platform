@@ -927,8 +927,9 @@ def stat_dashboard(request, course_id):
         user_id = n.id
         users = User.objects.get(pk=user_id)
 
-    if True:
-        all_enrolled_users = CourseEnrollment.objects.all().filter(course_id=course_key)
+    all_enrolled_users = CourseEnrollment.objects.all().filter(course_id=course_key)
+    too_many_users = False
+    if all_enrolled_users.count() < configuration_helpers.get_value("MAX_USERS_FOR_STAT_DASHBOARD",500):
         for _ue in all_enrolled_users:
             current_user = User.objects.get(pk=_ue.user_id)
             current_grade = CourseGradeFactory().read(current_user,course)
@@ -944,6 +945,8 @@ def stat_dashboard(request, course_id):
                 course_average_grade = course_average_grade + (_percent * 100)
                 user_finished = user_finished + 1
                 num_passed = num_passed + 1
+    else:
+        too_many_users = True
 
     #return context
     if user_finished != 0:
@@ -984,7 +987,8 @@ def stat_dashboard(request, course_id):
      'course_structure':course_structure,
      'overview':overview,
      'language_course':get_course_langue(course_language),
-     'problem_components':problem_components
+     'problem_components':problem_components,
+     'too_many_users': too_many_users
     }
 
     return render_to_response('courseware/stat.html', context)

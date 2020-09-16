@@ -183,7 +183,9 @@ p{
 #generate_grades_task, #generate_grades_task:visited, #generate_grades_task:hover{
   text-transform: inherit!important;
 }
-
+.text-center{
+text-transform:capitalize;
+}
 </style>
 <%
 course_key_id_cleared=str(course_id).replace('+','').replace(':','')
@@ -308,7 +310,11 @@ course_key_id_cleared=str(course_id).replace('+','').replace(':','')
     <div class="col-md-8">
       <div class="">
         <div class="primary-color-bg">
+          %if not too_many_users:
           <h2 class="primary-color-bg white-text bold-text pad-20 m-0 text-center">${_('Results')}</h2>
+          %else:
+          <h2 class="primary-color-bg white-text bold-text pad-20 m-0 text-center">Temporarily Unavailable Due To Performance Issues</h2>
+          %endif
         </div>
         <div class="mt-20">
           <div class="row m-0 figures-wrap  display-flex">
