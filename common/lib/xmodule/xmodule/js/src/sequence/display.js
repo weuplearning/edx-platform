@@ -296,9 +296,11 @@
 
                 if(newPosition == this.content_containertma.length){
                     this.$(".tma_tab").eq(newPosition - 1).focus(false);
+                    this.$(".tma_tab").removeAttr('disabled')
                     this.$('html, body').animate( { scrollTop: $(".tma_tab").eq(newPosition - 1).offset().top - 80 }, 500 );
 		}else{
                     this.sr_container.focus(false);
+                    this.$(".tma_tab").removeAttr('disabled')
                     this.$(".tma_tab").eq(newPosition - 1).focus(false);
                     this.$('html, body').animate( { scrollTop: $(".tma_tab").eq(newPosition - 1).offset().top - 80 }, 500 );
 		}
