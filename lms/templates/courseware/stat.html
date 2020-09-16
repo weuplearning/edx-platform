@@ -354,7 +354,7 @@ course_key_id_cleared=str(course_id).replace('+','').replace(':','')
             <button data-position="average" class="secondary-color-text" style="opacity:1">${_('per question')}</button>
             <button data-position="participant" class="secondary-color-text">${_('per participant')}</button>
             <span style="display:block;clear:left;"></span>
-            <div id="pop_up_grades">
+            <div id="pop_up_grades" style="display:none">
               <span>
                 % if LANGUAGE_CODE == "fr":
                 Le rapport avec les résultats de tous les participants est en cours d’exécution. Il vous sera envoyé par mail. Cette tâche peut prendre jusqu’à 15 minutes.
@@ -516,7 +516,7 @@ $('#generate_grades_task').click(function(){
     type:"POST",
     dataType:"json",
     success:function(data) {
-      $('#pop_up_grades').addClass('pop_up_show');
+      $('#pop_up_grades').show();
     }
   })
 })
