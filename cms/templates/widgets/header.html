@@ -16,43 +16,33 @@
 
 
 <%
-#Microsite-logo
+course_org="amundi"
+amundi_brand=True
+secondary_color="#00B6ED"
+primary_color="#0C1C49"
+course_org="amundi"
+logo='/edx/var/edxapp/media/logo-amundi.png'
+
+if context_course:
+  course_org = context_course.display_org_with_default
 
 try:
   microsite_data=SiteConfiguration.get_current_site_configuration()
 
   if microsite_data.get('logo') is not None:
     logo=microsite_data.get('logo')
-  else :
-    logo=''
 
   if microsite_data.get('amundi_brand'):
     amundi_brand=microsite_data.get('amundi_brand')
-  else :
-    amundi_brand=False
+
   if microsite_data.get('primary_color') is not None:
     primary_color=microsite_data.get('primary_color')
-  else :
-    primary_color="#0C1C49"
 
   if microsite_data.get('secondary_color') is not None:
     secondary_color=microsite_data.get('secondary_color')
-  else :
-    secondary_color="#00B6ED"
+
 except:
-  logo='/media/logo-amundi.png'
-  amundi_brand=True
-  secondary_color="#00B6ED"
-  primary_color="#0C1C49"
   pass
-
-logo='/edx/var/edxapp/media/logo-amundi.png'
-
-amundi_brand=True
-secondary_color="#00B6ED"
-primary_color="#0C1C49"
-
-course_org=""
 %>
 
 <style>
@@ -364,16 +354,16 @@ course_org=""
       </div>
       <div id="user-dropdown-menu">
       <div class="user-menu-element ">
-        <a class="" href="${settings.LMS_ROOT_URL.replace('https://','https://'+course_org)}/u/${request.user.username}">
+        <a class="" href="https://${course_org}.${settings.LMS_BASE}/u/${request.user.username}">
           <p class="name-atp-user">${request.user.first_name} ${request.user.last_name}</p>
           <p class="email-atp-user">${user.email}</p>
         </a>
       </div>
       <div class="user-menu-element" id="access-front">
-        <a href="${settings.LMS_ROOT_URL.replace('https://','https://'+course_org)}">${_("Access Trainee Interface")}</a>
+        <a href="https://${course_org}.${settings.LMS_BASE}">${_("Access Trainee Interface")}</a>
       </div>
       <div class="user-menu-element" id="logout-boutton">
-        <a class="" href="${settings.LMS_ROOT_URL.replace('https://','https://'+course_org)}/logout">
+        <a class="" href="https://${course_org}.${settings.LMS_BASE}/logout">
           <img style="height:20px;"src="${settings.LMS_ROOT_URL}/media/poweroff.png" alt="">
           <span>${_('logout')}</span>
         </a>
