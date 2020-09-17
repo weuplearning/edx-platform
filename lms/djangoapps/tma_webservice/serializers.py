@@ -18,7 +18,7 @@ from courseware.courses import get_course_by_id
 from course_progress.helpers import get_overall_progress
 from openedx.core.djangoapps.models.course_details import CourseDetails
 from lms.djangoapps.grades.new.course_grade import CourseGradeFactory
-from cms.djangoapps.microsite_manager.models import MicrositeAdminManager
+#from cms.djangoapps.microsite_manager.models import MicrositeAdminManager
 from microsite_configuration.models import Microsite
 from student.models import CourseEnrollmentAllowed, UserPreprofile
 from django.contrib.auth.models import User
@@ -41,12 +41,12 @@ class StudentSerializer(serializers.Serializer):
             last_login = last_login_brut.split('.')
 
             #Check if microsite admin
-            if MicrositeAdminManager.objects.filter(user=student).exists():
-                check_admin_microsite = True
-                microsite_key = MicrositeAdminManager.objects.get(user=student).microsite_id
-                microsite_admin_org = Microsite.objects.get(pk=microsite_key).key
-            else :
-                check_admin_microsite = False
+            #if MicrositeAdminManager.objects.filter(user=student).exists():
+            #    check_admin_microsite = True
+            #    microsite_key = MicrositeAdminManager.objects.get(user=student).microsite_id
+            #    microsite_admin_org = Microsite.objects.get(pk=microsite_key).key
+            #else :
+            check_admin_microsite = False
 
             #Check wich course invited first
             if CourseEnrollment.objects.filter(user=student).exists():
