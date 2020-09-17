@@ -2389,13 +2389,13 @@ def send_enroll_mail(obj,course,overview,course_details, list_email,module_store
     link = microsite_link+'/courses/'+str(course.id)+'/about'
     atp_primary_color = "#0C1C49"
     atp_secondary_color = "ffffff"
-    microsite_logo = "https://"+str(settings.LMS_BASE)+"/media/logo-amundi.png"
+    microsite_logo = "https://"+str(settings.LMS_BASE)+logo_key 
 
     platform_image=''
     log.info('send enroll email after microsites values')
 
     course_image = overview.image_urls['raw']
-    #course_link_img = 'https://'+site_name+course_image
+    course_link_img = 'https://'+str(settings.LMS_BASE)+course_image
     end_date = ''
 
     try:
@@ -2449,7 +2449,7 @@ def send_enroll_mail(obj,course,overview,course_details, list_email,module_store
            'link': link,
            'atp_primary_color': atp_primary_color,
            'atp_secondary_color': atp_secondary_color,
-           'course_link_img': "",
+           'course_link_img': course_link_img,
            'end_date': end_date,
            'grade_cutoff':str(module_store.grade_cutoffs['Pass'] * 100)+' %'
         }
