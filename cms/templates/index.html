@@ -136,11 +136,6 @@ header{
 }
 
 </style>
-<%
-log.info("timer 4 {}".format(datetime.datetime.now()))
-%>
-
-
 
 <!-- BLOC TITRE ET ONGLETS NAV NOUVEAU COURS / NOUVELLE BIBLIOTHEQUE HIDDEN -->
 <div  id="main-header-wrapper" class="wrapper-mast wrapper">
@@ -253,9 +248,6 @@ log.info("timer 4 {}".format(datetime.datetime.now()))
         </form>
       </div>
       % endif
-<%
-log.info("timer 6 {}".format(datetime.datetime.now()))
-%>
 
 <!-- FORMULAIRE DE CREATION DE LIBRAIRIES -->
       %if libraries_enabled and show_new_library_button:
@@ -313,9 +305,6 @@ log.info("timer 6 {}".format(datetime.datetime.now()))
       </div>
       % endif
 
-<%
-log.info("timer 7 {}".format(datetime.datetime.now()))
-%>
 
 <!-- FORMULAIRE DE CREATION DE MICROSITE -->
       % if request.user.is_staff:
@@ -523,10 +512,6 @@ log.info("timer 7 {}".format(datetime.datetime.now()))
       </ul>
       % endif
 
-
-<%
-log.info("timer 8 {}".format(datetime.datetime.now()))
-%>
 
 <!-- SI AU MOINS UN MODULE -->
       %if len(courses) > 0:
