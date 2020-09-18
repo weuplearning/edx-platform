@@ -36,6 +36,36 @@
         </script>
     % endfor
 </%block>
+
+<style>
+  #overlay-login{
+    position: absolute;
+    height: 100vh;
+    width: 100%;
+    background-color: white;
+    z-index: 1000;
+    text-transform:capitalize;
+  }
+  #login-amundi{
+    position: relative;
+    top: 40%;
+    bottom: 50%;
+  }
+  #amundi-connect-wrap{
+    height: 100%;
+    text-align: center;
+  }
+  #bouton-next{
+    text-transform:capitalize;
+    color:white;
+  }
+</style>
+<div id="overlay-login">
+  <div id="amundi-connect-wrap">
+    <a id="login-amundi" href="/auth/login/amundi/?auth_entry=register&lang=${configuration_helpers.get_value('language_code_for_sem','fr')}"><button id="bouton-next" class="primary-color-bg"><span>${_("login")}</span></button></a>
+  </div>
+</div>
+
 <div class="section-bkg-wrapper">
     <main id="main" aria-label="Content" tabindex="-1">
         <div id="content-container" class="login-register-content">
@@ -50,6 +80,7 @@
                 %>
             % endif
             <div id="login-and-registration-container" class="login-register ${border_class}"></div>
+            
         </div>
     </main>
 </div>
@@ -68,5 +99,8 @@ function findGetParameter(parameterName) {
 }
 if(!findGetParameter("admin")){
     $("#login-and-registration-container").css("visibility","hidden");
+}
+else{
+    $("#overlay-login").hide();
 }
 </script>
