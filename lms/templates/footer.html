@@ -144,8 +144,3 @@ $('#legal_notice,#close_legal,#close_cross span').click(function(e){
 
 </script>
 <script src="${static.url('js/bootstrap.min.js')}" charset="utf-8"></script>
-%  if configuration_helpers.get_value('lms_supplemental_js') and configuration_helpers.get_value('lms_supplemental_js') is not '' :
-  <script id="lms_supplemental_js" type="text/javascript" charset="utf-8">
-    ${configuration_helpers.get_value('lms_supplemental_js') | n}
-  </script>
-% endif

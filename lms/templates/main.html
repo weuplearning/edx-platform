@@ -449,3 +449,9 @@ jQuery('img.svg').each(function(){
 $('img.svg').show();
 </script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_SVG"></script>
+%  if configuration_helpers.get_value('lms_supplemental_js') and configuration_helpers.get_value('lms_supplemental_js') is not '' :
+  <script id="lms_supplemental_js" type="text/javascript" charset="utf-8">
+    ${configuration_helpers.get_value('lms_supplemental_js') | n}
+  </script>
+% endif
+
