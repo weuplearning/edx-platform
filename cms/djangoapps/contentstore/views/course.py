@@ -1384,14 +1384,10 @@ def session_manager_handler(emails,org,course,specific_msg=None):
     except:
         log.info('session manager handler except')
         log.exception("message")
-    try:
-        #urls = settings.FEATURES.get('SEM_ENDPOINTS')
-        urls = ["https://ppr-session-manager.amundi.com/v2/token","https://ppr-session-manager.amundi.com/v2/api/import","https://ppr-session-manager.amundi.com/v2/api/users/import"]
-        log.info(urls)
-    except:
-        urls = ["https://ppr-session-manager.amundi.com/v2/token","https://ppr-session-manager.amundi.com/v2/api/import","https://ppr-session-manager.amundi.com/v2/api/users/import"]
-        log.exception("message")
 
+    urls = ["https://session-manager.amundi.com/v2/token","https://session-manager.amundi.com/v2/api/import","https://session-manager.amundi.com/v2/api/users/import"]
+    if "preprod." in str(settings.LMS_BASE) or "qualif-atp." in str(settings.LMS_BASE):
+        urls = ["https://ppr-session-manager.amundi.com/v2/token","https://ppr-session-manager.amundi.com/v2/api/import","https://ppr-session-manager.amundi.com/v2/api/users/import"]
 
     redirect_uri = 'https://'+str(org)+'.'+str(settings.LMS_BASE)+'/auth/login/amundi/?auth_entry=login&next=%2Fdashboard&lang='+redirect_language
     log.info("START SEM TOKEN REQUEST")
