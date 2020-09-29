@@ -227,6 +227,20 @@ dashboard = static.get_value('css_overrides_dashboard')
        display: block;
      }
    </style>
+ %elif category.lower() =="cfa pass" :
+   <style>
+     #cat_cfapass{
+       display: block;
+       border-left:8px solid #F07D00!important;
+     }
+   </style>
+ %elif category.lower() =="efficiency" :
+   <style>
+     #cat_efficiency{
+       display: block;
+       border-left:8px solid #92D050!important;
+     }
+   </style>
   %endif
 %endfor
 
