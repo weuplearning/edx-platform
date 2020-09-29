@@ -39,7 +39,7 @@ siteconfig_all = SiteConfiguration.objects.all()
 <link rel="stylesheet" type="text/css" href="${static.url('css/index.css')}">
 <link rel="stylesheet" type="text/css" href="${static.url('css/index_sub.css')}">
 <style>
-.course-item .img_fundamentals,.course-item .img_regulatory,.course-item .img_fundamental,.course-item .img_oursolutions,.course-item .img_salesapproach, .course-item .img_softskills, .course-item .img_expert {
+.course-item .img_fundamentals,.course-item .img_regulatory,.course-item .img_fundamental,.course-item .img_oursolutions,.course-item .img_salesapproach, .course-item .img_softskills, .course-item .img_expert, .course-item .img_cfapass, .course-item .img_efficiency {
   position: absolute;
   bottom: 0;
   right: 0;
@@ -73,6 +73,12 @@ siteconfig_all = SiteConfiguration.objects.all()
 }
 .course-item .img_expert {
   background-image: url("${static.url('images/expert.png')}");
+}
+.course-item .img_cfapass {
+  background-image: url("${static.url('images/cfapass.png')}");
+}
+.course-item .img_efficiency {
+  background-image: url("${static.url('images/efficiency.png')}");
 }
 
 .is_block_clear {
@@ -1181,6 +1187,14 @@ header{
     background-color: #004F9B !important;
     color: #fff !important;
   }
+  .active_s_atp#cfapass_search,.active_s_atp#cfapass_search:hover,.active_s_atp#cfapass_search:focus {
+    background-color: #F07D00 !important;
+    color: #fff !important;
+  }
+  .active_s_atp#efficiency_search,.active_s_atp#efficiency_search:hover,.active_s_atp#efficiency_search:focus {
+    background-color: #92D050 !important;
+    color: #fff !important;
+  }
   #campaign_search,#module_search {
     border: 1px solid rgb(200, 200, 200);
     padding: 10px;
@@ -1258,6 +1272,12 @@ header{
   #expert_search{
     border:2px solid #004F9F;
   }
+  #cfapass_search{
+    border: 2px solid #F07D00;
+  }
+  #efficiency_search{
+    border:2px solid #92D050;
+  }
 
   ::-webkit-input-placeholder {
       font-style: italic;
@@ -1309,6 +1329,8 @@ header{
       <button class="action_search" id="regulatory_search" data-categ="regulatory">${_("Regulatory")}</button>
       <button class="action_search" id="softskills_search" data-categ="softskills">${_("SoftSkills")}</button>
       <button class="action_search" id="expert_search" data-categ="expert">${_("Expert")}</button>
+      <button class="action_search" id="cfapass_search" data-categ="cfapass">${_("CFA Pass")}</button>
+      <button class="action_search" id="efficiency_search" data-categ="efficiency">${_("Efficiency")}</button>
       <span class="is_block_clear"></span>
     </div>
     <div class="search_result is_hide_atp">
@@ -1332,6 +1354,8 @@ header{
         <button class="action_search" id="regulatory_search" data-categ="regulatory">${_("Regulatory")}</button>
         <button class="action_search" id="softskills_search" data-categ="softskills">${_("SoftSkills")}</button>
         <button class="action_search" id="expert_search" data-categ="expert">${_("Expert")}</button>
+        <button class="action_search" id="cfapass_search" data-categ="cfapass">${_("CFA Pass")}</button>
+        <button class="action_search" id="efficiency_search" data-categ="efficiency">${_("Efficiency")}</button>
         <span class="is_block_clear"></span>
       </div>
       <div class="search_result is_hide_atp">

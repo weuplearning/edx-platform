@@ -261,15 +261,21 @@ img.svg {
 #barre-nav-atp{
   min-height: 70px;
 }
-
 .img_softskills {
     background-image: url("/static/images/softskills.png")
 }
 .img_expert {
     background-image: url("/static/images/expert.png")
 }
-.img_expert , .img_softskills{
-  position: absolute;
+.img_cfapass {
+    background-image: url("/static/images/cfapass.png")
+}
+.img_efficiency {
+    background-image: url("/static/images/efficiency.png")
+}
+
+.img_expert, .img_softskills, .img_cfapass, .img_efficiency{
+    position: absolute;
     bottom: 0;
     right: 0;
     width: 70%;
@@ -370,6 +376,8 @@ else :
             <div id="cat_reg" class="submenu-item-atp" data-location="regulatory" onclick="followClickEvents(this,'my_categories-regulatory','navigation')">${_("Regulatory")}</div>
             <div id="cat_dem_exp" class="submenu-item-atp" data-location="expert" onclick="followClickEvents(this,'my_categories-expert','navigation')">${_("Expert")}</div>
             <div id="cat_dem_sofskil" class="submenu-item-atp" data-location="softskills" onclick="followClickEvents(this,'my_categories-soft_skills','navigation')">${_("Soft skills")}</div>
+            <div id="cat_cfapass" class="submenu-item-atp" data-location="cfapass" onclick="followClickEvents(this,'my_categories-cfapass','navigation')">${_("CFA Pass")}</div>
+            <div id="cat_efficiency" class="submenu-item-atp" data-location="efficiency" onclick="followClickEvents(this,'my_categories-efficiency','navigation')">${_("Efficiency")}</div>
             <div id="cat_all" class="submenu-item-atp" data-location="all" onclick="followClickEvents(this,'my_categories-all','navigation')">${_("All")}</div>
           </div>
         </li>

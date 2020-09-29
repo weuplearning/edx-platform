@@ -141,6 +141,12 @@ function template_course_card(atp_course_word,atp_course_link,img_src,course_id,
   else if(categ.toLowerCase()=="expert"){
     categ=wording_expert;
   }
+  else if(categ.toLowerCase()=="cfa pass"){
+    categ=wording_cfapass;
+  }
+  else if(categ.toLowerCase()=="efficiency"){
+    categ=wording_efficiency;
+  }
 
 
   var template = '<li class="atp_course_item" data-categ="'+categ_lower+'"><div class="atp_course_image"><span class="cateogry_text">'+categ+'</span><a href="/courses/'+course_id+'/courseware/"><img src="'+img_src+'" /><div class="img_'+categ_lower+'"></div></a></div><div class="progress_bar_status_up"><div class="progress_bar_status primary-color-bg" style="width:'+course_progression+'%;"></div></div><div class="atp_course_info"><div class="atp_course_duration"><div class="inside_atp_left"><img src="'+picto_dure+'" class="svg"/><span>'+duration+'</span><div style="display:block;clear:left;height:0px;"></div></div></div><div class="atp_course_dificulties"><div class="inside_atp"><span>'+required+'</span><img src="'+picto_obiligatoire+'" class="svg"/><div style="display:block;clear:left;height:0px;"></div></div></div></div><div class="atp_course_title primary-color-text"><span>'+display_name_with_default+'</span></div>'+_end_add+'<div class="atp_course_picto">'+_img_data+'</div><div class="atp_course_link"><a href="'+atp_course_link+'"class="primary-color-bg">'+atp_course_word+'</a></div></li>';

@@ -57,6 +57,8 @@ def generate_html(user,score,course_img_path,template_path,course_title,categori
         "phrase2":u"est décerné à",
         "soft skills":"démarche commerciale",
         "expert":"experts",
+        "cfa pass":"CFA Pass",
+        "efficiency":"Efficiency",
         },
     "de":{
         "date_title":u"Datum",
@@ -71,6 +73,8 @@ def generate_html(user,score,course_img_path,template_path,course_title,categori
         "phrase2":u"gehört zu",
         "soft skills":"Kommerzieller Ansatz",
         "expert":"experten",
+        "cfa pass":"CFA Pass",
+        "efficiency":"Efficiency",
         },
     "it":{
         "date_title":"Data",
@@ -85,6 +89,8 @@ def generate_html(user,score,course_img_path,template_path,course_title,categori
         "phrase2":u"è attribuito a",
         "soft skills":"Approccio commerciale",
         "expert":"esperti",
+        "cfa pass":"CFA Pass",
+        "efficiency":"Efficiency",
         },
     "en":{
         "date_title":"Date",
@@ -99,6 +105,8 @@ def generate_html(user,score,course_img_path,template_path,course_title,categori
         "phrase2":"is attributed to",
         "soft skills":"soft skills",
         "expert":"expert",
+        "cfa pass":"CFA Pass",
+        "efficiency":"Efficiency",
     },
     "cs":{
         "date_title":u"Datum",
@@ -113,6 +121,8 @@ def generate_html(user,score,course_img_path,template_path,course_title,categori
         "phrase2":u"pro",
         "soft skills":u"Prodejní dovednosti",
         "expert":u"Doplňková řešení",
+        "cfa pass":"CFA Pass",
+        "efficiency":"Efficiency",
     },
     "nl":{
         "date_title":u"Datum",
@@ -127,6 +137,8 @@ def generate_html(user,score,course_img_path,template_path,course_title,categori
         "phrase2":u"toegekend aan",
         "soft skills":"soft skills",
         "expert":"expert",
+        "cfa pass":"CFA Pass",
+        "efficiency":"Efficiency",
     },
     "ro":{
         "date_title":u"Data",
@@ -141,6 +153,8 @@ def generate_html(user,score,course_img_path,template_path,course_title,categori
         "phrase2":u"este atribuit ",
         "soft skills":"abilitati moi",
         "expert":"expert",
+        "cfa pass":"CFA Pass",
+        "efficiency":"Efficiency",
     },
     "hu":{
         "date_title":u"Dátum",
@@ -155,6 +169,8 @@ def generate_html(user,score,course_img_path,template_path,course_title,categori
         "phrase2":u"tréninget teljesítette",
         "soft skills":u"soft skills",
         "expert":u"expert",
+        "cfa pass":"CFA Pass",
+        "efficiency":"Efficiency",
     },
     "sk":{
         "date_title":u"Dátum",
@@ -169,6 +185,8 @@ def generate_html(user,score,course_img_path,template_path,course_title,categori
         "phrase2":u"sa pripisuje",
         "soft skills":u"Predajné zručnosti",
         "expert":u"Doplnkové riešenia",
+        "cfa pass":"CFA Pass",
+        "efficiency":"Efficiency",
     }
     }
 
