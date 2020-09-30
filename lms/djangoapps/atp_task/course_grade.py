@@ -240,7 +240,8 @@ class course_grade():
                             unit_completion = SubsectionCompletionView().get(self.request,user,str(course_id),unit.get('id')).data
                             if unit_completion.get('completion'):
                                 completed_blocks+=1
-                            if unit.get('graded') and unit.get('children'):
+                            if unit.get('num_graded_problems') > 1 and unit.get('graded') and unit.get('children'):
+                                quiz_completion_rate = SubsectionCompletionView().get(self.request,user,str(course_id),unit.get('id')).data['completion']
                                 for component in unit.get('children') :
                                     quiz_total_components+=1
                                     if component.get('complete'):
@@ -248,8 +249,6 @@ class course_grade():
                         if completed_blocks == total_blocks:
                             completed_blockstma+=1
 
-            if quiz_total_components!=0:
-                quiz_completion_rate =float(quiz_completed_components)/quiz_total_components
             if total_blocks != 0:
                 course_progression = float(completed_blocks)/total_blocks
 

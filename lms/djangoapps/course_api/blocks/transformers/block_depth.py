@@ -64,7 +64,6 @@ class BlockDepthTransformer(BlockStructureTransformer):
                 requested_depth_handler = float('inf')
             else:
                 requested_depth_handler = self.requested_depth
-            log.info(self.get_block_depth(block_structure, block_key))
             block_structure.remove_block_traversal(
                 lambda block_key: self.get_block_depth(block_structure, block_key) > requested_depth_handler
             )
