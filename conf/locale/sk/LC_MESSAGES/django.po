@@ -1572,20 +1572,20 @@ msgstr ""
 #: common/lib/capa/capa/capa_problem.py
 #: common/lib/xmodule/xmodule/capa_base.py
 msgid "Incorrect"
-msgstr "Nesprávnych"
+msgstr "Nesprávne"
 
 #: common/lib/capa/capa/capa_problem.py
 #: common/lib/xmodule/xmodule/capa_base.py
 msgid "Correct"
-msgstr "Správnych"
+msgstr "Správne"
 
 #: common/lib/capa/capa/inputtypes.py
 msgid "correct"
-msgstr "správny"
+msgstr "správne"
 
 #: common/lib/capa/capa/inputtypes.py
 msgid "incorrect"
-msgstr "nesprávny"
+msgstr "nesprávne"
 
 #: common/lib/capa/capa/inputtypes.py
 msgid "partially correct"
@@ -23966,13 +23966,13 @@ msgid "In progress"
 msgstr "Rozpracované"
 
 msgid "TO DO"
-msgstr "OTVORENÉ"
+msgstr "DOSTUPNÉ"
 
 msgid "to do"
-msgstr "otvorené"
+msgstr "dostupné"
 
 msgid "To do"
-msgstr "Otvorené"
+msgstr "Dostupné"
 
 msgid "MY CATEGORIES"
 msgstr "MOJE KATEGÓRIE"
@@ -24469,7 +24469,7 @@ msgstr "povinná"
 
 #: cms/templates/manage_course.html
 msgid "optional"
-msgstr "voliteľná"
+msgstr "dobrovoľný"
 
 #: cms/templates/manage_course.html
 msgid "Add participants to your training campaign and customize the invitation email"
@@ -24597,7 +24597,7 @@ msgstr "Odhlásiť"
 
 #log
 msgid "login"
-msgstr "Prihlásiť sa"
+msgstr "Prihlásenie"
 
 #cms index.html
 
@@ -24941,17 +24941,17 @@ msgid "You already have invited participants to this training campaign. Starting
 msgstr "Už ste pozval účastníkov k tejto tréningovej kampani. Začiatočný dátum už nemôže byť zmenený."
 
 msgid "Congratulations"
-msgstr "Blahoželanie"
+msgstr "Blahoželáme"
 
 msgid "Unfortunately, you haven't achieved the minimum score ({score}%) required to validate the training module."
-msgstr "Bohužiaľ, nedosiahli ste minimálny počet bodov ({score}%) potrebný na zvládnutie tréningového kurzu"
+msgstr "Žiaľ, nedosiahli ste minimálny počet bodov ({score}%) potrebných na úspešné absolvovanie kvízu."
 
 msgid "Start again"
 msgstr "Začnite ešte raz"
 
 #: lms/templates/dashboard.html
 msgid "Welcome to the Academy platform"
-msgstr "Vitajte v platforme akadémie!"
+msgstr "Vitajte vo vašej vzdelávacej platforme Amundi Academy"
 
 #: lms/templates/dashboard.html
 msgid "Your registration has been successful"
@@ -24967,7 +24967,7 @@ msgstr ""
 
 #: lms/templates/dashboard.html
 msgid "Below, access training modules you have yet to complete. Click"
-msgstr "Nižšie nájdete prístup k vzdelávacím kurzom, ktoré musíte ešte dokončiť. Kliknutím na "
+msgstr "V tejto časti sú vzdelávacie kurzy, ktoré je potrebné absolvovať. Kliknite na "
 
 #: lms/templates/dashboard.html
 msgid "Click"
@@ -24983,10 +24983,10 @@ msgstr ""
 
 #: lms/templates/dashboard.html
 msgid "to continue"
-msgstr "budete pokračovať ďalej"
+msgstr "pre viac informácii o kurze"
 
 msgid "You have completed the training module"
-msgstr "Teljesítetted a kurzust"
+msgstr "Dokončili ste vzdelávací kurz"
 
 msgid "Soft skills"
 msgstr "Predajné zručnosti"

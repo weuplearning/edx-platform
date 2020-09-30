@@ -2818,11 +2818,11 @@ language_setup={
     "sk":{
         'platform_lang' :'sk',
         'sem_lang' :'sk',
-        'msg':'Po dokonèení tohto kroku budete ma prístup k vzdelavaciemu modulu {0}.',
+        'msg':'Po dokončení tohto kroku budete mať prístup do vzdelávacej platformy.',
         'obj':'Pozvánka na prístup k {0} vzdelávaciemu modulu',
         'title_mail' : ['Kategória','Durácia','Režim','Dátum ukonèenia'],
         'required':'povinná',
-        'optional':'voliteľná',
+        'optional':'dobrovoľný',
         'categories':{
             'fundamentals':'Všeobecné základy',
             'our solutions':'Zakladné riešenia',
