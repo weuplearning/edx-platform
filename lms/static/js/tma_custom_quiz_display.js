@@ -268,7 +268,7 @@ function get_completion_status_tma_for_quiz(username,course_key,subsection_id){
 }
 function returnScore() {
   $.ajax({
-    url:'/api/atp/couseware_certif/'+course_id+'/',
+    url:'/api/atp/courseware_certif/'+course_id+'/',
     type:'GET',
     dataType:'json',
     success:function(data) {

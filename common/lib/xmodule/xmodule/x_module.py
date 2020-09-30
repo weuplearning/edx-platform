@@ -916,7 +916,6 @@ class XModuleToXBlockMixin(object):
         for key in set(six.iterkeys(request.POST)):
             if hasattr(request.POST[key], "file"):
                 request_post[key] = list(map(FileObjForWebobFiles, request.POST.getall(key)))
-        log.info(pprint.pformat(self))
         response_data = self.handle_ajax(suffix, request_post)
         return Response(response_data, content_type='application/json', charset='UTF-8')
 

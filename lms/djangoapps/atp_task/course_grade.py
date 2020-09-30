@@ -209,8 +209,50 @@ class course_grade():
             progress_status = "started"
             passed = course_grade.passed
             percent = course_grade.percent
-            #temporary disablin course_progression course_progression = get_overall_progress(user_id,course.id)
-            course_progression = '0'
+
+            course_id = self.course_id
+            course_progression = 0
+
+            from course_progress.helpers import get_overall_progress
+            from openedx.features.course_experience.utils import get_course_outline_block_tree
+            from completion.api.v1.views import SubsectionCompletionView
+
+            total_blocks=0
+            total_blockstma=0
+            completed_blockstma=0
+            completed_blocks=0
+            completion_rate=0
+            quiz_completion=0
+            quiz_total_components=0
+            quiz_completed_components=0
+            quiz_completion_rate=0
+            course_sections = get_course_outline_block_tree(self.request,str(course_id)).get('children')
+            if course_sections:
+                for section in course_sections :
+                  total_blockstma+=1
+                  section_completion = SubsectionCompletionView().get(self.request,user,str(course_id),section.get('id')).data
+                  if section.get('children') is None:
+                    continue
+                  for subsection in section.get('children') :
+                    if subsection.get('children'):
+                        for unit in subsection.get('children'):
+                            total_blocks+=1
+                            unit_completion = SubsectionCompletionView().get(self.request,user,str(course_id),unit.get('id')).data
+                            if unit_completion.get('completion'):
+                                completed_blocks+=1
+                            if unit.get('graded') and unit.get('children'):
+                                for component in unit.get('children') :
+                                    quiz_total_components+=1
+                                    if component.get('complete'):
+                                        quiz_completed_components+=1
+                        if completed_blocks == total_blocks:
+                            completed_blockstma+=1
+
+            if quiz_total_components!=0:
+                quiz_completion_rate =float(quiz_completed_components)/quiz_total_components
+            if total_blocks != 0:
+                course_progression = float(completed_blocks)/total_blocks
+
             _end = 0
             try:
                 _end = int(enrollment.course_overview.end.strftime("%s"))

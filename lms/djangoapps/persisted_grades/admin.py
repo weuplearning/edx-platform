@@ -7,8 +7,8 @@ from lms.djangoapps.persisted_grades import models
 
 class PersistedGradesAdmin(ImportExportModelAdmin):
     """Admin for PersistedGrades"""
-    list_display = ['course_id','user_id','percent','passed']
-    search_fields = ['course_id','user_id','percent','passed']
+    list_display = ['course_id','user_id','percent','passed','quiz_completed']
+    search_fields = ['course_id','user_id','percent','passed','quiz_completed']
 
 admin.site.register(models.PersistedGrades, PersistedGradesAdmin)
 

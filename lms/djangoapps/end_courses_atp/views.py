@@ -12,6 +12,8 @@ from xmodule.modulestore.django import modulestore
 
 #TMA GRADE TRACKING LIB
 from lms.djangoapps.tma_grade_tracking.models import dashboardStats
+from lms.djangoapps.persisted_grades.models import set_quiz_completion
+
 import logging
 log = logging.getLogger()
 
@@ -26,7 +28,7 @@ def ensure_certif(request,course_id):
     is_graded = True
     grade_cutoffs = modulestore().get_course(course_key, depth=0).grade_cutoffs['Pass'] * 100
     grading_note =  CourseGradeFactory().update(request.user, course_tma)
-
+    set_quiz_completion(course_id, request.user.id)
     passed = grading_note.passed
     percent = float(int(grading_note.percent * 1000)/10)
     context = {

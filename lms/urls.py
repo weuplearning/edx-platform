@@ -1099,7 +1099,7 @@ urlpatterns += (
 
 urlpatterns += (
     url(
-        r'^api/atp/couseware_certif/(?P<course_id>[^/]*)/$',
+        r'^api/atp/courseware_certif/(?P<course_id>[^/]*)/$',
         ensure_certif,
         name='courseware_certif',
     ),

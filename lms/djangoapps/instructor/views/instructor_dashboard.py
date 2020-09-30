@@ -906,7 +906,6 @@ def stat_dashboard(request, course_id):
     user_finished = 0
     # Users who completed the quiz entirely
     users_completed_quiz = 0
-    user_completed_quiz_list = []
     #course_structure
     course_structure = get_course_structure(request,course_id)
     course_usage_key = modulestore().make_course_usage_key(course_key)
@@ -918,14 +917,8 @@ def stat_dashboard(request, course_id):
 
     all_enrolled_users = CourseEnrollment.objects.all().filter(course_id=course_key)
     too_many_users = False
-    persisted_course_grades_for_course = get_persisted_course_grades_for_course(course.id)
 
-    #Find out who completed the quiz entirely
-    for user in row:
-        overall_progress = get_overall_progress(user.id, course_key)
-        if overall_progress == 100.0:
-            users_completed_quiz = users_completed_quiz + 1
-            user_completed_quiz_list.append(user.username)
+    persisted_course_grades_for_course = get_persisted_course_grades_for_course(course.id)
 
     if all_enrolled_users.count() < configuration_helpers.get_value("MAX_USERS_FOR_STAT_DASHBOARD",500):
         for _ue in all_enrolled_users:
@@ -934,15 +927,16 @@ def stat_dashboard(request, course_id):
 
             if persisted_course_grades_for_course.filter(user_id=_ue.user_id).exists():
                 current_grade = persisted_course_grades_for_course.get(user_id=_ue.user_id)
+                if current_grade.quiz_completed:
+                    users_completed_quiz = users_completed_quiz + 1
+                    course_average_grade_global = course_average_grade_global + (current_grade.percent * 100)
             else:
                 current_grade = CourseGradeFactory().read(current_user,course)
+
             _passed = current_grade.passed
             _percent = current_grade.percent
             user_course_started = user_course_started + 1
 
-            # Average grade of all users who completed the quiz
-            if _username in user_completed_quiz_list:
-                course_average_grade_global = course_average_grade_global + (_percent * 100)
             # Average grade of users who passed the quiz
             if _passed:
                 course_average_grade = course_average_grade + (_percent * 100)

@@ -66,6 +66,7 @@ from courseware.courses import (
 from openedx.core.djangoapps.models.course_details import CourseDetails
 from django.contrib.auth.models import User, AnonymousUser
 from lms.djangoapps.grades.course_grade_factory import CourseGradeFactory
+from lms.djangoapps.persisted_grades.models import get_persisted_course_grades_for_user
 
 log = logging.getLogger("edx.student")
 
@@ -836,13 +837,16 @@ def student_dashboard(request):
     start_course = []
     list_category = []
     _now = int(datetime.datetime.now().strftime("%s"))
+    user_course_grades = get_persisted_course_grades_for_user(request.user.id)
     if len(course_enrollments) > 0:
       for dashboard_index, enrollment in enumerate(course_enrollments):
         course_id = enrollment.course_overview.id
         user_id = request.user.id
         course_tma = get_course_by_id(enrollment.course_id)
-
-        course_grade_factory = CourseGradeFactory().read(request.user, course_tma)
+        if user_course_grades.filter(course_id=course_id).exists():
+            course_grade_factory = user_course_grades.get(course_id=course_id)
+        else:
+            course_grade_factory = CourseGradeFactory().read(request.user, course_tma)
         passed = course_grade_factory.passed
         percent = course_grade_factory.percent
 
@@ -887,7 +891,7 @@ def student_dashboard(request):
             completion_rate = float(completed_blocks)/total_blocks
         status ={}
         course_progression = int(completion_rate * 10);
-        log.info(course_progression)
+        log.info("[WUL] Tag for perf on course: "+str(enrollment.course_id)+" - Progress:"+str(course_progression))
         try:
             _end = int(enrollment.course_overview.end.strftime("%s"))
         except:

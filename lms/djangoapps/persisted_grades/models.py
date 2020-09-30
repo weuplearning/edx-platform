@@ -16,6 +16,7 @@ class PersistedGrades(models.Model):
     user_id = models.IntegerField(blank=False,default=0)
     percent = models.FloatField(default=0)
     passed = models.BooleanField(default=False)
+    quiz_completed = models.BooleanField(default=False)
 
 def get_persisted_course_grade(course_id, user_id):
     persisted_course_grade = None
@@ -41,3 +42,11 @@ def get_persisted_course_grades_for_course(course_id):
 
 def get_persisted_course_grades_for_user(user_id):
    return PersistedGrades.objects.filter(user_id = user_id)
+
+def set_quiz_completion(course_id, user_id):
+    persisted_grade = None
+    if PersistedGrades.objects.filter(course_id = course_id, user_id = user_id).exists():
+        persisted_grade = PersistedGrades.objects.get(course_id = course_id, user_id = user_id)
+        persisted_grade.quiz_completed = True
+        persisted_grade.save()
+    return persisted_grade

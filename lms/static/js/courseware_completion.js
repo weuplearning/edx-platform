@@ -77,7 +77,7 @@ function completion_nav_handler(course_id,user,item) {
 
   function returnScore() {
     $.ajax({
-      url:'/api/atp/couseware_certif/'+course_id+'/',
+      url:'/api/atp/courseware_certif/'+course_id+'/',
       type:'GET',
       dataType:'json',
       success:function(data) {
