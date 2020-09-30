@@ -30,7 +30,7 @@ from student.models import UserPreprofile
 from django.core.mail import EmailMessage
 
 from lms.djangoapps.grades.course_grade_factory import CourseGradeFactory
-#from course_progress.helpers import get_overall_progress
+from lms.djangoapps.persisted_grades.models import set_quiz_completion
 
 from django.conf import settings
 
@@ -252,6 +252,9 @@ class course_grade():
                 quiz_completion_rate =float(quiz_completed_components)/quiz_total_components
             if total_blocks != 0:
                 course_progression = float(completed_blocks)/total_blocks
+
+            if quiz_completion_rate == 1:
+                set_quiz_completion(str(course_id),user.id)
 
             _end = 0
             try:
