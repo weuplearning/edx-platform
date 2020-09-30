@@ -20,6 +20,7 @@ from .course_data import CourseData
 from .course_grade import CourseGrade, ZeroCourseGrade
 from .models import PersistentCourseGrade
 from .models_api import prefetch_grade_overrides_and_visible_blocks
+from lms.djangoapps.persisted_grades.models import store_persisted_course_grade
 
 log = getLogger(__name__)
 
@@ -157,13 +158,16 @@ class CourseGradeFactory(object):
         persistent_grade = PersistentCourseGrade.read(user.id, course_data.course_key)
         log.debug(u'Grades: Read, %s, User: %s, %s', six.text_type(course_data), user.id, persistent_grade)
 
-        return CourseGrade(
+        course_grade = CourseGrade(
             user,
             course_data,
             persistent_grade.percent_grade,
             persistent_grade.letter_grade,
             persistent_grade.letter_grade != u''
         )
+        # We store the persisted course grade in any case (ATP)
+        store_persisted_course_grade(course_data.course_key,user.id,course_grade.percent,course_grade.passed)
+        return course_grade
 
     @staticmethod
     def _update(user, course_data, force_update_subsections=False):
@@ -224,5 +228,8 @@ class CourseGradeFactory(object):
             u'Grades: Update, %s, User: %s, %s, persisted: %s',
             course_data.full_string(), user.id, course_grade, should_persist,
         )
+
+        #This is persisted is always persisted for ATP
+        store_persisted_course_grade(course_data.course_key,user.id,course_grade.percent,course_grade.passed)
 
         return course_grade

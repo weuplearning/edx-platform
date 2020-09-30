@@ -72,7 +72,9 @@ from openedx.core.djangoapps.content.course_overviews.models import CourseOvervi
 from courseware.courses import get_course_by_id
 from django.db import connection,connections
 from opaque_keys.edx.locations import SlashSeparatedCourseKey
+
 from lms.djangoapps.grades.course_grade_factory import CourseGradeFactory
+from lms.djangoapps.persisted_grades.models import get_persisted_course_grade,get_persisted_course_grades_for_course
 
 from lms.djangoapps.courseware.models import StudentModule
 from course_api.blocks.api import get_blocks
@@ -895,8 +897,6 @@ def stat_dashboard(request, course_id):
             all_user = all_user + 1
     #number of user who started the course
     user_course_started = 0
-    #number of users who completed the entire quiz
-    users_completed_quiz = 0
     #count passed
     num_passed = 0
     #add course average grade
@@ -905,39 +905,42 @@ def stat_dashboard(request, course_id):
     #number of user who finished the course
     user_finished = 0
     # Users who completed the quiz entirely
-    user_completed_quiz = 0
+    users_completed_quiz = 0
     user_completed_quiz_list = []
     #course_structure
     course_structure = get_course_structure(request,course_id)
     course_usage_key = modulestore().make_course_usage_key(course_key)
     blocks = get_blocks(request,course_usage_key,requested_fields=['display_name','children'])
 
-    # Users who completed the quiz (overall_progress equals 100.0 only if user completed the quiz)
-    for user in row:
-        #overall_progress = get_overall_progress(user.id, course_key)
-        #if overall_progress == 100.0:
-        users_completed_quiz = users_completed_quiz + 1
-        user_completed_quiz_list.append(user.username)
-
-    # connect mongodb return values:
-    #mongo_persist = dashboardStats()
-    #collection = mongo_persist.connect()
-    #find_mongo_persist_course = mongo_persist.find_by_course_id(collection,course_id)
     for n in row:
         user_id = n.id
         users = User.objects.get(pk=user_id)
 
     all_enrolled_users = CourseEnrollment.objects.all().filter(course_id=course_key)
     too_many_users = False
+    persisted_course_grades_for_course = get_persisted_course_grades_for_course(course.id)
+
+    #Find out who completed the quiz entirely
+    for user in row:
+        overall_progress = get_overall_progress(user.id, course_key)
+        if overall_progress == 100.0:
+            users_completed_quiz = users_completed_quiz + 1
+            user_completed_quiz_list.append(user.username)
+
     if all_enrolled_users.count() < configuration_helpers.get_value("MAX_USERS_FOR_STAT_DASHBOARD",500):
         for _ue in all_enrolled_users:
             current_user = User.objects.get(pk=_ue.user_id)
-            current_grade = CourseGradeFactory().read(current_user,course)
+            _username = current_user.username
+
+            if persisted_course_grades_for_course.filter(user_id=_ue.user_id).exists():
+                current_grade = persisted_course_grades_for_course.get(user_id=_ue.user_id)
+            else:
+                current_grade = CourseGradeFactory().read(current_user,course)
             _passed = current_grade.passed
             _percent = current_grade.percent
             user_course_started = user_course_started + 1
+
             # Average grade of all users who completed the quiz
-            _username = current_user.username
             if _username in user_completed_quiz_list:
                 course_average_grade_global = course_average_grade_global + (_percent * 100)
             # Average grade of users who passed the quiz
@@ -967,7 +970,7 @@ def stat_dashboard(request, course_id):
           for component in vertical['children']:
             if 'problem' in str(component):
               problem_components.append(str(component))
-    log.info(course)
+
     if course.language:
        course_language = course.language
     else:
@@ -1062,7 +1065,7 @@ def stat_dashboard_username(request, course_id, email):
         # var of grades / course_structure
         course_grade = []
         # get course_users_info
-        course_user_info = CourseGradeFactory().create(users, course)
+        course_user_info = get_persisted_course_grade(course.id, user_id)
         # user info responses
         user_info = [
         {'Score':str(course_user_info.percent * 100)+'%'},
@@ -1116,7 +1119,6 @@ def get_course_structure(request, course_id):
 
     course_key = CourseKey.from_string(course_id)
     course_usage_key = modulestore().make_course_usage_key(course_key)
-    log.info(type(course_usage_key))
     blocks = get_blocks(request,course_usage_key,requested_fields=['display_name','children'])
     root = blocks['root']
     blocks_overviews = []
