@@ -24986,7 +24986,7 @@ msgid "to continue"
 msgstr "pre viac informácii o kurze"
 
 msgid "You have completed the training module"
-msgstr "Dokončili ste vzdelávací kurz"
+msgstr "Úspešne ste absolvovali kurz"
 
 msgid "Soft skills"
 msgstr "Predajné zručnosti"

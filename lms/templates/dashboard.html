@@ -332,11 +332,16 @@ dashboard = static.get_value('css_overrides_dashboard')
       Welcome to the Academy platform! Your registration has been successful. The training modules are available in the "To Do" section.
     </p>
   %else:
+    %if request.LANGUAGE_CODE=="sk":
   <p class="primary-color-text">${_("Welcome to the Academy platform")}!
-    ${_("Your registration has been successful")}.
-    ${_("The training module")} ${first_course_name} ${_("is available in the section")}
-    ${_("To do")}.
-  </p>
+    ${_("Your registration has been successful")}.</p>
+    %else:
+   <p class="primary-color-text">${_("Welcome to the Academy platform")}!
+     ${_("Your registration has been successful")}.
+     ${_("The training module")} ${first_course_name} ${_("is available in the section")}
+     ${_("To do")}.</p>
+    
+    %endif
   %endif
   <button id="close_pop_up" class="primary-color-bg primary-color-border">${_("Close")}</button>
 </div>
