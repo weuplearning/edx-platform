@@ -20,8 +20,7 @@
                 <!--HEADER LOGOS-->
 <table width="600" border="0" cellspacing="0" cellpadding="0" align="center" style="font-family: arial;">
     <tr>
-      <td><img src="{{ org_image }}" alt="Amundi" width="150" height="68" style="display:block;"></td>
-                <td width="150" height="68"></td>
+      <td><img src="{{ org_image }}" alt="Organisation logo" height="68" style="display:block;"></td>
                 <td><img src="{{ platform_image }}" alt="Amundi Academy" width="300" height="68" style="display:block;"></td>
     </tr>
         </table>
