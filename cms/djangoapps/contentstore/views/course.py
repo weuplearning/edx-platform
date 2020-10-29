@@ -124,6 +124,7 @@ from lms.djangoapps.instructor.enrollment import enroll_email,get_email_params
 # Email imports
 import html2text
 import html
+import urllib.parse
 
 log = logging.getLogger(__name__)
 
@@ -585,7 +586,6 @@ def course_listing(request):
     split_archived = settings.FEATURES.get(u'ENABLE_SEPARATE_ARCHIVED_COURSES', False)
     active_courses, archived_courses = _process_courses_list(courses_iter, in_process_course_actions, split_archived)
     in_process_course_actions = [format_in_process_course_view(uca) for uca in in_process_course_actions]
-    log.info(active_courses)
     from courseware.courses import get_course_by_id
     for course_info in sorted(active_courses, key=lambda s: s['display_name'].lower() if s['display_name'] is not None else ''):
       q={}
@@ -636,8 +636,6 @@ def course_listing(request):
            _active_camp = True
       elif ('AMUNDI-GENERIC-TEMPLATE' in course_info['display_name']) and (not q['course_key_id'] in amundi_template):
            amundi_template[cur_indice].append(q)
-      log.info(course_scheduled)
-    log.info(_get_course_creator_status(user))
     return render_to_response(u'index.html', {
 
         u'courses': active_courses,
@@ -1000,7 +998,6 @@ def create_new_course_in_store(store, user, org, number, run, fields):
 
     # Initialize permissions for user in the new course
     initialize_permissions(new_course.id, user)
-    log.info(new_course.language)
     return new_course
 
 
@@ -2382,7 +2379,7 @@ def send_enroll_mail(obj,course,overview,course_details, list_email,module_store
     if configuration_helpers.get_value_for_org(course_org,"amundi_brand"):
         amundi_brand = configuration_helpers.get_value_for_org(course_org,"amundi_brand")
 
-    link = microsite_link+'/courses/'+str(course.id)+'/about'
+    link = microsite_link+'/auth/login/amundi/?auth_entry=register&next='+urllib.parse.quote('/courses/'+str(course.id)+'/about')
     atp_primary_color = "#0C1C49"
     atp_secondary_color = "ffffff"
     microsite_logo = "https://"+str(settings.LMS_BASE)+logo_key 
