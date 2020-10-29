@@ -24148,7 +24148,7 @@ msgid "To start"
 msgstr "Štart"
 
 msgid "Starting date"
-msgstr "Začiatok dátum"
+msgstr "Začiatočný datum"
 
 msgid "Ending date"
 msgstr "Konečný dátum"
@@ -24675,7 +24675,7 @@ msgstr "Stiahnuť zoznam účastníkov"
 
 #lms stat.html
 msgid "starting date"
-msgstr "začiatočný dátum"
+msgstr "začiatočný datum"
 
 #lms stat.html
 msgid "ending date"
@@ -24859,22 +24859,22 @@ msgid "An email invitation to participate to the training module has been sent t
 msgstr "Emailová pozvánka k tréningovému kurzu bola odoslaná, účastníkom."
 
 msgid "OUR SOLUTIONS"
-msgstr "NAŠE RIEŠENIE"
+msgstr "ZÁKLADNÉ RIEŠENIE"
 
 msgid "Our solutions"
-msgstr "Naše riešenie"
+msgstr "Základné riešenie"
 
 msgid "our solutions"
-msgstr "Naše riešenie"
+msgstr "Základné riešenie"
 
 msgid "OUR SOLUTION"
-msgstr "NAŠE RIEŠENIE"
+msgstr "ZÁKLADNÉ RIEŠENIE"
 
 msgid "Our solution"
-msgstr "Naše riešenie"
+msgstr "Základné riešenie"
 
 msgid "our solution"
-msgstr "Naše riešenie"
+msgstr "Základné riešenie"
 
 msgid "To create your training campaign, you have to specify an unique ID and the target of your training campaign. Please, note that the target wording will be indicated in the statistics of this training campaign."
 msgstr "pre vytvorenie kampane je nutné zadať unikátne ID a cieľ kampane. Uvedený cieľ bude zobrazený v štatistikách tejto tréningovej kampane."
