@@ -71,20 +71,20 @@
 		<td style="font-weight:bold; color:#040b31;">$first_name $last_name,</td>
 		</tr>
 		<tr>
-		<td style="color:#040b31;">Pozývame vás na úèas na vzdelávacom kurze <strong>{{ course_title }}.</strong></td>
+		<td style="color:#040b31;">Pozývame vás na účasť na vzdelávacom kurze <strong>{{ course_title }}.</strong></td>
 		</tr>
 		<tr>
-		<td style="color:#040b31;"><strong>Vzdelávací kurz musíte dokonèi do {{ end_date }}.</strong><br>
-		  Tento vzdelaávací kurz je <strong>{{ mode }}.</strong></td>
+		<td style="color:#040b31;"><strong>Vzdelávací kurz musíte dokončiť do {{ end_date }}.</strong><br>
+		  Tento vzdelávací kurz je <strong>{{ mode }}.</strong></td>
 		</tr>
 			<tr>
-				<td style="color:#040b31;">Na potvrdenie vzdelavacieho kurzu je potrebné minimálne skóre <span style="font-weight:bold;">{{ grade_cutoff }}</span>.</td>
+				<td style="color:#040b31;">Na potvrdenie vzdelávacieho kurzu je potrebné minimálne skóre <span style="font-weight:bold;">{{ grade_cutoff }}</span>.</td>
 		</tr>
 		<tr>
 		<td style="color:#040b31;">{{ content | safe }}</td>
 		</tr>
 		<tr>
-		<td style="padding:0 0 10px; color:#040b31;">Ak chcete získa prístup k vzdelavaciemu kurzu <span style="font-weight:bold;">{{ course_title }}</span>, kliknite na nasledujúci odkaz:<br><a href="{{ link }}">{{ link }}</a></td>
+		<td style="padding:0 0 10px; color:#040b31;">Ak chcete získať prístup k vzdelávaciemu kurzu <span style="font-weight:bold;">{{ course_title }}</span>, kliknite na nasledujúci odkaz:<br><a href="{{ link }}">{{ link }}</a></td>
 		</tr>
 
 	</table>
