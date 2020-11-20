@@ -47,7 +47,7 @@
           <td style="padding:0 5px; text-align:center; font-weight:bold; text-align:center; font-size:14px; color:#d2840a;">Kategória:</td>
 			 <td style="padding:0 5px; text-align:center; font-weight:bold; text-align:center; font-size:14px; color:#d2840a;">Durácia:</td>
 			 <td style="padding:0 5px; text-align:center; font-weight:bold; text-align:center; font-size:14px; color:#d2840a;">Režim:</td>
-			 <td style="padding:0 5px; text-align:center; font-weight:bold; text-align:center; font-size:14px; color:#d2840a;">Dátum ukonèenia:</td>
+			 <td style="padding:0 5px; text-align:center; font-weight:bold; text-align:center; font-size:14px; color:#d2840a;">Dátum ukončenia:</td>
         </tr>
         <tr>
           <td style="padding:0 5px 15px; text-align:center; font-weight:bold; text-align:center; font-size:14px; color:#040b31;">{{ category }}</td>
