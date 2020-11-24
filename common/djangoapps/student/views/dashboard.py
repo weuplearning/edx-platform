@@ -827,4 +827,9 @@ def student_dashboard(request):
         'resume_button_urls': resume_button_urls
     })
 
+    if len(course_enrollments) == 1:
+        # TODO : Rather use a reverse but for some reason courseware_course_tree is unknown
+        #return redirect(reverse('courseware_course_tree', kwargs={'course_id': course_enrollments[0].course_id}))
+        return redirect("courses/{}/course/".format(course_enrollments[0].course_id))
+
     return render_to_response('dashboard.html', context)

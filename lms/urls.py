@@ -645,6 +645,7 @@ urlpatterns += [
             settings.COURSE_ID_PATTERN,
         ),
         include('openedx.features.course_experience.urls'),
+        name='courseware_course_tree',
     ),
 
     # Course bookmarks UI in LMS
