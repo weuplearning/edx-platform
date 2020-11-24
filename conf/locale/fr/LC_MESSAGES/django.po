@@ -5361,8 +5361,8 @@ msgid ""
 "able to log back into your account until you have activated it."
 msgstr ""
 "Vous y êtes presque ! Utilisez le lien ci-dessous pour activer votre compte "
-"et accéder aux contenus de %(platform_name)s.Attention vous ne pourrez vous "
-"reconnecter qu'après avoir activé votre compte."
+"et accéder aux contenus de %(platform_name)s. Attention vous ne pourrez vous"
+" reconnecter qu'après avoir activé votre compte."
 
 #: common/templates/student/edx_ace/accountactivation/email/body.html
 msgid "Activate Your Account"
@@ -5394,7 +5394,7 @@ msgid ""
 "address."
 msgstr ""
 "Cet email a été envoyé automatiquement par %(lms_url)s car quelqu'un a tenté"
-" de créer un compte sur %(platform_name)s avec cette addresse email."
+" de créer un compte sur %(platform_name)s avec cette adresse email."
 
 #: common/templates/student/edx_ace/accountactivation/email/body.txt
 #, python-format
@@ -13897,7 +13897,7 @@ msgstr "Réinitialiser votre réponse"
 
 #: lms/templates/problem.html
 msgid "Show answer"
-msgstr ""
+msgstr "Voir la réponse"
 
 #: lms/templates/problem.html
 msgid "You have used {num_used} of {num_total} attempt"
@@ -13916,7 +13916,7 @@ msgstr ""
 
 #: lms/templates/problem.html
 msgid "Answers are displayed within the problem"
-msgstr ""
+msgstr "Les réponses sont affichées à l'intérieur du quiz"
 
 #: lms/templates/problem_notifications.html
 msgid "Next Hint"

@@ -545,16 +545,16 @@ msgstr[1] "{num_points} points possibles (non noté, résultats cachés)"
 #: common/lib/xmodule/xmodule/js/src/capa/display.js
 msgid "{num_points} point possible (graded)"
 msgid_plural "{num_points} points possible (graded)"
-msgstr[0] "{num_points} point possible (graded)"
-msgstr[1] "{num_points} points possibles (graded)"
+msgstr[0] "{num_points} point possible"
+msgstr[1] "{num_points} points possibles"
 
 #. Translators: {num_points} is the number of points possible (examples: 1, 3,
 #. 10).;
 #: common/lib/xmodule/xmodule/js/src/capa/display.js
 msgid "{num_points} point possible (ungraded)"
 msgid_plural "{num_points} points possible (ungraded)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{num_points} point possible"
+msgstr[1] "{num_points} points possibles"
 
 #. Translators: {earned} is the number of points earned. {possible} is the
 #. total number of points (examples: 0/1, 1/1, 2/3, 5/10). The total number of
@@ -563,8 +563,8 @@ msgstr[1] ""
 #: common/lib/xmodule/xmodule/js/src/capa/display.js
 msgid "{earned}/{possible} point (graded)"
 msgid_plural "{earned}/{possible} points (graded)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{earned}/{possible} point"
+msgstr[1] "{earned}/{possible} points"
 
 #. Translators: {earned} is the number of points earned. {possible} is the
 #. total number of points (examples: 0/1, 1/1, 2/3, 5/10). The total number of
@@ -573,8 +573,8 @@ msgstr[1] ""
 #: common/lib/xmodule/xmodule/js/src/capa/display.js
 msgid "{earned}/{possible} point (ungraded)"
 msgid_plural "{earned}/{possible} points (ungraded)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{earned}/{possible} point"
+msgstr[1] "{earned}/{possible} points"
 
 #: common/lib/xmodule/xmodule/js/src/capa/display.js
 msgid "The grading process is still running. Refresh the page to see updates."

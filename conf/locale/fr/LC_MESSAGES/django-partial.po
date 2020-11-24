@@ -5100,8 +5100,8 @@ msgid ""
 "able to log back into your account until you have activated it."
 msgstr ""
 "Vous y êtes presque ! Utilisez le lien ci-dessous pour activer votre compte "
-"et accéder aux contenus de %(platform_name)s. Attention vous ne pourrez vous "
-"reconnecter qu'après avoir activé votre compte."
+"et accéder aux contenus de %(platform_name)s. Attention vous ne pourrez vous"
+" reconnecter qu'après avoir activé votre compte."
 
 #: common/templates/student/edx_ace/accountactivation/email/body.html
 msgid "Activate Your Account"

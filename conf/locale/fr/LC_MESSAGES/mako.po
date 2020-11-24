@@ -1209,7 +1209,7 @@ msgstr "Réinitialiser votre réponse"
 
 #: lms/templates/problem.html
 msgid "Show answer"
-msgstr ""
+msgstr "Voir la réponse"
 
 #: lms/templates/problem.html
 msgid "You have used {num_used} of {num_total} attempt"
@@ -1228,7 +1228,7 @@ msgstr ""
 
 #: lms/templates/problem.html
 msgid "Answers are displayed within the problem"
-msgstr ""
+msgstr "Les réponses sont affichées à l'intérieur du quiz"
 
 #: lms/templates/problem_notifications.html
 msgid "Next Hint"
