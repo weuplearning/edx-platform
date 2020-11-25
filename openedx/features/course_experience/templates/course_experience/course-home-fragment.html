@@ -58,6 +58,10 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
         max-width: 40vw;
         animation: fadeInRight;
         animation-duration: 0.5s;
+        padding: 25px;
+        background-color: white;
+        border-radius: 2px;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16);
     }
     .page-content-container{
         border-left:none !important;
@@ -89,6 +93,7 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
         color: #f90!important;
         margin-bottom: 0px !important;
         margin-top:25px !important;
+        border-radius: 2px;
     }
 
     .page-content-secondary {
@@ -122,12 +127,10 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
        background: white;
     }
 
-
-    #badges .section-title {
-        background-color: #343a40;
-        padding: 10px 0 10px 15px;
-        border-radius: 2px;
+    .course-outline .block-tree .section {
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16);
     }
+
 
     .grade-block {
         display: flex;
@@ -145,7 +148,7 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
         align-items: center;
         height: 10px;
         overflow: hidden;
-        border-radius: 2px;
+        border-radius:5px;
     }
 
     .progress-bar-grade {
@@ -154,7 +157,7 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
         height: 100%;
         top:0;
         left:0;
-        border-radius: 2px;
+        border-radius: 5px;
         animation: fadeInLeft;
         animation-duration: 1.5s;
     }
@@ -167,6 +170,12 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
 
     #final-grade-progress {
         height: 15px;
+        border-radius: 7.5px;
+    }
+
+    #final-grade-progress .progress-bar-grade{
+        background-color: rgb(255, 153, 0) ;
+        border-radius: 7.5px;
     }
 
     .grade-section-title {
@@ -243,7 +252,6 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
         </div>
         <aside class="page-content-secondary course-sidebar">
             <div class="section" id="badges">
-                <h3 class="section-title"><img src="${static.url('images/medal_on.svg')}" class="main-badge"/>${_("Your badges")}</h3>
                 %if isinstance(user_grade,ZeroCourseGrade):
                     <p>ZeroCourseGrade</p>
                 %else:
@@ -281,87 +289,6 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
                     %endfor
                 %endif
             </div>
-
-            % if has_goal_permission:
-                <div class="section section-goals ${'' if current_goal else 'hidden'}">
-                    <div class="current-goal-container">
-                        <label class="title title-label hd-6" for="goal">
-                            <h3 class="hd-6">${_("Goal: ")}</h3>
-                        </label>
-                        <h3 class="title hd-6">${_("Goal: ")}</h3>
-                        <div class="goal">
-                            <span class="text">${goal_options[current_goal.goal_key] if current_goal else ""}</span>
-                        </div>
-                        <select class="edit-goal-select" id="goal">
-                            % for goal, goal_text in goal_options.items():
-                                <option value="${goal}" ${"selected" if current_goal and current_goal.goal_key == goal else ""}>${goal_text}</option>
-                            % endfor
-                        </select>
-                        <span class="sr sr-update-response-msg" aria-live="polite"></span>
-                        <span class="response-icon" aria-hidden="true"></span>
-                        <span class="sr">${_("Edit your course goal:")}</span>
-                        <button class="edit-icon">
-                            <span class="sr">${_("Edit your course goal:")}</span>
-                            <span class="fa fa-pencil" aria-hidden="true"></span>
-                        </button>
-                    </div>
-                </div>
-            % endif
-            % if course_tools:
-                <div class="section section-tools">
-                    <h3 class="hd-6 section-title">${_("Course Tools")}</h3>
-                    <ul class="list-unstyled">
-                        % for course_tool in course_tools:
-                            <li class="course-tool">
-                                % if course_tool.http_method == HttpMethod.GET:
-                                    <a class="course-tool-link" data-analytics-id="${course_tool.analytics_id()}" href="${course_tool.url(course_key)}">
-                                        <span class="icon ${course_tool.icon_classes()}" aria-hidden="true"></span>
-                                        ${course_tool.title()}
-                                    </a>
-                                % elif course_tool.http_method == HttpMethod.POST:
-                                    <form class="course-tool-form" action="${course_tool.url(course_key)}" method="post">
-                                        <input type="hidden" id="csrf_token" name="csrfmiddlewaretoken" value="${csrf_token}">
-                                        <input type="hidden" name="tool_data" value="${course_tool.data()}">
-                                        <button class="course-tool-button" data-analytics-id="${course_tool.analytics_id()}" aria-hidden="true">
-                                            <span class="icon ${course_tool.icon_classes()}" aria-hidden="true"></span>
-                                            ${course_tool.title()}
-                                        </button>
-                                    </form>
-                                % endif
-                            </li>
-                        % endfor
-                    </ul>
-                </div>
-            % endif
-            % if upgrade_url and upgrade_price:
-                <div class="section section-upgrade course-home-sidebar-upgrade ${'discount' if has_discount else 'no-discount'}">
-                    <h3 class="hd hd-6">${_("Pursue a verified certificate")}</h3>
-                        <img src="https://courses.edx.org/static/images/edx-verified-mini-cert.png" alt="">
-                        <div class="upgrade-container">
-                            <p>
-                                <a id="green_upgrade" class="btn-brand btn-upgrade"
-                                   href="${upgrade_url}"
-                                   data-creative="sidebarupsell"
-                                   data-position="sidebar-message"
-                                >
-                                    ${Text(_("Upgrade ({price})")).format(price=upgrade_price)}
-                                </a>
-                            </p>
-                            <p><button class="btn-link btn-small promo-learn-more">${_('Learn More')}</button></p>
-                        </div>
-                </div>
-            % endif
-            % if dates_fragment:
-                <div class="section section-dates">
-                    ${HTML(dates_fragment.body_html())}
-                </div>
-            % endif
-            % if handouts_html:
-                <div class="section section-handouts">
-                    <h3 class="hd-6 section-title">${_("Course Handouts")}</h3>
-                    ${HTML(handouts_html)}
-                </div>
-            % endif
         </aside>
     </div>
     % if course_sock_fragment:
