@@ -25,9 +25,9 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
   <link rel="stylesheet" type="text/css" href="${static.url('weup/css/animate-4.1.1.min.css')}" />
   <style>
     header.page-header.has-secondary{
-        background-image: url("${static.url('/media/microsites/amazon/banner.png')}");
+        background-image: url("/media/microsites/amazon/banner.png");
         padding-top: 50px !important;
-        padding-down: 50px !important;
+        padding-bottom: 50px !important;
     }
     .page-header-main, .page-header-secondary{
         animation: bounce;
@@ -54,14 +54,16 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
         padding-left: 25px !important;
     }
     .page-content .page-content-secondary{
-            min-width: 40vw;
-            max-width: 40vw;
+        min-width: 40vw;
+        max-width: 40vw;
+        animation: fadeInRight;
+        animation-duration: 0.5s;
     }
     .page-content-container{
-            border-left:none !important;
+        border-left:none !important;
     }
     .global-header.global-header{
-            background: white !important; 
+        background: white !important; 
     }
     h4.subsection-title{
         color: rgb(255, 153, 0) !important;
@@ -70,81 +72,108 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
         outline: none !important;
     }
 
-    #sections-medals {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        margin: 20px 0;
-        position: relative;
+    .small-badge {
+        height: 20px;
+        margin: 10px;
     }
 
-    .grade-tooltip {
-        position: absolute;
-        bottom: -60px;
+    .main-badge{
+        height:40px;
+        margin: 10px;
+    }
+
+    .course-outline .block-tree .section .section-name {
+        padding: 20px 0 20px 2px;
+        background-color: #343a40;
+        margin-bottom: 25px;
+        color: #f90!important;
+        margin-bottom: 0px !important;
+        margin-top:25px !important;
+    }
+
+    .page-content-secondary {
+        margin-top:25px !important;
+    }
+    #expand-collapse-outline-all-button {
+        display: none;
+    }
+
+    .page-content {
+        padding: 20px 0px;
+    }
+
+    #main{
+    	animation: fadeInLeft;
+        animation-duration: 0.5s;
+    }
+    .wrapper-preview-menu{
+       display:none;
+    }
+    .section-title{
+       color:white !important;
+    }
+    h2.hd.hd-3.page-title{
+       color:white !important;
+    }
+    .window-wrap, #course-container,#course-outline-block-tree{
+       background: #F4F5F6;
+    }
+    #main, .outline-item.accordion-panel{
+       background: white;
+    }
+
+
+    #badges .section-title {
+        background-color: #343a40;
+        padding: 10px 0 10px 15px;
+    }
+
+    .grade-block {
         display: flex;
         flex-direction: column;
+    }
+
+    .progress-bar-full {
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.2);
+        position: relative;
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction:row;
+        justify-content: center;
         align-items: center;
+        overflow: hidden;
     }
 
-    .grade-tooltip .chapter-grade {
-        
-        font-size: 24px;
-        font-weight: 900;
-        text-align: center;
+    .progress-bar-grade {
+        background-color:rgb(255, 153, 0);
+        position: absolute;
+        height: 100%;
+        top:0;
+        left:0;
+        animation: fadeInLeft;
+        animation-duration: 1.5s;
     }
 
-    .small-badge {
+    .progress-bar-value {
+        color: white;
+        font-weight: 700;
+        z-index: 2;
+    }
+
+    #final-grade-progress {
         height: 30px;
-        margin: 10px;
-        cursor: pointer;
     }
 
-    .small-badge:first-child {
-        margin-left: 0;
+    .grade-section-title {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        font-weight: 500;
     }
 
-.course-outline .block-tree .section .section-name {
-    padding: 20px 0 20px 2px;
-    background-color: #343a40;
-    margin-bottom: 25px;
-    color: #f90!important;
-    margin-bottom: 0px !important;
-    margin-top:25px !important;
-}
-#expand-collapse-outline-all-button {
-    display: none;
-}
-
-.page-content {
-    padding: 20px 0px;
-}
-
-#main{
-	animation: fadeInLeft;
-    animation-duration: 0.5s;
-}
-.wrapper-preview-menu{
-   display:none;
-}
-.section-title{
-   color:white !important;
-}
-h2.hd.hd-3.page-title{
-   color:white !important;
-}
-.window-wrap, #course-container,#course-outline-block-tree{
-   background: #F4F5F6;
-}
-#main, .outline-item.accordion-panel{
-   background: white;
-}
-#badges{
-   padding: 25px 0px;
-   background: #343a40;
-}
-</style>
-  
+    
+  </style>
 </%block>
 <%block name="content">
 <div class="course-view page-content-container" id="course-container">
@@ -208,38 +237,44 @@ h2.hd.hd-3.page-title{
             % endif
         </div>
         <aside class="page-content-secondary course-sidebar">
-                <div class="section" id="badges">
-                    <h3 class="hd-6 section-title">${_("Your badges")}</h3>
-            %if isinstance(user_grade,ZeroCourseGrade):
-
+            <div class="section" id="badges">
+                <h3 class="section-title"><img src="${static.url('images/medal_on.svg')}" class="main-badge"/>${_("Your badges")}</h3>
+                %if isinstance(user_grade,ZeroCourseGrade):
                     <p>ZeroCourseGrade</p>
-
-            %else:
-                    <style>
-                      .main-badge{height:40px}
-                    </style>
-                %if user_grade.passed:
-                    <img src="${static.url('images/medal_on.svg')}" class="main-badge"/>
-                %else: 
-                    <img src="${static.url('images/medal_off.svg')}" class="main-badge"/>
-                %endif
-                    <strong>Total grade - ${int(user_grade.percent * 100)} %<br/></strong>
-                <div id="sections-medals">
-                %for index, chapter in enumerate(user_grade.chapter_grades.keys()):
-                    % if user_grade.chapter_percentage(chapter) >= 0.5:
-                        <img src="${static.url('images/medal_on.svg')}" class="small-badge"/>
-                    % else :
-                        <img src="${static.url('images/medal_off.svg')}" class="small-badge"/>
-                    % endif
-                    <div class="grade-tooltip animate_pulse" id="grade-tooltip-${index}" style="display:none;" >
-                        <div class="chapter-grade" >${int(user_grade.chapter_percentage(chapter) * 100)} %</div>
-                        <div class="chapter-title">${user_grade.chapter_grades[chapter]['display_name']}</div>
+                %else:
+                    <div class="grade-block">
+                        <div class="grade-section-title">
+                            %if user_grade.passed:
+                                <img src="${static.url('images/medal_on.svg')}" class="main-badge"/>
+                            %else: 
+                                <img src="${static.url('images/medal_off.svg')}" class="main-badge"/>
+                            %endif
+                            <div style="text-transform: uppercase;">${_("Final grade")}</div>
+                        </div>
+                        <div class="progress-bar-full" id="final-grade-progress">
+                            <div class="progress-bar-value">${int(user_grade.percent * 100)}%</div>
+                            <div style="width:${int(user_grade.percent * 100)}%;" class="progress-bar-grade" ></div>
+                        </div>                    
                     </div>
-                %endfor
-                </div>
-
-            %endif
-                </div>
+                    
+                    %for index, chapter in enumerate(user_grade.chapter_grades.keys()):
+                        <div class="grade-block">
+                            <div class="grade-section-title">
+                                %if user_grade.chapter_percentage(chapter) >= 0.5:
+                                    <img src="${static.url('images/medal_on.svg')}" class="small-badge"/>
+                                %else: 
+                                    <img src="${static.url('images/medal_off.svg')}" class="small-badge"/>
+                                %endif
+                                <div>${user_grade.chapter_grades[chapter]['display_name']}</div>
+                            </div>
+                            <div class="progress-bar-full">
+                                <div class="progress-bar-value">${int(user_grade.chapter_percentage(chapter) * 100)}%</div>
+                                <div style="width:${int(user_grade.chapter_percentage(chapter) * 100)}%;" class="progress-bar-grade"></div>
+                            </div>                    
+                        </div>
+                    %endfor
+                %endif
+            </div>
 
             % if has_goal_permission:
                 <div class="section section-goals ${'' if current_goal else 'hidden'}">
