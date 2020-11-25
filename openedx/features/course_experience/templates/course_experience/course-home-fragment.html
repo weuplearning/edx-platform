@@ -25,20 +25,68 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
   <link rel="stylesheet" type="text/css" href="${static.url('weup/css/animate-4.1.1.min.css')}" />
   <style>
     header.page-header.has-secondary{
-      animation: fadeInRight;
-      animation-duration: 0.5s;
-
-      background-image: url("${static.url('images/blurred-header.jpg')}");
+        animation: fadeInRight;
+        animation-duration: 0.5s;
+        background-image: url("${static.url('images/blurred-header.jpg')}");
     }
     button.search-button{
-      background-color: rgb(0 0 0 / 20%);
+        background-color: rgb(0 0 0 / 20%);
+        margin-left: 5px;
     }
     .global-header .header-logo .course-header, a.help-link{
-      display:none !important;
+        display:none !important;
+    }
+
+    .course-outline .block-tree .outline-button .fa {
+        color: #343a40!important;
+    }
+    .course-outline .block-tree .outline-button .complete-checkmark {
+        background-color: rgb(255, 153, 0);
+        border-color: rgb(255, 153, 0);
+        color: white !important;
+        padding: 2px;
+    }
+    
+    button:focus {
+        outline: none !important;
+    }
+
+    #sections-medals {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        margin: 20px 0;
+        position: relative;
+    }
+
+    .grade-tooltip {
+        position: absolute;
+        bottom: -60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .grade-tooltip .chapter-grade {
+        
+        font-size: 24px;
+        font-weight: 900;
+        text-align: center;
+    }
+
+    .small-badge {
+        height: 30px;
+        margin: 10px;
+        cursor: pointer;
+    }
+
+    .small-badge:first-child {
+        margin-left: 0;
     }
   </style>
+  
 </%block>
-
 <%block name="content">
 <div class="course-view page-content-container" id="course-container">
     <header class="page-header has-secondary">
@@ -121,11 +169,20 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
                 %else: 
                     <img src="${static.url('images/medal_off.svg')}" class="main-badge"/>
                 %endif
-                    <strong>Total grade - ${user_grade.percent}<br/></strong>
-
-                %for chapter in user_grade.chapter_grades.keys():
-                    ${user_grade.chapter_grades[chapter]['display_name']} -- ${user_grade.chapter_percentage(chapter)}<br/>
+                    <strong>Total grade - ${int(user_grade.percent * 100)} %<br/></strong>
+                <div id="sections-medals">
+                %for index, chapter in enumerate(user_grade.chapter_grades.keys()):
+                    % if user_grade.chapter_percentage(chapter) >= 0.5:
+                        <img src="${static.url('images/medal_on.svg')}" class="small-badge"/>
+                    % else :
+                        <img src="${static.url('images/medal_off.svg')}" class="small-badge"/>
+                    % endif
+                    <div class="grade-tooltip animate_pulse" id="grade-tooltip-${index}" style="display:none;" >
+                        <div class="chapter-grade" >${int(user_grade.chapter_percentage(chapter) * 100)} %</div>
+                        <div class="chapter-title">${user_grade.chapter_grades[chapter]['display_name']}</div>
+                    </div>
                 %endfor
+                </div>
 
             %endif
                 </div>
@@ -216,6 +273,23 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
         ${HTML(course_sock_fragment.body_html())}
     % endif
 </div>
+<script>
+    // DISPLAY SECTIONS GRADES ON BADGE MOUSE OVER
+    let sectionsBadges = document.getElementsByClassName('small-badge')
+    Array.from(sectionsBadges).forEach(function(badge, index) {
+
+        let className = "grade-tooltip-" + index.toString()
+        let tooltip = document.getElementById(className)
+
+        badge.addEventListener("mouseenter", function() {
+            tooltip.style.display = "block";
+        }, false)
+
+        badge.addEventListener("mouseleave", function() {
+            tooltip.style.display = "none";
+        }, false)
+    })
+</script>
 </%block>
 
 <%static:webpack entry="CourseHome">
