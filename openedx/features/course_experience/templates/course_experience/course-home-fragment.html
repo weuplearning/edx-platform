@@ -18,11 +18,25 @@ from openedx.features.course_experience import DISABLE_UNIFIED_COURSE_TAB_FLAG, 
 from openedx.features.course_experience.course_tools import HttpMethod
 
 from lms.djangoapps.grades.course_grade import ZeroCourseGrade
-from pprint import pformat
 %>
 
 <%block name="header_extras">
   <link rel="stylesheet" type="text/css" href="${static.url('paragon/static/paragon.min.css')}" />
+  <link rel="stylesheet" type="text/css" href="${static.url('weup/css/animate-4.1.1.min.css')}" />
+  <style>
+    header.page-header.has-secondary{
+      animation: fadeInRight;
+      animation-duration: 0.5s;
+
+      background-image: url("${static.url('images/blurred-header.jpg')}");
+    }
+    button.search-button{
+      background-color: rgb(0 0 0 / 20%);
+    }
+    .global-header .header-logo .course-header, a.help-link{
+      display:none !important;
+    }
+  </style>
 </%block>
 
 <%block name="content">
@@ -87,6 +101,35 @@ from pprint import pformat
             % endif
         </div>
         <aside class="page-content-secondary course-sidebar">
+
+                <div class="section">
+                    <h3 class="hd-6 section-title">${_("Your profile")}</h3>
+                </div>
+
+                <div class="section">
+                    <h3 class="hd-6 section-title">${_("Your badges")}</h3>
+            %if isinstance(user_grade,ZeroCourseGrade):
+
+                    <p>ZeroCourseGrade</p>
+
+            %else:
+                    <style>
+                      .main-badge{height:40px}
+                    </style>
+                %if user_grade.passed:
+                    <img src="${static.url('images/medal_on.svg')}" class="main-badge"/>
+                %else: 
+                    <img src="${static.url('images/medal_off.svg')}" class="main-badge"/>
+                %endif
+                    <strong>Total grade - ${user_grade.percent}<br/></strong>
+
+                %for chapter in user_grade.chapter_grades.keys():
+                    ${user_grade.chapter_grades[chapter]['display_name']} -- ${user_grade.chapter_percentage(chapter)}<br/>
+                %endfor
+
+            %endif
+                </div>
+
             % if has_goal_permission:
                 <div class="section section-goals ${'' if current_goal else 'hidden'}">
                     <div class="current-goal-container">
@@ -167,17 +210,6 @@ from pprint import pformat
                     ${HTML(handouts_html)}
                 </div>
             % endif
-                <div class="section">
-                    <h3 class="hd-6 section-title">${_("Grade")}</h3>
-            %if isinstance(user_grade,ZeroCourseGrade):
-                    <p>ZeroCourseGrade</p>
-            %else:
-                    <strong>Total grade - ${user_grade.percent}<br/></strong>
-                    %for chapter in user_grade.chapter_grades.keys():
-                           ${pformat(user_grade.chapter_grades[chapter]['display_name'])} -- ${pformat(user_grade.chapter_percentage(chapter))}<br/>
-                    %endfor
-            %endif
-                </div>
         </aside>
     </div>
     % if course_sock_fragment:
