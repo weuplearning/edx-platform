@@ -25,20 +25,24 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
   <link rel="stylesheet" type="text/css" href="${static.url('weup/css/animate-4.1.1.min.css')}" />
   <style>
     header.page-header.has-secondary{
-        animation: fadeInRight;
+        background-image: url("${static.url('/media/microsites/amazon/banner.png')}");
+        padding-top: 50px !important;
+        padding-down: 50px !important;
+    }
+    .page-header-main, .page-header-secondary{
+        animation: bounce;
         animation-duration: 0.5s;
-        background-image: url("${static.url('images/blurred-header.jpg')}");
     }
     button.search-button{
-        background-color: rgb(0 0 0 / 20%);
         margin-left: 5px;
+        background: white !important;
     }
     .global-header .header-logo .course-header, a.help-link{
         display:none !important;
     }
 
     .course-outline .block-tree .outline-button .fa {
-        color: #343a40!important;
+        color: #f90 !important;
     }
     .course-outline .block-tree .outline-button .complete-checkmark {
         background-color: rgb(255, 153, 0);
@@ -46,7 +50,22 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
         color: white !important;
         padding: 2px;
     }
-    
+    .section-name.accordion-trigger.outline-button    {
+        padding-left: 25px !important;
+    }
+    .page-content .page-content-secondary{
+            min-width: 40vw;
+            max-width: 40vw;
+    }
+    .page-content-container{
+            border-left:none !important;
+    }
+    .global-header.global-header{
+            background: white !important; 
+    }
+    h4.subsection-title{
+        color: rgb(255, 153, 0) !important;
+    }
     button:focus {
         outline: none !important;
     }
@@ -84,7 +103,47 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
     .small-badge:first-child {
         margin-left: 0;
     }
-  </style>
+
+.course-outline .block-tree .section .section-name {
+    padding: 20px 0 20px 2px;
+    background-color: #343a40;
+    margin-bottom: 25px;
+    color: #f90!important;
+    margin-bottom: 0px !important;
+    margin-top:25px !important;
+}
+#expand-collapse-outline-all-button {
+    display: none;
+}
+
+.page-content {
+    padding: 20px 0px;
+}
+
+#main{
+	animation: fadeInLeft;
+    animation-duration: 0.5s;
+}
+.wrapper-preview-menu{
+   display:none;
+}
+.section-title{
+   color:white !important;
+}
+h2.hd.hd-3.page-title{
+   color:white !important;
+}
+.window-wrap, #course-container,#course-outline-block-tree{
+   background: #F4F5F6;
+}
+#main, .outline-item.accordion-panel{
+   background: white;
+}
+#badges{
+   padding: 25px 0px;
+   background: #343a40;
+}
+</style>
   
 </%block>
 <%block name="content">
@@ -149,12 +208,7 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
             % endif
         </div>
         <aside class="page-content-secondary course-sidebar">
-
-                <div class="section">
-                    <h3 class="hd-6 section-title">${_("Your profile")}</h3>
-                </div>
-
-                <div class="section">
+                <div class="section" id="badges">
                     <h3 class="hd-6 section-title">${_("Your badges")}</h3>
             %if isinstance(user_grade,ZeroCourseGrade):
 
