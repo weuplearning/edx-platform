@@ -99,7 +99,7 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
     }
 
     .page-content {
-        padding: 20px 0px;
+        padding: 20px;
     }
 
     #main{
@@ -126,6 +126,7 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
     #badges .section-title {
         background-color: #343a40;
         padding: 10px 0 10px 15px;
+        border-radius: 2px;
     }
 
     .grade-block {
@@ -142,27 +143,30 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
         flex-direction:row;
         justify-content: center;
         align-items: center;
+        height: 10px;
         overflow: hidden;
+        border-radius: 2px;
     }
 
     .progress-bar-grade {
-        background-color:rgb(255, 153, 0);
+        background-color:var(--green);
         position: absolute;
         height: 100%;
         top:0;
         left:0;
+        border-radius: 2px;
         animation: fadeInLeft;
         animation-duration: 1.5s;
     }
 
-    .progress-bar-value {
-        color: white;
-        font-weight: 700;
-        z-index: 2;
+    .grade-value {
+        font-weight: 500;
+        position: absolute;
+        right: 0;
     }
 
     #final-grade-progress {
-        height: 30px;
+        height: 15px;
     }
 
     .grade-section-title {
@@ -170,6 +174,7 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
         flex-direction: row;
         align-items: center;
         font-weight: 500;
+        position: relative;
     }
 
     
@@ -250,10 +255,11 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
                                 <img src="${static.url('images/medal_off.svg')}" class="main-badge"/>
                             %endif
                             <div style="text-transform: uppercase;">${_("Final grade")}</div>
+                            <div class="grade-value">${int(user_grade.percent * 100)}/100</div>
                         </div>
                         <div class="progress-bar-full" id="final-grade-progress">
-                            <div class="progress-bar-value">${int(user_grade.percent * 100)}%</div>
                             <div style="width:${int(user_grade.percent * 100)}%;" class="progress-bar-grade" ></div>
+                            
                         </div>                    
                     </div>
                     
@@ -266,9 +272,9 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
                                     <img src="${static.url('images/medal_off.svg')}" class="small-badge"/>
                                 %endif
                                 <div>${user_grade.chapter_grades[chapter]['display_name']}</div>
+                                <div class="grade-value">${int(user_grade.chapter_percentage(chapter) * 100)}/100</div>
                             </div>
                             <div class="progress-bar-full">
-                                <div class="progress-bar-value">${int(user_grade.chapter_percentage(chapter) * 100)}%</div>
                                 <div style="width:${int(user_grade.chapter_percentage(chapter) * 100)}%;" class="progress-bar-grade"></div>
                             </div>                    
                         </div>
