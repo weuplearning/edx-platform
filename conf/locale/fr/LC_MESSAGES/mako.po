@@ -7767,7 +7767,7 @@ msgstr "Page squelette"
 #: openedx/features/course_search/templates/course_search/course-search-fragment.html
 #: openedx/features/course_search/templates/course_search/course-search-fragment.html
 msgid "Search the course"
-msgstr "Rechercher dans le cours"
+msgstr "Rechercher dans les contenus"
 
 #: lms/templates/ux/reference/bootstrap/course-skeleton.html
 #: openedx/features/course_experience/templates/course_experience/course-home-fragment.html
