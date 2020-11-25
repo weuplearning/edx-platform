@@ -1460,15 +1460,19 @@ msgstr[1] "Votre mot de passe ne doit pas dépasser %(max_length)d caractères."
 #, python-format
 msgid "This password must contain at least %(min_alphabetic)d letter."
 msgid_plural "This password must contain at least %(min_alphabetic)d letters."
-msgstr[0] "Votre mot de passe doit contenir au moins %(min_alphabetic)d lettre."
-msgstr[1] "Votre mot de passe doit contenir au moins %(min_alphabetic)d lettres."
+msgstr[0] ""
+"Votre mot de passe doit contenir au moins %(min_alphabetic)d lettre."
+msgstr[1] ""
+"Votre mot de passe doit contenir au moins %(min_alphabetic)d lettres."
 
 #: common/djangoapps/util/password_policy_validators.py
 #, python-format
 msgid "Your password must contain at least %(min_alphabetic)d letter."
 msgid_plural "Your password must contain at least %(min_alphabetic)d letters."
-msgstr[0] "Votre mot de passe doit contenir au moins %(min_alphabetic)d lettre."
-msgstr[1] "Votre mot de passe doit contenir au moins %(min_alphabetic)d lettres."
+msgstr[0] ""
+"Votre mot de passe doit contenir au moins %(min_alphabetic)d lettre."
+msgstr[1] ""
+"Votre mot de passe doit contenir au moins %(min_alphabetic)d lettres."
 
 #: common/djangoapps/util/password_policy_validators.py
 #, python-format
@@ -1539,7 +1543,8 @@ msgid "Your password must contain at least %(min_lower)d lowercase letter."
 msgid_plural ""
 "Your password must contain at least %(min_lower)d lowercase letters."
 msgstr[0] "Votre mot de passe doit contenir au moins %(min_lower)d minuscule."
-msgstr[1] "Votre mot de passe doit contenir au moins %(min_lower)d minuscules."
+msgstr[1] ""
+"Votre mot de passe doit contenir au moins %(min_lower)d minuscules."
 
 #: common/djangoapps/util/password_policy_validators.py
 #, python-format
@@ -1554,8 +1559,12 @@ msgid ""
 "This password must contain at least %(min_punctuation)d punctuation mark."
 msgid_plural ""
 "This password must contain at least %(min_punctuation)d punctuation marks."
-msgstr[0] "Ce mot de passe doit contenir au moins %(min_punctuation)d caractère de ponctuation."
-msgstr[1] "Ce mot de passe doit contenir au moins %(min_punctuation)d caractères de ponctuation."
+msgstr[0] ""
+"Ce mot de passe doit contenir au moins %(min_punctuation)d caractère de "
+"ponctuation."
+msgstr[1] ""
+"Ce mot de passe doit contenir au moins %(min_punctuation)d caractères de "
+"ponctuation."
 
 #: common/djangoapps/util/password_policy_validators.py
 #, python-format
@@ -1563,8 +1572,12 @@ msgid ""
 "Your password must contain at least %(min_punctuation)d punctuation mark."
 msgid_plural ""
 "Your password must contain at least %(min_punctuation)d punctuation marks."
-msgstr[0] "Votre mot de passe doit contenir au moins %(min_punctuation)d caractère de ponctuation."
-msgstr[1] "Votre mot de passe doit contenir au moins %(min_punctuation)d caractères de ponctuation."
+msgstr[0] ""
+"Votre mot de passe doit contenir au moins %(min_punctuation)d caractère de "
+"ponctuation."
+msgstr[1] ""
+"Votre mot de passe doit contenir au moins %(min_punctuation)d caractères de "
+"ponctuation."
 
 #: common/djangoapps/util/password_policy_validators.py
 #, python-format
@@ -11193,7 +11206,7 @@ msgstr "Nom d'utilisateur public"
 msgid ""
 "The name that will identify you in your courses. It cannot be changed later."
 msgstr ""
-"Le nom qui permettra de vous identifier en cours. Il ne pourra pas être "
+"Le nom qui permettra de vous identifier sur la plateforme. Il ne pourra pas être "
 "modifié plus tard."
 
 #. Translators: This label appears above a dropdown menu on the registration
