@@ -75,6 +75,7 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
     }
     h4.subsection-title{
         color: rgb(255, 153, 0) !important;
+        font-size: 1rem;
     }
     button:focus {
         outline: none !important;
@@ -287,8 +288,8 @@ share_image = "https://amazon.the-mooc-agency.com/media/microsite/amazon/auto/im
                             %else: 
                                 <img src="${static.url('images/medal_off.svg')}" class="main-badge"/>
                             %endif
-                            <div style="text-transform: uppercase;">${_("Final grade")}</div>
-                            <div class="grade-value">${int(user_grade.percent * 100)}/100</div>
+                            <div style="text-transform: uppercase;">L'accélérateur du Numérique</div>
+                            <div class="grade-value">${int(user_grade.percent * 100)}%</div>
                         </div>
                         <div class="progress-bar-full" id="final-grade-progress">
                             <div style="width:${int(user_grade.percent * 100)}%;" class="progress-bar-grade" ></div>
@@ -305,7 +306,7 @@ share_image = "https://amazon.the-mooc-agency.com/media/microsite/amazon/auto/im
                                     <img src="${static.url('images/medal_off.svg')}" class="small-badge"/>
                                 %endif
                                 <div>${user_grade.chapter_grades[chapter]['display_name']}</div>
-                                <div class="grade-value">${int(user_grade.chapter_percentage(chapter) * 100)}/100</div>
+                                <div class="grade-value">${int(user_grade.chapter_percentage(chapter) * 100)}%</div>
                             </div>
                             <div class="progress-bar-full">
                                 <div style="width:${int(user_grade.chapter_percentage(chapter) * 100)}%;" class="progress-bar-grade"></div>
