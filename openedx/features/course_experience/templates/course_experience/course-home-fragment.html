@@ -186,10 +186,29 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
         position: relative;
     }
 
+    #share-list {
+        display: flex;
+        list-style: none;
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    #share-list i {
+        font-size: 30px;
+        margin: 0 10px;
+        color: #343a40;
+    }
     
   </style>
 </%block>
+
+
 <%block name="content">
+<%
+share_url = "https://www.accelerateur-du-numerique.fr/"
+share_title = "L%27acc%C3%A9l%C3%A9rateur%20du%20num%C3%A9rique"
+share_image = "https://amazon.the-mooc-agency.com/media/microsite/amazon/auto/images/logo.png"
+%>
 <div class="course-view page-content-container" id="course-container">
     <header class="page-header has-secondary">
         <div class="page-header-main">
@@ -289,29 +308,23 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
                     %endfor
                 %endif
             </div>
+            <ul id="share-list">
+                <li>
+                    <a target="_blank" href="http://www.facebook.com/share.php?u=${share_url}&t=${share_title}&pic=${share_image}" title="Facebook"><i class="fa fa-facebook-square" aria-hidden="true"></i></a>
+                </li>
+                <li>
+                    <a target="_blank" href="http://twitter.com/intent/tweet?text=${share_title}&url=${share_url}&pic=${share_image}" title="Twitter"><i class="fa fa-twitter-square" aria-hidden="true"></i></a>
+                </li>
+                <li>
+                    <a target="_blank" href="https://www.linkedin.com/sharing/share-offsite/?url=${share_url}&title=${share_title}" title="LinkedIn"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                </li>
+            </ul>
         </aside>
     </div>
     % if course_sock_fragment:
         ${HTML(course_sock_fragment.body_html())}
     % endif
 </div>
-<script>
-    // DISPLAY SECTIONS GRADES ON BADGE MOUSE OVER
-    let sectionsBadges = document.getElementsByClassName('small-badge')
-    Array.from(sectionsBadges).forEach(function(badge, index) {
-
-        let className = "grade-tooltip-" + index.toString()
-        let tooltip = document.getElementById(className)
-
-        badge.addEventListener("mouseenter", function() {
-            tooltip.style.display = "block";
-        }, false)
-
-        badge.addEventListener("mouseleave", function() {
-            tooltip.style.display = "none";
-        }, false)
-    })
-</script>
 </%block>
 
 <%static:webpack entry="CourseHome">
