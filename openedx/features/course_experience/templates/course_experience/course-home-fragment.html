@@ -62,9 +62,12 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
         background-color: white;
         border-radius: 2px;
         box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
     .page-content-container{
-        border-left:none !important;
+        border:none !important;
     }
     .global-header.global-header{
         background: white !important; 
@@ -191,6 +194,8 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
         list-style: none;
         flex-direction: row;
         justify-content: center;
+        border-top:1px solid rgba(0, 0, 0, 0.2);
+        padding-top: 30px;
     }
 
     #share-list i {
