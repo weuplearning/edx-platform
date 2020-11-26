@@ -278,17 +278,15 @@ share_image = "https://amazon.the-mooc-agency.com/media/microsite/amazon/auto/im
         </div>
         <aside class="page-content-secondary course-sidebar">
             <div class="section" id="badges">
-                %if isinstance(user_grade,ZeroCourseGrade):
-                    <p>ZeroCourseGrade</p>
-                %else:
                     <div class="grade-block">
+                            <h2 style="margin-top:-25px;padding:15px;color:white;background-color:#343a40;text-align:center">Avez-vous bien retenu ?</h2>
                         <div class="grade-section-title">
                             %if user_grade.passed:
                                 <img src="${static.url('images/medal_on.svg')}" class="main-badge"/>
                             %else: 
                                 <img src="${static.url('images/medal_off.svg')}" class="main-badge"/>
                             %endif
-                            <div style="text-transform: uppercase;">L'accélérateur du Numérique</div>
+                            <div style="text-transform: uppercase;">${course.display_name_with_default}</div>
                             <div class="grade-value">${int(user_grade.percent * 100)}%</div>
                         </div>
                         <div class="progress-bar-full" id="final-grade-progress">
@@ -300,7 +298,7 @@ share_image = "https://amazon.the-mooc-agency.com/media/microsite/amazon/auto/im
                     %for index, chapter in enumerate(user_grade.chapter_grades.keys()):
                         <div class="grade-block">
                             <div class="grade-section-title">
-                                %if user_grade.chapter_percentage(chapter) >= 0.5:
+                                %if user_grade.chapter_percentage(chapter) >= 0.7:
                                     <img src="${static.url('images/medal_on.svg')}" class="small-badge"/>
                                 %else: 
                                     <img src="${static.url('images/medal_off.svg')}" class="small-badge"/>
@@ -313,7 +311,6 @@ share_image = "https://amazon.the-mooc-agency.com/media/microsite/amazon/auto/im
                             </div>                    
                         </div>
                     %endfor
-                %endif
             </div>
             <ul id="share-list">
                 <li>
