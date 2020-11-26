@@ -1425,6 +1425,10 @@ msgid "Your password must contain {length_instruction}."
 msgstr "Votre mot de passe doit contenir {length_instruction}."
 
 #: common/djangoapps/util/password_policy_validators.py
+msgid "Your password must contain "
+msgstr "Votre mot de passe doit contenir "
+
+#: common/djangoapps/util/password_policy_validators.py
 msgid "Invalid password."
 msgstr "Mot de passe invalide."
 
@@ -1432,8 +1436,8 @@ msgstr "Mot de passe invalide."
 #, python-format
 msgid "at least %(min_length)d character"
 msgid_plural "at least %(min_length)d characters"
-msgstr[0] "au moins %(min_length)d caractère."
-msgstr[1] "au moins %(min_length)d caractères."
+msgstr[0] "au moins %(min_length)d caractère"
+msgstr[1] "au moins %(min_length)d caractères"
 
 #: common/djangoapps/util/password_policy_validators.py
 #, python-format

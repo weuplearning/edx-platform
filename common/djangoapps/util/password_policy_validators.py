@@ -71,7 +71,7 @@ def password_validators_instruction_texts():
             complexity_instructions=' & '.join(complexity_instructions)
         )
     else:
-        return _('Your password must contain {length_instruction}.'.format(length_instruction=length_instruction))
+        return _('Your password must contain ')+length_instruction+'.'
 
 
 def password_validators_restrictions():
