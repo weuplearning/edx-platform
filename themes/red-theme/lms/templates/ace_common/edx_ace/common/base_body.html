@@ -172,9 +172,6 @@
                         <!-- COPYRIGHT -->
                         <td>
                             &copy; {% now "Y" %} {{ platform_name }}, {% trans "All rights reserved" as tmsg %}{{ tmsg | force_escape }}.<br/>
-                            <br/>
-                            {% trans "Our mailing address is" as tmsg %}{{ tmsg | force_escape }}:<br/>
-                            {{ contact_mailing_address }}
                         </td>
                     </tr>
                 </table>
@@ -191,5 +188,7 @@
 </div>
 
 {# Debug info that is not user-visible #}
+<!--
 <span id="ace-message-id" style="display:none;">{{ message.log_id }}</span>
 <span id="template-revision" style="display:none;">{{ template_revision }}</span>
+-->

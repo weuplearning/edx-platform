@@ -11206,8 +11206,8 @@ msgstr "Nom d'utilisateur public"
 msgid ""
 "The name that will identify you in your courses. It cannot be changed later."
 msgstr ""
-"Le nom qui permettra de vous identifier sur la plateforme. Il ne pourra pas être "
-"modifié plus tard."
+"Le nom qui permettra de vous identifier sur la plateforme. Il ne pourra pas "
+"être modifié plus tard."
 
 #. Translators: This label appears above a dropdown menu on the registration
 #. form used to select the user's highest completed level of education.
