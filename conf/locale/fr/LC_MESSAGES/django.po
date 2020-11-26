@@ -1644,6 +1644,10 @@ msgid "Your password must contain {length_instruction}."
 msgstr "Votre mot de passe doit contenir {length_instruction}."
 
 #: common/djangoapps/util/password_policy_validators.py
+msgid "Your password must contain "
+msgstr "Votre mot de passe doit contenir "
+
+#: common/djangoapps/util/password_policy_validators.py
 msgid "Invalid password."
 msgstr "Mot de passe invalide."
 
@@ -1651,8 +1655,8 @@ msgstr "Mot de passe invalide."
 #, python-format
 msgid "at least %(min_length)d character"
 msgid_plural "at least %(min_length)d characters"
-msgstr[0] "au moins %(min_length)d caractère."
-msgstr[1] "au moins %(min_length)d caractères."
+msgstr[0] "au moins %(min_length)d caractère"
+msgstr[1] "au moins %(min_length)d caractères"
 
 #: common/djangoapps/util/password_policy_validators.py
 #, python-format
@@ -13429,7 +13433,7 @@ msgstr "Erreurs de chargement du cours"
 
 #: lms/templates/dashboard.html themes/edx.org/lms/templates/dashboard.html
 msgid "Search Your Courses"
-msgstr "Rechercher vos cours"
+msgstr "Rechercher"
 
 #: lms/templates/courseware/courseware.html lms/templates/dashboard.html
 #: themes/edx.org/lms/templates/dashboard.html
@@ -20099,7 +20103,7 @@ msgstr "Page squelette"
 #: openedx/features/course_experience/templates/course_experience/course-home-fragment.html
 #: openedx/features/course_search/templates/course_search/course-search-fragment.html
 msgid "Search the course"
-msgstr "Rechercher dans les contenus"
+msgstr "Rechercher"
 
 #: lms/templates/ux/reference/bootstrap/course-skeleton.html
 #: openedx/features/course_experience/templates/course_experience/course-home-fragment.html

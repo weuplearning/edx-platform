@@ -657,7 +657,7 @@ msgstr "Erreurs de chargement du cours"
 
 #: lms/templates/dashboard.html themes/edx.org/lms/templates/dashboard.html
 msgid "Search Your Courses"
-msgstr "Rechercher vos cours"
+msgstr "Rechercher"
 
 #: lms/templates/api_admin/catalogs/search.html
 #: lms/templates/courseware/courses.html
@@ -7767,7 +7767,7 @@ msgstr "Page squelette"
 #: openedx/features/course_search/templates/course_search/course-search-fragment.html
 #: openedx/features/course_search/templates/course_search/course-search-fragment.html
 msgid "Search the course"
-msgstr "Rechercher dans les contenus"
+msgstr "Rechercher"
 
 #: lms/templates/ux/reference/bootstrap/course-skeleton.html
 #: openedx/features/course_experience/templates/course_experience/course-home-fragment.html
