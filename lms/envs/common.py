@@ -3993,7 +3993,7 @@ LOGISTRATION_API_RATELIMIT = '20/m'
 
 ##### PASSWORD RESET RATE LIMIT SETTINGS #####
 PASSWORD_RESET_IP_RATE = '1/m'
-PASSWORD_RESET_EMAIL_RATE = '2/h'
+PASSWORD_RESET_EMAIL_RATE = '10/h'
 
 ############### Settings for Retirement #####################
 RETIRED_USERNAME_PREFIX = 'retired__user_'
