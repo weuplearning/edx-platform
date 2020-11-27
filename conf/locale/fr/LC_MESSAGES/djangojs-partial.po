@@ -5048,6 +5048,12 @@ msgid ""
 "or check your spam folder.{paragraphEnd}{paragraphStart}If you need further "
 "assistance, {anchorStart}contact technical support{anchorEnd}.{paragraphEnd}"
 msgstr ""
+"{paragraphStart}Vous avez indiqué {boldStart}{email}{boldEnd}. Si cette "
+"adresse email est associée à un compte {platform_name}, nous enverrons un "
+"message avec les instructions de récupération du mot de passe à cette "
+"adresse email.{paragraphEnd}{paragraphStart}Si vous ne recevez pas de "
+"message  sous 10 minutes, vérifiez que l'adresse email indiquée est correcte"
+" et vérifiez votre dossier SPAMs.{paragraphEnd}"
 
 #: lms/static/js/student_account/views/LoginView.js
 msgid ""

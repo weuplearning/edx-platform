@@ -2474,6 +2474,7 @@
       "{num_points} puntu posinle (kalifikatu gabea, emaitzak ezkutuan)"
     ],
     "{organization}\\'s logo": "logo {organization}",
+    "{paragraphStart}You entered {boldStart}{email}{boldEnd}. If this email address is associated with your {platform_name} account, we will send a message with password recovery instructions to this email address.{paragraphEnd}{paragraphStart}If you do not receive a password reset message after 1 minute, verify that you entered the correct email address, or check your spam folder.{paragraphEnd}{paragraphStart}If you need further assistance, {anchorStart}contact technical support{anchorEnd}.{paragraphEnd}": "{paragraphStart}Vous avez indiqu\u00e9 {boldStart}{email}{boldEnd}. Si cette adresse email est associ\u00e9e \u00e0 un compte {platform_name}, nous enverrons un message avec les instructions de r\u00e9cup\u00e9ration du mot de passe \u00e0 cette adresse email.{paragraphEnd}{paragraphStart}Si vous ne recevez pas de message  sous 10 minutes, v\u00e9rifiez que l'adresse email indiqu\u00e9e est correcte et v\u00e9rifiez votre dossier SPAMs.{paragraphEnd}",
     "{paragraph}=p;{preformatted}=pre;{heading3}=h3;{heading4}=h4;{heading5}=h5;{heading6}=h6": "{paragraph}=p;{preformatted}=pre;{heading3}=h3;{heading4}=h4;{heading5}=h5;{heading6}=h6",
     "{platform_display_name} Link": "{platform_display_name} Lien",
     "{screen_reader_start}Warning:{screen_reader_end} No content groups exist.": "{screen_reader_start}Avertissement : {screen_reader_end} Il n'existe aucun groupe de contenu.",
