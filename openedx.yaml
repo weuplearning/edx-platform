@@ -1,4 +1,5 @@
 # This file describes this Open edX repo, as described in OEP-2:
+<<<<<<< HEAD
 # http://open-edx-proposals.readthedocs.io/en/latest/oep-0002-bp-repo-metadata.html#specification
 
 nick: dev
@@ -11,3 +12,18 @@ openedx-release: {ref: master}
 owner: jmbowman
 supporting-teams:
     - platform-core
+=======
+# https://open-edx-proposals.readthedocs.io/en/latest/oep-0002-bp-repo-metadata.html#specification
+
+nick: edx
+openedx-release: {ref: release}
+
+oeps:
+    oep-2: true
+    oep-18: true
+    oep-7: true
+
+tags:
+    - core
+    - webservice
+>>>>>>> d22d386686382508ff3aae4c41917a21600eb317
