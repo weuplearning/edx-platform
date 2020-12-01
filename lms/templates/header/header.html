@@ -24,6 +24,8 @@ from openedx.core.djangoapps.site_configuration import helpers as configuration_
 
 <%
   unsupported_browser_alert_versions = configuration_helpers.get_value('UNSUPPORTED_BROWSER_ALERT_VERSIONS', settings.FEATURES.get('UNSUPPORTED_BROWSER_ALERT_VERSIONS'))
+  # provides a list of paths where cookie-consent widget is not active
+  paths_list = ["/tos", "/honor", "/privacy", "/faq"]
 %>
 % if waffle.switch_is_active('enable_unsupported_browser_alert'):
   <script>
@@ -78,7 +80,7 @@ from openedx.core.djangoapps.site_configuration import helpers as configuration_
 <![endif]-->
 % endif
 
-% if settings.FEATURES.get('ENABLE_COOKIE_CONSENT', False):
+% if settings.FEATURES.get('ENABLE_COOKIE_CONSENT', False) and request.path not in paths_list:
   <%include file="../widgets/cookie-consent.html" />
 % endif
 
