@@ -10918,7 +10918,7 @@ msgstr ""
 #: openedx/core/djangoapps/user_authn/templates/user_authn/edx_ace/passwordreset/email/subject.txt
 #, python-format
 msgid "Password reset on %(platform_name)s"
-msgstr "Réinitialiser le mot de passe sur %(platform_name)s"
+msgstr "Réinitialisez le mot de passe sur %(platform_name)s"
 
 #: openedx/core/djangoapps/user_authn/templates/user_authn/edx_ace/passwordresetsuccess/email/body.html
 msgid "Password Reset Success"
