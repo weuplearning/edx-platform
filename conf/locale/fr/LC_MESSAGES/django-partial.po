@@ -5473,7 +5473,7 @@ msgstr "Nouvelles"
 #: lms/djangoapps/branding/api.py lms/djangoapps/branding/api.py
 #: lms/djangoapps/certificates/views/webview.py
 msgid "Terms of Service & Honor Code"
-msgstr "Conditions d'utilisation & Code d'honneur"
+msgstr "Conditions d’utilisation & Code d’honneur"
 
 #. Translators: A 'Privacy Policy' is a legal document/statement describing a
 #. website's use of personal information
@@ -5491,7 +5491,7 @@ msgstr "Politique d'accessibilité"
 #: lms/djangoapps/branding/api.py lms/djangoapps/branding/api.py
 #: openedx/core/djangoapps/user_authn/views/registration_form.py
 msgid "Terms of Service"
-msgstr "Conditions d'utilisation"
+msgstr "Conditions d’utilisation"
 
 #: lms/djangoapps/branding/api.py lms/djangoapps/branding/api.py
 msgid "Sitemap"
@@ -11132,7 +11132,7 @@ msgstr "L'e-mail ne peut pas contenir plus de %(limit_value)s caractères "
 
 #: openedx/core/djangoapps/user_authn/views/registration_form.py
 msgid "You must accept the terms of service."
-msgstr "Vous devez accepter les conditions d'utilisation."
+msgstr "Vous devez accepter les conditions d’utilisation."
 
 #: openedx/core/djangoapps/user_authn/views/registration_form.py
 msgid "A level of education is required"
@@ -11242,7 +11242,7 @@ msgstr "Votre pays ou région de résidence."
 #. in order to register a new account.
 #: openedx/core/djangoapps/user_authn/views/registration_form.py
 msgid "Terms of Service and Honor Code"
-msgstr "Conditions d'utilisation et Code d'honneur"
+msgstr "Conditions d’utilisation et Code d’honneur"
 
 #: openedx/core/djangoapps/user_authn/views/registration_form.py
 #, python-brace-format
