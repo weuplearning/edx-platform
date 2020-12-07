@@ -4896,7 +4896,7 @@ msgstr ""
 "{strongStart}Attention: La suppression de votre compte est permanente et "
 "irréversible.{strongEnd} Veuillez lire en détail ce qui suit avant de "
 "poursuivre. Cette action est irréversible et {strongStart}vous ne pourrez "
-"plus utiliser le même email pour vous réinscrire à la plateforme "
+"plus utiliser le même email pour vous réinscrire au site internet "
 "{platformName}.{strongEnd}"
 
 #: lms/static/js/student_account/components/StudentAccountDeletion.jsx
@@ -4907,7 +4907,7 @@ msgid ""
 msgstr ""
 "Remarque: la suppression de votre compte et de vos données personnelles est "
 "définitive et irréversible. Une fois votre compte supprimé, vous ne pourrez "
-"plus utiliser vos identifiants pour acccéder au contenu de la plateforme "
+"plus utiliser vos identifiants pour acccéder au contenu du site internet "
 "{platformName}. Vous perdrez également l'accès à vos badges de validation de"
 " module."
 
@@ -4916,8 +4916,8 @@ msgid ""
 "Once your account is deleted, you cannot use it to take courses on the "
 "{platformName} app, {siteName}, or any other site hosted by {platformName}."
 msgstr ""
-"Une fois votre compte supprimé, vous ne pourrez plus suivre les contenus de "
-"la plateforme {platformName} ({siteName}) ou sur quelque terminal que ce "
+"Une fois votre compte supprimé, vous ne pourrez plus suivre les contenus du "
+"site internet {platformName} ({siteName}) ou sur quelque terminal que ce "
 "soit y compris une éventuelle application mobile de {platformName}."
 
 #: lms/static/js/student_account/components/StudentAccountDeletion.jsx
@@ -5143,7 +5143,7 @@ msgstr "Adresse e-mail (Connexion)"
 msgid ""
 "You receive messages from {platform_name} and course teams at this address."
 msgstr ""
-"Les messages que vous recevrez de la part de la plateforme {platform_name} "
+"Les messages que vous recevrez de la part du site internet {platform_name} "
 "et des équipes pédagogiques seront envoyés à cette adresse."
 
 #: lms/static/js/student_account/views/account_settings_factory.js
