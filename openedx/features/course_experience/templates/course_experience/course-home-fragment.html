@@ -25,14 +25,17 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
   <link rel="stylesheet" type="text/css" href="${static.url('weup/css/animate-4.1.1.min.css')}" />
   <style>
     header.page-header.has-secondary{
-        background-image: url("/media/microsites/amazon/banner.jpg");
-        padding-top: 50px !important;
-        padding-bottom: 50px !important;
+        background-image: url("/media/microsites/amazon/banner_v2.png");
+        padding-top: 10px !important;
+        padding-bottom: 10px !important;
         box-shadow: 0 3px 6px rgba(0,0,0,0.16);
     }
     .page-header-main, .page-header-secondary{
         animation: bounce;
         animation-duration: 0.5s;
+    }
+    .page-header-secondary{
+        padding-top: 25px !important;
     }
     .page-header-main h2.hd.hd-3.page-title{
         color: #343a40 !important;
@@ -322,6 +325,13 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
             font-size: 14px;
         }
     }
+
+    .logo_banner{
+    margin-top: -80px;
+    max-height: 180px;
+    padding-top: 85px;
+    padding-left: 25px;
+    }
   </style>
 </%block>
 
@@ -334,9 +344,10 @@ share_image = "https://amazon.the-mooc-agency.com/media/microsite/amazon/auto/im
 %>
 <div class="course-view page-content-container" id="course-container">
     <header class="page-header has-secondary">
+<img class="logo_banner" src="${static.url('amazon/images/logo.png')}" alt="L’Accélérateur du Numérique Accueil">
         <div class="page-header-main">
             <nav aria-label="${_('Course Outline')}" class="sr-is-focusable" tabindex="-1">
-                <h2 class="hd hd-3 page-title">${course.display_name_with_default}</h2>
+<!--                <h2 class="hd hd-3 page-title">${course.display_name_with_default}</h2>-->
             </nav>
         </div>
         <div class="page-header-secondary">
