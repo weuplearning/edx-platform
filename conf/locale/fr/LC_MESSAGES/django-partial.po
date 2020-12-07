@@ -6580,7 +6580,7 @@ msgstr "Pour voir le contenu du cours, {sign_in_link} ou {register_link}."
 #: openedx/features/course_experience/views/course_home_messages.py
 #, python-brace-format
 msgid "{sign_in_link} or {register_link}."
-msgstr ""
+msgstr "{sign_in_link} ou {register_link}."
 
 #: lms/djangoapps/courseware/views/views.py
 #: openedx/core/djangoapps/user_authn/templates/user_authn/edx_ace/passwordresetsuccess/email/body.html
@@ -11211,7 +11211,9 @@ msgid ""
 "The name that will identify you in your courses. It cannot be changed later."
 msgstr ""
 "Le nom qui permettra de vous identifier sur la plateforme. Il ne pourra pas "
-"être modifié plus tard."
+"être modifié plus tard. Les noms d'utilisateur peuvent seulement contenir "
+"des lettres (A-Z, a-z), des chiffres (0-9), des tirets bas (_) et des traits"
+" d'union (-)."
 
 #. Translators: This label appears above a dropdown menu on the registration
 #. form used to select the user's highest completed level of education.
@@ -11570,7 +11572,7 @@ msgstr "Voir toutes les dates"
 #: openedx/features/course_experience/api/v1/views.py
 msgid ""
 "Your due dates have been successfully shifted to help you stay on track."
-msgstr ""
+msgstr "Vos dates limites de rendu ont été décalées avec succès."
 
 #: openedx/features/course_experience/api/v1/views.py
 msgid "Deadlines successfully reset."
@@ -11595,7 +11597,7 @@ msgstr "Bienvenue dans {course_display_name}"
 msgid ""
 "You must be enrolled in the course to see course content. Please contact "
 "your degree administrator or edX Support if you have questions."
-msgstr ""
+msgstr "Vous devez être inscrit au cours pour voir son contenu."
 
 #: openedx/features/course_experience/views/course_home_messages.py
 #, python-brace-format
@@ -11629,6 +11631,18 @@ msgstr "{choice}"
 #, python-brace-format
 msgid "Set goal to: {goal_text}"
 msgstr "Sélectionner l'objectif suivant : {goal_text}"
+
+#: openedx/features/course_experience/views/course_home_messages.py
+msgid "Welcome! Activate your account from your mailbox."
+msgstr "Bievenue ! Activez votre compte depuis votre boîte mail."
+
+#: openedx/features/course_experience/views/course_home_messages.py
+msgid ""
+"Check your inbox for an account activation link. Check your SPAM folder if "
+"needed."
+msgstr ""
+"Vérifiez votre boîte de réception, vous devriez avoir reçu un mail "
+"d'acitivation de compte. Vérifiez vos SPAMS si besoin."
 
 #: openedx/features/discounts/admin.py
 msgid ""

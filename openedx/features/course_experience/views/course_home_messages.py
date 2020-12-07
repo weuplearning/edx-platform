@@ -32,7 +32,6 @@ from openedx.features.course_experience import CourseHomeMessages
 from common.djangoapps.student.models import CourseEnrollment
 from xmodule.course_module import COURSE_VISIBILITY_PUBLIC
 
-
 class CourseHomeMessageFragmentView(EdxFragmentView):
     """
     A fragment that displays a course message with an alert and call
@@ -112,7 +111,6 @@ def _register_course_home_messages(request, course, user_access, course_start_da
     Register messages to be shown in the course home content page.
     """
     allow_anonymous = check_public_access(course, [COURSE_VISIBILITY_PUBLIC])
-
     if user_access['is_anonymous'] and not allow_anonymous:
         sign_in_or_register_text = (_(u'{sign_in_link} or {register_link} and then enroll in this course.')
                                     if not CourseMode.is_masters_only(course.id)
@@ -131,6 +129,17 @@ def _register_course_home_messages(request, course, user_access, course_start_da
             ),
             title=Text(_('You must be enrolled in the course to see course content.'))
         )
+
+    if not request.user.is_active:
+        #If user is not active then let's fix this first !
+        CourseHomeMessages.register_info_message(
+            request,
+            Text(_(u'Check your inbox for an account activation link. '
+                    'Check your SPAM folder if needed.')),
+            title= Text(_('Welcome! Activate your account from your mailbox.'))
+        )
+
+
     if not user_access['is_anonymous'] and not user_access['is_staff'] and \
             not user_access['is_enrolled']:
 
