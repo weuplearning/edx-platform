@@ -492,6 +492,11 @@ class RegistrationView(APIView):
         if response:
             return response
 
+        # WUL - ADD FORM EXTRA VALIDATION
+        response = self._validate_form_extra_data(request)
+        if response:
+            return response
+
         response, user = self._create_account(request, data)
         if response:
             return response
@@ -500,6 +505,23 @@ class RegistrationView(APIView):
         response = self._create_response(request, {}, status_code=200, redirect_url=redirect_url)
         set_logged_in_cookies(request, response, user)
         return response
+    
+    def _validate_form_extra_data(request):
+        # WUL method for validating FORM_EXTRA data
+        errors = {}
+        form_extra_fields = configuration_helpers.get_value("FORM_EXTRA", [])
+
+        if form_extra_fields:
+            for field in form_extra_fields:
+                field_name = field.get('name')
+                field_data = request.POST.get(field_name)
+                required = field.get('required')
+                if required and not field_data:
+                    errors[field_name] = [{"user_message": "{} field is missing".format(field_name)}]
+
+        if errors:
+            return self._create_response(request, errors, status_code=400)
+    
 
     def _handle_duplicate_email_username(self, request, data):
         # pylint: disable=no-member
