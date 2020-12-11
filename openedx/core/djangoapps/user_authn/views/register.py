@@ -516,8 +516,9 @@ class RegistrationView(APIView):
                 field_name = field.get('name')
                 field_data = request.POST.get(field_name)
                 required = field.get('required')
+
                 if required and not field_data:
-                    errors[field_name] = [{"user_message": "{} field is missing".format(field_name)}]
+                    errors[field_name] = [{"user_message": "{} field is required".format(field_name)}]
 
         if errors:
             return self._create_response(request, errors, status_code=400)
