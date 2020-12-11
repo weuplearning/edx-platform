@@ -150,3 +150,5 @@ pii_report
 # Ignore transifex config
 .transifexrc
 
+# WUL CUSTOMIZATION
+**/migrations/*
