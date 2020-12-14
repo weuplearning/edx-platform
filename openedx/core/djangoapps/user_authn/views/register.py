@@ -48,7 +48,7 @@ from openedx.core.djangoapps.user_api.accounts.api import (
     get_password_validation_error,
     get_username_existence_validation_error,
     get_username_validation_error
-)
+    )
 from openedx.core.djangoapps.user_api.preferences import api as preferences_api
 from openedx.core.djangoapps.user_authn.cookies import set_logged_in_cookies
 from openedx.core.djangoapps.user_authn.utils import generate_password, is_registration_api_v1
@@ -506,7 +506,7 @@ class RegistrationView(APIView):
         set_logged_in_cookies(request, response, user)
         return response
     
-    def _validate_form_extra_data(request):
+    def _validate_form_extra_data(self, request):
         # WUL method for validating FORM_EXTRA data
         errors = {}
         form_extra_fields = configuration_helpers.get_value("FORM_EXTRA", [])
@@ -519,7 +519,7 @@ class RegistrationView(APIView):
 
                 if required and not field_data:
                     errors[field_name] = [{"user_message": "{} field is required".format(field_name)}]
-
+        
         if errors:
             return self._create_response(request, errors, status_code=400)
     
@@ -736,7 +736,7 @@ class RegistrationValidationView(APIView):
         "email": email_handler,
         "confirm_email": confirm_email_handler,
         "password": password_handler,
-        "country": country_handler
+        "country": country_handler,
     }
 
     @method_decorator(
