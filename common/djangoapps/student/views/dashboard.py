@@ -837,84 +837,14 @@ def student_dashboard(request):
     start_course = []
     list_category = []
     _now = int(datetime.datetime.now().strftime("%s"))
-    user_course_grades = get_persisted_course_grades_for_user(request.user.id)
     if len(course_enrollments) > 0:
       for dashboard_index, enrollment in enumerate(course_enrollments):
-        course_id = enrollment.course_overview.id
-        user_id = request.user.id
         course_tma = get_course_by_id(enrollment.course_id)
-        course_progression = 0
-        if user_course_grades.filter(course_id=course_id).exists():
-            course_grade_factory = user_course_grades.get(course_id=course_id)
-            course_progression = 10 if course_grade_factory.quiz_completed else 0
-            if course_progression == 10:
-                log.info("[WUL] Tag for perf on course: "+str(enrollment.course_id)+" quiz was completed")
-        else:
-            course_grade_factory = CourseGradeFactory().read(request.user, course_tma)
-        passed = course_grade_factory.passed
-        percent = course_grade_factory.percent
-
-        if passed:
-            course_progression = 10
-            
-        if course_progression != 10 and not passed:
-            from course_progress.helpers import get_overall_progress
-            from openedx.features.course_experience.utils import get_course_outline_block_tree
-            from completion.api.v1.views import SubsectionCompletionView
-
-            total_blocks=0
-            total_blockstma=0
-            completed_blockstma=0
-            completed_blocks=0
-            completion_rate=0
-            quiz_completion=0
-            quiz_total_components=0
-            quiz_completed_components=0
-            course_sections = get_course_outline_block_tree(request,str(course_id)).get('children')
-            if course_sections:
-                for section in course_sections :
-                  total_blockstma+=1
-                  section_completion = SubsectionCompletionView().get(request,request.user,str(course_id),section.get('id')).data
-
-                  if section.get('children') is None:
-                    continue
-
-                  #IN ATP only one section per course
-                  if section_completion['completion'] == 1:
-                    log.info("[WUL] Tag for perf on course: "+str(enrollment.course_id)+" section completion is 1")
-                    course_progression = 10
-                    break
-
-                  for subsection in section.get('children') :
-                    if subsection.get('children'):
-                        for unit in subsection.get('children'):
-                            total_blocks+=1
-                            unit_completion = SubsectionCompletionView().get(request,request.user,str(course_id),unit.get('id')).data
-                            if unit_completion.get('completion'):
-                                completed_blocks+=1
-                            if unit.get('graded') and unit.get('children'):
-                                for component in unit.get('children') :
-                                    quiz_total_components+=1
-                                    if component.get('complete'):
-                                        quiz_completed_components+=1
-                        if completed_blocks == total_blocks:
-                            completed_blockstma+=1
-            if total_blocks != 0:
-                completion_rate = float(completed_blocks)/total_blocks
-            status ={}
-            course_progression = int(completion_rate * 10);
-            log.info("[WUL] Tag for perf on course: "+str(enrollment.course_id)+" - Progress:"+str(course_progression))
-        try:
-            _end = int(enrollment.course_overview.end.strftime("%s"))
-        except:
-            _end = 0
-        q={}
-        course_open = True
-        if _end > 0 and _end < _now:
-            course_open = False
-        q['course_progression'] = int(course_progression * 10)
-        q['passed'] = passed
-        q['percent'] = float(int(percent * 1000)/10)
+        course_progress = get_new_course_progress(request,request.user,enrollment, course_tma)
+        q = {}
+        q['course_progression'] = course_progress['course_progression']
+        q['passed'] = course_progress['passed']
+        q['percent'] = float(int(course_progress['percent'] * 1000)/10)
         q['course_id'] = str(enrollment.course_id)
         q['duration'] = CourseDetails.fetch(enrollment.course_id).effort
         q['required'] = course_tma.is_required_atp
@@ -927,6 +857,8 @@ def student_dashboard(request):
         if not course_tma.categ in list_category:
             list_category.append(course_tma.categ)
 
+        course_open =  course_progress['course_open']
+        passed = course_progress['passed']
         #Add course to right category  ----  Ongoig
         if course_open :
             if passed :
@@ -1052,3 +984,83 @@ def student_dashboard(request):
     })
 
     return render_to_response('dashboard.html', context)
+
+
+def get_new_course_progress(request, user, enrollment, course_tma):
+        course_id = enrollment.course_id
+        user_id = user.id
+        course_progression = 0
+        user_course_grades = get_persisted_course_grades_for_user(user_id)
+        _now = int(datetime.datetime.now().strftime("%s"))
+        if user_course_grades.filter(course_id=course_id).exists():
+            course_grade_factory = user_course_grades.get(course_id=course_id)
+            course_progression = 10 if course_grade_factory.quiz_completed else 0
+            if course_progression == 10:
+                log.info("[WUL] Tag for perf on course: "+str(enrollment.course_id)+" quiz was completed")
+        else:
+            course_grade_factory = CourseGradeFactory().read(user, course_tma)
+        passed = course_grade_factory.passed
+        percent = course_grade_factory.percent
+
+        if passed:
+            course_progression = 10
+
+        if course_progression != 10 and not passed:
+            from course_progress.helpers import get_overall_progress
+            from openedx.features.course_experience.utils import get_course_outline_block_tree
+            from completion.api.v1.views import SubsectionCompletionView
+
+            total_blocks=0
+            total_blockstma=0
+            completed_blockstma=0
+            completed_blocks=0
+            completion_rate=0
+            quiz_completion=0
+            quiz_total_components=0
+            quiz_completed_components=0
+            course_sections = get_course_outline_block_tree(request,str(course_id)).get('children')
+            if course_sections:
+                for section in course_sections :
+                  total_blockstma+=1
+                  section_completion = SubsectionCompletionView().get(request,user,str(course_id),section.get('id')).data
+
+                  if section.get('children') is None:
+                    continue
+
+                  #IN ATP only one section per course
+                  if section_completion['completion'] == 1:
+                    log.info("[WUL] Tag for perf on course: "+str(enrollment.course_id)+" section completion is 1")
+                    course_progression = 10
+                    break
+
+                  for subsection in section.get('children') :
+                    if subsection.get('children'):
+                        for unit in subsection.get('children'):
+                            total_blocks+=1
+                            unit_completion = SubsectionCompletionView().get(request,user,str(course_id),unit.get('id')).data
+                            if unit_completion.get('completion'):
+                                completed_blocks+=1
+                            if unit.get('graded') and unit.get('children'):
+                                for component in unit.get('children') :
+                                    quiz_total_components+=1
+                                    if component.get('complete'):
+                                        quiz_completed_components+=1
+                        if completed_blocks == total_blocks:
+                            completed_blockstma+=1
+            if total_blocks != 0:
+                completion_rate = float(completed_blocks)/total_blocks
+            status ={}
+            course_progression = int(completion_rate * 10);
+
+        try:
+            _end = int(enrollment.course_overview.end.strftime("%s"))
+        except:
+            _end = 0
+
+        course_open = True
+        if _end > 0 and _end < _now:
+            course_open = False
+
+        log.info("[WUL] Tag for perf on course: "+str(enrollment.course_id)+" - Progress:"+str(course_progression)+" - Passed:"+str(passed))
+
+        return {'course_progression': int(course_progression * 10), 'passed': passed, 'percent': percent, 'course_open':course_open}
