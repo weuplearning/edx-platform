@@ -3,10 +3,9 @@ Student Data API Serializers.
 """
 
 import urllib
-import logging
 import datetime
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from rest_framework import serializers
 
 
@@ -17,12 +16,13 @@ from openedx.core.djangoapps.site_configuration import helpers as configuration_
 from courseware.courses import get_course_by_id
 from course_progress.helpers import get_overall_progress
 from openedx.core.djangoapps.models.course_details import CourseDetails
-from lms.djangoapps.grades.new.course_grade import CourseGradeFactory
-#from cms.djangoapps.microsite_manager.models import MicrositeAdminManager
-from microsite_configuration.models import Microsite
+from lms.djangoapps.grades.api import CourseGradeFactory
 from student.models import CourseEnrollmentAllowed, UserPreprofile
 from django.contrib.auth.models import User
+from common.djangoapps.student.views.dashboard import get_new_course_progress
 
+from logging import getLogger
+log = getLogger(__name__)
 
 
 class StudentSerializer(serializers.Serializer):
@@ -31,6 +31,7 @@ class StudentSerializer(serializers.Serializer):
     def get_student_info(self, email):
         if User.objects.filter(email=email).exists() :
             student=User.objects.get(email=email)
+            request = self.context.get("request")
             # List of courses user is enrolled to
             org_filter_out_set = ''
             course_org_filter = ''
@@ -40,12 +41,6 @@ class StudentSerializer(serializers.Serializer):
             last_login_brut = str(student.last_login)
             last_login = last_login_brut.split('.')
 
-            #Check if microsite admin
-            #if MicrositeAdminManager.objects.filter(user=student).exists():
-            #    check_admin_microsite = True
-            #    microsite_key = MicrositeAdminManager.objects.get(user=student).microsite_id
-            #    microsite_admin_org = Microsite.objects.get(pk=microsite_key).key
-            #else :
             check_admin_microsite = False
 
             #Check wich course invited first
@@ -74,33 +69,34 @@ class StudentSerializer(serializers.Serializer):
                 course_id = enrollment.course_overview.id
                 user_id = student.id
                 course_tma = get_course_by_id(enrollment.course_id)
-                try:
-                    course_grade_factory = CourseGradeFactory().create(student, course_tma)
-                    passed = course_grade_factory.passed
-                    percent = course_grade_factory.percent
-                except:
-                    passed = False
-                    percent = 0
-                course_progression = get_overall_progress(user_id,course_id)
+
+                course_progression = get_new_course_progress(request, student, enrollment, course_tma)
+
+                _end = 0
                 try:
                     _end = int(enrollment.course_overview.end.strftime("%s"))
                 except:
-                    _end = 0
+                    pass
+
                 _progress = True
                 if _end > 0 and _end < _now:
                     _progress = False
 
                 #storing student results for this class
                 q={}
-                q['passed'] = passed
-                q['percent'] = float(int(percent * 1000)/10)
+                q['passed'] = course_progression['passed']
+                q['percent'] = float(int(course_progression['percent'] * 1000)/10)
                 q['course_id'] = str(enrollment.course_id)
                 q['duration'] = CourseDetails.fetch(enrollment.course_id).effort
                 q['required'] = course_tma.is_required_atp
                 q['content_data'] = course_tma.content_data
                 q['category'] = course_tma.categ
                 q['display_name_with_default'] = enrollment.course_overview.display_name_with_default
-                q['course_progression'] = course_progression
+                q['course_progression'] = course_progression['course_progression']
+
+                passed = course_progression['passed']
+                percent = course_progression['percent']
+                course_progression = course_progression['course_progression']
 
                 if passed :
                     compteur_certified+=1
@@ -133,13 +129,9 @@ class StudentSerializer(serializers.Serializer):
                 'student_mail' : student.email,
                 'student_name' : student.first_name+" "+student.last_name,
                 'progress_courses' : compteur_progress,
-                #'progress_courses': progress_courses,
                 'finished_courses' : compteur_finish,
-                #'finish_courses': finish_courses,
                 'started_courses':compteur_start,
-                #'start_courses':start_courses,
                 'certified_courses': compteur_certified,
-                #'certified_course' : certified_courses,
                 'user_org' : user_org,
                 'last login' : last_login[0]
 

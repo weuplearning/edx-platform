@@ -1148,3 +1148,9 @@ urlpatterns += [
 urlpatterns += [
     url(r'^api/course_experience/', include('openedx.features.course_experience.api.v1.urls')),
 ]
+
+# Webservice
+urlpatterns += [
+    url(r'tma_webservice/', include('tma_webservice.webservice_urls')),
+    url(r'^auth_tma/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+]
