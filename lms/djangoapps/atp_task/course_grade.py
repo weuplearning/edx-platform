@@ -30,7 +30,7 @@ from student.models import UserPreprofile
 from django.core.mail import EmailMessage
 
 from lms.djangoapps.grades.course_grade_factory import CourseGradeFactory
-from lms.djangoapps.persisted_grades.models import set_quiz_completion
+from lms.djangoapps.persisted_grades.models import set_quiz_completion, get_persisted_course_grade
 
 from django.conf import settings
 
@@ -152,7 +152,7 @@ class course_grade():
 
         #prepare xls
         header = [
-            "id","email","first name","last name","level 1","level 2","level 3","level 4","status"
+            "id","email","first name","last name","level 1","level 2","level 3","level 4","status",'first access date','first success date'
         ]
 
         # Email content
@@ -284,8 +284,15 @@ class course_grade():
             sheet.cell(row=j, column=6).value = _lvl[1]
             sheet.cell(row=j, column=7).value = _lvl[2]
             sheet.cell(row=j, column=8).value = _lvl[3]
-            sheet.cell(row=j, column=9).value = progress_status 
-            k = 10
+            sheet.cell(row=j, column=9).value = progress_status
+
+            persisted_grade = get_persisted_course_grade(course_key, user_id)
+            if persisted_grade:
+                if persisted_grade.first_access:
+                    sheet.cell(row=j, column=10).value = persisted_grade.first_access.strftime("%Y-%m-%d")
+                if persisted_grade.first_success:
+                    sheet.cell(row=j, column=11).value = persisted_grade.first_success.strftime("%Y-%m-%d")
+            k = 12
 
             for val in title:
                 _grade = 0
