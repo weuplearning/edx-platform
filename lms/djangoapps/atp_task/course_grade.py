@@ -21,6 +21,7 @@ from lms.djangoapps.course_blocks.api import get_course_blocks
 from opaque_keys.edx.locations import SlashSeparatedCourseKey
 from opaque_keys.edx.locator import CourseLocator
 from courseware.courses import get_course_by_id
+from courseware.views.views import _submission_history_context
 from student.models import *
 from django.contrib.auth.models import User
 from importlib import reload
@@ -35,6 +36,7 @@ from lms.djangoapps.persisted_grades.models import set_quiz_completion, get_pers
 from django.conf import settings
 
 from pprint import pformat
+import datetime
 
 import sys
 
@@ -226,6 +228,7 @@ class course_grade():
             quiz_total_components=0
             quiz_completed_components=0
             quiz_completion_rate=0
+            problem_ids = []
             course_sections = get_course_outline_block_tree(self.request,str(course_id)).get('children')
             if course_sections:
                 for section in course_sections :
@@ -244,6 +247,7 @@ class course_grade():
                                 quiz_completion_rate = SubsectionCompletionView().get(self.request,user,str(course_id),unit.get('id')).data['completion']
                                 for component in unit.get('children') :
                                     quiz_total_components+=1
+                                    problem_ids.append(component.get('id'))
                                     if component.get('complete'):
                                         quiz_completed_components+=1
                         if completed_blocks == total_blocks:
@@ -286,13 +290,63 @@ class course_grade():
             sheet.cell(row=j, column=8).value = _lvl[3]
             sheet.cell(row=j, column=9).value = progress_status
 
+            first_access_date = ''
+            first_success_date = ''
             persisted_grade = get_persisted_course_grade(course_key, user_id)
+
             if persisted_grade:
+
+
                 if persisted_grade.first_access:
-                    sheet.cell(row=j, column=10).value = persisted_grade.first_access.strftime("%Y-%m-%d")
+                    first_access_date = persisted_grade.first_access
+                else:
+                    # There is no first access date, still if course progress is >0 then we will "force" the first_access date if possible
+                    # we do that because we have long history where this data was not computed
+                    if course_progression > 0:
+                        # Of course we bother only if course_progression is > 0
+                        # Now let's find if there is any question for which the student answered
+                        last_submission_times = []
+                        for problem_id in problem_ids:
+                            history_entries = _submission_history_context(user, course_id, user.username, problem_id).get('history_entries')
+                            if history_entries:
+                                for entry in history_entries:
+                                    last_submission_times.append(entry.updated)
+                                # We take the earliest submission made and remove 1 hour
+                        first_access_date = min(last_submission_times) - datetime.timedelta(hours=1, minutes=0)
+                if isinstance(first_access_date, datetime.date):
+                   # We try to save the date if possible as some other operations on database may be currently done
+                    try:
+                        persisted_grade.first_access = first_access_date
+                        persisted_grade.save()
+                    except:
+                        pass
+                    sheet.cell(row=j, column=10).value = first_access_date.strftime("%Y-%m-%d %H:%M")
+
+
+
                 if persisted_grade.first_success:
-                    sheet.cell(row=j, column=11).value = persisted_grade.first_success.strftime("%Y-%m-%d")
+                    first_success_date = persisted_grade.first_success
+                elif passed:
+                    # There is no first success date but we will find the latest date at which learner answered
+                    last_submission_times = []
+                    for problem_id in problem_ids:
+                        history_entries = _submission_history_context(user, course_id, user.username, problem_id).get('history_entries')
+                        if history_entries:
+                            for entry in history_entries:
+                                last_submission_times.append(entry.updated)
+                    first_success_date = max(last_submission_times)
+                if isinstance(first_success_date, datetime.date):
+                    # We try to save the date if possible as some other operations on database may be currently done
+                    try:
+                        persisted_grade.first_success = first_success_date
+                        persisted_grade.save()
+                    except:
+                        pass
+                    sheet.cell(row=j, column=11).value = first_success_date.strftime("%Y-%m-%d %H:%M")
+
             k = 12
+
+
 
             for val in title:
                 _grade = 0

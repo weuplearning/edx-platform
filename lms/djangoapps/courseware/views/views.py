@@ -1417,7 +1417,12 @@ def submission_history(request, course_id, student_username, location):
     Right now this only works for problems because that's all
     StudentModuleHistory records.
     """
+    context = _submission_history_context(request.user, course_id, student_username, location)
 
+    render_to_response('courseware/submission_history.html', context)
+
+
+def _submission_history_context(user, course_id, student_username, location):
     course_key = CourseKey.from_string(course_id)
 
     try:
@@ -1425,12 +1430,12 @@ def submission_history(request, course_id, student_username, location):
     except (InvalidKeyError, AssertionError):
         return HttpResponse(escape(_(u'Invalid location.')))
 
-    course = get_course_overview_with_access(request.user, 'load', course_key)
-    staff_access = bool(has_access(request.user, 'staff', course))
+    course = get_course_overview_with_access(user, 'load', course_key)
+    staff_access = bool(has_access(user, 'staff', course))
 
     # Permission Denied if they don't have staff access and are trying to see
     # somebody else's submission history.
-    if (student_username != request.user.username) and (not staff_access):
+    if (student_username != user.username) and (not staff_access):
         raise PermissionDenied
 
     user_state_client = DjangoXBlockUserStateClient()
@@ -1480,7 +1485,9 @@ def submission_history(request, course_id, student_username, location):
         'course_id': text_type(course_key)
     }
 
-    return render_to_response('courseware/submission_history.html', context)
+    return context
+
+    render_to_response('courseware/submission_history.html', context)
 
 
 def get_static_tab_fragment(request, course, tab):
