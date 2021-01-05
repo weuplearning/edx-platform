@@ -10936,6 +10936,8 @@ msgid ""
 "This is to confirm that you have successfully changed your password "
 "associated with %(platform_name)s account. Please sign-in to your account."
 msgstr ""
+"Nous vous confirmons que votre mot de passe a été changé avec succès. Vous "
+"pouvez vous connecter à %(platform_name)s avec votre nouveau mot de passe."
 
 #: openedx/core/djangoapps/user_authn/templates/user_authn/edx_ace/passwordresetsuccess/email/body.txt
 #, python-format
