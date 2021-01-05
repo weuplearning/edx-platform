@@ -488,6 +488,8 @@ class RegistrationView(APIView):
         data = request.POST.copy()
         self._handle_terms_of_service(data)
 
+        log.info("[WUL] Email: "+str(data['email'])+" - Specialty: "+str(data['specialty'])+" - Company: "+str(data['company']))
+
         response = self._handle_duplicate_email_username(request, data)
         if response:
             return response
