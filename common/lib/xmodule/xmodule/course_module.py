@@ -1068,6 +1068,15 @@ class CourseFields(object):
         scope=Scope.settings
     )
 
+    # WUL CUSTOMIZATION FOR ADDING TIME LIMIT TO COURSE MODULES
+    time_limit = Integer(
+        display_name=_("Time Limit"),
+        help=_(
+            "Set a completion time limit (in seconds) for non-quiz modules."
+            "By default, time limit is set to null"
+        ),
+        scope=Scope.settings
+    )
 
 class CourseModule(CourseFields, SequenceModule):  # pylint: disable=abstract-method
     """
