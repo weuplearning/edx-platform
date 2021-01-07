@@ -276,10 +276,10 @@ class CoursewareIndex(View):
             else:
                 #Performance note : it it probably very rare that we end up here, we will then compute the grade and persited grade along
                 #as it is included in coursegradefactory
-                CourseGradeFactory().read(self.effective_user, self.course)
+                grade = CourseGradeFactory().read(self.effective_user, self.course)
                 #Now persisted grade exists for sure
                 persisted_grade = get_persisted_course_grade(self.course.id, self.effective_user.id)
-                persisted_grade.set_first_access_date()
+                persisted_grade.set_first_access_date_if_needed()
 
         return render_to_response('courseware/courseware.html', courseware_context)
 

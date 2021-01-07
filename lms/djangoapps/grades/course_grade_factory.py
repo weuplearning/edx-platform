@@ -54,6 +54,7 @@ class CourseGradeFactory(object):
         try:
             return self._read(user, course_data)
         except PersistentCourseGrade.DoesNotExist:
+            store_persisted_course_grade(course_data.course_key,user.id,0,False)
             if assume_zero_if_absent(course_data.course_key):
                 return self._create_zero(user, course_data)
             elif create_if_needed:
