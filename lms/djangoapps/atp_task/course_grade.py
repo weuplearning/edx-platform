@@ -290,8 +290,8 @@ class course_grade():
             sheet.cell(row=j, column=8).value = _lvl[3]
             sheet.cell(row=j, column=9).value = progress_status
 
-            first_access_date = ''
-            first_success_date = ''
+            first_access_date = None
+            first_success_date = None
             persisted_grade = get_persisted_course_grade(course_key, user_id)
 
             if persisted_grade:
@@ -312,7 +312,8 @@ class course_grade():
                                 for entry in history_entries:
                                     last_submission_times.append(entry.updated)
                                 # We take the earliest submission made and remove 1 hour
-                        first_access_date = min(last_submission_times) - datetime.timedelta(hours=1, minutes=0)
+                        if last_submission_times:
+                            first_access_date = min(last_submission_times) - datetime.timedelta(hours=1, minutes=0)
                 if isinstance(first_access_date, datetime.date):
                    # We try to save the date if possible as some other operations on database may be currently done
                     try:
@@ -334,7 +335,8 @@ class course_grade():
                         if history_entries:
                             for entry in history_entries:
                                 last_submission_times.append(entry.updated)
-                    first_success_date = max(last_submission_times)
+                    if last_submission_times:
+                        first_success_date = max(last_submission_times)
                 if isinstance(first_success_date, datetime.date):
                     # We try to save the date if possible as some other operations on database may be currently done
                     try:
