@@ -527,6 +527,10 @@ class CoursewareIndex(View):
         else:
             courseware_context['microfrontend_link'] = None
 
+        # WUL customization for time_limit feature
+        course_overview = CourseOverview.get_from_id(self.course.id)
+        courseware_context['time_limit'] = course_overview.time_limit
+
         return courseware_context
 
     def _add_sequence_title_to_context(self, courseware_context):
