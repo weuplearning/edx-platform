@@ -6,21 +6,31 @@ export function markBlocksCompletedOnViewIfNeeded(runtime, containerElement) {
   const blockElements = $(containerElement).find(
     '.xblock-student_view[data-mark-completed-on-view-after-delay]',
   ).get();
-  console.log("blockElements")
-  console.log(blockElements)
+
   if (blockElements.length > 0) {
     const tracker = new ViewedEventTracker();
 
     blockElements.forEach((blockElement) => {
-      const markCompletedOnViewAfterDelay = 10;
+      let markCompletedOnViewAfterDelay = 10;
+      let blockId = blockElement.dataset.usageId.split("@")[2]
+
+      //  INHERIT TIME LIMIT FROM BLOCK PARAMS
+      if (blocksTimeLimit && blocksTimeLimit[blockId]) {
+        markCompletedOnViewAfterDelay = blocksTimeLimit[blockId] * 1000
+        console.log(markCompletedOnViewAfterDelay)
+
+      // INHERIT TIME LIMIT FROM COURSE PARAMS
+      } else if(timeLimit) {
+        markCompletedOnViewAfterDelay = parseInt(timeLimit * 1000, 10)
+      }
+
       if (markCompletedOnViewAfterDelay >= 0) {
         tracker.addElement(blockElement, markCompletedOnViewAfterDelay);
+
       }
     });
 
     tracker.addHandler((blockElement, event) => {
-      console.log("blockElement.dataset")
-      console.log(blockElement.dataset)
       const blockKey = blockElement.dataset.usageId;
       if (blockKey && !completedBlocksKeys.has(blockKey)) {
         if (event.elementHasBeenViewed) {
