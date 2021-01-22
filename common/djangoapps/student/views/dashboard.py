@@ -859,6 +859,7 @@ def student_dashboard(request):
 
         course_open =  course_progress['course_open']
         passed = course_progress['passed']
+        course_progression = q['course_progression']
         #Add course to right category  ----  Ongoig
         if course_open :
             if passed :
