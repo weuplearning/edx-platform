@@ -111,11 +111,9 @@
     var blocksTimeLimit = {}
     </script>
     % for idx, item in enumerate(items):
-      % for key, value in item['time_limits'].items():
-        <script>
-          blocksTimeLimit["${key}"] = "${value}"
-        </script>
-      % endfor
+      <script>
+        blocksTimeLimit = Object.assign(blocksTimeLimit, ${dump_js_escaped_json(item['time_limits']) | n, decode.utf8})
+      </script>
         % if ">" in item['page_title']:
           <%
           i+=1

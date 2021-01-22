@@ -366,6 +366,10 @@ courseware = static.get_value('css_overrides_courseware')
 <script type="text/javascript">
 var timeLimit = "${time_limit}";
 
+if(timeLimit === "None"){
+  timeLimit = null
+}
+
 function disableNextButton() {
   // DISABLE NEXT BUTTON WHEN UNIT IS NOT COMPLETED
   $(".tma_tab").each(function(){
@@ -376,6 +380,7 @@ function disableNextButton() {
 };
 
 setInterval(disableNextButton, 50);
+console.log(blocksTimeLimit)
 </script>
 <script src="${static.url('js/tma_custom_quiz_display.js')}"></script>
 <%
