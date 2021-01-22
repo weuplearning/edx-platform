@@ -13,20 +13,17 @@ export function markBlocksCompletedOnViewIfNeeded(runtime, containerElement) {
     blockElements.forEach((blockElement) => {
       let markCompletedOnViewAfterDelay = 10;
       let blockId = blockElement.dataset.usageId.split("@")[2]
-
       //  INHERIT TIME LIMIT FROM BLOCK PARAMS
       if (blocksTimeLimit && blocksTimeLimit[blockId]) {
-        markCompletedOnViewAfterDelay = blocksTimeLimit[blockId] * 1000
-        console.log(markCompletedOnViewAfterDelay)
+        markCompletedOnViewAfterDelay = blocksTimeLimit[blockId] * 1000;
 
       // INHERIT TIME LIMIT FROM COURSE PARAMS
       } else if(timeLimit) {
-        markCompletedOnViewAfterDelay = parseInt(timeLimit * 1000, 10)
+        markCompletedOnViewAfterDelay = timeLimit * 1000;
       }
 
       if (markCompletedOnViewAfterDelay >= 0) {
         tracker.addElement(blockElement, markCompletedOnViewAfterDelay);
-
       }
     });
 
