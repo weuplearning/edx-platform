@@ -30,6 +30,7 @@ from .mako_module import MakoModuleDescriptor
 from .progress import Progress
 from .x_module import AUTHOR_VIEW, PUBLIC_VIEW, STUDENT_VIEW, XModule
 from .xml_module import XmlDescriptor
+from xmodule.modulestore.django import modulestore
 
 log = logging.getLogger(__name__)
 
@@ -536,6 +537,18 @@ class SequenceModule(SequenceFields, ProctoringFields, XModule):
                 content = rendered_item.content
             else:
                 content = ''
+
+            # WUL CUSTOMIZATION FOR GETTING BLOCK TIME_LIMIT
+            store = modulestore()
+            xblocks = store.get_item(usage_id).get_children()
+            time_limits = {}
+            for block in xblocks:
+                if 'html' in block.xml_attributes['filename'][0]:
+                   # NEED TO FIND CLEANER WAY  TO GET BLOCK ID
+                   block_id = block.xml_attributes['filename'][0].split('/')[1].split('.')[0]
+                   time_limits[block_id] = block.time_limit
+            # END
+            
             iteminfo = {
                 'content': content,
                 'page_title': getattr(item, 'tooltip_title', ''),
@@ -543,7 +556,8 @@ class SequenceModule(SequenceFields, ProctoringFields, XModule):
                 'id': text_type(usage_id),
                 'bookmarked': is_bookmarked,
                 'path': " > ".join(display_names + [item.display_name_with_default]),
-                'graded': item.graded
+                'graded': item.graded,
+                'time_limits': time_limits
             }
             if not render_items:
                 # The item url format can be defined in the template context like so:

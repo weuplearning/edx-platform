@@ -17,7 +17,7 @@ from lxml import etree
 from path import Path as path
 from web_fragments.fragment import Fragment
 from xblock.core import XBlock
-from xblock.fields import Boolean, List, Scope, String
+from xblock.fields import Boolean, List, Scope, String, Integer
 from xmodule.contentstore.content import StaticContent
 from xmodule.editing_module import EditingMixin
 from xmodule.edxnotes_utils import edxnotes
@@ -58,6 +58,12 @@ class HtmlBlock(
         # it'd be nice to have a useful default but it screws up other things; so,
         # use display_name_with_default for those
         default=_("Text")
+    )
+    time_limit = Integer(
+        display_name=_("Time Limit"),
+        help=_("The time limit for this component."),
+        scope=Scope.settings,
+        default=None
     )
     data = String(help=_("Html contents to display for this module"), default=u"", scope=Scope.content)
     source_code = String(

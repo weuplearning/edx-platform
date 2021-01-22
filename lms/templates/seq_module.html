@@ -107,8 +107,15 @@
       <%include file="_gated_content.html" args="prereq_url=gated_content['prereq_url'], prereq_section_name=gated_content['prereq_section_name'], gated_section_name=gated_content['gated_section_name']"/>
     % else:
     <div class="sr-is-focusable" tabindex="-1"></div>
-
+    <script>
+    var blocksTimeLimit = {}
+    </script>
     % for idx, item in enumerate(items):
+      % for key, value in item['time_limits'].items():
+        <script>
+          blocksTimeLimit["${key}"] = "${value}"
+        </script>
+      % endfor
         % if ">" in item['page_title']:
           <%
           i+=1
@@ -205,7 +212,6 @@
        <button class="sequence-nav-button button-next disabled " disabled="disabled" style="width: 100px;border: 1px solid #0c1c48!important;border-radius: 15px;height: 30px;color: #fff;background-color: #0c1c48;font-weight: 600">
          ## Translators: A button for showing the Next Unit
          <span style="font-family: mywebfont;">${_('Next')}</span>
-
        </button>
      </nav>
     </div>
@@ -283,7 +289,9 @@
       }
 
     })
+
   </script>
+
 % if not exclude_units:
 </div>
 % endif
