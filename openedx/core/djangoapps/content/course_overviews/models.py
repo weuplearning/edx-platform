@@ -139,6 +139,8 @@ class CourseOverview(TimeStampedModel):
 
     history = HistoricalRecords()
 
+    time_limit = IntegerField(blank=True, null=True)
+
     @classmethod
     def _create_or_update(cls, course):
         """

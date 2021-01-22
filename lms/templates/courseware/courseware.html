@@ -362,15 +362,27 @@ courseware = static.get_value('css_overrides_courseware')
 
 
 </script>
+<script type="text/javascript" src="${static.url('js/courseware_completion.js')}"></script>
+<script type="text/javascript">
+var timeLimit = "${time_limit}";
 
-<script src="${static.url('js/courseware_completion.js')}"></script>
+function disableNextButton() {
+  // DISABLE NEXT BUTTON WHEN UNIT IS NOT COMPLETED
+  $(".tma_tab").each(function(){
+   if($(this).hasClass('disabled_unit_tma')){
+     $(this).children('.sequence-bottom').children('.button-next').prop("disabled", true)
+   } 
+ })
+};
+
+setInterval(disableNextButton, 50);
+</script>
 <script src="${static.url('js/tma_custom_quiz_display.js')}"></script>
 <%
 user_id = user.id
 username = user.username
 course_id = course.id
 %>
-
 
 <script>
   function ariane_height() {
