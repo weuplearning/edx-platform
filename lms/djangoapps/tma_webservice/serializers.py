@@ -24,7 +24,6 @@ from common.djangoapps.student.views.dashboard import get_new_course_progress
 from logging import getLogger
 log = getLogger(__name__)
 
-
 class StudentSerializer(serializers.Serializer):
     student_info = serializers.SerializerMethodField()
 
@@ -101,6 +100,7 @@ class StudentSerializer(serializers.Serializer):
                 if passed :
                     compteur_certified+=1
                     certified_courses.append(q)
+
                 if course_progression > 0 and course_progression < 100 and not passed and _progress:
                     compteur_progress+=1
                     progress_courses.append(q)
@@ -136,6 +136,7 @@ class StudentSerializer(serializers.Serializer):
                 'last login' : last_login[0]
 
             }
+
             if check_admin_microsite :
                 context['microsite_admin_org'] = microsite_admin_org
 

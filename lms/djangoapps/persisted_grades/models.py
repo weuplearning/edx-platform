@@ -49,7 +49,7 @@ def store_persisted_course_grade(course_id, user_id, grade, passed):
         persisted_grade.passed = passed
         persisted_grade.save()
 
-    persisted_grade.set_first_success_date_if_needed()
+    #persisted_grade.set_first_success_date_if_needed()
 
     return persisted_grade
 
@@ -66,5 +66,5 @@ def set_quiz_completion(course_id, user_id):
         if not persisted_grade.quiz_completed:
             persisted_grade.quiz_completed = True
             persisted_grade.save()
-        persisted_grade.set_first_success_date_if_needed()
+        #persisted_grade.set_first_success_date_if_needed()
     return persisted_grade
