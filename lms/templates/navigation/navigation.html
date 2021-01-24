@@ -306,14 +306,14 @@ else :
   main_atp_logo_style=""
 
   if configuration_helpers.get_value('white_or_color_logo')=="white":
-    amundi_brand_url='/media/logo-amundiacademy_blanc.png'
+    amundi_brand_url='/media/logo-amundiacademy_blanc-new.png'
     main_atp_logo = static.url('images/logo.png')
 
     if configuration_helpers.get_value('logo'):
       main_atp_logo = configuration_helpers.get_value('logo')
 
   else:
-    amundi_brand_url='/media/logo-amundiacademy.png'
+    amundi_brand_url='/media/logo-amundiacademy-new.png'
     main_atp_logo_style="padding: 10px 0px;"
     main_atp_logo = static.url('images/logo.png')
 
