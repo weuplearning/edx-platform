@@ -272,7 +272,6 @@ def generate_html(user,score,course_img_path,template_path,course_title,categori
     #use requests geoffrey fix
     response_img = requests.get(course_img_path, stream=True)
     response_img.raw.decode_content = True
-    log.info("atp_certificates.utils course_img get requests status code : ".format(response_img.status_code))
     image_cours=Image.open(response_img.raw)
     try:
         image_cours=resizeimage.resize_width(image_cours, 300)

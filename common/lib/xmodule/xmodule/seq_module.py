@@ -10,7 +10,7 @@ import json
 import logging
 from datetime import datetime
 from functools import reduce
-
+from pprint import pformat
 from pkg_resources import resource_string
 
 import six
@@ -539,14 +539,13 @@ class SequenceModule(SequenceFields, ProctoringFields, XModule):
                 content = ''
 
             # WUL CUSTOMIZATION FOR GETTING BLOCK TIME_LIMIT
-            store = modulestore()
-            xblocks = store.get_item(usage_id).get_children()
+            xblocks = item.get_children()
             time_limits = {}
             for block in xblocks:
-                if 'html' in block.xml_attributes['filename'][0]:
-                   # NEED TO FIND CLEANER WAY  TO GET BLOCK ID
-                   block_id = block.xml_attributes['filename'][0].split('/')[1].split('.')[0]
-                   time_limits[block_id] = block.time_limit
+                try:
+                    time_limits[block.location.block_id] = block.time_limit
+                except:
+                    pass
             # END
             
             iteminfo = {
