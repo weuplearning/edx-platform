@@ -1077,6 +1077,15 @@ class CourseFields(object):
         ),
         scope=Scope.settings
     )
+    time_limit_tooltip = String(
+        display_name=_("Time Limit Tooltip"),
+        help=_(
+            "Define the message to display so student get informed about time limit"
+        ),
+        default=_("You have to wait for %%time_limit%% seconds to go to next unity"),
+        scope=Scope.settings,
+    )
+
 
 class CourseModule(CourseFields, SequenceModule):  # pylint: disable=abstract-method
     """

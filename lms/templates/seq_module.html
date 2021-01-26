@@ -1,4 +1,5 @@
 <%page expression_filter="h"/>
+<%namespace name='static' file='/static_content.html'/>
 <%! from django.utils.translation import pgettext, ugettext as _ %>
 <%! from openedx.core.djangolib.js_utils import js_escaped_string, dump_js_escaped_json %>
 <style>
@@ -108,10 +109,18 @@
     % else:
     <div class="sr-is-focusable" tabindex="-1"></div>
     <script>
+    // blocks are unit xblocks
     var blocksTimeLimit = {}
+
+    // item equals to CMS unit
+    var itemsTimeLimit = {}
     </script>
     % for idx, item in enumerate(items):
       <script>
+        // GET UNIT TIME LIMIT FOR TIMER PURPOSE
+        itemsTimeLimit["${item['id']}"] = Object.values(${dump_js_escaped_json(item['time_limits']) | n, decode.utf8})[0]
+
+        // GET XBLOCK TIME LIMIT FOR NEXT BUTTON ACTIVATION
         blocksTimeLimit = Object.assign(blocksTimeLimit, ${dump_js_escaped_json(item['time_limits']) | n, decode.utf8})
       </script>
         % if ">" in item['page_title']:
@@ -207,7 +216,8 @@
     </div>
      <div class="seq_content" role="tabpanel"></div>
      <nav class="sequence-bottom" style="margin: 30px 0px"aria-label="${_('Section')}">
-       <button class="sequence-nav-button button-next disabled " disabled="disabled" style="width: 100px;border: 1px solid #0c1c48!important;border-radius: 15px;height: 30px;color: #fff;background-color: #0c1c48;font-weight: 600">
+       <div class="timer-tooltip"></div>
+       <button class="sequence-nav-button button-next disabled " onclick='setSecondsLeft(${dump_js_escaped_json(items[idx + 1 if idx + 1 < len(items) else idx]["id"]) | n, decode.utf8});'  disabled="disabled" style="width: 100px;border: 1px solid #0c1c48!important;border-radius: 15px;height: 30px;color: #fff;background-color: #0c1c48;font-weight: 600;">
          ## Translators: A button for showing the Next Unit
          <span style="font-family: mywebfont;">${_('Next')}</span>
        </button>
@@ -293,3 +303,31 @@
 % if not exclude_units:
 </div>
 % endif
+
+
+<script type="text/javascript" src="${static.url('js/courseware_completion.js')}"></script>
+<script type="text/javascript">
+  // CREATE A COUNTER FOR TIME LIMITED BLOCKS
+  function setSecondsLeft(nextBlockId){
+  console.log(nextBlockId)
+    var secondsLeft = itemsTimeLimit[nextBlockId]
+    console.log(secondsLeft)
+    var counter = setInterval(function(){
+       if(secondsLeft >= 0){
+         secondsLeft -= 1
+         var tooltips = document.getElementsByClassName("timer-tooltip")
+         for(tooltip of tooltips){
+           // APPLY ONLY FOR NOT COMPLETED BLOCKS
+           var parentBlock = tooltip.parentElement.parentElement
+           if(parentBlock.classList.contains("disabled_unit_tma")){
+             tooltip.innerHTML = secondsLeft
+             if(secondsLeft < 1){
+               tooltip.innerHTML = ""
+             }
+           }
+         }
+      }
+    }, 1000)
+  }
+  setSecondsLeft(${dump_js_escaped_json(items[0]['id']) | n, decode.utf8})
+</script>

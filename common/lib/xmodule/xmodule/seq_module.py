@@ -542,6 +542,7 @@ class SequenceModule(SequenceFields, ProctoringFields, XModule):
             xblocks = item.get_children()
             time_limits = {}
             for block in xblocks:
+                log.info(pformat(block))
                 try:
                     time_limits[block.location.block_id] = block.time_limit
                 except:
