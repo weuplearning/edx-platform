@@ -359,7 +359,7 @@ courseware = static.get_value('css_overrides_courseware')
   var unfortunately_wording = '${_("Unfortunately, you haven\'t achieved the minimum score ({score}%) required to validate the training module.").format(score=int(course.grading_policy.get('GRADE_CUTOFFS').get('Pass')*100))}';
   var score_wording = '${_("Your total score :")}';
   var to_end_wording = '${_("To end this training module, you have to access every chapters and finish the validation knowledge test.")}';
-  var timeLimitTooltip = ${course.time_limit_tooltip}
+  var timeLimitTooltip = '${course.time_limit_tooltip}';
 
 </script>
 <script type="text/javascript" src="${static.url('js/courseware_completion.js')}"></script>

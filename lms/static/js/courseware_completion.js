@@ -125,3 +125,4 @@ function completion_nav_handler(course_id,user,item) {
     });
   };
 };
+

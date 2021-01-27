@@ -1072,15 +1072,17 @@ class CourseFields(object):
     time_limit = Integer(
         display_name=_("Time Limit"),
         help=_(
-            "Set a completion time limit (in seconds) for non-quiz modules."
-            "By default, time limit is set to null"
+            "Set a completion time limit (in seconds) for non-quiz blocks. "
+            "By default, time limit is set to null. "
+            "WARNING: if you change this value, any previous configuration on a per block basis will be erased "
+            "you will need to set specific per block values again."
         ),
         scope=Scope.settings
     )
     time_limit_tooltip = String(
         display_name=_("Time Limit Tooltip"),
         help=_(
-            "Define the message to display so student get informed about time limit"
+            "Define the message to display so that student get informed about the time limit."
         ),
         default=_("You have to wait for %sec% seconds to go to next unity"),
         scope=Scope.settings,
