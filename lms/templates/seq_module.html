@@ -114,6 +114,8 @@
 
     // item equals to CMS unit
     var itemsTimeLimit = {}
+
+    var timerText = ""
     </script>
     % for idx, item in enumerate(items):
       <script>
@@ -122,6 +124,8 @@
 
         // GET XBLOCK TIME LIMIT FOR NEXT BUTTON ACTIVATION
         blocksTimeLimit = Object.assign(blocksTimeLimit, ${dump_js_escaped_json(item['time_limits']) | n, decode.utf8})
+
+        timerText = "${item['time_limit_tooltip']}"
       </script>
         % if ">" in item['page_title']:
           <%
@@ -216,7 +220,7 @@
     </div>
      <div class="seq_content" role="tabpanel"></div>
      <nav class="sequence-bottom" style="margin: 30px 0px"aria-label="${_('Section')}">
-       <div class="timer-tooltip"></div>
+       <div class="timer-tooltip" style="width:100%;text-align:center;height:20px;color:#05144d ;"></div>
        <button class="sequence-nav-button button-next disabled " onclick='setSecondsLeft(${dump_js_escaped_json(items[idx + 1 if idx + 1 < len(items) else idx]["id"]) | n, decode.utf8});'  disabled="disabled" style="width: 100px;border: 1px solid #0c1c48!important;border-radius: 15px;height: 30px;color: #fff;background-color: #0c1c48;font-weight: 600;">
          ## Translators: A button for showing the Next Unit
          <span style="font-family: mywebfont;">${_('Next')}</span>
@@ -307,27 +311,36 @@
 
 <script type="text/javascript" src="${static.url('js/courseware_completion.js')}"></script>
 <script type="text/javascript">
+
   // CREATE A COUNTER FOR TIME LIMITED BLOCKS
   function setSecondsLeft(nextBlockId){
-  console.log(nextBlockId)
+
     var secondsLeft = itemsTimeLimit[nextBlockId]
-    console.log(secondsLeft)
-    var counter = setInterval(function(){
-       if(secondsLeft >= 0){
-         secondsLeft -= 1
-         var tooltips = document.getElementsByClassName("timer-tooltip")
-         for(tooltip of tooltips){
-           // APPLY ONLY FOR NOT COMPLETED BLOCKS
-           var parentBlock = tooltip.parentElement.parentElement
-           if(parentBlock.classList.contains("disabled_unit_tma")){
-             tooltip.innerHTML = secondsLeft
-             if(secondsLeft < 1){
-               tooltip.innerHTML = ""
-             }
-           }
-         }
-      }
-    }, 1000)
+
+    if(secondsLeft){
+      var counter = setInterval(function(){
+        secondsLeft -= 1
+        if(secondsLeft >= 0){
+
+          var tooltips = document.getElementsByClassName("timer-tooltip")
+          for(tooltip of tooltips){
+            // GET UNITY COMPLETION STATUS THROUGH UNITY CLASS
+            var parentBlock = tooltip.parentElement.parentElement
+
+            if(parentBlock.classList.contains("disabled_unit_tma") && parentBlock.dataset.id === nextBlockId){
+              tooltip.innerHTML = timerText.replace("%sec%", secondsLeft.toString())
+
+              if(secondsLeft < 1){
+                tooltip.innerHTML = ""
+              }
+            }
+          }
+        }
+      }, 1000)
+    }
   }
-  setSecondsLeft(${dump_js_escaped_json(items[0]['id']) | n, decode.utf8})
+
+  $(document).ready(function(){
+    setSecondsLeft(document.getElementsByClassName("tma_tab active").item(0).dataset.id)
+  })
 </script>

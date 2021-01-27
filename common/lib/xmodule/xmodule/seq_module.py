@@ -540,13 +540,16 @@ class SequenceModule(SequenceFields, ProctoringFields, XModule):
 
             # WUL CUSTOMIZATION FOR GETTING BLOCK TIME_LIMIT
             xblocks = item.get_children()
+            time_limit_tooltip = modulestore().get_course(item.get_parent().course_id).time_limit_tooltip
             time_limits = {}
-            for block in xblocks:
-                log.info(pformat(block))
-                try:
-                    time_limits[block.location.block_id] = block.time_limit
-                except:
-                    pass
+
+            # NO TIME LIMIT FOR PROBLEM BLOCKS
+            if item_type != "problem":
+                for block in xblocks:
+                    try:
+                        time_limits[block.location.block_id] = block.time_limit
+                    except:
+                        pass
             # END
             
             iteminfo = {
@@ -557,7 +560,8 @@ class SequenceModule(SequenceFields, ProctoringFields, XModule):
                 'bookmarked': is_bookmarked,
                 'path': " > ".join(display_names + [item.display_name_with_default]),
                 'graded': item.graded,
-                'time_limits': time_limits
+                'time_limits': time_limits,
+                'time_limit_tooltip': time_limit_tooltip,
             }
             if not render_items:
                 # The item url format can be defined in the template context like so:

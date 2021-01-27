@@ -1082,7 +1082,7 @@ class CourseFields(object):
         help=_(
             "Define the message to display so student get informed about time limit"
         ),
-        default=_("You have to wait for %%time_limit%% seconds to go to next unity"),
+        default=_("You have to wait for %sec% seconds to go to next unity"),
         scope=Scope.settings,
     )
 
