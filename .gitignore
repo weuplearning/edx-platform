@@ -149,4 +149,4 @@ pii_report
 
 # Ignore transifex config
 .transifexrc
-
+**/migrations/*
