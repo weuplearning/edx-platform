@@ -349,7 +349,7 @@
         margin-right: $baseline / 2;
         border-radius: 100px;
         color: white;
-        background-color: $green;
+        background-color: $secondary;
         float: right;
       }
     }
@@ -397,7 +397,7 @@
           .subsection-text {
             .details {
               font-size: $body-font-size;
-              color: theme-color("secondary");
+              color: theme-color("secondary") !important;
             }
 
             .prerequisite {
