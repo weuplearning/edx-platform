@@ -23,6 +23,13 @@ from openedx.features.course_experience import course_home_page_title, DISABLE_C
    )
 %>
 
+<style>
+  .window-wrap {
+    background: url("${static.url('{}/images/bg_img.png'.format(course.org))}");
+    background-size: contain;
+  }
+</style>
+
 % if display_reset_dates_banner:
     <script type="text/javascript">
         $('.reset-deadlines-banner').css('display', 'flex');

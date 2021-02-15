@@ -46,9 +46,13 @@ body.view-in-course {
 
   // content area wrapper
   .container {
-    max-width: none;
+    max-width: 65vw;
     min-width: initial;
     width: auto;
+
+    @media only screen and (min-device-width : 320px) and (max-device-width : 1023px) {
+      max-width: 100vw;
+    }
   }
 
   // course info page

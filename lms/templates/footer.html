@@ -15,12 +15,16 @@
     background-color: var(--primary);
   }
 
-  .wrapper-footer .site-nav {
-    margin-bottom: 0 !important;
+  body.view-in-course .wrapper-footer {
+    background-color: gray;
   }
 
-  .wrapper-footer .site-nav .nav-link{
-    color: rgb(247, 210, 210) !important;
+  .wrapper-footer .site-nav, .wrapper-footer footer#footer-openedx .colophon .nav-colophon {
+    margin: 0 !important;
+  }
+
+  .wrapper-footer .site-nav .nav-link, .wrapper-footer footer#footer-openedx .colophon .nav-colophon li a {
+    color: white !important;
   }
 </style>
 
@@ -29,10 +33,10 @@
     <footer>
       <div class="row">
         <div class="col-md-9">
-          <nav class="navbar site-nav navbar-expand-sm" aria-label="${_('About')}">
+          <nav class="navbar site-nav navbar-expand-sm" aria-label="${_('CGU')}">
             <ul class="navbar-nav">
               <li class="nav-item">
-                <a class="nav-link" href="/cgu">CGU</a>
+                <a class="nav-link" href="/cgu">Conditions générales d'utilisation</a>
               </li>
             </ul>
           </nav>
@@ -52,13 +56,11 @@
       % endif
     >
       <div class="colophon">
-        <nav class="nav-colophon" aria-label="${_('About')}">
+        <nav class="nav-colophon" aria-label="${_('CGU')}">
           <ol>
-              % for item_num, link in enumerate(footer['navigation_links'], start=1):
-              <li class="nav-colophon-0${item_num}">
-                <a id="${link['name']}" href="${link['url']}">${link['title']}</a>
-              </li>
-              % endfor
+            <li class="nav-colophon-01">
+              <a id="cgu" href="/cgu">Conditions générales d'utilisation</a>
+            </li>
           </ol>
         </nav>
       </div>
