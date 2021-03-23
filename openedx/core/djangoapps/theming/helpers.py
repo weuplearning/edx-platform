@@ -23,7 +23,8 @@ from openedx.core.djangoapps.theming.helpers_dirs import (
 )
 from openedx.core.lib.cache_utils import request_cached
 
-logger = getLogger(__name__)  # pylint: disable=invalid-name
+logger = getLogger(__name__)  # pylint: disable=invalid-nam
+
 
 
 @request_cached()
@@ -160,6 +161,7 @@ def get_current_site():
          (django.contrib.sites.models.Site): returns current site
     """
     request = get_current_request()
+
     if not request:
         return None
     return getattr(request, 'site', None)
