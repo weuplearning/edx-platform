@@ -1640,10 +1640,10 @@ FOOTER_OPENEDX_URL = "https://open.edx.org"
 # We use logo images served from files.edx.org so we can (roughly) track
 # how many OpenEdX installations are running.
 # Site operators can choose from these logo options:
-# * https://files.edx.org/openedx-logos/edx-openedx-logo-tag.png
-# * https://files.edx.org/openedx-logos/edx-openedx-logo-tag-light.png"
-# * https://files.edx.org/openedx-logos/edx-openedx-logo-tag-dark.png
-FOOTER_OPENEDX_LOGO_IMAGE = "https://files.edx.org/openedx-logos/edx-openedx-logo-tag.png"
+# * https://files.edx.org/openedx-logos/open-edx-logo-tag.png
+# * https://files.edx.org/openedx-logos/open-edx-logo-tag-light.png"
+# * https://files.edx.org/openedx-logos/open-edx-logo-tag-dark.png
+FOOTER_OPENEDX_LOGO_IMAGE = "https://files.edx.org/openedx-logos/open-edx-logo-tag.png"
 
 # This is just a placeholder image.
 # Site operators can customize this with their organization's image.
@@ -1686,10 +1686,10 @@ MIDDLEWARE = [
 
     # A newer and safer request cache.
     'edx_django_utils.cache.middleware.RequestCacheMiddleware',
-    'edx_django_utils.monitoring.middleware.CachedCustomMonitoringMiddleware',
+    'edx_django_utils.monitoring.CachedCustomMonitoringMiddleware',
 
     # Generate code ownership attributes. Keep this immediately after RequestCacheMiddleware.
-    'edx_django_utils.monitoring.code_owner.middleware.CodeOwnerMonitoringMiddleware',
+    'edx_django_utils.monitoring.CodeOwnerMonitoringMiddleware',
 
     # Cookie monitoring
     'openedx.core.lib.request_utils.CookieMonitoringMiddleware',
@@ -2813,6 +2813,7 @@ SUPPORT_SITE_LINK = ''
 ID_VERIFICATION_SUPPORT_LINK = ''
 PASSWORD_RESET_SUPPORT_LINK = ''
 ACTIVATION_EMAIL_SUPPORT_LINK = ''
+LOGIN_ISSUE_SUPPORT_LINK = ''
 
 # Days before the expired date that we warn the user
 ENTITLEMENT_EXPIRED_ALERT_PERIOD = 90

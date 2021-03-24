@@ -658,7 +658,7 @@ MIDDLEWARE = [
 
     # A newer and safer request cache.
     'edx_django_utils.cache.middleware.RequestCacheMiddleware',
-    'edx_django_utils.monitoring.middleware.MonitoringMemoryMiddleware',
+    'edx_django_utils.monitoring.MonitoringMemoryMiddleware',
 
     # Cookie monitoring
     'openedx.core.lib.request_utils.CookieMonitoringMiddleware',
@@ -1532,6 +1532,7 @@ SUPPORT_SITE_LINK = ''
 ID_VERIFICATION_SUPPORT_LINK = ''
 PASSWORD_RESET_SUPPORT_LINK = ''
 ACTIVATION_EMAIL_SUPPORT_LINK = ''
+LOGIN_ISSUE_SUPPORT_LINK = ''
 
 ############################## EVENT TRACKING #################################
 
