@@ -98,10 +98,10 @@
                         field,
                         len = data.length,
                         requiredFields = [],
-                        optionalFields = [];
+                        optionalFields = [],
+                        nonRequiredFields = [];
 
                     this.fields = data;
-
                     this.hasOptionalFields = false;
                     for (i = 0; i < len; i++) {
                         field = data[i];
@@ -109,7 +109,7 @@
                             // eslint-disable-next-line no-param-reassign
                             field.errorMessages = this.escapeStrings(field.errorMessages);
                         }
-
+                        
                         if (field.required) {
                             requiredFields.push(field);
                         } else {
@@ -120,11 +120,18 @@
                                 // input elements that are visible on the page.
                                 this.hasOptionalFields = true;
                             }
-                            optionalFields.push(field);
+                            if (field.optional){
+                                nonRequiredFields.push(field)
+                            } else {
+                                optionalFields.push(field);
+                            }
+                            
                         }
                     }
 
                     html = this.renderFields(requiredFields, 'required-fields');
+
+                    html.push.apply(html, this.renderFields(nonRequiredFields, 'non-required-fields'));
 
                     html.push.apply(html, this.renderFields(optionalFields, 'optional-fields'));
 

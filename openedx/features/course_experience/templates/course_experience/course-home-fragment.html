@@ -25,20 +25,15 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
   <link rel="stylesheet" type="text/css" href="${static.url('weup/css/animate-4.1.1.min.css')}" />
   <style>
     header.page-header.has-secondary{
-        background-image: url("/media/microsites/amazon/banner_v2.png");
+        background-color: var(--primary);
         padding-top: 10px !important;
         padding-bottom: 10px !important;
         box-shadow: 0 3px 6px rgba(0,0,0,0.16);
-    }
-    .page-header-main, .page-header-secondary{
-        animation: bounce;
-        animation-duration: 0.5s;
+        display: flex;
+        align-items: center;
     }
     .page-header-secondary{
-        padding-top: 25px !important;
-    }
-    .page-header-main h2.hd.hd-3.page-title{
-        color: #343a40 !important;
+        padding: 25px 0 !important;
     }
     button.search-button{
         margin-left: 5px;
@@ -49,19 +44,19 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
     }
 
     .course-outline .block-tree .outline-button .fa {
-        color: #f90 !important;
+        color: var(--secondary) !important;
     }
     .course-outline .block-tree .outline-button .complete-checkmark {
-        background-color: rgb(255, 153, 0);
-        border-color: rgb(255, 153, 0);
+        background-color: var(--secondary);
+        border-color: var(--secondary);
         color: white !important;
         padding: 2px;
     }
     .course-message .message-content .message-header{
-        color: #f90 !important;
+        color: var(--secondary) !important;
     }
     .course-message .message-content{
-        border: 1px solid #f90 !important;
+        border: 1px solid var(--secondary) !important;
     }
     .section-name.accordion-trigger.outline-button    {
         padding-left: 25px !important;
@@ -69,7 +64,6 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
     }
      a.subsection-text div.details,a.subsection-text span.icon.fa.fa-pencil-square-o{
          display:none !important;
-         visiblity: hidden;
      }
     .page-content .page-content-secondary{
         min-width: calc(50% - 15px);
@@ -98,7 +92,6 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
         background: white !important; 
     }
     h4.subsection-title{
-        color: rgb(255, 153, 0) !important;
         font-size: 1rem;
     }
     button:focus {
@@ -117,9 +110,9 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
 
     .course-outline .block-tree .section .section-name {
         padding: 20px 0 20px 2px;
-        background-color: #343a40;
+        background-color: var(--tertiary);
         margin-bottom: 25px;
-        color: #f90!important;
+        color: var(--secondary)!important;
         margin-bottom: 0px !important;
         margin-top:25px !important;
         border-radius: 2px;
@@ -210,7 +203,7 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
     }
 
     #final-grade-progress .progress-bar-grade{
-        background-color: rgb(255, 153, 0) ;
+        background-color: var(--secondary);
         border-radius: 7.5px;
     }
 
@@ -247,7 +240,7 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
     .page-content .page-content-secondary h4{
         padding:15px;
         color:white;
-        background-color:#343a40;
+        background-color:var(--tertiary);
         text-align:center
     }
 
@@ -256,6 +249,11 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
+    }
+
+    #logo_banner {
+        margin: auto 30px;
+        height: 40px;
     }
 
     
@@ -331,12 +329,6 @@ from lms.djangoapps.grades.course_grade import ZeroCourseGrade
         }
     }
 
-    .logo_banner{
-    margin-top: -80px;
-    max-height: 180px;
-    padding-top: 85px;
-    padding-left: 25px;
-    }
   </style>
   <script>
 document.title = "Cours | ${HTML(course.display_name_with_default)}";
@@ -346,18 +338,10 @@ document.title = "Cours | ${HTML(course.display_name_with_default)}";
 
 
 <%block name="content">
-<%
-share_url = "https://www.accelerateur-du-numerique.fr/"
-share_title = "L%27acc%C3%A9l%C3%A9rateur%20du%20num%C3%A9rique"
-share_image = "https://amazon.the-mooc-agency.com/media/microsite/amazon/auto/images/logo.png"
-%>
 <div class="course-view page-content-container" id="course-container">
     <header class="page-header has-secondary">
-<img class="logo_banner" src="${static.url('amazon/images/logo.png')}" alt="L’Accélérateur du Numérique Accueil">
         <div class="page-header-main">
-            <nav aria-label="${_('Course Outline')}" class="sr-is-focusable" tabindex="-1">
-<!--                <h2 class="hd hd-3 page-title">${course.display_name_with_default}</h2>-->
-            </nav>
+            <img id="logo_banner" src="${static.url('{}/images/logo_secondary.png'.format(course.org))}" alt="banner logo">
         </div>
         <div class="page-header-secondary">
             % if show_search:
@@ -379,7 +363,7 @@ share_image = "https://amazon.the-mooc-agency.com/media/microsite/amazon/auto/im
             % endif
             <div class="form-actions">
                 % if resume_course_url:
-                    <a class="btn btn-primary action-resume-course" href="${resume_course_url}">
+                    <a class="btn btn-secondary action-resume-course" href="${resume_course_url}">
                         % if has_visited_course:
                             <span data-action-type="resume">${_("Resume Course")}</span>
                         % else:
@@ -449,17 +433,6 @@ share_image = "https://amazon.the-mooc-agency.com/media/microsite/amazon/auto/im
                         </div>
                     %endfor
             </div>
-            <ul id="share-list">
-                <li>
-                    <a target="_blank" href="http://www.facebook.com/share.php?u=${share_url}&t=${share_title}&pic=${share_image}" title="Facebook"><i class="fa fa-facebook-square" aria-hidden="true"></i></a>
-                </li>
-                <li>
-                    <a target="_blank" href="http://twitter.com/intent/tweet?text=${share_title}&url=${share_url}&pic=${share_image}" title="Twitter"><i class="fa fa-twitter-square" aria-hidden="true"></i></a>
-                </li>
-                <li>
-                    <a target="_blank" href="https://www.linkedin.com/sharing/share-offsite/?url=${share_url}&title=${share_title}" title="LinkedIn"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
-                </li>
-            </ul>
         </aside>
     </div>
     % if course_sock_fragment:
@@ -544,6 +517,3 @@ share_image = "https://amazon.the-mooc-agency.com/media/microsite/amazon/auto/im
       });
 
 </%static:require_module_async> 
-<script>
-$("div.grade-block").eq(1).hide();
-</script>
