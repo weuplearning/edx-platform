@@ -82,9 +82,11 @@ dates_banner_displayed = False
                                       <h4 class="subsection-title">
                                           ${ subsection['display_name'] }
                             % if num_graded_problems:
+<!--
                                           ${ngettext("({number} Question)",
                                                      "({number} Questions)",
                                                      num_graded_problems).format(number=num_graded_problems)}
+-->
                             % endif
                                       </h4>
                             % if subsection.get('complete'):

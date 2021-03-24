@@ -26,6 +26,9 @@ from lms.djangoapps.course_goals.api import (
 from lms.djangoapps.courseware.exceptions import CourseAccessRedirect
 from lms.djangoapps.courseware.utils import can_show_verified_upgrade, verified_upgrade_deadline_link
 from lms.djangoapps.courseware.views.views import CourseTabView
+
+from lms.djangoapps.grades.api import CourseGradeFactory
+
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
 from openedx.core.djangoapps.plugin_api.views import EdxFragmentView
 from openedx.core.djangoapps.util.maintenance_banner import add_maintenance_banner
@@ -121,10 +124,14 @@ class CourseHomeFragmentView(EdxFragmentView):
         # Unenrolled users who are not course or global staff are given only a subset.
         enrollment = CourseEnrollment.get_enrollment(request.user, course_key)
         user_access = {
+            'is_authenticated': request.user.is_authenticated,
             'is_anonymous': request.user.is_anonymous,
             'is_enrolled': enrollment and enrollment.is_active,
             'is_staff': has_access(request.user, 'staff', course_key),
         }
+
+        if not user_access['is_authenticated']:
+            raise CourseAccessRedirect(reverse('dashboard'))
 
         allow_anonymous = COURSE_ENABLE_UNENROLLED_ACCESS_FLAG.is_enabled(course_key)
         allow_public = allow_anonymous and course.course_visibility == COURSE_VISIBILITY_PUBLIC
@@ -215,12 +222,17 @@ class CourseHomeFragmentView(EdxFragmentView):
             settings.FEATURES.get('ENABLE_COURSEWARE_SEARCH') or
             (settings.FEATURES.get('ENABLE_COURSEWARE_SEARCH_FOR_COURSE_STAFF') and user_access['is_staff'])
         )
+
+        # Compute course grade so that we can show badges
+        user_grade = CourseGradeFactory().read(request.user, course)
+
         # Render the course home fragment
         context = {
             'request': request,
             'csrf': csrf(request)['csrf_token'],
             'course': course,
             'course_key': course_key,
+            'user_grade': user_grade,
             'outline_fragment': outline_fragment,
             'handouts_html': handouts_html,
             'course_home_message_fragment': course_home_message_fragment,

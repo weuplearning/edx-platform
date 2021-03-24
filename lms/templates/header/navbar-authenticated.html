@@ -11,8 +11,8 @@ from openedx.core.djangoapps.site_configuration import helpers as configuration_
 %>
 
 <%
-  show_explore_courses = settings.FEATURES.get('COURSES_ARE_BROWSABLE')
-  show_sysadmin_dashboard = settings.FEATURES.get('ENABLE_SYSADMIN_DASHBOARD','') and user.is_staff
+  show_explore_courses = configuration_helpers.get_value('COURSES_ARE_BROWSABLE',settings.FEATURES.get('COURSES_ARE_BROWSABLE'))
+  show_sysadmin_dashboard = configuration_helpers.get_value('ENABLE_SYSADMIN_DASHBOARD',settings.FEATURES.get('ENABLE_SYSADMIN_DASHBOARD','')) and user.is_staff
   self.real_user = getattr(user, 'real_user', user)
 
   support_link = configuration_helpers.get_value('SUPPORT_SITE_LINK', settings.SUPPORT_SITE_LINK)

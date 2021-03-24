@@ -61,12 +61,9 @@
                 <table role="presentation" width="100%" align="left" border="0" cellpadding="0" cellspacing="0">
                     <tr>
                         <td width="70">
-                            <a href="{% with_link_tracking homepage_url %}"><img
-                                    src="https://media.sailthru.com/595/1k1/8/o/599f355101b3f.png" width="70"
+                            <a href="https://amazon.koa.preprd.website"><img
+                                    src="https://amazon.koa.preprd.website/static/amazon/images/logo.png" width="100"
                                     height="30" alt="{% filter force_escape %}{% blocktrans %}Go to {{ platform_name }} Home Page{% endblocktrans %}{% endfilter %}"/></a>
-                        </td>
-                        <td align="right" style="text-align: {{ LANGUAGE_BIDI|yesno:"left,right" }};">
-                            <a class="login" href="{% with_link_tracking dashboard_url %}" style="color: #005686;">{%  trans "Sign In" %}</a>
                         </td>
                     </tr>
                 </table>
@@ -172,9 +169,6 @@
                         <!-- COPYRIGHT -->
                         <td>
                             &copy; {% now "Y" %} {{ platform_name }}, {% trans "All rights reserved" as tmsg %}{{ tmsg | force_escape }}.<br/>
-                            <br/>
-                            {% trans "Our mailing address is" as tmsg %}{{ tmsg | force_escape }}:<br/>
-                            {{ contact_mailing_address }}
                         </td>
                     </tr>
                     {% if unsubscribe_url %}
@@ -198,5 +192,7 @@
 </div>
 
 {# Debug info that is not user-visible #}
+<!--
 <span id="ace-message-id" style="display:none;">{{ message.log_id }}</span>
 <span id="template-revision" style="display:none;">{{ template_revision }}</span>
+-->

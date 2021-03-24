@@ -30,14 +30,12 @@ should_show_order_history = should_redirect_to_order_history_microfrontend() and
 
 <div class="nav-item hidden-mobile">
     <a href="${reverse('dashboard')}" class="menu-title">
-        <img data-hj-suppress class="user-image-frame" src="${profile_image_url}" alt="">
-        <span class="sr-only">${_("Dashboard for:")}</span>
         <span data-hj-suppress class="username">${displayname}</span>
     </a>
 </div>
 <div class="nav-item hidden-mobile nav-item-dropdown" tabindex="-1">
     <div class="toggle-user-dropdown" role="button" aria-label=${_("Options Menu")} aria-expanded="false" tabindex="0" aria-controls="user-menu">
-        <span class="fa fa-caret-down" aria-hidden="true"></span>
+        <span class="fa fa-bars" aria-hidden="true"></span>
     </div>
     <div class="dropdown-user-menu hidden" aria-label=${_("More Options")} role="menu" id="user-menu" tabindex="-1">
         % if resume_block:
@@ -49,7 +47,7 @@ should_show_order_history = should_redirect_to_order_history_microfrontend() and
             <div class="mobile-nav-item dropdown-item dropdown-nav-item"><a href="${settings.ENTERPRISE_LEARNER_PORTAL_BASE_URL}/${enterprise_customer_portal.get('slug')}" role="menuitem">${_("Dashboard")}</a></div>
         % endif
 
-        <div class="mobile-nav-item dropdown-item dropdown-nav-item"><a href="${reverse('learner_profile', kwargs={'username': username})}" role="menuitem">${_("Profile")}</a></div>
+<!--        <div class="mobile-nav-item dropdown-item dropdown-nav-item"><a href="${reverse('learner_profile', kwargs={'username': username})}" role="menuitem">${_("Profile")}</a></div>-->
         <div class="mobile-nav-item dropdown-item dropdown-nav-item"><a href="${reverse('account_settings')}" role="menuitem">${_("Account")}</a></div>
         % if should_show_order_history:
             <div class="mobile-nav-item dropdown-item dropdown-nav-item"><a href="${settings.ORDER_HISTORY_MICROFRONTEND_URL}" role="menuitem">${_("Order History")}</a></div>

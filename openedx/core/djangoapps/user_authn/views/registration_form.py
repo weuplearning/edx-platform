@@ -5,6 +5,7 @@ Objects and utilities used to construct registration forms.
 import copy
 from importlib import import_module
 import re
+import logging
 
 import six
 
@@ -36,6 +37,8 @@ from common.djangoapps.util.password_policy_validators import (
     password_validators_restrictions,
     validate_password,
 )
+
+log = logging.getLogger()
 
 
 class TrueCheckbox(widgets.CheckboxInput):
@@ -430,6 +433,22 @@ class RegistrationFormFactory(object):
                         form_desc,
                         required=self._is_field_required(field_name)
                     )
+
+        # WUL - ADD CUSTOM FIELDS TO FORM
+        FORM_EXTRA_FIELDS = configuration_helpers.get_value('FORM_EXTRA', [])
+        if(len(FORM_EXTRA_FIELDS)):
+            for field in FORM_EXTRA_FIELDS:
+                form_desc.add_field(
+                    field.get('name', u''),
+                    label=field.get('label', u''),
+                    field_type=field.get('type', u'text'),
+                    default=field.get('defaultValue', u''),
+                    placeholder=field.get('placeholder', u''),
+                    required=field.get('required', True),
+                    options=field.get('options', None),
+                    optional=field.get('optional', True)
+                )
+
         # remove confirm_email form v1 registration form
         if is_api_v1(request):
             for index, field in enumerate(form_desc.fields):
@@ -1019,6 +1038,7 @@ class RegistrationFormFactory(object):
 
         # Translators: "Terms of service" is a legal document users must agree to
         # in order to register a new account.
+        #error_msg = _(u"You must accept the terms of service.")
         error_msg = _(u"You must agree to the {platform_name} {terms_of_service}").format(
             platform_name=configuration_helpers.get_value("PLATFORM_NAME", settings.PLATFORM_NAME),
             terms_of_service=terms_label

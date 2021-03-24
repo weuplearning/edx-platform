@@ -75,7 +75,7 @@
     margin-top: $baseline;
     letter-spacing: normal;
     font-family: $font-family-sans-serif;
-    color: $uxpl-blue-hover-active;
+    color: $primary;
   }
 
   h3 {
@@ -518,8 +518,8 @@ ul.fa-ul{
   }
 
   .action-primary {
-    @extend %btn-primary-blue;
-
+    border: none;
+    background-color: $secondary;
     padding: 1ex 1em;
     text-transform: none;
     font-weight: 600;
@@ -528,6 +528,10 @@ ul.fa-ul{
 
     .icon {
       @extend %sso-icon;
+    }
+    
+    &:hover, &:focus {
+      background-color: $primary;
     }
   }
 
@@ -911,12 +915,12 @@ ul.fa-ul{
 
       .modal-close-button:hover {
         background: $white;
-        color: $uxpl-blue-hover-active;
+        color: $primary;
         text-decoration: underline;
       }
 
       .modal-close-button:focus {
-        color: $uxpl-blue-hover-active;
+        color: $primary;
         text-decoration: underline;
       }
     }

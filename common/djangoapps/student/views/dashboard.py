@@ -495,7 +495,7 @@ def student_dashboard(request):
     if not UserProfile.objects.filter(user=user).exists():
         return redirect(reverse('account_settings'))
 
-    platform_name = configuration_helpers.get_value("platform_name", settings.PLATFORM_NAME)
+    platform_name = configuration_helpers.get_value("PLATFORM_NAME", settings.PLATFORM_NAME)
 
     enable_verified_certificates = configuration_helpers.get_value(
         'ENABLE_VERIFIED_CERTIFICATES',
@@ -522,6 +522,15 @@ def student_dashboard(request):
     # Get the org whitelist or the org blacklist for the current site
     site_org_whitelist, site_org_blacklist = get_org_black_and_whitelist_for_site()
     course_enrollments = list(get_course_enrollments(user, site_org_whitelist, site_org_blacklist, course_limit))
+
+    # If there is any global register, take it into account
+    associated_courses = configuration_helpers.get_value('TMA_ASSOCIATED_COURSES',{})
+    if associated_courses.get('global_register'):
+        for course_id in associated_courses.get('global_register'):
+            if not course_id in [str(enrollment.course_id) for enrollment in course_enrollments]:
+                course_key = CourseKey.from_string(course_id)
+                CourseEnrollment.enroll(user, course_key)
+        course_enrollments = list(get_course_enrollments(user, site_org_whitelist, site_org_blacklist, course_limit))
 
     # Get the entitlements for the user and a mapping to all available sessions for that entitlement
     # If an entitlement has no available sessions, pass through a mock course overview object
@@ -826,5 +835,9 @@ def student_dashboard(request):
     context.update({
         'resume_button_urls': resume_button_urls
     })
+
+    if len(course_enrollments) == 1:
+        # TODO : Rather use a reverse but for some reason courseware_course_tree is unknown
+        return redirect(reverse('openedx.course_experience.course_home', kwargs={'course_id': course_enrollments[0].course_id}))
 
     return render_to_response('dashboard.html', context)

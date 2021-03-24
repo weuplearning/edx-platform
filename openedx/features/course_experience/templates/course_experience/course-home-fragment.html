@@ -16,19 +16,332 @@ from openedx.core.djangolib.js_utils import dump_js_escaped_json, js_escaped_str
 from openedx.core.djangolib.markup import Text, HTML
 from openedx.features.course_experience import DISABLE_UNIFIED_COURSE_TAB_FLAG, SHOW_REVIEWS_TOOL_FLAG
 from openedx.features.course_experience.course_tools import HttpMethod
+
+from lms.djangoapps.grades.course_grade import ZeroCourseGrade
 %>
 
 <%block name="header_extras">
   <link rel="stylesheet" type="text/css" href="${static.url('paragon/static/paragon.min.css')}" />
+  <link rel="stylesheet" type="text/css" href="${static.url('weup/css/animate-4.1.1.min.css')}" />
+  <style>
+    header.page-header.has-secondary{
+        background-color: var(--primary);
+        padding-top: 10px !important;
+        padding-bottom: 10px !important;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+        display: flex;
+        align-items: center;
+    }
+    .page-header-secondary{
+        padding: 25px 0 !important;
+    }
+    button.search-button{
+        margin-left: 5px;
+        background: white !important;
+    }
+    .global-header .header-logo .course-header, a.help-link{
+        display:none !important;
+    }
+
+    .course-outline .block-tree .outline-button .fa {
+        color: var(--secondary) !important;
+    }
+    .course-outline .block-tree .outline-button .complete-checkmark {
+        background-color: var(--secondary);
+        border-color: var(--secondary);
+        color: white !important;
+        padding: 2px;
+    }
+    .course-message .message-content .message-header{
+        color: var(--secondary) !important;
+    }
+    .course-message .message-content{
+        border: 1px solid var(--secondary) !important;
+    }
+    .section-name.accordion-trigger.outline-button    {
+        padding-left: 25px !important;
+        padding-right: 25px !important;
+    }
+     a.subsection-text div.details,a.subsection-text span.icon.fa.fa-pencil-square-o{
+         display:none !important;
+     }
+    .page-content .page-content-secondary{
+        min-width: calc(50% - 15px);
+        max-width: calc(50% - 15px);
+        animation: fadeInRight;
+        animation-duration: 0.5s;
+        background-color: white;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+        flex-direction: column;
+        justify-content: space-between;
+        padding:0;
+        border-radius: 2px;
+        overflow: hidden;
+        margin: 0;
+    }
+
+    .page-content .page-content-main { 
+        min-width: calc(50% - 15px);
+        max-width: calc(50% - 15px);
+    }
+
+    .page-content-container{
+        border:none !important;
+    }
+    .global-header.global-header{
+        background: white !important; 
+    }
+    h4.subsection-title{
+        font-size: 1rem;
+    }
+    button:focus {
+        outline: none !important;
+    }
+
+    .small-badge {
+        height: 20px;
+        margin: 10px 10px 10px 0;
+    }
+
+    .main-badge{
+        height:40px;
+        margin: 10px 10px 10px 0;
+    }
+
+    .course-outline .block-tree .section .section-name {
+        padding: 20px 0 20px 2px;
+        background-color: var(--tertiary);
+        margin-bottom: 25px;
+        color: var(--secondary)!important;
+        margin-bottom: 0px !important;
+        margin-top:25px !important;
+        border-radius: 2px;
+    }
+
+    .page-content-secondary {
+        margin-top:25px !important;
+    }
+    #expand-collapse-outline-all-button {
+        display: none;
+    }
+
+    .page-content {
+        padding: 20px;
+        justify-content: space-between;
+    }
+
+    #main{
+    	animation: fadeInLeft;
+        animation-duration: 0.5s;
+    }
+    .wrapper-preview-menu{
+       //display:none;
+    }
+.wrapper-preview-menu .view-in-studio, .wrapper-preview-menu a.btn.btn-primary{
+    display:none !important;
+}
+
+
+    .section-title{
+       color:white !important;
+    }
+    h2.hd.hd-3.page-title{
+       color:white !important;
+    }
+    .window-wrap, #course-container,#course-outline-block-tree{
+       background: #F4F5F6;
+    }
+    #main, .outline-item.accordion-panel{
+       background: white;
+    }
+
+    .course-outline .block-tree .section {
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+        margin: 0 !important;
+    }
+
+
+    .grade-block {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .progress-bar-full {
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.2);
+        position: relative;
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction:row;
+        justify-content: center;
+        align-items: center;
+        height: 10px;
+        overflow: hidden;
+        border-radius:5px;
+    }
+
+    .progress-bar-grade {
+        background-color:var(--green);
+        position: absolute;
+        height: 100%;
+        top:0;
+        left:0;
+        border-radius: 5px;
+        animation: fadeInLeft;
+        animation-duration: 1.5s;
+    }
+
+    .grade-value {
+        font-weight: 500;
+        position: absolute;
+        right: 0;
+    }
+
+    #final-grade-progress {
+        height: 15px;
+        border-radius: 7.5px;
+    }
+
+    #final-grade-progress .progress-bar-grade{
+        background-color: var(--secondary);
+        border-radius: 7.5px;
+    }
+
+    .grade-section-title {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        font-weight: 500;
+        position: relative;
+    }
+
+    #share-list {
+        display: flex;
+        list-style: none;
+        flex-direction: row;
+        flex-direction: row;
+        justify-content: center;
+        border-top:1px solid rgba(0, 0, 0, 0.2);
+        padding-top: 30px;
+        padding-left: 0;
+        margin: 0 25px 25px 25px;
+    }
+
+    #share-list i {
+        font-size: 40px;
+        margin: 0 10px;
+        color: #343a40;
+    }
+
+    #badges {
+        padding: 0 25px 25px 25px;
+    }
+
+    .page-content .page-content-secondary h4{
+        padding:15px;
+        color:white;
+        background-color:var(--tertiary);
+        text-align:center
+    }
+
+    .grade-section-title .chapter-title{
+        max-width: 80%;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    #logo_banner {
+        margin: auto 30px;
+        height: 40px;
+    }
+
+    
+    @media screen and (max-width: 1024px) {
+        .page-content .page-content-secondary { 
+            min-width: calc(50% - 15px);
+            max-width: calc(50% - 15px);
+            margin: 0;
+        }
+
+        .page-content .page-content-main { 
+            min-width: calc(50% - 15px);
+            max-width: calc(50% - 15px);
+        }
+    }
+    @media screen and (max-width: 991px) {
+        .page-content .page-content-secondary { 
+            min-width: calc(60% - 15px);
+            max-width: calc(60% - 15px);
+        }
+
+        .page-content .page-content-main { 
+            min-width: calc(40% - 15px);
+            max-width: calc(40% - 15px);
+        }
+
+    }
+    @media screen and (max-width: 768px) {
+        .page-content .page-content-secondary { 
+            min-width: 100%;
+            max-width: 100%;
+            margin-left: 0;
+        }
+
+        .page-content .page-content-main { 
+            min-width: 100%;
+            max-width: 100%;
+        }
+
+        .page-content {
+            flex-direction: column;
+        }
+
+        .page-content .page-content-secondary h4{
+            font-size:16px;
+        }
+    }
+
+    @media screen and (max-width: 500px) {
+        .grade-section-title {
+            font-size: 12px;
+        }
+
+        .main-badge{
+            height:25px;
+        }
+
+        .small-badge {
+            margin: 0 5px 5px 5px;
+        }
+        h3.section-title{
+            padding-left: 5px !important;
+            font-size: 14px !important;
+        }
+        h4.subsection-title{
+            font-size: 14px !important;
+        }
+    }
+
+    @media screen and (max-width: 500px) {
+        .grade-section-title {
+            font-size: 14px;
+        }
+    }
+
+  </style>
+  <script>
+document.title = "Cours | ${HTML(course.display_name_with_default)}";
+  </script>
+
 </%block>
+
 
 <%block name="content">
 <div class="course-view page-content-container" id="course-container">
     <header class="page-header has-secondary">
         <div class="page-header-main">
-            <nav aria-label="${_('Course Outline')}" class="sr-is-focusable" tabindex="-1">
-                <h2 class="hd hd-3 page-title">${course.display_name_with_default}</h2>
-            </nav>
+            <img id="logo_banner" src="${static.url('{}/images/logo_secondary.png'.format(course.org))}" alt="banner logo">
         </div>
         <div class="page-header-secondary">
             % if show_search:
@@ -50,7 +363,7 @@ from openedx.features.course_experience.course_tools import HttpMethod
             % endif
             <div class="form-actions">
                 % if resume_course_url:
-                    <a class="btn btn-primary action-resume-course" href="${resume_course_url}">
+                    <a class="btn btn-secondary action-resume-course" href="${resume_course_url}">
                         % if has_visited_course:
                             <span data-action-type="resume">${_("Resume Course")}</span>
                         % else:
@@ -84,86 +397,42 @@ from openedx.features.course_experience.course_tools import HttpMethod
             % endif
         </div>
         <aside class="page-content-secondary course-sidebar">
-            % if has_goal_permission:
-                <div class="section section-goals ${'' if current_goal else 'hidden'}">
-                    <div class="current-goal-container">
-                        <label class="title title-label hd-6" for="goal">
-                            <h3 class="hd-6">${_("Goal: ")}</h3>
-                        </label>
-                        <h3 class="title hd-6">${_("Goal: ")}</h3>
-                        <div class="goal">
-                            <span class="text">${goal_options[current_goal.goal_key] if current_goal else ""}</span>
+            <h4>Avez-vous bien retenu ?</h4>
+            <div class="section" id="badges">
+                    
+                    <div class="grade-block">       
+                        <div class="grade-section-title">
+                            %if user_grade.passed:
+                                <img src="${static.url('images/medal_on.svg')}" class="main-badge"/>
+                            %else: 
+                                <img src="${static.url('images/medal_off.svg')}" class="main-badge"/>
+                            %endif
+                            <div style="text-transform: uppercase;">${course.display_name_with_default}</div>
+                            <div class="grade-value">${int(user_grade.percent * 100)}%</div>
                         </div>
-                        <select class="edit-goal-select" id="goal">
-                            % for goal, goal_text in goal_options.items():
-                                <option value="${goal}" ${"selected" if current_goal and current_goal.goal_key == goal else ""}>${goal_text}</option>
-                            % endfor
-                        </select>
-                        <span class="sr sr-update-response-msg" aria-live="polite"></span>
-                        <span class="response-icon" aria-hidden="true"></span>
-                        <span class="sr">${_("Edit your course goal:")}</span>
-                        <button class="edit-icon">
-                            <span class="sr">${_("Edit your course goal:")}</span>
-                            <span class="fa fa-pencil" aria-hidden="true"></span>
-                        </button>
+                        <div class="progress-bar-full" id="final-grade-progress">
+                            <div style="width:${int(user_grade.percent * 100)}%;" class="progress-bar-grade" ></div>
+                            
+                        </div>                    
                     </div>
-                </div>
-            % endif
-            % if course_tools:
-                <div class="section section-tools">
-                    <h3 class="hd-6 section-title">${_("Course Tools")}</h3>
-                    <ul class="list-unstyled">
-                        % for course_tool in course_tools:
-                            <li class="course-tool">
-                                % if course_tool.http_method == HttpMethod.GET:
-                                    <a class="course-tool-link" data-analytics-id="${course_tool.analytics_id()}" href="${course_tool.url(course_key)}">
-                                        <span class="icon ${course_tool.icon_classes()}" aria-hidden="true"></span>
-                                        ${course_tool.title()}
-                                    </a>
-                                % elif course_tool.http_method == HttpMethod.POST:
-                                    <form class="course-tool-form" action="${course_tool.url(course_key)}" method="post">
-                                        <input type="hidden" id="csrf_token" name="csrfmiddlewaretoken" value="${csrf_token}">
-                                        <input type="hidden" name="tool_data" value="${course_tool.data()}">
-                                        <button class="course-tool-button" data-analytics-id="${course_tool.analytics_id()}" aria-hidden="true">
-                                            <span class="icon ${course_tool.icon_classes()}" aria-hidden="true"></span>
-                                            ${course_tool.title()}
-                                        </button>
-                                    </form>
-                                % endif
-                            </li>
-                        % endfor
-                    </ul>
-                </div>
-            % endif
-            % if upgrade_url and upgrade_price:
-                <div class="section section-upgrade course-home-sidebar-upgrade ${'discount' if has_discount else 'no-discount'}">
-                    <h3 class="hd hd-6">${_("Pursue a verified certificate")}</h3>
-                        <img src="https://courses.edx.org/static/images/edx-verified-mini-cert.png" alt="">
-                        <div class="upgrade-container">
-                            <p>
-                                <a id="green_upgrade" class="btn-brand btn-upgrade"
-                                   href="${upgrade_url}"
-                                   data-creative="sidebarupsell"
-                                   data-position="sidebar-message"
-                                >
-                                    ${Text(_("Upgrade ({price})")).format(price=upgrade_price)}
-                                </a>
-                            </p>
-                            <p><button class="btn-link btn-small promo-learn-more">${_('Learn More')}</button></p>
+                    
+                    %for index, chapter in enumerate(user_grade.chapter_grades.keys()):
+                        <div class="grade-block">
+                            <div class="grade-section-title">
+                                %if user_grade.chapter_percentage(chapter) >= 0.7:
+                                    <img src="${static.url('images/medal_on.svg')}" class="small-badge"/>
+                                %else: 
+                                    <img src="${static.url('images/medal_off.svg')}" class="small-badge"/>
+                                %endif
+                                <div class="chapter-title" >${user_grade.chapter_grades[chapter]['display_name']}</div>
+                                <div class="grade-value">${int(user_grade.chapter_percentage(chapter) * 100)}%</div>
+                            </div>
+                            <div class="progress-bar-full">
+                                <div style="width:${int(user_grade.chapter_percentage(chapter) * 100)}%;" class="progress-bar-grade"></div>
+                            </div>                    
                         </div>
-                </div>
-            % endif
-            % if dates_fragment:
-                <div class="section section-dates">
-                    ${HTML(dates_fragment.body_html())}
-                </div>
-            % endif
-            % if handouts_html:
-                <div class="section section-handouts">
-                    <h3 class="hd-6 section-title">${_("Course Handouts")}</h3>
-                    ${HTML(handouts_html)}
-                </div>
-            % endif
+                    %endfor
+            </div>
         </aside>
     </div>
     % if course_sock_fragment:
