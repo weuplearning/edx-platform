@@ -2743,6 +2743,9 @@ INSTALLED_APPS = [
     'openedx.core.djangoapps.content.learning_sequences.apps.LearningSequencesConfig',
 
     'ratelimitbackend',
+
+    #WUL custom apps
+    'lms.djangoapps.wul_apps',
 ]
 
 ######################### CSRF #########################################
