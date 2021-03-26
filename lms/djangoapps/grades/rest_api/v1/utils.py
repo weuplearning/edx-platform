@@ -2,6 +2,7 @@
 Define some view level utility functions here that multiple view modules will share
 """
 
+import logging
 
 from contextlib import contextmanager
 
@@ -19,6 +20,7 @@ from common.djangoapps.util.query import use_read_replica_if_available
 
 USER_MODEL = get_user_model()
 
+log = logging.getLogger(__name__)
 
 class CourseEnrollmentPagination(CursorPagination):
     """
@@ -167,6 +169,13 @@ class GradeViewMixin(DeveloperErrorViewMixin):
         """
         Serialize a single grade to dict to use in Responses
         """
+        # Later if needed we may add more info but we should then add arguments to the API to make sure perf does not go down
+        # example : ?username=ZZZZZZZsummary=true&chapter_grades=false&subsection_grades=true
+
+        #from pprint import pformat
+        #log.info("course_grade ss: "+pformat(course_grade.subsection_grades))
+        #log.info("course_grade chap: "+pformat(course_grade.chapter_grades))
+        #log.info("course_grade summary: "+pformat(course_grade.summary))
         return {
             'username': user.username,
             # per business requirements, email should only be visible for students in masters track only
@@ -175,6 +184,7 @@ class GradeViewMixin(DeveloperErrorViewMixin):
             'passed': course_grade.passed,
             'percent': course_grade.percent,
             'letter_grade': course_grade.letter_grade,
+            'summay':course_grade.summary
         }
 
     def perform_authentication(self, request):
