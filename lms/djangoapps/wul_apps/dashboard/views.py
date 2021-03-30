@@ -44,7 +44,7 @@ def get_platform_courses(request):
 
     for course_overview in courses_overviews:
         course_id = course_overview['id']
-        course_key = CourseKey.from_string(course_id)
+        course_key = SlashSeparatedCourseKey.from_string(str(course_id))
         course_cohorted = is_course_cohorted(course_key)
 
         cohorts = {}
@@ -52,7 +52,7 @@ def get_platform_courses(request):
             course = get_course_by_id(course_key)
             cohorts = get_cohort_names(course)
 
-        org_courses[course_id] = {
+        org_courses[str(course_id)] = {
             'start': course_overview['start'],
             'end': course_overview['end'],
             'enrollment_start': course_overview['enrollment_start'],
@@ -91,7 +91,7 @@ def get_course_enrollments(request, course_id):
     user_enrollments_profiles = {}
     org_courses = {}
 
-    course_key = CourseKey.from_string(course_id)
+    course_key = SlashSeparatedCourseKey.from_string(str(course_id))
     course_overview = CourseOverview.objects.get(id=course_key).__dict__
     course_cohorted = is_course_cohorted(course_key)
     cohorts = {}
@@ -264,14 +264,21 @@ def wul_dashboard_view(request):
 @login_required
 def get_student_profile(request, user_email):
     if not wul_verify_access(request.user).has_dashboard_access(course_id=None):
+        log.info('has not dashboard access')
         return HttpResponseForbidden
     context={}
+
+    log.info('has dashboard access')
 
     if User.objects.filter(email=user_email).exists():
         user = User.objects.get(email=user_email)
         #Get preprofile info
         userprofile = UserProfile.objects.get(user=user)
         username = user.username
+
+        log.info('username')
+        log.info(username)
+
         try :
             custom_field=json.loads(user.profile.custom_field)
             first_name=custom_field['first_name']
@@ -280,8 +287,12 @@ def get_student_profile(request, user_email):
             last_name='Undefined'
             first_name='Undefined'
 
-        #Get certificate form extra
+        #Get certificate form extra)
         form_factory = ensure_form_factory()
+
+        log.info('form_factory')
+        log.info(form_factory)
+
         db = 'ensure_form'
         collection = 'certificate_form'
         form_factory.connect(db=db,collection=collection)
@@ -289,15 +300,21 @@ def get_student_profile(request, user_email):
         form_factory.get_user_certificate_form_extra(user)
         certificate_form_extra = form_factory.user_certificate_form_extra
 
-        #Get courses enrollments
-        microsite_courses=get_courses(user=user, org=configuration_helpers.get_value('course_org_filter')[0])
-        custom_field_editor_unlocked=configuration_helpers.get_value('WUL_ENABLE_CUSTOM_FIELD_EDITOR',False)
-        field_configs=configuration_helpers.get_value('FORM_EXTRA',{})
-        certificate_configs=configuration_helpers.get_value('CERTIFICATE_FORM_EXTRA',{})
+        log.info(certificate_form_extra)
+        log.info('certificate_form_extra')
 
-        user_ms_course_list={}
+        #Get courses enrollments
+        microsite_courses = get_courses(user=user, org=configuration_helpers.get_value('course_org_filter')[0])
+        custom_field_editor_unlocked = configuration_helpers.get_value('WUL_ENABLE_CUSTOM_FIELD_EDITOR', False)
+        field_configs = configuration_helpers.get_value('FORM_EXTRA',{})
+        certificate_configs = configuration_helpers.get_value('CERTIFICATE_FORM_EXTRA',{})
+
+        log.info('certificate')
+
+        user_ms_course_list = {}
+        
         for course in microsite_courses :
-            course_key = SlashSeparatedCourseKey.from_deprecated_string(str(course.id))
+            course_key = SlashSeparatedCourseKey.from_string(str(course.id))
             _course=get_course_by_id(course_key)
             enrollment=CourseEnrollment.objects.filter(user=user, course_id=_course.id)
 
@@ -412,7 +429,7 @@ def get_register_fields(request):
 @login_required
 
 def generate_student_time_sheet(request, course_id, user_email):
-    course_key = CourseKey.from_string(course_id)
+    course_key = SlashSeparatedCourseKey.from_string(str(course_id))
     course = get_course_by_id(course_key)
     user = User.objects.get(email=user_email)
     custom_field = json.loads(UserProfile.objects.get(user=user).custom_field)
