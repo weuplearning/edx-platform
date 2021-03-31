@@ -11,7 +11,7 @@ from opaque_keys.edx.keys import CourseKey
 from courseware.courses import get_course_by_id, get_courses
 from django.core.exceptions import ObjectDoesNotExist
 #updated arbo
-from lms.djangoapps.grades.api import CourseGradeFactory
+from lms.djangoapps.grades.course_grade_factory import CourseGradeFactory
 from student.models import CourseEnrollment, UserProfile, LoginFailures
 from lms.djangoapps.wul_apps.wul_support_functions import is_course_opened, is_enrollment_opened, wul_verify_access
 from django.contrib.auth.models import User
@@ -268,28 +268,21 @@ def wul_dashboard_view(request):
 def get_student_profile(request, user_email):
     log.info('test')
     if not wul_verify_access(request.user).has_dashboard_access(course_id=None):
-        log.info('has not dashboard access')
         return HttpResponseForbidden
     context={}
 
-    log.info('has dashboard access')
-
     if User.objects.filter(email=user_email).exists():
         user = User.objects.get(email=user_email)
-        #Get preprofile info
         userprofile = UserProfile.objects.get(user=user)
         username = user.username
 
-        log.info('username')
-        log.info(username)
-
         try :
-            custom_field=json.loads(user.profile.custom_field)
-            first_name=custom_field['first_name']
-            last_name=custom_field['last_name']
+            custom_field = json.loads(user.profile.custom_field)
+            first_name = custom_field['first_name']
+            last_name = custom_field['last_name']
         except :
-            last_name='Undefined'
-            first_name='Undefined'
+            last_name = 'Undefined'
+            first_name = 'Undefined'
 
         #Get certificate form extra)
         form_factory = ensure_form_factory()
@@ -297,12 +290,14 @@ def get_student_profile(request, user_email):
         log.info('form_factory')
         log.info(form_factory)
 
-        db = 'ensure_form'
-        collection = 'certificate_form'
-        form_factory.connect(db=db,collection=collection)
-        form_factory.get_user_form_extra(user)
-        form_factory.get_user_certificate_form_extra(user)
-        certificate_form_extra = form_factory.user_certificate_form_extra
+        # db = 'ensure_form'
+        # collection = 'certificate_form'
+        # form_factory.connect(db=db,collection=collection)
+        # form_factory.get_user_form_extra(user)
+        # log.info(form_factory.get_user_form_extra(user))
+        # form_factory.get_user_certificate_form_extra(user)
+        # certificate_form_extra = form_factory.user_certificate_form_extra
+        certificate_form_extra = {}
 
         log.info(certificate_form_extra)
         log.info('certificate_form_extra')
@@ -326,9 +321,10 @@ def get_student_profile(request, user_email):
 
 
             if enrollment.exists() and CourseEnrollment.objects.filter(user=user,course_id=_course.id, is_active=1).exists():
-                grade = CourseGradeFactory().create(user, _course) # grade desactivation : takes too long to get this stuff
-                # this_grade=grade.grade_value['percent']
-                this_passed=grade.passed
+                # create method has been deprecated
+                #grade = CourseGradeFactory().read(user, _course) # grade desactivation : takes too long to get this stuff
+                grade = CourseGradeFactory().read(user, _course) # grade desactivation : takes too long to get this stuff
+                passed = grade.passed
                 enrolled_to_enrollment = True
                 enrollment_grades='/courses/'+str(_course.id)+'/progress/'+str(user.id)
                 start_date=True
@@ -336,19 +332,17 @@ def get_student_profile(request, user_email):
                 enrolled_to_enrollment = False
                 enrollment_grades = 'n/a'
                 start_date = False
-                # this_grade = '0'
-                this_passed=False
+                passed = False
 
             user_ms_course_list[str(course.id)]={
-                'id':str(course.id),
-                'start_date':start_date,
-                'course_name':_course.display_name_with_default,
-                'course_grades':enrollment_grades,
-                'opened_enrollments':is_enrollment_opened(course),
-                'opened_course':is_course_opened(course),
-                'on_invitation':_course.invitation_only,
-                # 'grade':this_grade,
-                'passed':this_passed,
+                'id': str(course.id),
+                'start_date': start_date,
+                'course_name': _course.display_name_with_default,
+                'course_grades': enrollment_grades,
+                'opened_enrollments': is_enrollment_opened(course),
+                'opened_course': is_course_opened(course),
+                'on_invitation': _course.invitation_only,
+                'passed': passed, 
                 'enrolled_to_enrollment': enrolled_to_enrollment,
             }
 
@@ -367,6 +361,8 @@ def get_student_profile(request, user_email):
             last_login=_('User has not logged in yet')
 
         sorted_user_ms_course_list = OrderedDict(sorted(user_ms_course_list.items(), key = lambda x: x[1]['course_name'])) 
+
+        log.info(custom_field)
 
         context={
             'email':str(user_email),

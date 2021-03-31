@@ -89,7 +89,7 @@ class CustomFieldView(APIView):
 
 class CustomFieldEditor(APIView):
     def get(self, request):
-        if not tma_verify_access(request.user).has_dashboard_access(course_id=None):
+        if not wul_verify_access(request.user).has_dashboard_access(course_id=None):
             return HttpResponseForbidden
         user_id = request.user_id
         context = {
@@ -108,7 +108,7 @@ class CustomFieldEditor(APIView):
         return JsonResponse(custom_field, status=200)
     
     def post(self, request, format='json'):
-        if not tma_verify_access(request.user).has_dashboard_access(course_id=None):
+        if not wul_verify_access(request.user).has_dashboard_access(course_id=None):
             return HttpResponseForbidden
         user_id = request.data['user_id_for_api']
         user_profile = UserProfile.objects.get(user_id=user_id)
