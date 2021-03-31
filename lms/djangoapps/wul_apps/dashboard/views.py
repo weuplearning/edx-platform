@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.csrf import ensure_csrf_cookie
 from edxmako.shortcuts import render_to_response
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
@@ -36,6 +37,7 @@ import datetime
 
 log = logging.getLogger()
 
+@staff_member_required
 @require_http_methods(['GET'])
 def get_platform_courses(request):
     org_courses = {}
@@ -70,7 +72,7 @@ def get_platform_courses(request):
 
     return JsonResponse(response)
 
-
+@staff_member_required
 @require_http_methods(["GET"])
 def get_course_enrollments_count(request):
     count = 0
@@ -85,7 +87,7 @@ def get_course_enrollments_count(request):
     }
     return JsonResponse(response)
 
-
+@staff_member_required
 @require_http_methods(["GET"])
 def get_course_enrollments(request, course_id):
     user_enrollments_profiles = {}
@@ -148,7 +150,7 @@ def get_course_enrollments(request, course_id):
     }
     return JsonResponse(response)
 
-
+@staff_member_required
 @require_http_methods(["GET"])
 def view_enrollments(request):
     user_enrollments_profiles = {}
@@ -235,6 +237,7 @@ def view_enrollments(request):
 
     return JsonResponse(response)
 
+@staff_member_required
 @login_required
 def wul_dashboard_view(request):
     context = {}
@@ -260,9 +263,10 @@ def wul_dashboard_view(request):
     context['user_email'] = str(request.user.email)
     return render_to_response('wul_apps/dashboard.html', {"props": context})
 
-
+@staff_member_required
 @login_required
 def get_student_profile(request, user_email):
+    log.info('test')
     if not wul_verify_access(request.user).has_dashboard_access(course_id=None):
         log.info('has not dashboard access')
         return HttpResponseForbidden
@@ -388,6 +392,7 @@ def get_student_profile(request, user_email):
 
     return JsonResponse(context, status=200)
 
+@staff_member_required
 @login_required
 def get_password_link(request):
     user_email = request.body
@@ -395,6 +400,7 @@ def get_password_link(request):
     response ={'link':str(password_link)}
     return JsonResponse(response)
 
+@staff_member_required
 @login_required
 def unlock_account(request):
     user_email = request.body
@@ -404,6 +410,7 @@ def unlock_account(request):
         response={'error':'LoginFailure object doesn\'t exists'}
     return JsonResponse(response)
 
+@staff_member_required
 @require_http_methods(["GET"])
 @login_required
 def get_register_fields(request):
@@ -425,9 +432,9 @@ def get_register_fields(request):
 
     return JsonResponse(response)
 
+@staff_member_required
 @require_http_methods(["GET"])
 @login_required
-
 def generate_student_time_sheet(request, course_id, user_email):
     course_key = SlashSeparatedCourseKey.from_string(str(course_id))
     course = get_course_by_id(course_key)
