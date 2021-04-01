@@ -37,7 +37,6 @@ import datetime
 
 log = logging.getLogger()
 
-@staff_member_required
 @require_http_methods(['GET'])
 def get_platform_courses(request):
     org_courses = {}
@@ -72,7 +71,6 @@ def get_platform_courses(request):
 
     return JsonResponse(response)
 
-@staff_member_required
 @require_http_methods(["GET"])
 def get_course_enrollments_count(request):
     count = 0
@@ -87,7 +85,6 @@ def get_course_enrollments_count(request):
     }
     return JsonResponse(response)
 
-@staff_member_required
 @require_http_methods(["GET"])
 def get_course_enrollments(request, course_id):
     user_enrollments_profiles = {}
@@ -150,7 +147,6 @@ def get_course_enrollments(request, course_id):
     }
     return JsonResponse(response)
 
-@staff_member_required
 @require_http_methods(["GET"])
 def view_enrollments(request):
     user_enrollments_profiles = {}
@@ -237,9 +233,10 @@ def view_enrollments(request):
 
     return JsonResponse(response)
 
-@staff_member_required
 @login_required
 def wul_dashboard_view(request):
+    if not wul_verify_access(request.user).has_dashboard_access(course_id=None):
+        return HttpResponseForbidden
     context = {}
 
     microsite = configuration_helpers.get_value('domain_prefix')
@@ -263,7 +260,6 @@ def wul_dashboard_view(request):
     context['user_email'] = str(request.user.email)
     return render_to_response('wul_apps/dashboard.html', {"props": context})
 
-@staff_member_required
 @login_required
 def get_student_profile(request, user_email):
     log.info('test')
@@ -287,9 +283,6 @@ def get_student_profile(request, user_email):
         #Get certificate form extra)
         form_factory = ensure_form_factory()
 
-        log.info('form_factory')
-        log.info(form_factory)
-
         # db = 'ensure_form'
         # collection = 'certificate_form'
         # form_factory.connect(db=db,collection=collection)
@@ -299,16 +292,11 @@ def get_student_profile(request, user_email):
         # certificate_form_extra = form_factory.user_certificate_form_extra
         certificate_form_extra = {}
 
-        log.info(certificate_form_extra)
-        log.info('certificate_form_extra')
-
         #Get courses enrollments
         microsite_courses = get_courses(user=user, org=configuration_helpers.get_value('course_org_filter')[0])
         custom_field_editor_unlocked = configuration_helpers.get_value('WUL_ENABLE_CUSTOM_FIELD_EDITOR', False)
         field_configs = configuration_helpers.get_value('FORM_EXTRA',{})
         certificate_configs = configuration_helpers.get_value('CERTIFICATE_FORM_EXTRA',{})
-
-        log.info('certificate')
 
         user_ms_course_list = {}
         
@@ -316,9 +304,6 @@ def get_student_profile(request, user_email):
             course_key = SlashSeparatedCourseKey.from_string(str(course.id))
             _course=get_course_by_id(course_key)
             enrollment=CourseEnrollment.objects.filter(user=user, course_id=_course.id)
-
-
-
 
             if enrollment.exists() and CourseEnrollment.objects.filter(user=user,course_id=_course.id, is_active=1).exists():
                 # create method has been deprecated
@@ -388,7 +373,6 @@ def get_student_profile(request, user_email):
 
     return JsonResponse(context, status=200)
 
-@staff_member_required
 @login_required
 def get_password_link(request):
     user_email = request.body
@@ -396,7 +380,6 @@ def get_password_link(request):
     response ={'link':str(password_link)}
     return JsonResponse(response)
 
-@staff_member_required
 @login_required
 def unlock_account(request):
     user_email = request.body
@@ -406,7 +389,6 @@ def unlock_account(request):
         response={'error':'LoginFailure object doesn\'t exists'}
     return JsonResponse(response)
 
-@staff_member_required
 @require_http_methods(["GET"])
 @login_required
 def get_register_fields(request):
@@ -428,7 +410,6 @@ def get_register_fields(request):
 
     return JsonResponse(response)
 
-@staff_member_required
 @require_http_methods(["GET"])
 @login_required
 def generate_student_time_sheet(request, course_id, user_email):
