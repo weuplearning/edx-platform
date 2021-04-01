@@ -39,6 +39,7 @@ class ensure_form_factory(ensure_form_models):
             if value is None:
                 custom_fields[key] = ''
 
+        log.info(custom_fields.items())
         self.UserProfile.custom_field = json.dumps(custom_fields)
         self.UserProfile.save()
         

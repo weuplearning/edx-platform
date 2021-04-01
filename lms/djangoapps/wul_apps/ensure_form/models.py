@@ -2,13 +2,16 @@
 from pymongo import MongoClient
 from django.conf import settings
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
+import logging
+
+log = logging.getLogger()
 
 class ensure_form_models():
     def __init__(self):
         #user_id
         self.user_id = int
         #microsite name
-        self.microsite = configuration_helpers.get_value('domain_prefix')
+        self.microsite = configuration_helpers.get_value('course_org_filter')[0]
         #MONGO HOST
         self.host = settings.MODULESTORE.get("default").get('OPTIONS').get('stores')[0].get('DOC_STORE_CONFIG').get('host')[0]
         #MONGO PORT
@@ -22,6 +25,9 @@ class ensure_form_models():
 
     # methode connection à la db mongo
     def connect(self,db=None,collection=None):
+        log.info('host')
+        log.info(self.host)
+        log.info(self.port)
 
         try:
             self.client = MongoClient(self.host, self.port)
@@ -36,12 +42,16 @@ class ensure_form_models():
     #methode de recuperation par user_id ou microsite voirs les deux
     def getForm(self,user_id=False,microsite=False):
         q = {}
+        log.info(self.microsite)
         if microsite:
             q['microsite'] = self.microsite
         if user_id:
             q['user_id'] = self.user_id
 
         search = self.collection.find_one(q)
+
+        log.info('search')
+        log.info(search)
 
         return search
 
