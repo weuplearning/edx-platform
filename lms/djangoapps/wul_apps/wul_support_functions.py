@@ -22,6 +22,7 @@ class wul_verify_access():
         self.user = user
         self.email = user.email
         self.username = user.username
+        self.org = configuration_helpers.get_value('course_org_filter')[0]
 
     def is_wul_team(self):
         if self.user.is_staff and self.email.find('themoocagency.com') > -1 and self.user.is_active:
@@ -32,65 +33,29 @@ class wul_verify_access():
             return False
 
     def is_page_allowed(self):
-        org = configuration_helpers.get_value('course_org_filter')[0]
-        allowed_users = SiteConfiguration.objects.get(
-            key=org).values.get('TMA_PAGES_ACCESS')
+        allowed_users = configuration_helpers.get_value('WUL_PAGES_ACCESS')
 
         if allowed_users is not None:
-
-            if self.email in allowed_users.get('all'):
+            if self.email in allowed_users:
                 return True
-            # improve support of regexp
-            elif allowed_users.get('all') and hasattr(allowed_users.get('all'), '__iter__'):
-                if any(re.match(pattern + "$", self.email) for pattern in allowed_users.get('all')):
-                    return True
+                
+        return False
 
-    def is_dashboard_allowed(self, course_key):
 
+    def is_dashboard_allowed(self):
         allowed_users = configuration_helpers.get_value('WUL_DASHBOARD_ACCESS')
 
         if allowed_users is not None:
-            if self.email.lower() in allowed_users.get('all'):
+            if self.email.lower() in allowed_users:
                 return True
-            # improve support of regexp
-            elif allowed_users.get('all') and hasattr(allowed_users.get('all'), '__iter__'):
-                if any(re.match(pattern + "$", self.email.lower()) for pattern in allowed_users.get('all')):
-                    return True
-
-            if str(course_key) in allowed_users.keys():
-                if self.email.lower() in allowed_users.get(str(course_key)):
-                    return True
-            # improve support of regexp
-                elif allowed_users.get(str(course_key)) and hasattr(allowed_users.get(str(course_key)), '__iter__'):
-                    if any(re.match(pattern + "$", self.email.lower()) for pattern in allowed_users.get(str(course_key))):
-                        return True
 
         return False
 
-    def has_dashboard_access(self, course_id):
-        course_key = None
-        if course_id:
-            course_key = SlashSeparatedCourseKey.from_string(course_id)
-        if self.is_wul_team() or self.is_dashboard_allowed(course_key):
+    def has_dashboard_access(self):
+        if self.is_wul_team() or self.is_dashboard_allowed():
             return True
         else:
             return False
-
-    def hasDigitalQuizAccess(self):
-        try:
-            with open('/edx/var/edxapp/secret/microsite/'+configuration_helpers.get_value('course_org_filter')+'/barometer_access_rights.json') as json_file:
-                data = json.load(json_file)
-        except:
-            data = {}
-        return self.is_tma_team() or self.username in data.get('allowed_usernames')
-
-    def hasStatisticsAccess(self):
-        try:
-            with open('/edx/var/edxapp/secret/microsite/'+configuration_helpers.get_value('course_org_filter')+'/barometer_bo_access_rights.json') as json_file:
-                data = json.load(json_file)
-        except:
-            data = {}
-        return self.is_tma_team() or self.username in data.get('allowed_usernames')
 
 
 class wul_randomization():

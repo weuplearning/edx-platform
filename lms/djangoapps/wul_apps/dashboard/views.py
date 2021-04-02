@@ -235,7 +235,7 @@ def view_enrollments(request):
 
 @login_required
 def wul_dashboard_view(request):
-    if not wul_verify_access(request.user).has_dashboard_access(course_id=None):
+    if not wul_verify_access(request.user).has_dashboard_access():
         return HttpResponseForbidden
     context = {}
 
@@ -263,7 +263,7 @@ def wul_dashboard_view(request):
 @login_required
 def get_student_profile(request, user_email):
     log.info('test')
-    if not wul_verify_access(request.user).has_dashboard_access(course_id=None):
+    if not wul_verify_access(request.user).has_dashboard_access():
         return HttpResponseForbidden
     context={}
 
