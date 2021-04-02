@@ -45,14 +45,11 @@ class wul_verify_access():
                 if any(re.match(pattern + "$", self.email) for pattern in allowed_users.get('all')):
                     return True
 
-    def is_dashboard_allowed(self, course_key, org):
-        if course_key != None:
-            allowed_users = SiteConfiguration.objects.get(key=course_key.org).values.get('WUL_DASHBOARD_ACCESS')
-        else:
-            allowed_users = SiteConfiguration.objects.get(key=org).values.get('WUL_DASHBOARD_ACCESS')
+    def is_dashboard_allowed(self, course_key):
+
+        allowed_users = configuration_helpers.get_value('WUL_DASHBOARD_ACCESS')
 
         if allowed_users is not None:
-
             if self.email.lower() in allowed_users.get('all'):
                 return True
             # improve support of regexp
@@ -71,11 +68,10 @@ class wul_verify_access():
         return False
 
     def has_dashboard_access(self, course_id):
-        org = configuration_helpers.get_value('course_org_filter')[0]
         course_key = None
         if course_id:
-            course_key = SlashSeparatedCourseKey.from_deprecated_string(course_id)
-        if self.is_wul_team() or self.is_dashboard_allowed(course_key, org):
+            course_key = SlashSeparatedCourseKey.from_string(course_id)
+        if self.is_wul_team() or self.is_dashboard_allowed(course_key):
             return True
         else:
             return False
@@ -202,7 +198,7 @@ def is_valid_client(parameters, api_client_data):
 def is_valid_courseid(course_id, api_client_data):
     valid_course_id = False
     try:
-        course_key = SlashSeparatedCourseKey.from_deprecated_string(course_id)
+        course_key = SlashSeparatedCourseKey.from_string(course_id)
     except:
         valid_course_id = False
         return valid_course_id
@@ -228,7 +224,7 @@ def get_password(first_name, password_base):
 
 
 def register_from_courseid(user, student_mail, course_id):
-    course_id = SlashSeparatedCourseKey.from_deprecated_string(course_id)
+    course_id = SlashSeparatedCourseKey.from_string(course_id)
     if not CourseEnrollment.is_enrolled(user, course_id):
         enrollment_obj = CourseEnrollment.enroll_by_email(
             student_mail, course_id)
