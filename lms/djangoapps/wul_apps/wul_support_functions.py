@@ -32,7 +32,7 @@ class wul_verify_access():
             return False
 
     def is_page_allowed(self):
-        org = configuration_helpers.get_value('domain_prefix')
+        org = configuration_helpers.get_value('course_org_filter')[0]
         allowed_users = SiteConfiguration.objects.get(
             key=org).values.get('TMA_PAGES_ACCESS')
 
@@ -71,7 +71,7 @@ class wul_verify_access():
         return False
 
     def has_dashboard_access(self, course_id):
-        org = configuration_helpers.get_value('domain_prefix')
+        org = configuration_helpers.get_value('course_org_filter')[0]
         course_key = None
         if course_id:
             course_key = SlashSeparatedCourseKey.from_deprecated_string(course_id)
