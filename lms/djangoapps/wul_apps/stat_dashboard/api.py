@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import sys
-reload(sys)
-sys.setdefaultencoding('utf8')
+import importlib
+importlib.reload(sys)
 
 from course_api.blocks.views import BlocksInCourseView,BlocksView
 from courseware.models import StudentModule

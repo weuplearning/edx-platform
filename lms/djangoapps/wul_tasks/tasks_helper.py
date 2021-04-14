@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
 import sys
-reload(sys)
-sys.setdefaultencoding('utf8')
+import importlib
+importlib.reload(sys)
 
 import json
 import logging
-from StringIO import StringIO
+# from StringIO import StringIO
 from collections import OrderedDict
 from datetime import datetime
 from itertools import chain
 from time import time
 
-import dogstats_wrapper as dog_stats_api
 import re
 import unicodecsv
 from celery import Task, current_task
@@ -29,18 +28,20 @@ from track import contexts
 
 from courseware.courses import get_course_by_id, get_problems_in_section
 
-from tma_task.models import tmaTask, PROGRESS
+from lms.djangoapps.wul_tasks.models import WulTask, PROGRESS
 
 from util.db import outer_atomic
 
 #GEOFFREY
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
-from tma_stat_dashboard.grade_reports import grade_reports
-from tma_stat_dashboard.tma_dashboard import tma_dashboard
-from tma_apps.fraissinet.fraissinet import fraissinet
+# from tma_stat_dashboard.grade_reports import grade_reports
+from lms.djangoapps.wul_apps.stat_dashboard.wul_dashboard import wul_dashboard
+# from tma_apps.fraissinet.fraissinet import fraissinet
 
-#DASHBOARD V2
-from tma_apps.tma_dashboard.dashboard_tasks import create_and_register_multi_users
+# #DASHBOARD V2
+# from tma_apps.wul_dashboard.dashboard_tasks import create_and_register_multi_users
+
+log = logging.getLogger(__name__)
 
 TASK_LOG = logging.getLogger('edx.celery.task')
 
@@ -122,12 +123,12 @@ class BaseInstructorTask(Task):
         # is the first value passed to all such args, so we'll use that.
         # And we assume that it exists, else we would already have had a failure.
         entry_id = args[0]
-        entry = tmaTask.objects.get(pk=entry_id)
+        entry = WulTask.objects.get(pk=entry_id)
         # Check to see if any subtasks had been defined as part of this task.
         # If not, then we know that we're done.  (If so, let the subtasks
         # handle updating task_state themselves.)
         if len(entry.subtasks) == 0:
-            entry.task_output = tmaTask.create_output_for_success(task_progress)
+            entry.task_output = WulTask.create_output_for_success(task_progress)
             entry.task_state = SUCCESS
             entry.save_now()
 
@@ -151,25 +152,25 @@ class BaseInstructorTask(Task):
         TASK_LOG.debug(u'Task %s: failure returned', task_id)
         entry_id = args[0]
         try:
-            entry = tmaTask.objects.get(pk=entry_id)
-        except tmaTask.DoesNotExist:
+            entry = WulTask.objects.get(pk=entry_id)
+        except WulTask.DoesNotExist:
             # if the InstructorTask object does not exist, then there's no point
             # trying to update it.
             TASK_LOG.error(u"Task (%s) has no InstructorTask object for id %s", task_id, entry_id)
         else:
             TASK_LOG.warning(u"Task (%s) failed", task_id, exc_info=True)
-            entry.task_output = tmaTask.create_output_for_failure(einfo.exception, einfo.traceback)
+            entry.task_output = WulTask.create_output_for_failure(einfo.exception, einfo.traceback)
             entry.task_state = FAILURE
             entry.save_now()
 
-class UpdateProblemModuleStateError(Exception):
-    """
-    Error signaling a fatal condition while updating problem modules.
+# class UpdateProblemModuleStateError(Exception):
+#     """
+#     Error signaling a fatal condition while updating problem modules.
 
-    Used when the current module cannot be processed and no more
-    modules should be attempted.
-    """
-    pass
+#     Used when the current module cannot be processed and no more
+#     modules should be attempted.
+#     """
+#     pass
 
 def _get_current_task():
     """
@@ -211,7 +212,7 @@ def run_main_task(entry_id, task_fcn, action_name):
     # Get the InstructorTask to be updated. If this fails then let the exception return to Celery.
     # There's no point in catching it here.
     with outer_atomic():
-        entry = tmaTask.objects.get(pk=entry_id)
+        entry = WulTask.objects.get(pk=entry_id)
         entry.task_state = PROGRESS
         entry.save_now()
 
@@ -220,13 +221,17 @@ def run_main_task(entry_id, task_fcn, action_name):
     course_id = entry.course_id
     task_input = json.loads(entry.task_input)
     microsite = entry.microsite_input
+
     # Construct log message
-    fmt = u'Task: {task_id}, tmaTask ID: {entry_id}, Course: {course_id}, Input: {task_input}'
+    fmt = u'Task: {task_id}, WulTask ID: {entry_id}, Course: {course_id}, Input: {task_input}'
     task_info_string = fmt.format(task_id=task_id, entry_id=entry_id, course_id=course_id, task_input=task_input)
     TASK_LOG.info(u'%s, Starting update (nothing %s yet)', task_info_string, action_name)
 
     # Check that the task_id submitted in the InstructorTask matches the current task
     # that is running.
+
+
+
     request_task_id = _get_current_task().request.id
     if task_id != request_task_id:
         fmt = u'{task_info}, Requested task did not match actual task "{actual_id}"'
@@ -235,66 +240,67 @@ def run_main_task(entry_id, task_fcn, action_name):
         raise ValueError(message)
 
     # Now do the work
-    with dog_stats_api.timer('instructor_tasks.time.overall', tags=[u'action:{name}'.format(name=action_name)]):
-        task_progress = task_fcn(entry_id, course_id, task_input, action_name,microsite)
+    # with dog_stats_api.timer('instructor_tasks.time.overall', tags=[u'action:{name}'.format(name=action_name)]):
+    task_progress = task_fcn(entry_id, course_id, task_input, action_name,microsite)
 
     # Release any queries that the connection has been hanging onto
     reset_queries()
 
     # Log and exit, returning task_progress info as task result
-    TASK_LOG.info(u'%s, Task type: %s, Finishing task: %s', task_info_string, action_name, task_progress)
     return task_progress
 
-def upload_grades_xls(_xmodule_instance_args, _entry_id, course_id, _task_input, action_name,microsite):
+# def upload_grades_xls(_xmodule_instance_args, _entry_id, course_id, _task_input, action_name,microsite):
+#     course_key = course_id
+#     course_id = str(course_id)
+#     grade_path = grade_reports(_task_input,course_id=course_id,microsite=microsite).task_generate_xls()
+
+#     task_progress = TaskProgress('grade_generation')
+#     task_progress.complementary = grade_path
+
+#     return task_progress.update_task_state()
+#     #tracker.emit(REPORT_REQUESTED_EVENT_NAME, {"report_type": grade_path, })
+
+def users_generation(_xmodule_instance_args, _entry_id, course_id, _task_input, action_name, microsite):
     course_key = course_id
     course_id = str(course_id)
-    grade_path = grade_reports(_task_input,course_id=course_id,microsite=microsite).task_generate_xls()
-
-    task_progress = TaskProgress('grade_generation')
-    task_progress.complementary = grade_path
-
-    return task_progress.update_task_state()
-    #tracker.emit(REPORT_REQUESTED_EVENT_NAME, {"report_type": grade_path, })
-
-def users_generation(_xmodule_instance_args, _entry_id, course_id, _task_input, action_name,microsite):
-    course_key = course_id
-    course_id = str(course_id)
-    generation_path =  tma_dashboard(course_id=course_id,course_key=course_key,request=_task_input).task_generate_user()
+    generation_path =  wul_dashboard(course_id=course_id,course_key=course_key,request=_task_input).task_generate_user()
 
     task_progress = TaskProgress('user_generation')
     task_progress.complementary = generation_path
 
     return task_progress.update_task_state()
+
+
     #tracker.emit(REPORT_REQUESTED_EVENT_NAME, {"report_type": generation_path, })
 
-#SBO TASK
-def sbo_xls_generation(_xmodule_instance_args, _entry_id, course_id, _task_input, action_name,microsite):
-    course_key = course_id
-    course_id = str(course_id)
-    user_id = _task_input.get('requester_id')
-    user_email = _task_input.get('requester_email')
-    custom_field = _task_input.get('custom_field')
-    generation_path =  fraissinet(course_id=course_id,course_key=course_key).generate_xls(user_id,user_email,custom_field)
+# #SBO TASK
+# def sbo_xls_generation(_xmodule_instance_args, _entry_id, course_id, _task_input, action_name,microsite):
+#     course_key = course_id
+#     course_id = str(course_id)
+#     user_id = _task_input.get('requester_id')
+#     user_email = _task_input.get('requester_email')
+#     custom_field = _task_input.get('custom_field')
+#     generation_path =  fraissinet(course_id=course_id,course_key=course_key).generate_xls(user_id,user_email,custom_field)
 
-    task_progress = TaskProgress('sbo_user_xls')
-    task_progress.complementary = generation_path
+#     task_progress = TaskProgress('sbo_user_xls')
+#     task_progress.complementary = generation_path
 
-    return task_progress.update_task_state()
-    #tracker.emit(REPORT_REQUESTED_EVENT_NAME, {"report_type": generation_path, })
+#     return task_progress.update_task_state()
+#     #tracker.emit(REPORT_REQUESTED_EVENT_NAME, {"report_type": generation_path, })
 
 
-#DASHBOARD V2 TASKS
-def helper_generate_users_from_csv(_xmodule_instance_args, _entry_id, course_key, task_input, action_name, microsite):
-    task_function = create_and_register_multi_users(course_key, task_input=task_input)
-    task_progress = TaskProgress('user_generation')
-    task_progress.complementary = task_function
-    return task_progress.update_task_state()
+# #DASHBOARD V2 TASKS
+# def helper_generate_users_from_csv(_xmodule_instance_args, _entry_id, course_key, task_input, action_name, microsite):
+#     task_function = create_and_register_multi_users(course_key, task_input=task_input)
+#     task_progress = TaskProgress('user_generation')
+#     task_progress.complementary = task_function
+#     return task_progress.update_task_state()
 
-#TMA DASHBOARD ADD TIME
-def helper_add_extra_time(_xmodule_instance_args, _entry_id, course_id, _task_input, action_name,microsite):
-    course_key = course_id
-    course_id = str(course_id)
-    add_time_task =  tma_dashboard(course_id=course_id,course_key=course_key,request=_task_input).task_add_time()
-    task_progress = TaskProgress('add_extra_time')
-    task_progress.complementary = add_time_task
-    return task_progress.update_task_state()
+# #TMA DASHBOARD ADD TIME
+# def helper_add_extra_time(_xmodule_instance_args, _entry_id, course_id, _task_input, action_name,microsite):
+#     course_key = course_id
+#     course_id = str(course_id)
+#     add_time_task =  wul_dashboard(course_id=course_id,course_key=course_key,request=_task_input).task_add_time()
+#     task_progress = TaskProgress('add_extra_time')
+#     task_progress.complementary = add_time_task
+#     return task_progress.update_task_state()

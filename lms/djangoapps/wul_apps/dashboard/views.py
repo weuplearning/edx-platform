@@ -241,6 +241,7 @@ def wul_dashboard_view(request):
 
     microsite = configuration_helpers.get_value('domain_prefix')
     translations = json.load(open("/edx/var/edxapp/media/wul_apps/dashboard/trads/dashboard_trads.json"))
+    endpoints = json.load(open("/edx/var/edxapp/media/wul_apps/dashboard/endpoints/wul_endpoints.json"))
     user_language = request.LANGUAGE_CODE if request.LANGUAGE_CODE in translations.keys() else 'en'
 
     primary_color = configuration_helpers.get_value('primary_color', '#333333')
@@ -258,6 +259,7 @@ def wul_dashboard_view(request):
     context['translations'] = translations[user_language]
     context['dashboard_config'] = dashboard_config
     context['user_email'] = str(request.user.email)
+    context['endpoints'] = endpoints
     return render_to_response('wul_apps/dashboard.html', {"props": context})
 
 @login_required
@@ -542,3 +544,6 @@ def generate_student_time_sheet(request, course_id, user_email):
 
 #breakline  si nom de cours trop long
 #change page quand arrive à la fin   if y < image_size => nouvelle page + image
+
+# def tma_create_user_from_csv(request, course_id):
+#     log.info("*****************TEST***************")

@@ -108,8 +108,13 @@ class CustomFieldEditor(APIView):
         return JsonResponse(custom_field, status=200)
     
     def post(self, request, format='json'):
-        if not wul_verify_access(request.user).has_dashboard_access(course_id=None):
+        log.info("********************CUSTOM*******************************")
+        log.info(wul_verify_access(request.user).has_dashboard_access())
+
+        if not wul_verify_access(request.user).has_dashboard_access():
             return HttpResponseForbidden
+        # if not wul_verify_access(request.user).has_dashboard_access(course_id=None):
+        #     return HttpResponseForbidden
         user_id = request.data['user_id_for_api']
         user_profile = UserProfile.objects.get(user_id=user_id)
 
