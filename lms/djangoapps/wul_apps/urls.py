@@ -9,6 +9,7 @@ from lms.djangoapps.wul_apps.dashboard.views import *
 from lms.djangoapps.wul_apps.custom_fields_editor.views import *
 from lms.djangoapps.wul_apps.statistics.views import *
 from lms.djangoapps.wul_apps.ensure_form.views import *
+from lms.djangoapps.wul_apps.stat_dashboard.views import *
 
 
 # WUL DASHBOARD ENDPOINTS
@@ -23,6 +24,7 @@ urlpatterns = (
     url(r'^dashboard/unlock_account/', unlock_account, name='unlock_account'),
     url(r'^dashboard/get_register_fields/', get_register_fields, name='get_register_fields'),
     url(r'^dashboard/generate_student_time_sheet/(?P<course_id>[^/]*)/(?P<user_email>[^/]*)$', generate_student_time_sheet, name='generate_student_time_sheet'),
+    url(r'^dashboard/(?P<course_id>[^/]*)/wul_dashboard_upload_csv', tma_create_user_from_csv, name='tma_create_user_from_csv'),
 )
 
 # CUSTOM FIELDS ENDPOINTS

@@ -108,8 +108,10 @@ class CustomFieldEditor(APIView):
         return JsonResponse(custom_field, status=200)
     
     def post(self, request, format='json'):
-        if not wul_verify_access(request.user).has_dashboard_access(course_id=None):
+        if not wul_verify_access(request.user).has_dashboard_access():
             return HttpResponseForbidden
+        # if not wul_verify_access(request.user).has_dashboard_access(course_id=None):
+        #     return HttpResponseForbidden
         user_id = request.data['user_id_for_api']
         user_profile = UserProfile.objects.get(user_id=user_id)
 
@@ -124,8 +126,17 @@ class CustomFieldEditor(APIView):
             custom_fields = json.loads(user_profile.custom_field)
             # As request.data is a querydict with multiplevalues for keys we update manually
             for key in request.data.keys():
+                # if key != 'user_id_for_api':
+                #     custom_fields[key] = request.data[key]
+                #     log.info(request.data[key])
+                #     log.info(type(request.data[key]))
+
                 if key != 'user_id_for_api':
-                    custom_fields[key] = request.data[key]
+                    if key == "virtual_class_1" or key == "virtual_class_2":
+                        custom_fields[key] =json.loads(request.data[key]) 
+                    else:
+                        custom_fields[key] = request.data[key]
+
             custom_fields["last_update_maker"] = request.user.email
             custom_fields["last_update_date"] = int(round(time.time() * 1000))
             user_profile.custom_field = json.dumps(custom_fields)

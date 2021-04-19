@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 import sys
+import importlib
+importlib.reload(sys)
+
 import string
 import random
 from datetime import datetime
 import os
-import importlib
 import csv
 import time
-from xlwt import *
+# from xlwt import *
 import json
 from io import BytesIO
-reload(sys)
-sys.setdefaultencoding('utf8')
 
 from opaque_keys.edx.locations import SlashSeparatedCourseKey
 from xmodule.modulestore.django import modulestore
@@ -19,9 +19,9 @@ from courseware.courses import get_course_by_id
 from student.models import User,CourseEnrollment,UserProfile,LoginFailures
 from course_api.blocks.api import get_blocks
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
-from lms.djangoapps.tma_grade_tracking.models import dashboardStats
+# from lms.djangoapps.tma_grade_tracking.models import dashboardStats
 from edxmako.shortcuts import render_to_response
-from .api import stat_dashboard_api
+# from .api import stat_dashboard_api
 
 from django.core.validators import validate_email
 
@@ -41,14 +41,14 @@ from openedx.core.djangoapps.course_groups.models import CohortMembership, Cours
 
 from django.contrib.auth.models import User
 
-from shoppingcart.models import (
-    Coupon,
-    CourseRegistrationCode,
-    RegistrationCodeRedemption,
-    Invoice,
-    CourseMode,
-    CourseRegistrationCodeInvoiceItem,
-)
+# from shoppingcart.models import (
+#     Coupon,
+#     CourseRegistrationCode,
+#     RegistrationCodeRedemption,
+#     Invoice,
+#     CourseMode,
+#     CourseRegistrationCodeInvoiceItem,
+# )
 from student.models import (
     CourseEnrollment, unique_id_for_user, anonymous_id_for_user,
     UserProfile, Registration, EntranceExamConfiguration,
@@ -68,36 +68,40 @@ from instructor.enrollment import render_message_to_string
 from django.core.mail import send_mail
 
 #taskmodel
-from tma_task.models import WulTask
+from lms.djangoapps.wul_tasks.models import WulTask
 
 #USER MANAGEMENT
 from django.utils.http import int_to_base36
 from django.contrib.auth.tokens import default_token_generator
-from student.views import password_reset_confirm_wrapper
-from django.core.urlresolvers import reverse
+# from student.views import password_reset_confirm_wrapper
+# from django.core.urlresolvers import reverse
 
 #EMAIL MANAGEMENT
 import smtplib
-from email.MIMEMultipart import MIMEMultipart
-from email.MIMEText import MIMEText
-from email.MIMEBase import MIMEBase
+# from email.MIMEMultipart import MIMEMultipart
+# from email.MIMEText import MIMEText
+# from email.MIMEBase import MIMEBase
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
 from email import encoders
 from courseware.courses import get_course_by_id
 
 #Course timer
-from tma_apps.models import TmaCourseOverview
+from lms.djangoapps.wul_apps.models import WulCourseOverview
 from django.core import serializers
 
 from openedx.core.djangoapps.course_groups.cohorts import is_course_cohorted
-from lms.djangoapps.tma_apps.tma_statistics.time_tracker import time_tracker_manager
+# from lms.djangoapps.tma_apps.tma_statistics.time_tracker import time_tracker_manager
 
-from social.apps.django_app.default.models import UserSocialAuth
+# from social.apps.django_app.default.models import UserSocialAuth
+from social_django.models import UserSocialAuth
 
 
 log = logging.getLogger(__name__)
 
 
-class tma_dashboard():
+class wul_dashboard():
 
     def __init__(self,course_id=None,course_key=None,request=None):
 
@@ -324,7 +328,8 @@ class tma_dashboard():
         # see if there is an activation email template definition available as configuration,
         # if so, then render that
         message_type = param_dict['message']
-        template_base="edx-microsite/"+param_dict['microsite']+"/templates/"
+        
+        template_base="/edx/app/edxapp/edx-themes/"+param_dict['microsite']+"/lms/templates/instructor/edx_ace/"
 
         email_template_dict = {
             'allowed_enroll': (
@@ -352,8 +357,8 @@ class tma_dashboard():
                 'emails/remove_beta_tester_email_message.txt'
             ),
             'account_creation_and_enrollment': (
-                'emails/enroll_email_enrolledsubject.txt',
-                'emails/account_creation_and_enroll_emailMessage.txt'
+                'accountcreationandenrollment/email/subject.txt',
+                'accountcreationandenrollment/email/body.txt'
             ),
         }
 
@@ -414,8 +419,8 @@ class tma_dashboard():
         _requester_user = User.objects.get(pk=requester_id)
         self.site_name = task_input.get('site_name')+' '
 
-        log.warning(u'tma_dashboard.task_generate_user inscription users pour le microsite : '+microsite)
-        log.warning(u'tma_dashboard.task_generate_user inscription users par le username '+_requester_user.username+' email : '+_requester_user.email)
+        log.warning(u'wul_dashboard.task_generate_user inscription users pour le microsite : '+microsite)
+        log.warning(u'wul_dashboard.task_generate_user inscription users par le username '+_requester_user.username+' email : '+_requester_user.email)
         generated_passwords = []
         _generates = []
         _failed = []
@@ -430,12 +435,15 @@ class tma_dashboard():
 
         # for white labels we use 'shopping cart' which uses CourseMode.DEFAULT_SHOPPINGCART_MODE_SLUG as
         # course mode for creating course enrollments.
-        if CourseMode.is_white_label(self.course_key):
-            course_mode = CourseMode.DEFAULT_SHOPPINGCART_MODE_SLUG
-        else:
-            course_mode = None
+
+        # if CourseMode.is_white_label(self.course_key):
+        #     course_mode = CourseMode.DEFAULT_SHOPPINGCART_MODE_SLUG
+        # else:
+        #     course_mode = None
+        course_mode= None
 
         #TREATING EACH USER
+
         for _user in valid_rows:
             #get current users values
             try:
@@ -551,6 +559,7 @@ class tma_dashboard():
                     if (key in register_keys) and (not key in custom_field.keys()):
                         custom_field[key] = value
 
+            
                 created_user = self.create_and_enroll_user(
                     email, username, custom_field, password, complete_name, self.course_id, course_mode, _requester_user, email_params, first_name, last_name, microsite
                 )
@@ -562,8 +571,8 @@ class tma_dashboard():
                 else:
                     _failed.append(
                         {"email":email,"reponse":"creation failed"})
-        log.warning(u'tma_dashboard.task_generate_user fin inscription users pour le microsite : '+microsite)
-        log.warning(u'tma_dashboard.task_generate_user fin inscription users par le username '+_requester_user.username+' email : '+_requester_user.email)
+        log.warning(u'wul_dashboard.task_generate_user fin inscription users pour le microsite : '+microsite)
+        log.warning(u'wul_dashboard.task_generate_user fin inscription users par le username '+_requester_user.username+' email : '+_requester_user.email)
 
         #Send an email to requester with potential failures
         generated_users_list = ''
@@ -606,37 +615,37 @@ class tma_dashboard():
 
         return retour
 
-    def as_views(self):
+    # def as_views(self):
 
-        _stat_dashboard_api = _stat_dashboard_api = stat_dashboard_api(self.request,self.course_id,course_key=self.course_key)
-        course_structure = _stat_dashboard_api.get_course_structure()
+    #     _stat_dashboard_api = _stat_dashboard_api = stat_dashboard_api(self.request,self.course_id,course_key=self.course_key)
+    #     course_structure = _stat_dashboard_api.get_course_structure()
 
-        #ensure user is @themoocagency.com
-        _email = self.request.user.email
-        if "@themoocagency.com" in _email:
-            csv_limits = False
-        else:
-            csv_limits = True
+    #     #ensure user is @themoocagency.com
+    #     _email = self.request.user.email
+    #     if "@themoocagency.com" in _email:
+    #         csv_limits = False
+    #     else:
+    #         csv_limits = True
 
 
-        total_participants=CourseEnrollment.objects.enrollment_counts(self.course_key)
+    #     total_participants=CourseEnrollment.objects.enrollment_counts(self.course_key)
 
-        #Course cohorted
-        course_cohorted = is_course_cohorted(self.course_key)
+    #     #Course cohorted
+    #     course_cohorted = is_course_cohorted(self.course_key)
 
-        context = {
-            "course_id":self.course_id,
-            "course":self.course,
-            "course_module":self.course_module,
-            "course_structure":course_structure,
-            "register_fields":self.required_register_fields(),
-            "certificates_fields":self.required_certificates_fields(),
-            "csv_limits":csv_limits,
-            "total_participants":total_participants,
-            "cohorted":course_cohorted,
-        }
+    #     context = {
+    #         "course_id":self.course_id,
+    #         "course":self.course,
+    #         "course_module":self.course_module,
+    #         "course_structure":course_structure,
+    #         "register_fields":self.required_register_fields(),
+    #         "certificates_fields":self.required_certificates_fields(),
+    #         "csv_limits":csv_limits,
+    #         "total_participants":total_participants,
+    #         "cohorted":course_cohorted,
+    #     }
 
-        return render_to_response('tma_dashboard.html', context)
+    #     return render_to_response('dashboard/home.html', context)
 
     def ensure_user_exists(self):
 
@@ -675,50 +684,50 @@ class tma_dashboard():
 
         return context
 
-    def user_grade_task_list(self):
-        task_type = "user_generation"
-        course_key = self.course_key
-        task_list = WulTask.objects.all().filter(course_id=course_key,task_type=task_type)
-        return_list = []
-        for task in task_list:
+    # def user_grade_task_list(self):
+    #     task_type = "user_generation"
+    #     course_key = self.course_key
+    #     task_list = WulTask.objects.all().filter(course_id=course_key,task_type=task_type)
+    #     return_list = []
+    #     for task in task_list:
 
-            requester = User.objects.get(pk=task.requester_id)
+    #         requester = User.objects.get(pk=task.requester_id)
 
-            q = {}
+    #         q = {}
 
-            q['id'] = task.id
+    #         q['id'] = task.id
 
-            q['requester'] = {
-                "id":requester.id,
-                "email":requester.email,
-                "username":requester.username,
-            }
-	        try:
-                q['output'] = json.loads(task.task_output)
-            except:
-                q['output'] = {}
+    #         q['requester'] = {
+    #             "id":requester.id,
+    #             "email":requester.email,
+    #             "username":requester.username,
+    #         }
+	#         try:
+    #             q['output'] = json.loads(task.task_output)
+    #         except:
+    #             q['output'] = {}
 
-            q['date'] = task.created
-            q['progress'] = task.task_state
+    #         q['date'] = task.created
+    #         q['progress'] = task.task_state
 
-            return_list.append(q)
+    #         return_list.append(q)
 
-        return return_list
+    #     return return_list
 
 
 
     #USER MANAGEMENT ACTIONS
-    def generate_password_link(self):
-        user_email=self.request.POST.get('user_email')
-        user=User.objects.get(email=user_email)
-        uid=int_to_base36(user.id)
-        token = default_token_generator.make_token(user)
+    # def generate_password_link(self):
+    #     user_email=self.request.POST.get('user_email')
+    #     user=User.objects.get(email=user_email)
+    #     uid=int_to_base36(user.id)
+    #     token = default_token_generator.make_token(user)
 
-        final_link = reverse(password_reset_confirm_wrapper, args=(uid, token))
-        json ={
-        'link':str(final_link)
-        }
-        return json
+    #     final_link = reverse(password_reset_confirm_wrapper, args=(uid, token))
+    #     json ={
+    #     'link':str(final_link)
+    #     }
+    #     return json
 
     def tma_unlock_account(self):
         json={}
@@ -761,86 +770,86 @@ class tma_dashboard():
 
 
 
-    def task_add_time(self):
-        task_input = self.request
-        participant_list = task_input.get("participants_list")
-        time_to_add = task_input.get("time_to_add")
-        microsite = task_input.get("microsite")
-        feedback=''
-        invalid_mail=[]
-        not_enrolled=[]
-        not_registered=[]
-        treated=[]
-        failed=[]
-        course = get_course_by_id(self.course_key)
-        time_to_add_hours=time_to_add/3600
-        time_to_add_minutes=(time_to_add-(time_to_add_hours*3600))/60
+    # def task_add_time(self):
+    #     task_input = self.request
+    #     participant_list = task_input.get("participants_list")
+    #     time_to_add = task_input.get("time_to_add")
+    #     microsite = task_input.get("microsite")
+    #     feedback=''
+    #     invalid_mail=[]
+    #     not_enrolled=[]
+    #     not_registered=[]
+    #     treated=[]
+    #     failed=[]
+    #     course = get_course_by_id(self.course_key)
+    #     time_to_add_hours=time_to_add/3600
+    #     time_to_add_minutes=(time_to_add-(time_to_add_hours*3600))/60
 
-        if int(time_to_add) > 0 and len(participant_list)>0:
-            for participant in participant_list :
-                valid_email=False
-                try:
-                    validate_email(participant)
-                    valid_email=True
-                except ValidationError:
-                    invalid_mail.append(participant)
+    #     if int(time_to_add) > 0 and len(participant_list)>0:
+    #         for participant in participant_list :
+    #             valid_email=False
+    #             try:
+    #                 validate_email(participant)
+    #                 valid_email=True
+    #             except ValidationError:
+    #                 invalid_mail.append(participant)
                 
-                if valid_email :
-                    if User.objects.filter(email=participant).exists():
-                        user = User.objects.get(email=participant)
-                        if CourseEnrollment.is_enrolled(user, self.course_key):
-                            try:
-                                time_tracker_manager(user=user, course_id=self.course_id).add_course_time(time=time_to_add, section="extra", sub_section="extra")
-                                treated.append(participant)
-                            except:
-                                failed.append(participant)
-                        else :
-                            not_enrolled.append(participant)
-                    else :
-                        not_registered.append(participant)
+    #             if valid_email :
+    #                 if User.objects.filter(email=participant).exists():
+    #                     user = User.objects.get(email=participant)
+    #                     if CourseEnrollment.is_enrolled(user, self.course_key):
+    #                         try:
+    #                             time_tracker_manager(user=user, course_id=self.course_id).add_course_time(time=time_to_add, section="extra", sub_section="extra")
+    #                             treated.append(participant)
+    #                         except:
+    #                             failed.append(participant)
+    #                     else :
+    #                         not_enrolled.append(participant)
+    #                 else :
+    #                     not_registered.append(participant)
                         
-            if treated :
-                feedback+=self.feedbackGenerator("Les utilisateurs suivants ont bien été traités (temps ajouté : "+str(time_to_add_hours)+"h"+str(time_to_add_minutes)+"mn) :", treated)
-            if failed :
-                feedback+=self.feedbackGenerator("Une erreur s'est produite lors de l'ajout de temps pour les utilisateurs suivants :", failed)
-            if invalid_mail :
-                feedback+=self.feedbackGenerator("Les emails suivants sont invalides :", invalid_mail)
-            if not_enrolled :
-                feedback+=self.feedbackGenerator("Les emails suivants ne sont pas inscrits à ce cours:", not_enrolled)
-            if not_registered :
-                feedback+=self.feedbackGenerator("Les emails suivants n'ont pas de cours sur notre plateforme:", not_registered)
+    #         if treated :
+    #             feedback+=self.feedbackGenerator("Les utilisateurs suivants ont bien été traités (temps ajouté : "+str(time_to_add_hours)+"h"+str(time_to_add_minutes)+"mn) :", treated)
+    #         if failed :
+    #             feedback+=self.feedbackGenerator("Une erreur s'est produite lors de l'ajout de temps pour les utilisateurs suivants :", failed)
+    #         if invalid_mail :
+    #             feedback+=self.feedbackGenerator("Les emails suivants sont invalides :", invalid_mail)
+    #         if not_enrolled :
+    #             feedback+=self.feedbackGenerator("Les emails suivants ne sont pas inscrits à ce cours:", not_enrolled)
+    #         if not_registered :
+    #             feedback+=self.feedbackGenerator("Les emails suivants n'ont pas de cours sur notre plateforme:", not_registered)
 
-        else :
-            feedback="<p>Une erreur est survenue lors de l'ajout de temps sur votre liste d'utilisateurs :</p><ul>"
-            if int(time_to_add)==0 or not time_to_add :
-                feedback+="<li>Aucun temps à ajouter</li>"
-            if len(participant_list)==0:
-                feedback+="<li>Aucun participant dans la liste</li>"
-            feedback+="</ul>"
+    #     else :
+    #         feedback="<p>Une erreur est survenue lors de l'ajout de temps sur votre liste d'utilisateurs :</p><ul>"
+    #         if int(time_to_add)==0 or not time_to_add :
+    #             feedback+="<li>Aucun temps à ajouter</li>"
+    #         if len(participant_list)==0:
+    #             feedback+="<li>Aucun participant dans la liste</li>"
+    #         feedback+="</ul>"
         
-        html = "<html><head></head><body><p>Bonjour,<br><br> L'ajout de temps sur votre liste d'utilisateurs pour le cours "+course.display_name_with_default+" sur le microsite "+microsite+" est maintenant terminé.<br> "+feedback+"<br><br>The MOOC Agency<br></p></body></html>"
-        part2 = MIMEText(html.encode('utf-8'), 'html', 'utf-8')
-        fromaddr = "ne-pas-repondre@themoocagency.com"
-        toaddr = task_input.get('requester_email')
-        msg = MIMEMultipart()
-        msg['From'] = fromaddr
-        msg['To'] = toaddr+", sysadmin@themoocagency.com"
-        msg['Subject'] = "Ajout de Temps liste utilisateurs -"+course.display_name_with_default
-        part = MIMEBase('application', 'octet-stream')
-        server = smtplib.SMTP('mail3.themoocagency.com', 25)
-        server.starttls()
-        server.login('contact', 'waSwv6Eqer89')
-        msg.attach(part2)
-        text = msg.as_string()
-        server.sendmail(fromaddr, toaddr, text)
-        server.quit()
-        retour = {
-            "requester": task_input.get('requester_email'),
-            "treated": treated,
-            "failed": failed,
-            "warning": invalid_mail+not_enrolled+not_registered
-        }
-        return retour
+    #     html = "<html><head></head><body><p>Bonjour,<br><br> L'ajout de temps sur votre liste d'utilisateurs pour le cours "+course.display_name_with_default+" sur le microsite "+microsite+" est maintenant terminé.<br> "+feedback+"<br><br>The MOOC Agency<br></p></body></html>"
+    #     part2 = MIMEText(html.encode('utf-8'), 'html', 'utf-8')
+    #     fromaddr = "ne-pas-repondre@themoocagency.com"
+    #     toaddr = task_input.get('requester_email')
+    #     msg = MIMEMultipart()
+    #     msg['From'] = fromaddr
+    #     msg['To'] = toaddr+", sysadmin@themoocagency.com"
+    #     msg['Subject'] = "Ajout de Temps liste utilisateurs -"+course.display_name_with_default
+    #     part = MIMEBase('application', 'octet-stream')
+    #     server = smtplib.SMTP('mail3.themoocagency.com', 25)
+    #     server.starttls()
+    #     server.login('contact', 'waSwv6Eqer89')
+    #     msg.attach(part2)
+    #     text = msg.as_string()
+    #     server.sendmail(fromaddr, toaddr, text)
+    #     server.quit()
+    #     retour = {
+    #         "requester": task_input.get('requester_email'),
+    #         "treated": treated,
+    #         "failed": failed,
+    #         "warning": invalid_mail+not_enrolled+not_registered
+    #     }
+    #     return retour
 
         
 
@@ -857,5 +866,5 @@ class tma_dashboard():
 
 
 def random_string(length):
-    pool = string.letters + string.digits
-    return ''.join(random.choice(pool) for i in xrange(length))
+    pool = string.ascii_letters + string.digits
+    return ''.join(random.choice(pool) for i in range(length))
