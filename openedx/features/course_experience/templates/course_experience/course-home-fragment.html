@@ -420,8 +420,6 @@ document.title = "Cours | ${HTML(course.display_name_with_default)}";
 
                  %if configuration_helpers.get_value('COMPLETION_BASED_DASHBOARD_MONO', False):
 
-                   <% course_block_tree = get_course_outline_block_tree(request, six.text_type(course.id), request.user) %>
-
                     % for section in course_block_tree.get('children'):
                       <%
                       total_blocks = 1
