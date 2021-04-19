@@ -226,9 +226,13 @@ class CourseHomeFragmentView(EdxFragmentView):
         # Compute course grade so that we can show badges
         user_grade = CourseGradeFactory().read(request.user, course)
 
+        # Send block tree
+        course_block_tree = get_course_outline_block_tree(request, six.text_type(course.id), request.user)
+
         # Render the course home fragment
         context = {
             'request': request,
+            'course_block_tree': course_block_tree,
             'csrf': csrf(request)['csrf_token'],
             'course': course,
             'course_key': course_key,
