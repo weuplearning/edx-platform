@@ -12,6 +12,7 @@ import time
 # from xlwt import *
 import json
 from io import BytesIO
+from path import Path
 
 from opaque_keys.edx.locations import SlashSeparatedCourseKey
 from xmodule.modulestore.django import modulestore
@@ -22,6 +23,8 @@ from openedx.core.djangoapps.site_configuration import helpers as configuration_
 # from lms.djangoapps.tma_grade_tracking.models import dashboardStats
 from edxmako.shortcuts import render_to_response
 # from .api import stat_dashboard_api
+
+from openedx.core.lib.tempdir import mkdtemp_clean
 
 from django.core.validators import validate_email
 
@@ -328,8 +331,10 @@ class wul_dashboard():
         # see if there is an activation email template definition available as configuration,
         # if so, then render that
         message_type = param_dict['message']
+        dest_path = Path(settings.COMPREHENSIVE_THEME_DIRS[0])
         
-        template_base="/edx/app/edxapp/edx-themes/"+param_dict['microsite']+"/lms/templates/instructor/edx_ace/"
+        # template_base="/edx/app/edxapp/edx-themes/"+param_dict['microsite']+"/lms/templates/instructor/edx_ace/"
+        template_base= dest_path + "/" + param_dict['microsite']+"/lms/templates/instructor/edx_ace/"
 
         email_template_dict = {
             'allowed_enroll': (
