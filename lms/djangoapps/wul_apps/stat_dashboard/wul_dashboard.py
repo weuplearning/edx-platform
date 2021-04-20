@@ -336,6 +336,8 @@ class wul_dashboard():
         # template_base="/edx/app/edxapp/edx-themes/"+param_dict['microsite']+"/lms/templates/instructor/edx_ace/"
         template_base= dest_path + "/" + param_dict['microsite']+"/lms/templates/instructor/edx_ace/"
 
+        log.info(template_base)
+
         email_template_dict = {
             'allowed_enroll': (
                 'emails/enroll_email_allowedsubject.txt',
