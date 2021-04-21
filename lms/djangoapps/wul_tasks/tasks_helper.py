@@ -34,8 +34,8 @@ from util.db import outer_atomic
 
 #GEOFFREY
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
-# from tma_stat_dashboard.grade_reports import grade_reports
 from lms.djangoapps.wul_apps.stat_dashboard.wul_dashboard import wul_dashboard
+from lms.djangoapps.wul_apps.stat_dashboard.grade_reports import grade_reports
 # from tma_apps.fraissinet.fraissinet import fraissinet
 
 # #DASHBOARD V2
@@ -249,16 +249,16 @@ def run_main_task(entry_id, task_fcn, action_name):
     # Log and exit, returning task_progress info as task result
     return task_progress
 
-# def upload_grades_xls(_xmodule_instance_args, _entry_id, course_id, _task_input, action_name,microsite):
-#     course_key = course_id
-#     course_id = str(course_id)
-#     grade_path = grade_reports(_task_input,course_id=course_id,microsite=microsite).task_generate_xls()
+def upload_grades_xls(_xmodule_instance_args, _entry_id, course_id, _task_input, action_name,microsite):
+    course_key = course_id
+    course_id = str(course_id)
+    grade_path = grade_reports(_task_input,course_id=course_id,microsite=microsite).task_generate_xls()
 
-#     task_progress = TaskProgress('grade_generation')
-#     task_progress.complementary = grade_path
+    task_progress = TaskProgress('grade_generation')
+    task_progress.complementary = grade_path
 
-#     return task_progress.update_task_state()
-#     #tracker.emit(REPORT_REQUESTED_EVENT_NAME, {"report_type": grade_path, })
+    return task_progress.update_task_state()
+    #tracker.emit(REPORT_REQUESTED_EVENT_NAME, {"report_type": grade_path, })
 
 def users_generation(_xmodule_instance_args, _entry_id, course_id, _task_input, action_name, microsite):
     course_key = course_id

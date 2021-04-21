@@ -544,6 +544,3 @@ def generate_student_time_sheet(request, course_id, user_email):
 
 #breakline  si nom de cours trop long
 #change page quand arrive à la fin   if y < image_size => nouvelle page + image
-
-# def tma_create_user_from_csv(request, course_id):
-#     log.info("*****************TEST***************")

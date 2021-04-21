@@ -6,10 +6,10 @@ WUL APPS endpoints urls.
 from django.conf.urls import url, include
 from django.conf import settings
 from lms.djangoapps.wul_apps.dashboard.views import *
-from lms.djangoapps.wul_apps.custom_fields_editor.views import *
-from lms.djangoapps.wul_apps.statistics.views import *
-from lms.djangoapps.wul_apps.ensure_form.views import *
-from lms.djangoapps.wul_apps.stat_dashboard.views import *
+from lms.djangoapps.wul_apps.custom_fields_editor.views import CustomFieldView, CustomFieldEditor
+from lms.djangoapps.wul_apps.statistics.views import add_time_tracking, get_user_global_time
+from lms.djangoapps.wul_apps.ensure_form.views import ensure_form
+from lms.djangoapps.wul_apps.stat_dashboard.views import tma_create_user_from_csv, calculate_grades_xls
 
 
 # WUL DASHBOARD ENDPOINTS
@@ -25,6 +25,8 @@ urlpatterns = (
     url(r'^dashboard/get_register_fields/', get_register_fields, name='get_register_fields'),
     url(r'^dashboard/generate_student_time_sheet/(?P<course_id>[^/]*)/(?P<user_email>[^/]*)$', generate_student_time_sheet, name='generate_student_time_sheet'),
     url(r'^dashboard/(?P<course_id>[^/]*)/wul_dashboard_upload_csv', tma_create_user_from_csv, name='tma_create_user_from_csv'),
+    # url(r'^courses/{}/stat_dashboard/xls_grade_reports/$'.format(settings.COURSE_ID_PATTERN), calculate_grades_xls,name='calculate_grades_xls'),
+    
 )
 
 # CUSTOM FIELDS ENDPOINTS
@@ -42,4 +44,10 @@ urlpatterns += (
 urlpatterns += (
     url(r'^statistics/{}/add_time_tracking$'.format(settings.COURSE_ID_PATTERN), add_time_tracking ,name='add_time_tracking'),
     url(r'^statistics/{}/get_global_time_tracking$'.format(settings.COURSE_ID_PATTERN), get_user_global_time ,name='get_global_time'),
+)
+
+#GRADE REPORT
+urlpatterns += (
+    url(r'^dashboard/(?P<course_id>[^/]*)/stat_dashboard/xls_grade_reports/$', calculate_grades_xls,name='calculate_grades_xls'),
+    
 )

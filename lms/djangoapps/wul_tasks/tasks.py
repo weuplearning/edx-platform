@@ -14,7 +14,7 @@ from celery import task
 from lms.djangoapps.wul_tasks.tasks_helper import (
     run_main_task,
     BaseInstructorTask,
-    # upload_grades_xls,
+    upload_grades_xls,
     users_generation,
     # sbo_xls_generation,
     # helper_generate_users_from_csv,
@@ -25,20 +25,20 @@ from lms.djangoapps.wul_tasks.tasks_helper import (
 log = logging.getLogger(__name__)
 TASK_LOG = logging.getLogger('edx.celery.task')
 
-# @task(base=BaseInstructorTask, routing_key=settings.GRADES_DOWNLOAD_ROUTING_KEY)
-# def calculate_grades_xls(entry_id, xmodule_instance_args):
-#     """
-#     Grade a course and push the results to an S3 bucket for download.
-#     """
-#     # Translators: This is a past-tense verb that is inserted into task progress messages as {action}.
-#     action_name = ugettext_noop('graded')
-#     TASK_LOG.info(
-#         u"Task: %s, statdashboardTask ID: %s, Task type: %s, Preparing for task execution",
-#         xmodule_instance_args.get('task_id'), entry_id, action_name
-#     )
+@task(base=BaseInstructorTask, routing_key=settings.GRADES_DOWNLOAD_ROUTING_KEY)
+def calculate_grades_xls(entry_id, xmodule_instance_args):
+    """
+    Grade a course and push the results to an S3 bucket for download.
+    """
+    # Translators: This is a past-tense verb that is inserted into task progress messages as {action}.
+    action_name = ugettext_noop('graded')
+    TASK_LOG.info(
+        u"Task: %s, statdashboardTask ID: %s, Task type: %s, Preparing for task execution",
+        xmodule_instance_args.get('task_id'), entry_id, action_name
+    )
 
-#     task_fn = partial(upload_grades_xls, xmodule_instance_args)
-#     return run_main_task(entry_id, task_fn, action_name)
+    task_fn = partial(upload_grades_xls, xmodule_instance_args)
+    return run_main_task(entry_id, task_fn, action_name)
 
 @task(base=BaseInstructorTask, routing_key=settings.GRADES_DOWNLOAD_ROUTING_KEY)
 def generate_users(entry_id, xmodule_instance_args):
