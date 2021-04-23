@@ -454,15 +454,16 @@ class WulCourseGradeReport(object):
         """
         Returns a list of all applicable column headers for this grade report.
         """
+
         return (
-            ["Student ID", "Email", "Username"] +
+            ["Student ID", "Email", "First name", "Last name", "last login", "Inscription date"] +
             self._grades_header(context) +
-            (['Cohort Name'] if context.cohorts_enabled else []) +
-            [u'Experiment Group ({})'.format(partition.name) for partition in context.course_experiments] +
-            (['Team Name'] if context.teams_enabled else []) +
-            ['Enrollment Track', 'Verification Status'] +
-            ['Certificate Eligible', 'Certificate Delivered', 'Certificate Type'] +
-            ['Enrollment Status']
+            (['Cohort Name'] if context.cohorts_enabled else []) 
+            # [u'Experiment Group ({})'.format(partition.name) for partition in context.course_experiments] +
+            # (['Team Name'] if context.teams_enabled else []) +
+            # ['Enrollment Track', 'Verification Status'] +
+            # ['Certificate Eligible', 'Certificate Delivered', 'Certificate Type'] +
+            # ['Enrollment Status']
         )
 
     def _error_headers(self):
@@ -504,54 +505,7 @@ class WulCourseGradeReport(object):
         """
         date = datetime.now(UTC)
         send_attached_csv_by_mail([success_headers] + success_rows, 'grade_report', context.course_id, date)
-        # log.info("********************UPLOAD1**************************")
-        # log.info(context.task_info_string)
-        # log.info(success_rows)
-        # log.info(error_rows)
-
-        #Create Workbook
-        wb = openpyxlWorkbook()
-        # filename = '/home/edxtma/csv/{}_{}.xls'.format(time.strftime("%Y_%m_%d"),"csv_files")
-        filename = '/home/edxtma/csv/test.xls'
-        sheet =  wb.active
-        sheet.title = "Grade Report"
-
-        output = BytesIO()
-        wb.save(output)
-        _files_values = output.getvalue()
-        # log.info("*******************COMPILEFILEVALUE**************************")
-        # log.info(_files_values)
-
-        html = "<html><head></head><body><p>Bonjour,<br/><br/>Vous trouverez en PJ le rapport de donnees du MOOC {}<br/><br/>Si vous disposez d'accès suffisants vous pouvez accéder au dashboard du cours: https://{}/tma/{}/dashboard <br><br> et au studio du cours : https://{}/course/{}    <br/><br/>Bonne reception<br>The MOOC Agency<br></p></body></html>".format("course_name", "nom du site", "courseid", "settings", "courseid")
-        part2 = MIMEText(html.encode('utf-8'), 'html', 'utf-8')
-
-        fromaddr = "ne-pas-repondre@themoocagency.com"
-        toaddr = str("dimitri.hoareau@weuplearning.com")
-        msg = MIMEMultipart()
-        msg['From'] = fromaddr
-        msg['To'] = toaddr
-
-        subject = u"{} - Rapport de donnees".format("coursedisplayname")
-
-        msg['Subject'] = subject
-
-        attachment = _files_values
-        part = MIMEBase('application', 'octet-stream')
-        part.set_payload(attachment)
-        encoders.encode_base64(part)
-        part.add_header('Content-Disposition', "attachment; filename= %s" % os.path.basename(filename))
-        msg.attach(part)
-        server = smtplib.SMTP('mail3.themoocagency.com', 25)
-        server.starttls()
-        server.login('contact', 'waSwv6Eqer89')
-        msg.attach(part2)
-        text = msg.as_string()
-        # server.sendmail(fromaddr, toaddr, text)
-        server.quit()
-        log.warning("file sent to {}".format("dimitri.hoareau@weuplearning.com"))
-
         if len(error_rows) > 0:
-            log.info("*****************UPLOAD2************************")
             error_rows = [error_headers] + error_rows
             send_attached_csv_by_mail(error_rows, 'grade_report_err', context.course_id, date)
 
@@ -758,16 +712,19 @@ class WulCourseGradeReport(object):
                     # An empty gradeset means we failed to grade a student.
                     error_rows.append([user.id, user.username, text_type(error)])
                 else:
+                    log.info(user)
+                    log.info(dir(user))
                     success_rows.append(
-                        [user.id, user.email, user.username] +
-                        self._user_grades(course_grade, context) +
-                        self._user_cohort_group_names(user, context) +
-                        self._user_experiment_group_names(user, context) +
-                        self._user_team_names(user, bulk_context.teams) +
-                        self._user_verification_mode(user, context, bulk_context.enrollments) +
-                        self._user_certificate_info(user, context, course_grade, bulk_context.certs) +
-                        [_user_enrollment_status(user, context.course_id)]
+                        [user.id, user.email, user.first_name, user.last_name, user.last_login, user.date_joined] +
+                        self._user_grades(course_grade, context) 
+                        # self._user_cohort_group_names(user, context) +
+                        # self._user_experiment_group_names(user, context) +
+                        # self._user_team_names(user, bulk_context.teams) +
+                        # self._user_verification_mode(user, context, bulk_context.enrollments) +
+                        # self._user_certificate_info(user, context, course_grade, bulk_context.certs) +
+                        # [_user_enrollment_status(user, context.course_id)]
                     )
+
             return success_rows, error_rows
 
 
@@ -799,8 +756,6 @@ class ProblemGradeReport(GradeReportBase):
         context.update_status('ProblemGradeReport - 2: Compiling grades')
         success_rows, error_rows = self._compile(context, batched_rows)
         context.update_status('ProblemGradeReport - 3: Uploading grades')
-        log.info("********************GENERATE************************")
-        log.info(success_rows)
         self.send_mail_with_csv(context, [success_headers] + success_rows, [error_headers] + error_rows)
 
         return context.update_status('ProblemGradeReport - 4: Completed problem grades')

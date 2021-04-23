@@ -312,24 +312,10 @@ class DjangoStorageReportStore(ReportStore):
         # Adding unicode signature (BOM) for MS Excel 2013 compatibility
         if six.PY2:
             output_buffer.write(codecs.BOM_UTF8)
-        csvwriter = csv.writer(output_buffer)
+        csvwriter = csv.writer(output_buffer, delimiter=';')
         csvwriter.writerows(self._get_utf8_encoded_rows(rows))
         output_buffer.seek(0)
-        logger.info("*******************MODEL**************************")
-        logger.info(filename)
-        logger.info(dir(output_buffer))
-        logger.info(output_buffer.open())
-        logger.info(output_buffer.name)
-        logger.info(output_buffer.file)
-        sio = output_buffer.file
-        bio = io.BytesIO(sio.read().encode('utf8'))
-        bio.seek(0)
-        logger.info(bio)
-        logger.info(bio.read())
-        logger.info(bio.getvalue())
-
-
-
+        csv_file_to_sent = output_buffer.file.getvalue()
         filename = filename
 
         html = "<html><head></head><body><p>Bonjour,<br/><br/>Vous trouverez en PJ le rapport de donnees du MOOC {}<br/><br/>Si vous disposez d'accès suffisants vous pouvez accéder au dashboard du cours: https://{}/tma/{}/dashboard <br><br> et au studio du cours : https://{}/course/{}    <br/><br/>Bonne reception<br>The MOOC Agency<br></p></body></html>".format("course_name", "nom du site", "courseid", "settings", "courseid")
@@ -345,7 +331,8 @@ class DjangoStorageReportStore(ReportStore):
 
         msg['Subject'] = subject
 
-        attachment = bio.getvalue()
+        attachment = csv_file_to_sent
+        # attachment = bio.getvalue()
         part = MIMEBase('application', 'octet-stream')
         part.set_payload(attachment)
         encoders.encode_base64(part)
