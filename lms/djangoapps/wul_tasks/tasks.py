@@ -9,17 +9,23 @@ from functools import partial
 from django.conf import settings
 from django.utils.translation import ugettext_noop
 
+from xmodule.modulestore.django import modulestore
 from celery import task
 
 from lms.djangoapps.wul_tasks.tasks_helper import (
     run_main_task,
     BaseInstructorTask,
-    upload_grades_xls,
+    # upload_grades_xls,
     users_generation,
     # sbo_xls_generation,
     # helper_generate_users_from_csv,
     # helper_add_extra_time
 )
+
+from lms.djangoapps.wul_tasks.grades import (
+    WulCourseGradeReport
+)
+
 
 
 log = logging.getLogger(__name__)
@@ -37,7 +43,8 @@ def calculate_grades_xls(entry_id, xmodule_instance_args):
         xmodule_instance_args.get('task_id'), entry_id, action_name
     )
 
-    task_fn = partial(upload_grades_xls, xmodule_instance_args)
+    # task_fn = partial(upload_grades_xls, xmodule_instance_args)
+    task_fn = partial(WulCourseGradeReport.generate, xmodule_instance_args)
     return run_main_task(entry_id, task_fn, action_name)
 
 @task(base=BaseInstructorTask, routing_key=settings.GRADES_DOWNLOAD_ROUTING_KEY)

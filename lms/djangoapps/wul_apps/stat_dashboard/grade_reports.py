@@ -30,7 +30,12 @@ from openedx.core.djangoapps.course_groups.cohorts import get_cohort, is_course_
 from lms.djangoapps.wul_apps.models import WulCourseEnrollment
 import time
 from collections import OrderedDict
-# from lms.djangoapps.grades.context import grading_context_for_course
+from lms.djangoapps.grades.context import grading_context_for_course
+from lms.djangoapps.grades.api import (
+    CourseGradeFactory,
+    context as grades_context,
+    prefetch_course_and_subsection_grades,
+)
 
 from io import BytesIO
 
@@ -58,6 +63,9 @@ class grade_reports():
         self.filename = filename
         self.filepath = filepath
         self.subscribe_report = subscribe_report
+
+        log.info("******************INIT*******************************")
+        log.info(self.course_id)
 
     # def prepare_workbook(self):
     #     timesfr = time.strftime("%d_%m_%Y_%H_%M_%S")
@@ -236,9 +244,7 @@ class grade_reports():
     #     return JsonResponse(response)
 
 
-
-
-    # def tma_get_scorable_blocks_titles(self, course_key):
+    # def wul_get_scorable_blocks_titles(self, course_key):
     #     """
     #     Returns an dict that maps a scorable block's location id to its title.
     #     """
@@ -259,6 +265,41 @@ class grade_reports():
     #                 )
     #                 scorable_block_titles[scorable_block.location] = header_name
     #     return scorable_block_titles
+
+    def wul_get_scorable_blocks_titles(self):
+        """
+        Returns an OrderedDict that maps an assignment type to a dict of
+        subsection-headers and average-header.
+        """
+        grading_cxt = grades_context.grading_context(self.course, self.course_structure)
+        graded_assignments_map = OrderedDict()
+        for assignment_type_name, subsection_infos in six.iteritems(grading_cxt['all_graded_subsections_by_type']):
+            graded_subsections_map = OrderedDict()
+            for subsection_index, subsection_info in enumerate(subsection_infos, start=1):
+                subsection = subsection_info['subsection_block']
+                header_name = u"{assignment_type} {subsection_index}: {subsection_name}".format(
+                    assignment_type=assignment_type_name,
+                    subsection_index=subsection_index,
+                    subsection_name=subsection.display_name,
+                )
+                graded_subsections_map[subsection.location] = header_name
+
+            average_header = u"{assignment_type}".format(assignment_type=assignment_type_name)
+
+            # Use separate subsection and average columns only if
+            # there's more than one subsection.
+            separate_subsection_avg_headers = len(subsection_infos) > 1
+            if separate_subsection_avg_headers:
+                average_header += u" (Avg)"
+
+            graded_assignments_map[assignment_type_name] = {
+                'subsection_headers': graded_subsections_map,
+                'average_header': average_header,
+                'separate_subsection_avg_headers': separate_subsection_avg_headers,
+                'grader': grading_cxt['subsection_type_graders'].get(assignment_type_name),
+            }
+        return graded_assignments_map
+
 
     # def get_time_tracking(self,enrollment):
     #     tma_enrollment,is_exist=TmaCourseEnrollment.objects.get_or_create(course_enrollment_edx=enrollment)
@@ -304,7 +345,12 @@ class grade_reports():
 
         course_key=CourseKey.from_string(self.course_id)
         course=get_course_by_id(course_key)
-        microsite_information = Microsite.objects.get(key=self.microsite)
+        microsite_information = "test"
+
+
+        log.info("*****µCOURSE**************")
+        log.info(course)
+        log.info
 
         form_factory = ensure_form_factory()
         form_factory.connect(db='ensure_form',collection='certificate_form')
@@ -333,9 +379,11 @@ class grade_reports():
             form_labels[field.get('name')]=field.get('label')
         for field in certificate_fields :
             form_labels[field.get('name')]=field.get('label')
-
+        log.info("*************************FORMLABEL**********************")
+        log.info(form_labels)
         calculate_average_for_attestation = False
-        if form_labels["cas_pratique_grade"]:
+        # if form_labels["cas_pratique_grade"]:
+        if "cas_pratique_grade" in form_labels:
             if not certificate_advanced_config:
                 form_labels.pop("cas_pratique_grade")
             elif certificate_advanced_config and len(certificate_advanced_config) == 0:
@@ -360,7 +408,8 @@ class grade_reports():
                 report_fields.remove('cohorte_names')
 
         #Get Graded block for exercises_grade details
-        scorable_blocks_titles = self.tma_get_scorable_blocks_titles(course_key)
+        # scorable_blocks_titles = self.wul_get_scorable_blocks_titles(course_key)
+        scorable_blocks_titles = self.wul_get_scorable_blocks_titles()
 
         #Create Workbook
         wb = openpyxlWorkbook()
@@ -708,12 +757,20 @@ class grade_reports():
         #Send the email to receivers
         receivers = self.request.get('send_to')
 
+        # if cohortes_targeted and len(cohortes_targeted)>1:
+        #     html = "<html><head></head><body><p>Bonjour,<br/><br/>Vous trouverez en PJ le rapport de donnees du MOOC {} pour les cohortes {}<br/><br/>Si vous disposez d'accès suffisants vous pouvez accéder au dashboard du cours: https://{}/tma/{}/dashboard <br><br> et au studio du cours : https://{}/course/{}    <br/><br/>Bonne reception<br>The MOOC Agency<br></p></body></html>".format(course.display_name, ' , '.join(cohortes_targeted), microsite_information.values['SITE_NAME'], course.id, settings.CMS_BASE, course.id)
+        # elif cohortes_targeted and len(cohortes_targeted)==1:
+        #     html = "<html><head></head><body><p>Bonjour,<br/><br/>Vous trouverez en PJ le rapport de donnees du MOOC {} pour la cohorte {}<br/><br/>Si vous disposez d'accès suffisants vous pouvez accéder au dashboard du cours: https://{}/tma/{}/dashboard <br><br> et au studio du cours : https://{}/course/{}    <br/><br/>Bonne reception<br>The MOOC Agency<br></p></body></html>".format(course.display_name, ' '.join(cohortes_targeted), microsite_information.values['SITE_NAME'], course.id, settings.CMS_BASE, course.id)
+        # else :
+        #     html = "<html><head></head><body><p>Bonjour,<br/><br/>Vous trouverez en PJ le rapport de donnees du MOOC {}<br/><br/>Si vous disposez d'accès suffisants vous pouvez accéder au dashboard du cours: https://{}/tma/{}/dashboard <br><br> et au studio du cours : https://{}/course/{}    <br/><br/>Bonne reception<br>The MOOC Agency<br></p></body></html>".format(course.display_name, microsite_information.values['SITE_NAME'], course.id, settings.CMS_BASE, course.id)
+        # part2 = MIMEText(html.encode('utf-8'), 'html', 'utf-8')
+
         if cohortes_targeted and len(cohortes_targeted)>1:
-            html = "<html><head></head><body><p>Bonjour,<br/><br/>Vous trouverez en PJ le rapport de donnees du MOOC {} pour les cohortes {}<br/><br/>Si vous disposez d'accès suffisants vous pouvez accéder au dashboard du cours: https://{}/tma/{}/dashboard <br><br> et au studio du cours : https://{}/course/{}    <br/><br/>Bonne reception<br>The MOOC Agency<br></p></body></html>".format(course.display_name, ' , '.join(cohortes_targeted), microsite_information.values['SITE_NAME'], course.id, settings.CMS_BASE, course.id)
+            html = "<html><head></head><body><p>Bonjour,<br/><br/>Vous trouverez en PJ le rapport de donnees du MOOC {} pour les cohortes {}<br/><br/>Si vous disposez d'accès suffisants vous pouvez accéder au dashboard du cours: https://{}/tma/{}/dashboard <br><br> et au studio du cours : https://{}/course/{}    <br/><br/>Bonne reception<br>The MOOC Agency<br></p></body></html>".format(course.display_name, ' , '.join(cohortes_targeted), microsite_information, course.id, settings.CMS_BASE, course.id)
         elif cohortes_targeted and len(cohortes_targeted)==1:
-            html = "<html><head></head><body><p>Bonjour,<br/><br/>Vous trouverez en PJ le rapport de donnees du MOOC {} pour la cohorte {}<br/><br/>Si vous disposez d'accès suffisants vous pouvez accéder au dashboard du cours: https://{}/tma/{}/dashboard <br><br> et au studio du cours : https://{}/course/{}    <br/><br/>Bonne reception<br>The MOOC Agency<br></p></body></html>".format(course.display_name, ' '.join(cohortes_targeted), microsite_information.values['SITE_NAME'], course.id, settings.CMS_BASE, course.id)
+            html = "<html><head></head><body><p>Bonjour,<br/><br/>Vous trouverez en PJ le rapport de donnees du MOOC {} pour la cohorte {}<br/><br/>Si vous disposez d'accès suffisants vous pouvez accéder au dashboard du cours: https://{}/tma/{}/dashboard <br><br> et au studio du cours : https://{}/course/{}    <br/><br/>Bonne reception<br>The MOOC Agency<br></p></body></html>".format(course.display_name, ' '.join(cohortes_targeted), microsite_information, course.id, settings.CMS_BASE, course.id)
         else :
-            html = "<html><head></head><body><p>Bonjour,<br/><br/>Vous trouverez en PJ le rapport de donnees du MOOC {}<br/><br/>Si vous disposez d'accès suffisants vous pouvez accéder au dashboard du cours: https://{}/tma/{}/dashboard <br><br> et au studio du cours : https://{}/course/{}    <br/><br/>Bonne reception<br>The MOOC Agency<br></p></body></html>".format(course.display_name, microsite_information.values['SITE_NAME'], course.id, settings.CMS_BASE, course.id)
+            html = "<html><head></head><body><p>Bonjour,<br/><br/>Vous trouverez en PJ le rapport de donnees du MOOC {}<br/><br/>Si vous disposez d'accès suffisants vous pouvez accéder au dashboard du cours: https://{}/tma/{}/dashboard <br><br> et au studio du cours : https://{}/course/{}    <br/><br/>Bonne reception<br>The MOOC Agency<br></p></body></html>".format(course.display_name, microsite_information, course.id, settings.CMS_BASE, course.id)
         part2 = MIMEText(html.encode('utf-8'), 'html', 'utf-8')
 
         for receiver in receivers :
