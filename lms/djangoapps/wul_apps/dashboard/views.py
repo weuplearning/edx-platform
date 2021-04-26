@@ -35,6 +35,11 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
 import datetime
 
+#password generator
+from django.urls import reverse
+from django.utils.http import int_to_base36
+from django.contrib.auth.tokens import default_token_generator
+
 log = logging.getLogger()
 
 @require_http_methods(['GET'])
@@ -375,11 +380,25 @@ def get_student_profile(request, user_email):
 
     return JsonResponse(context, status=200)
 
+# @login_required
+# def get_password_link(request):
+#     user_email = request.body
+#     password_link= WulUserActions(user_email).generate_password_link()
+#     response ={'link':str(password_link)}
+#     return JsonResponse(response)
+
 @login_required
 def get_password_link(request):
     user_email = request.body
-    password_link= WulUserActions(user_email).generate_password_link()
-    response ={'link':str(password_link)}
+    decoded_user_email = user_email.decode("utf-8")
+    user = User.objects.get(email=decoded_user_email)
+    link = '{link}'.format(
+    link=reverse('password_reset_confirm', kwargs={
+        'uidb36': int_to_base36(user.id),
+        'token': default_token_generator.make_token(user),
+    }),
+    )
+    response ={'link':str(link)}
     return JsonResponse(response)
 
 @login_required
