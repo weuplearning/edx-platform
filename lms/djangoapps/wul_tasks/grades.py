@@ -10,6 +10,7 @@ from time import time
 
 import re
 import six
+import json
 from lms.djangoapps.course_blocks.api import get_course_blocks
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -57,6 +58,8 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
 import os
+
+from common.djangoapps.student.models import UserProfile
 
 log = logging.getLogger(__name__)
 
@@ -430,16 +433,22 @@ class WulCourseGradeReport(object):
         """
         with modulestore().bulk_operations(course_id):
             context = _WulCourseGradeReportContext(_xmodule_instance_args, _entry_id, course_id, _task_input, action_name)
-            return WulCourseGradeReport()._generate(context)
+            return WulCourseGradeReport()._generate(context, _task_input)
 
-    def _generate(self, context):
+    def _generate(self, context, _task_input):
         """
         Internal method for generating a grade report for the given context.
         """
+
+        register_fields = _task_input['register_form']
+        custom_fields_header = []
+        for element in register_fields:
+            custom_fields_header.append(element['label'])
+
         context.update_status(u'Starting grades')
-        success_headers = self._success_headers(context)
+        success_headers = self._success_headers(context, custom_fields_header)
         error_headers = self._error_headers()
-        batched_rows = self._batched_rows(context)
+        batched_rows = self._batched_rows(context, custom_fields_header, _task_input)
 
         context.update_status(u'Compiling grades')
         success_rows, error_rows = self._compile(context, batched_rows)
@@ -450,13 +459,18 @@ class WulCourseGradeReport(object):
 
         return context.update_status(u'Completed grades')
 
-    def _success_headers(self, context):
+    def _success_headers(self, context, custom_fields_header):
+
         """
         Returns a list of all applicable column headers for this grade report.
         """
 
         return (
-            ["Student ID", "Email", "First name", "Last name", "last login", "Inscription date"] +
+            # ["Student ID", "Email", "First name", "Last name", "last login", "Inscription date"] +
+            ["Student ID", "Email"] +
+            custom_fields_header +
+            # ["First name", "Last name", "Company name", "Virtual class 1", "Virtual class 2"] +
+            ["last login", "Inscription date"] +
             self._grades_header(context) +
             (['Cohort Name'] if context.cohorts_enabled else []) 
             # [u'Experiment Group ({})'.format(partition.name) for partition in context.course_experiments] +
@@ -472,13 +486,13 @@ class WulCourseGradeReport(object):
         """
         return ["Student ID", "Username", "Error"]
 
-    def _batched_rows(self, context):
+    def _batched_rows(self, context, custom_fields_header, _task_input):
         """
         A generator of batches of (success_rows, error_rows) for this report.
         """
         for users in self._batch_users(context):
             users = [u for u in users if u is not None]
-            yield self._rows_for_users(context, users)
+            yield self._rows_for_users(context, users, custom_fields_header, _task_input)
 
     def _compile(self, context, batched_rows):
         """
@@ -694,10 +708,11 @@ class WulCourseGradeReport(object):
         )
         return certificate_info
 
-    def _rows_for_users(self, context, users):
+    def _rows_for_users(self, context, users, custom_fields_header, _task_input):
         """
         Returns a list of rows for the given users for this report.
         """
+
         with modulestore().bulk_operations(context.course_id):
             bulk_context = _CourseGradeBulkContext(context, users)
 
@@ -712,10 +727,26 @@ class WulCourseGradeReport(object):
                     # An empty gradeset means we failed to grade a student.
                     error_rows.append([user.id, user.username, text_type(error)])
                 else:
-                    log.info(user)
-                    log.info(dir(user))
+                    # custom_fields_header = ["First Name", "Last Name", "Entreprise", "Classe Virtuelle 1", "Classe Virtuelle 2"]
+                    register_fields = _task_input['register_form']
+                    custom_field_array = []
+                    custom_field = json.loads(UserProfile.objects.get(user=user).custom_field)
+
+                    for element in register_fields:
+                        if element['label'] in custom_fields_header:
+                            try:
+                                element_index = custom_fields_header.index(element['label'])
+                                element_value = custom_field[element['name']]
+                                custom_field_array.append(custom_field[element['name']])
+                                custom_field_array[element_index] = custom_field[element['name']]
+                            except:
+                                custom_field_array.append('')
+                                pass
+
                     success_rows.append(
-                        [user.id, user.email, user.first_name, user.last_name, user.last_login, user.date_joined] +
+                        [user.id, user.email] +
+                        custom_field_array +
+                        [user.last_login, user.date_joined] +
                         self._user_grades(course_grade, context) 
                         # self._user_cohort_group_names(user, context) +
                         # self._user_experiment_group_names(user, context) +
@@ -751,7 +782,7 @@ class ProblemGradeReport(GradeReportBase):
         context.update_status('ProblemGradeReport - 1: Starting problem grades')
         success_headers = self._success_headers(context)
         error_headers = self._error_headers()
-        batched_rows = self._batched_rows(context)
+        batched_rows = self._batched_rows(context, succe)
 
         context.update_status('ProblemGradeReport - 2: Compiling grades')
         success_rows, error_rows = self._compile(context, batched_rows)
