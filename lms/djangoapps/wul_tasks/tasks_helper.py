@@ -34,7 +34,6 @@ from lms.djangoapps.wul_tasks.models import WulTask, PROGRESS, ReportStore
 from util.db import outer_atomic
 
 #GEOFFREY
-from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 from lms.djangoapps.wul_apps.stat_dashboard.wul_dashboard import wul_dashboard
 from lms.djangoapps.wul_apps.stat_dashboard.grade_reports import grade_reports
 # from lms.djangoapps.instructor_task.models import ReportStore
@@ -327,7 +326,7 @@ def users_generation(_xmodule_instance_args, _entry_id, course_id, _task_input, 
 #     task_progress.complementary = add_time_task
 #     return task_progress.update_task_state()
 
-def send_attached_csv_by_mail(rows, csv_name, course_id, timestamp, config_name='GRADES_DOWNLOAD'):
+def send_attached_csv_by_mail(rows, csv_name, course_id, timestamp, task_input, config_name='GRADES_DOWNLOAD'):
     """
     Upload data as a CSV using ReportStore.
 
@@ -352,7 +351,7 @@ def send_attached_csv_by_mail(rows, csv_name, course_id, timestamp, config_name=
     )
 
 
-    report_store.store_rows(course_id, report_name, rows)
+    report_store.store_rows(course_id, report_name, rows, task_input)
     tracker_emit(csv_name)
 
     return report_name

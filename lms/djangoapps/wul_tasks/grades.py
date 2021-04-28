@@ -48,18 +48,11 @@ from xmodule.modulestore.django import modulestore
 from xmodule.partitions.partitions_service import PartitionService
 from xmodule.split_test_module import get_split_user_partitions
 from lms.djangoapps.wul_tasks.tasks_helper import TaskProgress, send_attached_csv_by_mail
+from common.djangoapps.student.models import UserProfile
 # from lms.djangoapps.instructor_task.tasks_helper.utils import upload_csv_to_report_store
 
-from openpyxl import Workbook as openpyxlWorkbook
-from io import BytesIO
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.mime.base import MIMEBase
-from email import encoders
-import os
 
-from common.djangoapps.student.models import UserProfile
+
 
 log = logging.getLogger(__name__)
 
@@ -439,7 +432,6 @@ class WulCourseGradeReport(object):
         """
         Internal method for generating a grade report for the given context.
         """
-
         register_fields = _task_input['register_form']
         custom_fields_header = []
         for element in register_fields:
@@ -455,7 +447,7 @@ class WulCourseGradeReport(object):
 
         context.update_status(u'Uploading grades')
 
-        self.send_mail_with_csv(context, success_headers, success_rows, error_headers, error_rows)
+        self.send_mail_with_csv(context, success_headers, success_rows, error_headers, error_rows, _task_input)
 
         return context.update_status(u'Completed grades')
 
@@ -513,15 +505,15 @@ class WulCourseGradeReport(object):
 
         return success_rows, error_rows
 
-    def send_mail_with_csv(self, context, success_headers, success_rows, error_headers, error_rows):
+    def send_mail_with_csv(self, context, success_headers, success_rows, error_headers, error_rows, _task_input):
         """
         Creates and uploads a CSV for the given headers and rows.
         """
         date = datetime.now(UTC)
-        send_attached_csv_by_mail([success_headers] + success_rows, 'grade_report', context.course_id, date)
+        send_attached_csv_by_mail([success_headers] + success_rows, 'grade_report', context.course_id, date, _task_input)
         if len(error_rows) > 0:
             error_rows = [error_headers] + error_rows
-            send_attached_csv_by_mail(error_rows, 'grade_report_err', context.course_id, date)
+            send_attached_csv_by_mail(error_rows, 'grade_report_err', context.course_id, date, _task_input)
 
     def _grades_header(self, context):
         """
@@ -727,7 +719,6 @@ class WulCourseGradeReport(object):
                     # An empty gradeset means we failed to grade a student.
                     error_rows.append([user.id, user.username, text_type(error)])
                 else:
-                    # custom_fields_header = ["First Name", "Last Name", "Entreprise", "Classe Virtuelle 1", "Classe Virtuelle 2"]
                     register_fields = _task_input['register_form']
                     custom_field_array = []
                     custom_field = json.loads(UserProfile.objects.get(user=user).custom_field)
@@ -741,7 +732,6 @@ class WulCourseGradeReport(object):
                                 custom_field_array[element_index] = custom_field[element['name']]
                             except:
                                 custom_field_array.append('')
-                                pass
 
                     success_rows.append(
                         [user.id, user.email] +

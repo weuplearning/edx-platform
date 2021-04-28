@@ -43,8 +43,7 @@ from email.mime.base import MIMEBase
 from email import encoders
 import os
 import codecs, io
-
-
+from lms.djangoapps.courseware.courses import get_course_by_id
 logger = logging.getLogger(__name__)
 
 # define custom states used by InstructorTask
@@ -303,7 +302,12 @@ class DjangoStorageReportStore(ReportStore):
 
         self.storage.save(path, buff)
 
-    def store_rows(self, course_id, filename, rows):
+    def store_rows(self, course_id, filename, rows, task_input):
+
+        receiver = task_input['send_to'][0]
+        site_name = task_input['site_name']
+        course=get_course_by_id(course_id)
+
         """
         Given a course_id, filename, and rows (each row is an iterable of
         strings), write the rows to the storage backend in csv format.
@@ -318,16 +322,16 @@ class DjangoStorageReportStore(ReportStore):
         csv_file_to_sent = output_buffer.file.getvalue()
         filename = filename
 
-        html = "<html><head></head><body><p>Bonjour,<br/><br/>Vous trouverez en PJ le rapport de donnees du MOOC {}<br/><br/>Si vous disposez d'accès suffisants vous pouvez accéder au dashboard du cours: https://{}/tma/{}/dashboard <br><br> et au studio du cours : https://{}/course/{}    <br/><br/>Bonne reception<br>The MOOC Agency<br></p></body></html>".format("course_name", "nom du site", "courseid", "settings", "courseid")
+        html = "<html><head></head><body><p>Bonjour,<br/><br/>Vous trouverez en PJ le rapport de donnees du MOOC {}<br/><br/>Si vous disposez d'accès suffisants vous pouvez accéder au dashboard du cours: https://{}/wul_apps/dashboard/home <br><br> et au studio du cours : https://studio.weup.in/course/{}    <br/><br/>Bonne reception<br>The MOOC Agency<br></p></body></html>".format(course.display_name ,site_name , course_id)
         part2 = MIMEText(html.encode('utf-8'), 'html', 'utf-8')
 
         fromaddr = "ne-pas-repondre@themoocagency.com"
-        toaddr = str("dimitri.hoareau@weuplearning.com")
+        toaddr = str(receiver)
         msg = MIMEMultipart()
         msg['From'] = fromaddr
         msg['To'] = toaddr
 
-        subject = u"{} - Rapport de donnees".format("coursedisplayname")
+        subject = u"{} - Rapport de donnees".format(course.display_name)
 
         msg['Subject'] = subject
 
@@ -346,7 +350,7 @@ class DjangoStorageReportStore(ReportStore):
         text = msg.as_string()
         server.sendmail(fromaddr, toaddr, text)
         server.quit()
-        logger.warning("file sent to {}".format("dimitri.hoareau@weuplearning.com"))
+        logger.warning("file sent to {}".format(receiver))
 
         self.store(course_id, filename, output_buffer)
 
