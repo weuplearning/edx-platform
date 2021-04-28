@@ -30,6 +30,7 @@ def submit_calculate_grades_xls(request, course_key):
     """
     task_type = 'grade_course'
     task_class = calculate_grades_xls
+    site_name = configuration_helpers.get_value('SITE_NAME')
 
     _microsite = configuration_helpers.get_value('domain_prefix')
     register_form = configuration_helpers.get_value('FORM_EXTRA')
@@ -63,6 +64,7 @@ def submit_calculate_grades_xls(request, course_key):
 
     receivers = json.loads(request.body).get('receivers')
     task_input = {
+        "site_name": site_name,
         "microsite":_microsite,
         "form":_form,
         "register_form":register_form,

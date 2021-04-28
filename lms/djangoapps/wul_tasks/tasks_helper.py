@@ -281,12 +281,13 @@ def run_main_task(entry_id, task_fcn, action_name):
 #     return task_progress.update_task_state()
 #     #tracker.emit(REPORT_REQUESTED_EVENT_NAME, {"report_type": grade_path, })
 
-def users_generation(_xmodule_instance_args, _entry_id, course_id, _task_input, action_name, microsite):
+# def users_generation(_xmodule_instance_args, _entry_id, course_id, _task_input, action_name, microsite):
+def users_generation(_xmodule_instance_args, _entry_id, course_id, _task_input, action_name):
     course_key = course_id
     course_id = str(course_id)
     generation_path =  wul_dashboard(course_id=course_id,course_key=course_key,request=_task_input).task_generate_user()
 
-    task_progress = TaskProgress('user_generation')
+    task_progress = TaskProgress('user_generation', total=None, start_time=None)
     task_progress.complementary = generation_path
 
     return task_progress.update_task_state()

@@ -303,7 +303,6 @@ class DjangoStorageReportStore(ReportStore):
         self.storage.save(path, buff)
 
     def store_rows(self, course_id, filename, rows, task_input):
-
         receiver = task_input['send_to'][0]
         site_name = task_input['site_name']
         course=get_course_by_id(course_id)
