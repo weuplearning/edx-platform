@@ -29,8 +29,8 @@ from django.utils.translation import ugettext as _
 log = logging.getLogger(__name__)
 
 
-from lms.djangoapps.wul_tasks.api import submit_generate_users
-# from lms.djangoapps.wul_tasks.api import submit_generate_users
+from lms.djangoapps.wul_tasks.api import submit_generate_users, submit_calculate_grades_xls
+
 
 
 
@@ -191,25 +191,28 @@ from lms.djangoapps.wul_tasks.api import submit_generate_users
 
 #     return JsonResponse(tma_dashboard(course_id=course_id,course_key=course_key,request=request).user_grade_task_list())
 
-# #TASK EXEMPLE
-# @transaction.non_atomic_requests
-# @require_POST
-# @ensure_csrf_cookie
-# @cache_control(no_cache=True, no_store=True, must_revalidate=True)
-# #@require_level('staff')
-# def calculate_grades_xls(request,course_id):
 
-#     course_key = SlashSeparatedCourseKey.from_deprecated_string(course_id)
-#     try:
-#         submit_calculate_grades_xls(request, course_key)
-#         success_status = _("The grade report is being created."
-#                            " To view the status of the report, see Pending Tasks below.")
-#         return JsonResponse({"status": success_status,"user_email":request.user.email})
-#     except AlreadyRunningError:
-#         already_running_status = _("The grade report is currently being created."
-#                                    " To view the status of the report, see Pending Tasks below."
-#                                    " You will be able to download the report when it is complete.")
-#         return JsonResponse({"status": already_running_status})
+
+
+#TASK EXEMPLE
+@transaction.non_atomic_requests
+@require_POST
+@ensure_csrf_cookie
+@cache_control(no_cache=True, no_store=True, must_revalidate=True)
+#@require_level('staff')
+def calculate_grades_xls(request,course_id):
+    course_key = SlashSeparatedCourseKey.from_string(course_id)
+    try:
+        submit_calculate_grades_xls(request, course_key)
+        success_status = _("The grade report is being created."
+                           " To view the status of the report, see Pending Tasks below.")
+        return JsonResponse({"status": success_status,"user_email":request.user.email})
+    except AlreadyRunningError:
+        already_running_status = _("The grade report is currently being created."
+                                   " To view the status of the report, see Pending Tasks below."
+                                   " You will be able to download the report when it is complete.")
+        return JsonResponse({"status": already_running_status})
+
 
 
 

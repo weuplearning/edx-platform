@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 import sys
-reload(sys)
-sys.setdefaultencoding('utf8')
+import importlib
+importlib.reload(sys)
 
 import os
 import json
-from xlwt import *
+# from xlwt import *
 import time
 import logging
 import re
@@ -18,32 +18,37 @@ from django.http import Http404, HttpResponseServerError, HttpResponse
 from util.json_request import JsonResponse
 from student.models import User,CourseEnrollment,UserProfile
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
-from lms.djangoapps.tma_grade_tracking.models import dashboardStats
-from tma_ensure_form.utils import ensure_form_factory
+# from lms.djangoapps.tma_grade_tracking.models import dashboardStats
+from lms.djangoapps.wul_apps.ensure_form.utils import ensure_form_factory
 from .libs import return_select_value
-from lms.djangoapps.grades.new.course_grade import CourseGradeFactory
-from opaque_keys.edx.locations import SlashSeparatedCourseKey
+# from lms.djangoapps.grades.new.course_grade import CourseGradeFactory
+# from opaque_keys.edx.locations import SlashSeparatedCourseKey
 from opaque_keys.edx.keys import CourseKey
 from courseware.courses import get_course_by_id
-from openedx.core.djangoapps.course_groups.models import CohortMembership, CourseUserGroup
+# from openedx.core.djangoapps.course_groups.models import CohortMembership, CourseUserGroup
 from openedx.core.djangoapps.course_groups.cohorts import get_cohort, is_course_cohorted
-from tma_apps.models import TmaCourseEnrollment
+from lms.djangoapps.wul_apps.models import WulCourseEnrollment
 import time
 from collections import OrderedDict
 from lms.djangoapps.grades.context import grading_context_for_course
+from lms.djangoapps.grades.api import (
+    CourseGradeFactory,
+    context as grades_context,
+    prefetch_course_and_subsection_grades,
+)
 
 from io import BytesIO
 
 import smtplib
-from email.MIMEMultipart import MIMEMultipart
-from email.MIMEText import MIMEText
-from email.MIMEBase import MIMEBase
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
 from email import encoders
 
 from django.core.mail import EmailMessage
-from microsite_configuration.models import Microsite
+# from microsite_configuration.models import Microsite
 from django.conf import settings
-from tma_apps.best_grade.helpers import check_best_grade
+from lms.djangoapps.wul_apps.best_grade.helpers import check_best_grade
 from courseware.user_state_client import DjangoXBlockUserStateClient
 from openpyxl import Workbook as openpyxlWorkbook
 
@@ -59,228 +64,264 @@ class grade_reports():
         self.filepath = filepath
         self.subscribe_report = subscribe_report
 
-    def prepare_workbook(self):
-        timesfr = time.strftime("%d_%m_%Y_%H_%M_%S")
-        timestr = str(timesfr)
-        wb = Workbook(encoding='utf-8')
-        self.filename = '{}_{}_grades.xls'.format(self.microsite,timestr)
-        self.filepath = '/edx/var/edxapp/grades/{}'.format(self.filename)
-        sheet_count = wb.add_sheet('reports')
+        log.info("******************INIT*******************************")
+        log.info(self.course_id)
 
-        return wb
+    # def prepare_workbook(self):
+    #     timesfr = time.strftime("%d_%m_%Y_%H_%M_%S")
+    #     timestr = str(timesfr)
+    #     wb = Workbook(encoding='utf-8')
+    #     self.filename = '{}_{}_grades.xls'.format(self.microsite,timestr)
+    #     self.filepath = '/edx/var/edxapp/grades/{}'.format(self.filename)
+    #     sheet_count = wb.add_sheet('reports')
 
-    def generate_xls(self):
-        log.warning(_("tma_grade_reports : start generate_xls"))
-        log.warning(_("tma_grade_reports : course_id : "+self.course_id))
+    #     return wb
 
-        #get request body
+    # def generate_xls(self):
+    #     log.warning(_("tma_grade_reports : start generate_xls"))
+    #     log.warning(_("tma_grade_reports : course_id : "+self.course_id))
 
-        body = json.loads(self.request.body).get('fields')
+    #     #get request body
 
-        log.warning(_("tma_grade_reports : microsite : "+self.microsite))
-        log.warning(_("tma_grade_reports : body : "+str(body)))
-        #get mongodb course's grades
-        mongo_persist = dashboardStats()
-        find_mongo_persist_course = mongo_persist.get_course(self.course_id)
+    #     body = json.loads(self.request.body).get('fields')
 
-        #prepare workbook
-        _wb = self.prepare_workbook()
-        sheet_count = _wb.get_sheet('reports')
+    #     log.warning(_("tma_grade_reports : microsite : "+self.microsite))
+    #     log.warning(_("tma_grade_reports : body : "+str(body)))
+    #     #get mongodb course's grades
+    #     mongo_persist = dashboardStats()
+    #     find_mongo_persist_course = mongo_persist.get_course(self.course_id)
 
-        #form factory connection
-        form_factory = ensure_form_factory()
-        form_factory_db = 'ensure_form'
-        form_factory_collection = 'certificate_form'
-        form_factory.connect(db=form_factory_db,collection=form_factory_collection)
+    #     #prepare workbook
+    #     _wb = self.prepare_workbook()
+    #     sheet_count = _wb.get_sheet('reports')
 
-        #get register & certificate fields info
-        register_form_ = configuration_helpers.get_value('FORM_EXTRA')
-        certificates_form_ = configuration_helpers.get_value('CERTIFICATE_FORM_EXTRA')
+    #     #form factory connection
+    #     form_factory = ensure_form_factory()
+    #     form_factory_db = 'ensure_form'
+    #     form_factory_collection = 'certificate_form'
+    #     form_factory.connect(db=form_factory_db,collection=form_factory_collection)
 
-        #prepare workbook header
-        k=0
-        for u in body:
-            if not ('final-grades' and 'summary') in u:
-                sheet_count.write(0, k, u)
-                k = k + 1
-            elif "summary" in u:
-                grade_breakdown = find_mongo_persist_course[0].get('users_info').get('summary').get('grade_breakdown')
-                for key,value in grade_breakdown.items():
-                    sheet_count.write(0, k, value.get('category'))
-                    k = k + 1
-            elif "final-grades" in u:
-                sheet_count.write(0, k, 'final grade')
-                k = k + 1
-                sheet_count.write(0, k, 'Eligible attestation')
-                k = k + 1
+    #     #get register & certificate fields info
+    #     register_form_ = configuration_helpers.get_value('FORM_EXTRA')
+    #     certificates_form_ = configuration_helpers.get_value('CERTIFICATE_FORM_EXTRA')
 
-        #sheets row
-        j = 1
+    #     #prepare workbook header
+    #     k=0
+    #     for u in body:
+    #         if not ('final-grades' and 'summary') in u:
+    #             sheet_count.write(0, k, u)
+    #             k = k + 1
+    #         elif "summary" in u:
+    #             grade_breakdown = find_mongo_persist_course[0].get('users_info').get('summary').get('grade_breakdown')
+    #             for key,value in grade_breakdown.items():
+    #                 sheet_count.write(0, k, value.get('category'))
+    #                 k = k + 1
+    #         elif "final-grades" in u:
+    #             sheet_count.write(0, k, 'final grade')
+    #             k = k + 1
+    #             sheet_count.write(0, k, 'Eligible attestation')
+    #             k = k + 1
 
-        #write differents workbook_rows
-        for _row in find_mongo_persist_course:
-            # get row user_id
-            user_id = _row['user_id']
+    #     #sheets row
+    #     j = 1
 
-            #ensure user exist if False pass to next row
-            ensure_user_exist = True
-            try:
-                #get current row users mysql auth_user & aut_userprofile info
-                _user = User.objects.raw("SELECT a.id,a.email,a.username,a.date_joined,b.custom_field FROM auth_user a,auth_userprofile b WHERE a.id = b.user_id and a.id = %s", [user_id])
+    #     #write differents workbook_rows
+    #     for _row in find_mongo_persist_course:
+    #         # get row user_id
+    #         user_id = _row['user_id']
 
-                #prepare dict of auth_user info
-                user = {}
+    #         #ensure user exist if False pass to next row
+    #         ensure_user_exist = True
+    #         try:
+    #             #get current row users mysql auth_user & aut_userprofile info
+    #             _user = User.objects.raw("SELECT a.id,a.email,a.username,a.date_joined,b.custom_field FROM auth_user a,auth_userprofile b WHERE a.id = b.user_id and a.id = %s", [user_id])
 
-                #prepare dict of aut_userprofile info
-                user_profile = {}
+    #             #prepare dict of auth_user info
+    #             user = {}
 
-                #prepare dict of certificate form info
-                user_certif_profile = {}
+    #             #prepare dict of aut_userprofile info
+    #             user_profile = {}
 
-                #ensure only first occurance of _user is use
-                det = 0
+    #             #prepare dict of certificate form info
+    #             user_certif_profile = {}
 
-                #get current user certificates forms values
-                if certificates_form_ is not None:
-                    form_factory.microsite = self.microsite
-                    form_factory.user_id = user_id
-                    try:
-                        user_certif_profile = form_factory.getForm(user_id=True,microsite=True).get('form')
-			log.ingo("user_certif_profile")
-			log.warning(user_certif_profile)
-                    except:
-                        pass
+    #             #ensure only first occurance of _user is use
+    #             det = 0
 
-                #hydrate user & user_profile dicts
-                for extract in _user:
-                    if det < 1:
-                        #hydrate user dict
-                        user['id'] = extract.id
-                        user['email'] = extract.email
-                        user['username'] = extract.username
-                        user['date_joined'] = extract.date_joined
+    #             #get current user certificates forms values
+    #             if certificates_form_ is not None:
+    #                 form_factory.microsite = self.microsite
+    #                 form_factory.user_id = user_id
+    #                 try:
+    #                     user_certif_profile = form_factory.getForm(user_id=True,microsite=True).get('form')
+	# 		log.ingo("user_certif_profile")
+	# 		log.warning(user_certif_profile)
+    #                 except:
+    #                     pass
 
-                        #row from auth_userprofile mysql table
-                        _user_profile = extract.custom_field
+    #             #hydrate user & user_profile dicts
+    #             for extract in _user:
+    #                 if det < 1:
+    #                     #hydrate user dict
+    #                     user['id'] = extract.id
+    #                     user['email'] = extract.email
+    #                     user['username'] = extract.username
+    #                     user['date_joined'] = extract.date_joined
 
-                        #bloc for with det == 1
-                        det = 1
+    #                     #row from auth_userprofile mysql table
+    #                     _user_profile = extract.custom_field
 
-                        #hydrate user_profile dict
-                        try:
-                            user_profile = json.loads(_user_profile)
-                        except:
-                            pass
+    #                     #bloc for with det == 1
+    #                     det = 1
 
-            except:
-                ensure_user_exist = False
+    #                     #hydrate user_profile dict
+    #                     try:
+    #                         user_profile = json.loads(_user_profile)
+    #                     except:
+    #                         pass
 
-            #write user xls line if exist
-            if ensure_user_exist:
-                k=0
-                for n in body:
+    #         except:
+    #             ensure_user_exist = False
 
-                    #insert user mysql value to xls
-                    if n in user.keys():
-                        if n == 'date_joined':
-                            sheet_count.write(j, k, str(user.get(n).strftime('%d-%m-%Y')))
-                        else:
-                            sheet_count.write(j, k, user.get(n))
-                        k = k + 1
+    #         #write user xls line if exist
+    #         if ensure_user_exist:
+    #             k=0
+    #             for n in body:
 
-                    #insert register_form mysql value to xls
-                    elif n in user_profile.keys():
-                        _insert_value = return_select_value(n,user_profile.get(n),register_form_)
-                        sheet_count.write(j, k, _insert_value)
-                        k = k + 1
+    #                 #insert user mysql value to xls
+    #                 if n in user.keys():
+    #                     if n == 'date_joined':
+    #                         sheet_count.write(j, k, str(user.get(n).strftime('%d-%m-%Y')))
+    #                     else:
+    #                         sheet_count.write(j, k, user.get(n))
+    #                     k = k + 1
 
-                    #insert certificate_form mongodb value to xls
-                    elif n in user_certif_profile.keys():
-                        _insert_value = return_select_value(n,user_certif_profile.get(n),certificates_form_)
-                        sheet_count.write(j, k, _insert_value)
-                        k = k + 1
+    #                 #insert register_form mysql value to xls
+    #                 elif n in user_profile.keys():
+    #                     _insert_value = return_select_value(n,user_profile.get(n),register_form_)
+    #                     sheet_count.write(j, k, _insert_value)
+    #                     k = k + 1
 
-                    #insert summary grades mongodb value to xls
-                    elif "summary" in n:
-                        grade_breakdown = _row.get('users_info').get('summary').get('grade_breakdown')
-                        for key,value in grade_breakdown.items():
-                            #insert grade value to xls
-                            details = value['detail']
-                            details = details.replace(value['category'],"").replace(" = ","").replace("of a possible ","").replace("%","")
-                            split = details.split(" ")
-                            avg = str(int(float(split[0])/float(split[1]) * 100))+"%"
-                            sheet_count.write(j, k, avg)
-                            k = k + 1
+    #                 #insert certificate_form mongodb value to xls
+    #                 elif n in user_certif_profile.keys():
+    #                     _insert_value = return_select_value(n,user_certif_profile.get(n),certificates_form_)
+    #                     sheet_count.write(j, k, _insert_value)
+    #                     k = k + 1
 
-                    #insert final grades mongodb value to xls
-                    elif "final-grades" in n:
-                        sheet_count.write(j, k, str(_row.get('users_info').get('percent') * 100)+"%")
-                        k = k + 1
-                        sheet_count.write(j, k, str(_row.get('users_info').get('passed')))
-                        k = k + 1
-                    else:
-                        sheet_count.write(j, k, '')
-                        k = k + 1
-                j = j + 1
-            else:
-                pass
-        log.warning(_("tma_grade_reports : save file generate_xls"))
-        _wb.save(self.filepath)
-        _file = open(self.filepath,'r')
-        _content = _file.read()
-        _file.close()
+    #                 #insert summary grades mongodb value to xls
+    #                 elif "summary" in n:
+    #                     grade_breakdown = _row.get('users_info').get('summary').get('grade_breakdown')
+    #                     for key,value in grade_breakdown.items():
+    #                         #insert grade value to xls
+    #                         details = value['detail']
+    #                         details = details.replace(value['category'],"").replace(" = ","").replace("of a possible ","").replace("%","")
+    #                         split = details.split(" ")
+    #                         avg = str(int(float(split[0])/float(split[1]) * 100))+"%"
+    #                         sheet_count.write(j, k, avg)
+    #                         k = k + 1
 
-        response = {
-            'path':self.filename
-        }
-        return JsonResponse(response)
+    #                 #insert final grades mongodb value to xls
+    #                 elif "final-grades" in n:
+    #                     sheet_count.write(j, k, str(_row.get('users_info').get('percent') * 100)+"%")
+    #                     k = k + 1
+    #                     sheet_count.write(j, k, str(_row.get('users_info').get('passed')))
+    #                     k = k + 1
+    #                 else:
+    #                     sheet_count.write(j, k, '')
+    #                     k = k + 1
+    #             j = j + 1
+    #         else:
+    #             pass
+    #     log.warning(_("tma_grade_reports : save file generate_xls"))
+    #     _wb.save(self.filepath)
+    #     _file = open(self.filepath,'r')
+    #     _content = _file.read()
+    #     _file.close()
+
+    #     response = {
+    #         'path':self.filename
+    #     }
+    #     return JsonResponse(response)
 
 
+    # def wul_get_scorable_blocks_titles(self, course_key):
+    #     """
+    #     Returns an dict that maps a scorable block's location id to its title.
+    #     """
+    #     scorable_block_titles = OrderedDict()
+    #     grading_context = grading_context_for_course(course_key)
 
+    #     for assignment_type_name, subsection_infos in grading_context['all_graded_subsections_by_type'].iteritems():
+    #         for subsection_index, subsection_info in enumerate(subsection_infos, start=1):
+    #             for scorable_block in subsection_info['scored_descendants']:
+    #                 header_name = (
+    #                     u"{assignment_type} {subsection_index}: "
+    #                     u"{subsection_name} - {scorable_block_name}"
+    #                 ).format(
+    #                     scorable_block_name=scorable_block.display_name,
+    #                     assignment_type=assignment_type_name,
+    #                     subsection_index=subsection_index,
+    #                     subsection_name=subsection_info['subsection_block'].display_name,
+    #                 )
+    #                 scorable_block_titles[scorable_block.location] = header_name
+    #     return scorable_block_titles
 
-    def tma_get_scorable_blocks_titles(self, course_key):
+    def wul_get_scorable_blocks_titles(self):
         """
-        Returns an dict that maps a scorable block's location id to its title.
+        Returns an OrderedDict that maps an assignment type to a dict of
+        subsection-headers and average-header.
         """
-        scorable_block_titles = OrderedDict()
-        grading_context = grading_context_for_course(course_key)
-
-        for assignment_type_name, subsection_infos in grading_context['all_graded_subsections_by_type'].iteritems():
+        grading_cxt = grades_context.grading_context(self.course, self.course_structure)
+        graded_assignments_map = OrderedDict()
+        for assignment_type_name, subsection_infos in six.iteritems(grading_cxt['all_graded_subsections_by_type']):
+            graded_subsections_map = OrderedDict()
             for subsection_index, subsection_info in enumerate(subsection_infos, start=1):
-                for scorable_block in subsection_info['scored_descendants']:
-                    header_name = (
-                        u"{assignment_type} {subsection_index}: "
-                        u"{subsection_name} - {scorable_block_name}"
-                    ).format(
-                        scorable_block_name=scorable_block.display_name,
-                        assignment_type=assignment_type_name,
-                        subsection_index=subsection_index,
-                        subsection_name=subsection_info['subsection_block'].display_name,
-                    )
-                    scorable_block_titles[scorable_block.location] = header_name
-        return scorable_block_titles
+                subsection = subsection_info['subsection_block']
+                header_name = u"{assignment_type} {subsection_index}: {subsection_name}".format(
+                    assignment_type=assignment_type_name,
+                    subsection_index=subsection_index,
+                    subsection_name=subsection.display_name,
+                )
+                graded_subsections_map[subsection.location] = header_name
 
-    def get_time_tracking(self,enrollment):
-        tma_enrollment,is_exist=TmaCourseEnrollment.objects.get_or_create(course_enrollment_edx=enrollment)
-        global_time_tracking = self.convert_seconds_in_hours(tma_enrollment.global_time_tracking)
-        return global_time_tracking
+            average_header = u"{assignment_type}".format(assignment_type=assignment_type_name)
+
+            # Use separate subsection and average columns only if
+            # there's more than one subsection.
+            separate_subsection_avg_headers = len(subsection_infos) > 1
+            if separate_subsection_avg_headers:
+                average_header += u" (Avg)"
+
+            graded_assignments_map[assignment_type_name] = {
+                'subsection_headers': graded_subsections_map,
+                'average_header': average_header,
+                'separate_subsection_avg_headers': separate_subsection_avg_headers,
+                'grader': grading_cxt['subsection_type_graders'].get(assignment_type_name),
+            }
+        return graded_assignments_map
+
+
+    # def get_time_tracking(self,enrollment):
+    #     tma_enrollment,is_exist=TmaCourseEnrollment.objects.get_or_create(course_enrollment_edx=enrollment)
+    #     global_time_tracking = self.convert_seconds_in_hours(tma_enrollment.global_time_tracking)
+    #     return global_time_tracking
         
 
-    def get_detailed_time_tracking(self,enrollment):
-        detailed_time_tracking = {}
-        tma_enrollment,is_exist=TmaCourseEnrollment.objects.get_or_create(course_enrollment_edx=enrollment)
-        try:
-            detailed_time_tracking = json.loads(tma_enrollment.detailed_time_tracking)
-        except:
-            pass
-        return detailed_time_tracking
+    # def get_detailed_time_tracking(self,enrollment):
+    #     detailed_time_tracking = {}
+    #     tma_enrollment,is_exist=TmaCourseEnrollment.objects.get_or_create(course_enrollment_edx=enrollment)
+    #     try:
+    #         detailed_time_tracking = json.loads(tma_enrollment.detailed_time_tracking)
+    #     except:
+    #         pass
+    #     return detailed_time_tracking
 
-    def convert_seconds_in_hours(self, seconds):
-        hours = seconds // 3600
-        seconds %= 3600
-        minutes = seconds // 60
-        time_spent = str(hours)+"h"+str(minutes)+"min"
-        return time_spent
+    # def convert_seconds_in_hours(self, seconds):
+    #     hours = seconds // 3600
+    #     seconds %= 3600
+    #     minutes = seconds // 60
+    #     time_spent = str(hours)+"h"+str(minutes)+"min"
+    #     return time_spent
 
         
         
@@ -304,7 +345,12 @@ class grade_reports():
 
         course_key=CourseKey.from_string(self.course_id)
         course=get_course_by_id(course_key)
-        microsite_information = Microsite.objects.get(key=self.microsite)
+        microsite_information = "test"
+
+
+        log.info("*****µCOURSE**************")
+        log.info(course)
+        log.info
 
         form_factory = ensure_form_factory()
         form_factory.connect(db='ensure_form',collection='certificate_form')
@@ -333,9 +379,11 @@ class grade_reports():
             form_labels[field.get('name')]=field.get('label')
         for field in certificate_fields :
             form_labels[field.get('name')]=field.get('label')
-
+        log.info("*************************FORMLABEL**********************")
+        log.info(form_labels)
         calculate_average_for_attestation = False
-        if form_labels["cas_pratique_grade"]:
+        # if form_labels["cas_pratique_grade"]:
+        if "cas_pratique_grade" in form_labels:
             if not certificate_advanced_config:
                 form_labels.pop("cas_pratique_grade")
             elif certificate_advanced_config and len(certificate_advanced_config) == 0:
@@ -360,7 +408,8 @@ class grade_reports():
                 report_fields.remove('cohorte_names')
 
         #Get Graded block for exercises_grade details
-        scorable_blocks_titles = self.tma_get_scorable_blocks_titles(course_key)
+        # scorable_blocks_titles = self.wul_get_scorable_blocks_titles(course_key)
+        scorable_blocks_titles = self.wul_get_scorable_blocks_titles()
 
         #Create Workbook
         wb = openpyxlWorkbook()
@@ -708,12 +757,20 @@ class grade_reports():
         #Send the email to receivers
         receivers = self.request.get('send_to')
 
+        # if cohortes_targeted and len(cohortes_targeted)>1:
+        #     html = "<html><head></head><body><p>Bonjour,<br/><br/>Vous trouverez en PJ le rapport de donnees du MOOC {} pour les cohortes {}<br/><br/>Si vous disposez d'accès suffisants vous pouvez accéder au dashboard du cours: https://{}/tma/{}/dashboard <br><br> et au studio du cours : https://{}/course/{}    <br/><br/>Bonne reception<br>The MOOC Agency<br></p></body></html>".format(course.display_name, ' , '.join(cohortes_targeted), microsite_information.values['SITE_NAME'], course.id, settings.CMS_BASE, course.id)
+        # elif cohortes_targeted and len(cohortes_targeted)==1:
+        #     html = "<html><head></head><body><p>Bonjour,<br/><br/>Vous trouverez en PJ le rapport de donnees du MOOC {} pour la cohorte {}<br/><br/>Si vous disposez d'accès suffisants vous pouvez accéder au dashboard du cours: https://{}/tma/{}/dashboard <br><br> et au studio du cours : https://{}/course/{}    <br/><br/>Bonne reception<br>The MOOC Agency<br></p></body></html>".format(course.display_name, ' '.join(cohortes_targeted), microsite_information.values['SITE_NAME'], course.id, settings.CMS_BASE, course.id)
+        # else :
+        #     html = "<html><head></head><body><p>Bonjour,<br/><br/>Vous trouverez en PJ le rapport de donnees du MOOC {}<br/><br/>Si vous disposez d'accès suffisants vous pouvez accéder au dashboard du cours: https://{}/tma/{}/dashboard <br><br> et au studio du cours : https://{}/course/{}    <br/><br/>Bonne reception<br>The MOOC Agency<br></p></body></html>".format(course.display_name, microsite_information.values['SITE_NAME'], course.id, settings.CMS_BASE, course.id)
+        # part2 = MIMEText(html.encode('utf-8'), 'html', 'utf-8')
+
         if cohortes_targeted and len(cohortes_targeted)>1:
-            html = "<html><head></head><body><p>Bonjour,<br/><br/>Vous trouverez en PJ le rapport de donnees du MOOC {} pour les cohortes {}<br/><br/>Si vous disposez d'accès suffisants vous pouvez accéder au dashboard du cours: https://{}/tma/{}/dashboard <br><br> et au studio du cours : https://{}/course/{}    <br/><br/>Bonne reception<br>The MOOC Agency<br></p></body></html>".format(course.display_name, ' , '.join(cohortes_targeted), microsite_information.values['SITE_NAME'], course.id, settings.CMS_BASE, course.id)
+            html = "<html><head></head><body><p>Bonjour,<br/><br/>Vous trouverez en PJ le rapport de donnees du MOOC {} pour les cohortes {}<br/><br/>Si vous disposez d'accès suffisants vous pouvez accéder au dashboard du cours: https://{}/tma/{}/dashboard <br><br> et au studio du cours : https://{}/course/{}    <br/><br/>Bonne reception<br>The MOOC Agency<br></p></body></html>".format(course.display_name, ' , '.join(cohortes_targeted), microsite_information, course.id, settings.CMS_BASE, course.id)
         elif cohortes_targeted and len(cohortes_targeted)==1:
-            html = "<html><head></head><body><p>Bonjour,<br/><br/>Vous trouverez en PJ le rapport de donnees du MOOC {} pour la cohorte {}<br/><br/>Si vous disposez d'accès suffisants vous pouvez accéder au dashboard du cours: https://{}/tma/{}/dashboard <br><br> et au studio du cours : https://{}/course/{}    <br/><br/>Bonne reception<br>The MOOC Agency<br></p></body></html>".format(course.display_name, ' '.join(cohortes_targeted), microsite_information.values['SITE_NAME'], course.id, settings.CMS_BASE, course.id)
+            html = "<html><head></head><body><p>Bonjour,<br/><br/>Vous trouverez en PJ le rapport de donnees du MOOC {} pour la cohorte {}<br/><br/>Si vous disposez d'accès suffisants vous pouvez accéder au dashboard du cours: https://{}/tma/{}/dashboard <br><br> et au studio du cours : https://{}/course/{}    <br/><br/>Bonne reception<br>The MOOC Agency<br></p></body></html>".format(course.display_name, ' '.join(cohortes_targeted), microsite_information, course.id, settings.CMS_BASE, course.id)
         else :
-            html = "<html><head></head><body><p>Bonjour,<br/><br/>Vous trouverez en PJ le rapport de donnees du MOOC {}<br/><br/>Si vous disposez d'accès suffisants vous pouvez accéder au dashboard du cours: https://{}/tma/{}/dashboard <br><br> et au studio du cours : https://{}/course/{}    <br/><br/>Bonne reception<br>The MOOC Agency<br></p></body></html>".format(course.display_name, microsite_information.values['SITE_NAME'], course.id, settings.CMS_BASE, course.id)
+            html = "<html><head></head><body><p>Bonjour,<br/><br/>Vous trouverez en PJ le rapport de donnees du MOOC {}<br/><br/>Si vous disposez d'accès suffisants vous pouvez accéder au dashboard du cours: https://{}/tma/{}/dashboard <br><br> et au studio du cours : https://{}/course/{}    <br/><br/>Bonne reception<br>The MOOC Agency<br></p></body></html>".format(course.display_name, microsite_information, course.id, settings.CMS_BASE, course.id)
         part2 = MIMEText(html.encode('utf-8'), 'html', 'utf-8')
 
         for receiver in receivers :
@@ -753,15 +810,15 @@ class grade_reports():
 
         return response
 
-    def addOneToChoice(self, choice):
-        choice=choice.split("_")
-        choice[1]=str(int(choice[1])+1)
-        return "_".join(choice)
+    # def addOneToChoice(self, choice):
+    #     choice=choice.split("_")
+    #     choice[1]=str(int(choice[1])+1)
+    #     return "_".join(choice)
 
-    def download_xls(self):
-        self.filepath = '/edx/var/edxapp/grades/{}'.format(self.filename)
-        _file = open(self.filepath,'r')
-        _content = _file.read()
-        response = HttpResponse(_content, content_type="application/vnd.ms-excel")
-        response['Content-Disposition'] = "attachment; filename="+self.filename
-        return response
+    # def download_xls(self):
+    #     self.filepath = '/edx/var/edxapp/grades/{}'.format(self.filename)
+    #     _file = open(self.filepath,'r')
+    #     _content = _file.read()
+    #     response = HttpResponse(_content, content_type="application/vnd.ms-excel")
+    #     response['Content-Disposition'] = "attachment; filename="+self.filename
+    #     return response

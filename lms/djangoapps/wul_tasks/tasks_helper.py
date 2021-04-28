@@ -3,6 +3,7 @@ import sys
 import importlib
 importlib.reload(sys)
 
+from eventtracking import tracker
 import json
 import logging
 # from StringIO import StringIO
@@ -28,14 +29,16 @@ from track import contexts
 
 from courseware.courses import get_course_by_id, get_problems_in_section
 
-from lms.djangoapps.wul_tasks.models import WulTask, PROGRESS
+from lms.djangoapps.wul_tasks.models import WulTask, PROGRESS, ReportStore
 
 from util.db import outer_atomic
 
 #GEOFFREY
-from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
-# from tma_stat_dashboard.grade_reports import grade_reports
 from lms.djangoapps.wul_apps.stat_dashboard.wul_dashboard import wul_dashboard
+from lms.djangoapps.wul_apps.stat_dashboard.grade_reports import grade_reports
+# from lms.djangoapps.instructor_task.models import ReportStore
+from common.djangoapps.util.file import course_filename_prefix_generator
+
 # from tma_apps.fraissinet.fraissinet import fraissinet
 
 # #DASHBOARD V2
@@ -53,9 +56,29 @@ class TaskProgress(object):
     'attempted', 'succeeded', 'skipped', 'failed', 'total',
     'action_name', and 'duration_ms' values.
     """
-    def __init__(self, action_name):
+    def __init__(self, action_name, total, start_time):
         self.action_name = action_name
         self.complementary = None
+        self.total = total
+        self.start_time = start_time
+        self.attempted = 0
+        self.succeeded = 0
+        self.skipped = 0
+        self.failed = 0
+        self.preassigned = 0
+
+        @property
+        def state(self):
+            return {
+                'action_name': self.action_name,
+                'attempted': self.attempted,
+                'succeeded': self.succeeded,
+                'skipped': self.skipped,
+                'failed': self.failed,
+                'total': self.total,
+                'preassigned': self.preassigned,
+                'duration_ms': int((time() - self.start_time) * 1000),
+            }
 
     def update_task_state(self, extra_meta=None):
         """
@@ -220,7 +243,7 @@ def run_main_task(entry_id, task_fcn, action_name):
     task_id = entry.task_id
     course_id = entry.course_id
     task_input = json.loads(entry.task_input)
-    microsite = entry.microsite_input
+    # microsite = entry.microsite_input
 
     # Construct log message
     fmt = u'Task: {task_id}, WulTask ID: {entry_id}, Course: {course_id}, Input: {task_input}'
@@ -229,9 +252,6 @@ def run_main_task(entry_id, task_fcn, action_name):
 
     # Check that the task_id submitted in the InstructorTask matches the current task
     # that is running.
-
-
-
     request_task_id = _get_current_task().request.id
     if task_id != request_task_id:
         fmt = u'{task_info}, Requested task did not match actual task "{actual_id}"'
@@ -241,7 +261,8 @@ def run_main_task(entry_id, task_fcn, action_name):
 
     # Now do the work
     # with dog_stats_api.timer('instructor_tasks.time.overall', tags=[u'action:{name}'.format(name=action_name)]):
-    task_progress = task_fcn(entry_id, course_id, task_input, action_name,microsite)
+    # task_progress = task_fcn(entry_id, course_id, task_input, action_name,microsite)
+    task_progress = task_fcn(entry_id, course_id, task_input, action_name)
 
     # Release any queries that the connection has been hanging onto
     reset_queries()
@@ -260,12 +281,13 @@ def run_main_task(entry_id, task_fcn, action_name):
 #     return task_progress.update_task_state()
 #     #tracker.emit(REPORT_REQUESTED_EVENT_NAME, {"report_type": grade_path, })
 
-def users_generation(_xmodule_instance_args, _entry_id, course_id, _task_input, action_name, microsite):
+# def users_generation(_xmodule_instance_args, _entry_id, course_id, _task_input, action_name, microsite):
+def users_generation(_xmodule_instance_args, _entry_id, course_id, _task_input, action_name):
     course_key = course_id
     course_id = str(course_id)
     generation_path =  wul_dashboard(course_id=course_id,course_key=course_key,request=_task_input).task_generate_user()
 
-    task_progress = TaskProgress('user_generation')
+    task_progress = TaskProgress('user_generation', total=None, start_time=None)
     task_progress.complementary = generation_path
 
     return task_progress.update_task_state()
@@ -304,3 +326,39 @@ def users_generation(_xmodule_instance_args, _entry_id, course_id, _task_input, 
 #     task_progress = TaskProgress('add_extra_time')
 #     task_progress.complementary = add_time_task
 #     return task_progress.update_task_state()
+
+def send_attached_csv_by_mail(rows, csv_name, course_id, timestamp, task_input, config_name='GRADES_DOWNLOAD'):
+    """
+    Upload data as a CSV using ReportStore.
+
+    Arguments:
+        rows: CSV data in the following format (first column may be a
+            header):
+            [
+                [row1_colum1, row1_colum2, ...],
+                ...
+            ]
+        csv_name: Name of the resulting CSV
+        course_id: ID of the course
+
+    Returns:
+        report_name: string - Name of the generated report
+    """
+    report_store = ReportStore.from_config(config_name)
+    report_name = u"{course_prefix}_{csv_name}_{timestamp_str}.csv".format(
+        course_prefix=course_filename_prefix_generator(course_id),
+        csv_name=csv_name,
+        timestamp_str=timestamp.strftime("%Y-%m-%d-%H%M")
+    )
+
+
+    report_store.store_rows(course_id, report_name, rows, task_input)
+    tracker_emit(csv_name)
+
+    return report_name
+
+def tracker_emit(report_name):
+    """
+    Emits a 'report.requested' event for the given report.
+    """
+    tracker.emit(REPORT_REQUESTED_EVENT_NAME, {"report_type": report_name, })

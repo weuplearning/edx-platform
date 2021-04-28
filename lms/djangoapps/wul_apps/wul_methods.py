@@ -30,13 +30,13 @@ class WulUserActions():
             pass
         return user
 
-    def generate_password_link(self):
-        final_link=''
-        if self.user:
-            uid = int_to_base36(self.user.id)
-            token = default_token_generator.make_token(self.user)
-            final_link = reverse(PasswordResetConfirmWrapper, args=(uid, token))
-        return final_link
+    # def generate_password_link(self):
+    #     final_link=''
+    #     if self.user:
+    #         uid = int_to_base36(self.user.id)
+    #         token = default_token_generator.make_token(self.user)
+    #         final_link = reverse(PasswordResetConfirmWrapper, args=(uid, token))
+    #     return final_link
 
     def unlock_user_account(self):
         if self.user and LoginFailures.objects.filter(user=self.user):

@@ -6,7 +6,7 @@ importlib.reload(sys)
 # from tasks.models import tmaTask
 
 from lms.djangoapps.wul_tasks.tasks import (
-    # calculate_grades_xls,
+    calculate_grades_xls,
     generate_users,
     # sbo_user,
     # add_extra_time
@@ -22,60 +22,62 @@ from openedx.core.djangoapps.site_configuration import helpers as configuration_
 import logging
 log = logging.getLogger(__name__)
 
-# #generation grades reports
-# def submit_calculate_grades_xls(request, course_key):
+#generation grades reports
+def submit_calculate_grades_xls(request, course_key):
 
-#     """
-#     AlreadyRunningError is raised if the course's grades are already being updated.
-#     """
-#     task_type = 'grade_course'
-#     task_class = calculate_grades_xls
+    """
+    AlreadyRunningError is raised if the course's grades are already being updated.
+    """
+    task_type = 'grade_course'
+    task_class = calculate_grades_xls
+    site_name = configuration_helpers.get_value('SITE_NAME')
 
-#     _microsite = configuration_helpers.get_value('domain_prefix')
-#     register_form = configuration_helpers.get_value('FORM_EXTRA')
-#     if register_form is None:
-#         register_form = []
-#     certificate_form = configuration_helpers.get_value('CERTIFICATE_FORM_EXTRA')
-#     if certificate_form is None:
-#         certificate_form = []
-#     if _microsite is None:
-#         _microsite = '_';
-#     _form = json.loads(request.body).get('fields')
-#     scope = json.loads(request.body).get('scope')
-#     users_admin = []
-#     certificate_advanced_config = {}
-#     include_days_left_in_report = False
+    _microsite = configuration_helpers.get_value('domain_prefix')
+    register_form = configuration_helpers.get_value('FORM_EXTRA')
+    if register_form is None:
+        register_form = []
+    certificate_form = configuration_helpers.get_value('CERTIFICATE_FORM_EXTRA')
+    if certificate_form is None:
+        certificate_form = []
+    if _microsite is None:
+        _microsite = '_';
+    _form = json.loads(request.body).get('fields')
+    scope = json.loads(request.body).get('scope')
+    users_admin = []
+    certificate_advanced_config = {}
+    include_days_left_in_report = False
     
-#     try :
-#         users_admin = configuration_helpers.get_value("TMA_DASHBOARD_ACCESS").get("all")
-#     except:
-#         pass
+    try :
+        users_admin = configuration_helpers.get_value("TMA_DASHBOARD_ACCESS").get("all")
+    except:
+        pass
 
-#     try :
-#         include_days_left_in_report = configuration_helpers.get_value("TMA_DASHBOARD_REPORTS_INCLUDE_DAYS_LEFT_FOR_COURSE_ACCESS")
-#     except:
-#         pass
+    try :
+        include_days_left_in_report = configuration_helpers.get_value("TMA_DASHBOARD_REPORTS_INCLUDE_DAYS_LEFT_FOR_COURSE_ACCESS")
+    except:
+        pass
 
-#     try :
-#         certificate_advanced_config = configuration_helpers.get_value("CERTIFICATE_ADVANCED_CONFIGURATION")
-#     except:
-#         pass
+    try :
+        certificate_advanced_config = configuration_helpers.get_value("CERTIFICATE_ADVANCED_CONFIGURATION")
+    except:
+        pass
 
-#     receivers = json.loads(request.body).get('receivers')
-#     task_input = {
-#         "microsite":_microsite,
-#         "form":_form,
-#         "register_form":register_form,
-#         "certificate_form":certificate_form,
-#         "send_to":receivers,
-#         "scope":scope,
-#         "users_admin": users_admin,
-#         "include_days_left_in_report": include_days_left_in_report,
-#         "certificate_advanced_config": certificate_advanced_config
-#     }
-#     task_key = ""
+    receivers = json.loads(request.body).get('receivers')
+    task_input = {
+        "site_name": site_name,
+        "microsite":_microsite,
+        "form":_form,
+        "register_form":register_form,
+        "certificate_form":certificate_form,
+        "send_to":receivers,
+        "scope":scope,
+        "users_admin": users_admin,
+        "include_days_left_in_report": include_days_left_in_report,
+        "certificate_advanced_config": certificate_advanced_config
+    }
+    task_key = ""
 
-#     return submit_task(request, task_type, task_class, course_key, task_input, task_key, _microsite)
+    return submit_task(request, task_type, task_class, course_key, task_input, task_key, _microsite)
 
 #generations utilisateurs
 def submit_generate_users(request, course_key):
