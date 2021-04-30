@@ -733,10 +733,20 @@ class WulCourseGradeReport(object):
                             except:
                                 custom_field_array.append('')
 
+                    try:
+                        last_login = user.last_login.strftime("%d/%m/%Y")
+                    except:
+                        last_login = None
+
+                    try:
+                        date_joined = user.date_joined.strftime("%d/%m/%Y")
+                    except:
+                        date_joined = None
+
                     success_rows.append(
                         [user.id, user.email] +
                         custom_field_array +
-                        [user.last_login, user.date_joined] +
+                        [last_login, date_joined] +
                         self._user_grades(course_grade, context) 
                         # self._user_cohort_group_names(user, context) +
                         # self._user_experiment_group_names(user, context) +
