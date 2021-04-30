@@ -708,8 +708,6 @@ class WulCourseGradeReport(object):
 
     def get_time_tracking(self,enrollment):
         wul_enrollment,is_exist=WulCourseEnrollment.objects.get_or_create(course_enrollment_edx=enrollment)
-        log.info("************************************************************")
-        log.info(wul_enrollment.global_time_tracking)
         global_time_tracking = self.convert_seconds_in_hours(wul_enrollment.global_time_tracking)
         return global_time_tracking
 
@@ -730,9 +728,6 @@ class WulCourseGradeReport(object):
             ):
 
                 user_enrollment = [user_enrolled for user_enrolled in course_enrollments if user_enrolled.user_id == user.id]
-                log.info("****ISITWORKING?*****")
-                log.info(user_enrollment)
-
 
                 try:
                     time_tracking = self.get_time_tracking(user_enrollment[0])
