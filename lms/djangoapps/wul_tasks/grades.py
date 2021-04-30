@@ -49,6 +49,7 @@ from xmodule.partitions.partitions_service import PartitionService
 from xmodule.split_test_module import get_split_user_partitions
 from lms.djangoapps.wul_tasks.tasks_helper import TaskProgress, send_attached_csv_by_mail
 from common.djangoapps.student.models import UserProfile
+from lms.djangoapps.wul_apps.models import WulCourseEnrollment
 # from lms.djangoapps.instructor_task.tasks_helper.utils import upload_csv_to_report_store
 
 
@@ -458,11 +459,9 @@ class WulCourseGradeReport(object):
         """
 
         return (
-            # ["Student ID", "Email", "First name", "Last name", "last login", "Inscription date"] +
             ["Student ID", "Email"] +
             custom_fields_header +
-            # ["First name", "Last name", "Company name", "Virtual class 1", "Virtual class 2"] +
-            ["last login", "Inscription date"] +
+            ["Last login", "Inscription date", "Time tracking"] +
             self._grades_header(context) +
             (['Cohort Name'] if context.cohorts_enabled else []) 
             # [u'Experiment Group ({})'.format(partition.name) for partition in context.course_experiments] +
@@ -700,11 +699,23 @@ class WulCourseGradeReport(object):
         )
         return certificate_info
 
+    def convert_seconds_in_hours(self, seconds):
+        hours = seconds // 3600
+        seconds %= 3600
+        minutes = seconds // 60
+        time_spent = str(hours)+"h"+str(minutes)+"min"
+        return time_spent
+
+    def get_time_tracking(self,enrollment):
+        wul_enrollment,is_exist=WulCourseEnrollment.objects.get_or_create(course_enrollment_edx=enrollment)
+        global_time_tracking = self.convert_seconds_in_hours(wul_enrollment.global_time_tracking)
+        return global_time_tracking
+
     def _rows_for_users(self, context, users, custom_fields_header, _task_input):
         """
         Returns a list of rows for the given users for this report.
         """
-
+        course_enrollments=CourseEnrollment.objects.filter(course_id=context.course_id, is_active=1)
         with modulestore().bulk_operations(context.course_id):
             bulk_context = _CourseGradeBulkContext(context, users)
 
@@ -715,6 +726,14 @@ class WulCourseGradeReport(object):
                 collected_block_structure=context.course_structure,
                 course_key=context.course_id,
             ):
+
+                user_enrollment = [user_enrolled for user_enrolled in course_enrollments if user_enrolled.user_id == user.id]
+
+                try:
+                    time_tracking = self.get_time_tracking(user_enrollment[0])
+                except:
+                    time_tracking = "0h0min"
+
                 if not course_grade:
                     # An empty gradeset means we failed to grade a student.
                     error_rows.append([user.id, user.username, text_type(error)])
@@ -746,7 +765,7 @@ class WulCourseGradeReport(object):
                     success_rows.append(
                         [user.id, user.email] +
                         custom_field_array +
-                        [last_login, date_joined] +
+                        [last_login, date_joined, time_tracking] +
                         self._user_grades(course_grade, context) 
                         # self._user_cohort_group_names(user, context) +
                         # self._user_experiment_group_names(user, context) +
