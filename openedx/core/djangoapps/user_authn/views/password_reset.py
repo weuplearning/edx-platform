@@ -149,6 +149,8 @@ def send_password_reset_email_for_user(user, request, preferred_email=None):
     site_name = settings.LOGISTRATION_MICROFRONTEND_DOMAIN if should_redirect_to_logistration_mircrofrontend() \
         else configuration_helpers.get_value('SITE_NAME', settings.SITE_NAME)
     message_context.update({
+        'domain_prefix': configuration_helpers.get_value('domain_prefix'),
+        'site_name': configuration_helpers.get_value('SITE_NAME'),
         'request': request,  # Used by google_analytics_tracking_pixel
         # TODO: This overrides `platform_name` from `get_base_template_context` to make the tests passes
         'platform_name': configuration_helpers.get_value('PLATFORM_NAME', settings.PLATFORM_NAME),
@@ -161,7 +163,6 @@ def send_password_reset_email_for_user(user, request, preferred_email=None):
             }),
         )
     })
-
     msg = PasswordReset().personalize(
         recipient=Recipient(user.username, preferred_email or user.email),
         language=user_language_preference,
