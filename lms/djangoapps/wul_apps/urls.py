@@ -10,6 +10,7 @@ from lms.djangoapps.wul_apps.custom_fields_editor.views import CustomFieldView, 
 from lms.djangoapps.wul_apps.statistics.views import add_time_tracking, get_user_global_time
 from lms.djangoapps.wul_apps.ensure_form.views import ensure_form
 from lms.djangoapps.wul_apps.stat_dashboard.views import tma_create_user_from_csv, calculate_grades_xls
+from lms.djangoapps.wul_apps.statistics.views import add_time_tracking
 
 
 # WUL DASHBOARD ENDPOINTS
@@ -49,5 +50,11 @@ urlpatterns += (
 #GRADE REPORT
 urlpatterns += (
     url(r'^dashboard/(?P<course_id>[^/]*)/stat_dashboard/xls_grade_reports/$', calculate_grades_xls,name='calculate_grades_xls'),
-    
+)
+
+#Interface Statistiques
+urlpatterns +=(
+    url(r'^{}/wul_stats/time_tracker$'.format(settings.COURSE_ID_PATTERN), add_time_tracking ,name='add_time_tracking'),
+    # url(r'^{}/wul_stats/get_global_time$'.format(settings.COURSE_ID_PATTERN), 'tma_apps.tma_statistics.views.get_user_global_time' ,name='get_global_time'),
+    # url(r'^{}/wul_stats/course_state$'.format(settings.COURSE_ID_PATTERN), 'tma_apps.tma_statistics.views.update_user_course_state' ,name='update_user_course_state'),
 )

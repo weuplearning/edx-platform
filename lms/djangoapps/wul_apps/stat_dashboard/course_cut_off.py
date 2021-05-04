@@ -14,7 +14,7 @@ from openedx.core.djangoapps.course_groups.models import CohortMembership, Cours
 from opaque_keys.edx.locations import SlashSeparatedCourseKey
 from openedx.core.djangoapps.course_groups.cohorts import get_cohort
 from django.utils.translation import ugettext as _
-from tma_apps.models import TmaCourseOverview
+from wul_apps.models import WulCourseOverview
 
 log = logging.getLogger(__name__)
 
@@ -90,7 +90,7 @@ class course_cut_off():
 		response={}
 
 		if action is not None :
-			add_timer = TmaCourseOverview.set_timer_status(self.course_id, action)
+			add_timer = WulCourseOverview.set_timer_status(self.course_id, action)
 			if add_timer != "error" :
 				response['success']=_('Course timer activated')
 				status=200
@@ -112,12 +112,12 @@ class course_cut_off():
 			course_overview = CourseOverview.objects.get(id=self.course_key)
 			course_extra = json.loads(course_overview.course_extra)
 			if action =='delete_course_timer':
-				TmaCourseOverview.delete_course_timer(self.course_id)
+				WulCourseOverview.delete_course_timer(self.course_id)
 				context['success']=_('Cours timer deleted')
 			elif action =='add_course_timer':
 				timer_type=self.request.POST.get('timer_type','')
 				timer_value=self.request.POST.get('timer_value','')
-				add_timer = TmaCourseOverview.add_course_timer(self.course_id, timer_type, timer_value)
+				add_timer = WulCourseOverview.add_course_timer(self.course_id, timer_type, timer_value)
 				context['success']=_('Course date timer created')
 				context['success']=_('Course timer created')
 			else :
@@ -169,7 +169,7 @@ def has_valid_timer(user, course_id):
 	#check if course has global timer
 	course_key = SlashSeparatedCourseKey.from_deprecated_string(course_id)
 	course_overview = CourseOverview.objects.get(id=course_key)
-	tma_course_overview = TmaCourseOverview.get_overview(course_id)
+	wul_course_overview = WulCourseOverview.get_overview(course_id)
 
 	#Check use cohort CohortMembership
 	if get_cohort(user, course_key):
@@ -190,19 +190,19 @@ def has_valid_timer(user, course_id):
 	user_access=True
 	#Timer is activated
 	user_timer_date=None
-	if tma_course_overview.course_timer_active:
+	if wul_course_overview.course_timer_active:
 		#Check for cohort timer
 		if user_cohort_timer is not None :
 			user_timer_date=user_cohort_timer
 		#If no cohort_timer check for course timer
 		else :
-			if tma_course_overview.course_timer_type=='days_timer' and user_enter_date is not None :
-				user_timer_date = user_enter_date +timedelta(days = tma_course_overview.course_timer_days_value)
+			if wul_course_overview.course_timer_type=='days_timer' and user_enter_date is not None :
+				user_timer_date = user_enter_date +timedelta(days = wul_course_overview.course_timer_days_value)
 				if datetime.now() > user_timer_date.replace(tzinfo=None) :
 					user_access=False
 
-			elif tma_course_overview.course_timer_type=='date_timer' and user_enter_date is not None:
-				user_timer_date = tma_course_overview.course_timer_date_value
+			elif wul_course_overview.course_timer_type=='date_timer' and user_enter_date is not None:
+				user_timer_date = wul_course_overview.course_timer_date_value
 				if date.now() > user_timer_date :
 					user_access=False
 
