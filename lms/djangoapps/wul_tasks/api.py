@@ -46,6 +46,12 @@ def submit_calculate_grades_xls(request, course_key):
     users_admin = []
     certificate_advanced_config = {}
     include_days_left_in_report = False
+    time_tracking = False
+
+    try :
+        time_tracking = configuration_helpers.get_value("TMA_DASHBOARD_CONFIG").get("DISPLAY_TIME_TRACKING")
+    except:
+        pass
     
     try :
         users_admin = configuration_helpers.get_value("TMA_DASHBOARD_ACCESS").get("all")
@@ -73,7 +79,8 @@ def submit_calculate_grades_xls(request, course_key):
         "scope":scope,
         "users_admin": users_admin,
         "include_days_left_in_report": include_days_left_in_report,
-        "certificate_advanced_config": certificate_advanced_config
+        "certificate_advanced_config": certificate_advanced_config,
+        "time_tracking": time_tracking
     }
     task_key = ""
 
