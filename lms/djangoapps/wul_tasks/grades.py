@@ -464,7 +464,7 @@ class WulCourseGradeReport(object):
             ["Student ID", "Email"] +
             custom_fields_header +
             ["Last login", "Inscription date"] +
-            ("Time tracking" if time_tracking else []) +
+            (["Time tracking"] if time_tracking else []) +
             self._grades_header(context) +
             (['Cohort Name'] if context.cohorts_enabled else []) 
             # [u'Experiment Group ({})'.format(partition.name) for partition in context.course_experiments] +
@@ -773,7 +773,7 @@ class WulCourseGradeReport(object):
                         [user.id, user.email] +
                         custom_field_array +
                         [last_login, date_joined] +
-                        (time_tracking if display_time_tracking else []) +
+                        ([time_tracking] if display_time_tracking else []) +
                         self._user_grades(course_grade, context) 
                         # self._user_cohort_group_names(user, context) +
                         # self._user_experiment_group_names(user, context) +

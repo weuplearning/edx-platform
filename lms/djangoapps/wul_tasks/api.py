@@ -49,7 +49,7 @@ def submit_calculate_grades_xls(request, course_key):
     time_tracking = False
 
     try :
-        time_tracking = configuration_helpers.get_value("TMA_DASHBOARD_CONFIG").get("DISPLAY_TIME_TRACKING")
+        time_tracking = configuration_helpers.get_value("WUL_DASHBOARD_CONFIG").get("DISPLAY_TIME_TRACKING")
     except:
         pass
     
