@@ -437,9 +437,11 @@ class WulCourseGradeReport(object):
         custom_fields_header = []
         for element in register_fields:
             custom_fields_header.append(element['label'])
+        
+        time_tracking = _task_input['time_tracking']
 
         context.update_status(u'Starting grades')
-        success_headers = self._success_headers(context, custom_fields_header)
+        success_headers = self._success_headers(context, custom_fields_header, time_tracking)
         error_headers = self._error_headers()
         batched_rows = self._batched_rows(context, custom_fields_header, _task_input)
 
@@ -452,7 +454,7 @@ class WulCourseGradeReport(object):
 
         return context.update_status(u'Completed grades')
 
-    def _success_headers(self, context, custom_fields_header):
+    def _success_headers(self, context, custom_fields_header, time_tracking):
 
         """
         Returns a list of all applicable column headers for this grade report.
@@ -461,7 +463,8 @@ class WulCourseGradeReport(object):
         return (
             ["Student ID", "Email"] +
             custom_fields_header +
-            ["Last login", "Inscription date", "Time tracking"] +
+            ["Last login", "Inscription date"] +
+            (["Time tracking"] if time_tracking else []) +
             self._grades_header(context) +
             (['Cohort Name'] if context.cohorts_enabled else []) 
             # [u'Experiment Group ({})'.format(partition.name) for partition in context.course_experiments] +
@@ -715,6 +718,8 @@ class WulCourseGradeReport(object):
         """
         Returns a list of rows for the given users for this report.
         """
+        display_time_tracking = _task_input["time_tracking"]
+
         course_enrollments=CourseEnrollment.objects.filter(course_id=context.course_id, is_active=1)
         with modulestore().bulk_operations(context.course_id):
             bulk_context = _CourseGradeBulkContext(context, users)
@@ -728,6 +733,8 @@ class WulCourseGradeReport(object):
             ):
 
                 user_enrollment = [user_enrolled for user_enrolled in course_enrollments if user_enrolled.user_id == user.id]
+
+
 
                 try:
                     time_tracking = self.get_time_tracking(user_enrollment[0])
@@ -765,7 +772,8 @@ class WulCourseGradeReport(object):
                     success_rows.append(
                         [user.id, user.email] +
                         custom_field_array +
-                        [last_login, date_joined, time_tracking] +
+                        [last_login, date_joined] +
+                        ([time_tracking] if display_time_tracking else []) +
                         self._user_grades(course_grade, context) 
                         # self._user_cohort_group_names(user, context) +
                         # self._user_experiment_group_names(user, context) +
