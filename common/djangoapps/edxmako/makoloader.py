@@ -1,5 +1,5 @@
 
-
+import os
 import logging
 
 from django.conf import settings
@@ -21,7 +21,7 @@ class MakoLoader(object):
     in django.template.loaders.base.
     We need this in order to be able to include mako templates inside main_django.html.
     """
-
+ 
     is_usable = False
     supports_recursion = True
 
@@ -50,13 +50,20 @@ class MakoLoader(object):
         """
         source, origin = self.load_template_source(template_name)
 
+        origin_string = str(origin) # patch to fix the loader switch issue dimitri:19/05/2021
+
+
+
         # In order to allow dynamic template overrides, we need to cache templates based on their absolute paths
         # rather than relative paths, overriding templates would have same relative paths.
-        module_directory = self.module_directory.rstrip("/") + "/{dir_hash}/".format(dir_hash=hash(origin.name))
+
+        module_directory = self.module_directory.rstrip("/") + "/{dir_hash}/".format(dir_hash=hash(origin_string)) # patch to fix the loader switch issue dimitri:19/05/2021
+        # module_directory = self.module_directory.rstrip("/") + "/{dir_hash}/".format(dir_hash=hash(origin.name)) # old version dimitri:19/05/2021
 
         if source.startswith("## mako\n"):
             # This is a mako template
-            template = Template(filename=origin.name,
+            # template = Template(filename=origin.name, # old version dimitri:19/05/2021
+            template = Template(filename=origin_string,
                                 module_directory=module_directory,
                                 input_encoding='utf-8',
                                 output_encoding='utf-8',
@@ -82,12 +89,17 @@ class MakoLoader(object):
                 return source, origin.name
 
     def load_template_source(self, template_name):
+
+
         """
         Method returns the contents of the  template
         """
         for origin in self.base_loader.get_template_sources(template_name):
+            origin_patch = self.base_loader.get_theme_template_sources()[0] + "/" + template_name # patch to fix the loader switch issue dimitri:19/05/2021
+            source_patch = open(origin_patch).read() # patch to fix the loader switch issue dimitri:19/05/2021
             try:
-                return self.base_loader.get_contents(origin), origin
+                # return self.base_loader.get_contents(origin), origin # old version dimitri:19/05/2021
+                return source_patch, origin_patch
             except TemplateDoesNotExist:
                 pass
         raise TemplateDoesNotExist(template_name)
