@@ -93,13 +93,25 @@ class MakoLoader(object):
         Method returns the contents of the  template
         """
         for origin in self.base_loader.get_template_sources(template_name):
-            origin_patch = self.base_loader.get_theme_template_sources()[0] + "/" + template_name # patch to fix the loader switch issue dimitri:19/05/2021
-            source_patch = open(origin_patch).read() # patch to fix the loader switch issue dimitri:19/05/2021
+
             try:
-                # return self.base_loader.get_contents(origin), origin # old version dimitri:19/05/2021
-                return source_patch, origin_patch
+                origin_patch = self.base_loader.get_theme_template_sources()[0] + "/" + template_name # patch to fix the loader / issue dimitri:19/05/2021
+                try:
+                    source_patch = open(origin_patch).read() # patch to fix the loader / issue dimitri:19/05/2021
+                except FileNotFoundError:
+                    pass
+            except AttributeError:
+                pass
+
+            try:
+                try:
+                    return source_patch, origin_patch
+                except:
+                    return self.base_loader.get_contents(origin), origin # old version dimitri:19/05/2021
             except TemplateDoesNotExist:
                 pass
+
+                
         raise TemplateDoesNotExist(template_name)
 
     def reset(self):
