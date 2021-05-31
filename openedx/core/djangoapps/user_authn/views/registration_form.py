@@ -447,8 +447,8 @@ class RegistrationFormFactory(object):
                     placeholder=field.get('placeholder', u''),
                     required=field.get('required', True),
                     options=field.get('options', None),
-                    optional=None
-                    # optional=field.get('optional', True)
+                    # optional=None
+                    optional=field.get('optional', True)
                 )
 
         # remove confirm_email form v1 registration form
