@@ -484,8 +484,11 @@ class WulCourseGradeReport(object):
         """
         A generator of batches of (success_rows, error_rows) for this report.
         """
+        
         for users in self._batch_users(context):
+
             users = [u for u in users if u is not None]
+
             yield self._rows_for_users(context, users, custom_fields_header, _task_input)
 
     def _compile(self, context, batched_rows):
@@ -719,8 +722,8 @@ class WulCourseGradeReport(object):
         Returns a list of rows for the given users for this report.
         """
         display_time_tracking = _task_input["time_tracking"]
-
         course_enrollments=CourseEnrollment.objects.filter(course_id=context.course_id, is_active=1)
+
         with modulestore().bulk_operations(context.course_id):
             bulk_context = _CourseGradeBulkContext(context, users)
 
@@ -732,56 +735,62 @@ class WulCourseGradeReport(object):
                 course_key=context.course_id,
             ):
 
-                user_enrollment = [user_enrolled for user_enrolled in course_enrollments if user_enrolled.user_id == user.id]
+                # log.info(_task_input["scope"])
 
+                # Filtered reports
+                if not _task_input['scope']['admin'] and (user.email.find("@yopmail") != -1 or user.email.find("@weuplearning") != -1 or user.email.find("@themoocagency") != -1): 
+                    pass
+                else :
+                    # log.info(user.email)
+                    user_enrollment = [user_enrolled for user_enrolled in course_enrollments if user_enrolled.user_id == user.id]
 
-
-                try:
-                    time_tracking = self.get_time_tracking(user_enrollment[0])
-                except:
-                    time_tracking = "0h0min"
-
-                if not course_grade:
-                    # An empty gradeset means we failed to grade a student.
-                    error_rows.append([user.id, user.username, text_type(error)])
-                else:
-                    register_fields = _task_input['register_form']
-                    custom_field_array = []
-                    custom_field = json.loads(UserProfile.objects.get(user=user).custom_field)
-
-                    for element in register_fields:
-                        if element['label'] in custom_fields_header:
-                            try:
-                                element_index = custom_fields_header.index(element['label'])
-                                element_value = custom_field[element['name']]
-                                custom_field_array.append(custom_field[element['name']])
-                                custom_field_array[element_index] = custom_field[element['name']]
-                            except:
-                                custom_field_array.append('')
 
                     try:
-                        last_login = user.last_login.strftime("%d/%m/%Y")
+                        time_tracking = self.get_time_tracking(user_enrollment[0])
                     except:
-                        last_login = None
+                        time_tracking = "0h0min"
 
-                    try:
-                        date_joined = user.date_joined.strftime("%d/%m/%Y")
-                    except:
-                        date_joined = None
+                    if not course_grade:
+                        # An empty gradeset means we failed to grade a student.
+                        error_rows.append([user.id, user.username, text_type(error)])
+                    else:
+                        register_fields = _task_input['register_form']
+                        custom_field_array = []
+                        custom_field = json.loads(UserProfile.objects.get(user=user).custom_field)
 
-                    success_rows.append(
-                        [user.id, user.email] +
-                        custom_field_array +
-                        [last_login, date_joined] +
-                        ([time_tracking] if display_time_tracking else []) +
-                        self._user_grades(course_grade, context) 
-                        # self._user_cohort_group_names(user, context) +
-                        # self._user_experiment_group_names(user, context) +
-                        # self._user_team_names(user, bulk_context.teams) +
-                        # self._user_verification_mode(user, context, bulk_context.enrollments) +
-                        # self._user_certificate_info(user, context, course_grade, bulk_context.certs) +
-                        # [_user_enrollment_status(user, context.course_id)]
-                    )
+                        for element in register_fields:
+                            if element['label'] in custom_fields_header:
+                                try:
+                                    element_index = custom_fields_header.index(element['label'])
+                                    element_value = custom_field[element['name']]
+                                    custom_field_array.append(custom_field[element['name']])
+                                    custom_field_array[element_index] = custom_field[element['name']]
+                                except:
+                                    custom_field_array.append('')
+
+                        try:
+                            last_login = user.last_login.strftime("%d/%m/%Y")
+                        except:
+                            last_login = None
+
+                        try:
+                            date_joined = user.date_joined.strftime("%d/%m/%Y")
+                        except:
+                            date_joined = None
+
+                        success_rows.append(
+                            [user.id, user.email] +
+                            custom_field_array +
+                            [last_login, date_joined] +
+                            ([time_tracking] if display_time_tracking else []) +
+                            self._user_grades(course_grade, context) 
+                            # self._user_cohort_group_names(user, context) +
+                            # self._user_experiment_group_names(user, context) +
+                            # self._user_team_names(user, bulk_context.teams) +
+                            # self._user_verification_mode(user, context, bulk_context.enrollments) +
+                            # self._user_certificate_info(user, context, course_grade, bulk_context.certs) +
+                            # [_user_enrollment_status(user, context.course_id)]
+                        )
 
             return success_rows, error_rows
 
