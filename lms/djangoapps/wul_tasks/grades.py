@@ -736,6 +736,7 @@ class WulCourseGradeReport(object):
             ):
 
                 # log.info(_task_input["scope"])
+
                 # Filtered reports
                 if not _task_input['scope']['admin'] and (user.email.find("@yopmail") != -1 or user.email.find("@weuplearning") != -1 or user.email.find("@themoocagency") != -1): 
                     pass
