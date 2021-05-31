@@ -438,6 +438,7 @@ class RegistrationFormFactory(object):
         FORM_EXTRA_FIELDS = configuration_helpers.get_value('FORM_EXTRA', [])
         if(len(FORM_EXTRA_FIELDS)):
             for field in FORM_EXTRA_FIELDS:
+                
                 form_desc.add_field(
                     field.get('name', u''),
                     label=field.get('label', u''),
@@ -446,7 +447,8 @@ class RegistrationFormFactory(object):
                     placeholder=field.get('placeholder', u''),
                     required=field.get('required', True),
                     options=field.get('options', None),
-                    optional=field.get('optional', True)
+                    optional=None
+                    # optional=field.get('optional', True)
                 )
 
         # remove confirm_email form v1 registration form
