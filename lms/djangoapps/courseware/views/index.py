@@ -69,6 +69,7 @@ from ..permissions import MASQUERADE_AS_STUDENT
 from ..toggles import COURSEWARE_MICROFRONTEND_COURSE_TEAM_PREVIEW, REDIRECT_TO_COURSEWARE_MICROFRONTEND
 from ..url_helpers import get_microfrontend_url
 from .views import CourseTabView
+from openedx.features.course_experience.utils import get_course_outline_block_tree
 
 log = logging.getLogger("edx.courseware.views.index")
 
@@ -461,11 +462,13 @@ class CoursewareIndex(View):
             self.section_url_name,
             self.field_data_cache,
         )
+
         courseware_context['accordion'] = render_accordion(
             self.request,
             self.course,
             table_of_contents['chapters'],
         )
+
 
         courseware_context['course_sock_fragment'] = CourseSockFragmentView().render_to_fragment(
             request, course=self.course)
@@ -492,6 +495,7 @@ class CoursewareIndex(View):
                 table_of_contents['previous_of_active_section'],
                 table_of_contents['next_of_active_section'],
             )
+
             courseware_context['fragment'] = self.section.render(self.view, section_context)
 
             if self.section.position and self.section.has_children:
@@ -502,6 +506,44 @@ class CoursewareIndex(View):
             courseware_context['microfrontend_link'] = self.microfrontend_url
         else:
             courseware_context['microfrontend_link'] = None
+
+
+        # fix to display accordion in courseware
+        courses_with_displayed_accordion = ["course-v1:bim+test+test"]
+        if str(self.course_key) in courses_with_displayed_accordion:
+            courseware_context['disable_accordion'] = False
+
+
+        # log.info("coursewarecontext !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        # course_details = get_course_outline_block_tree(request, "course-v1:bim+test+test", request.user)
+        # course_sections = course_details.get('children')
+
+        # for idx, section in enumerate(course_sections):
+        #     log.info(idx)
+        #     log.info(section)
+
+        # sections_completed = []
+        # subsections_completed = []
+        # for section in course_sections:
+        #     if section.get('complete'):
+        #         sections_completed.append(section['block_id'])
+        #     for subsection in section.get('children', []):
+        #         if subsection.get('complete'):
+        #             subsections_completed.append(subsection['block_id'])
+
+        # log.info("***********************************")
+        # for table in table_of_contents['chapters']:
+        #     for section in table["sections"]:
+        #         if section['url_name'] in subsections_completed:
+        #             log.info(section['display_name'])
+
+
+        # courseware_context["sections_completed"] = sections_completed
+        # courseware_context["subsections_completed"] = subsections_completed
+        # for section in self.chapter["sections"]:
+        #     log.info(section)
+        # chapter_detail = courseware_context["chapter"]
+        # log.info(chapter_detail["display_name"])
 
         return courseware_context
 
@@ -532,6 +574,7 @@ class CoursewareIndex(View):
             )
 
     def _create_section_context(self, previous_of_active_section, next_of_active_section):
+
         """
         Returns and creates the rendering context for the section.
         """
@@ -563,6 +606,7 @@ class CoursewareIndex(View):
             section_context['next_url'] = _compute_section_url(next_of_active_section, 'first')
         # sections can hide data that masquerading staff should see when debugging issues with specific students
         section_context['specific_masquerade'] = self._is_masquerading_as_specific_student()
+
         return section_context
 
 
@@ -572,22 +616,43 @@ def render_accordion(request, course, table_of_contents):
     Expects the table_of_contents to have data on each chapter and section,
     including which ones are active.
     """
+
+    course_key = str(six.text_type(course.id))
+
+    # To get the completion into the accordion menu
+    course_details = get_course_outline_block_tree(request, course_key, request.user)
+    course_sections = course_details.get('children')
+
+    sections_completed = []
+    subsections_completed = []
+    for section in course_sections:
+        if section.get('complete'):
+            sections_completed.append(section['block_id'])
+        for subsection in section.get('children', []):
+            if subsection.get('complete'):
+                subsections_completed.append(subsection['block_id'])
+
     context = dict(
         [
+            ('completed_sections', sections_completed),
+            ('completed_subsections', subsections_completed),
             ('toc', table_of_contents),
             ('course_id', six.text_type(course.id)),
             ('csrf', csrf(request)['csrf_token']),
             ('due_date_display_format', course.due_date_display_format),
         ] + list(TEMPLATE_IMPORTS.items())
-    )
+    )   
+
     return render_to_string('courseware/accordion.html', context)
 
 
 def save_child_position(seq_module, child_name):
+
     """
     child_name: url_name of the child
     """
     for position, child in enumerate(seq_module.get_display_items(), start=1):
+
         if child.location.block_id == child_name:
             # Only save if position changed
             if position != seq_module.position:

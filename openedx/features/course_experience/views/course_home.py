@@ -55,6 +55,8 @@ from .welcome_message import WelcomeMessageFragmentView
 
 EMPTY_HANDOUTS_HTML = u'<ol></ol>'
 
+import logging
+log = logging.getLogger()
 
 class CourseHomeView(CourseTabView):
     """
@@ -147,15 +149,19 @@ class CourseHomeFragmentView(EdxFragmentView):
         resume_course_url = None
         handouts_html = None
 
+        # Compute course grade so that we can show badges
+        user_grade = CourseGradeFactory().read(request.user, course)
+
         course_overview = CourseOverview.get_from_id(course.id)
         if user_access['is_enrolled'] or user_access['is_staff']:
             outline_fragment = CourseOutlineFragmentView().render_to_fragment(
-                request, course_id=course_id, **kwargs
+                user_grade,request, course_id=course_id, **kwargs
             )
             if LATEST_UPDATE_FLAG.is_enabled(course_key):
                 update_message_fragment = LatestUpdateFragmentView().render_to_fragment(
                     request, course_id=course_id, **kwargs
                 )
+
             else:
                 update_message_fragment = WelcomeMessageFragmentView().render_to_fragment(
                     request, course_id=course_id, **kwargs
@@ -175,7 +181,7 @@ class CourseHomeFragmentView(EdxFragmentView):
             )
         elif allow_public_outline or allow_public:
             outline_fragment = CourseOutlineFragmentView().render_to_fragment(
-                request, course_id=course_id, user_is_enrolled=False, **kwargs
+                user_grade,request, course_id=course_id, user_is_enrolled=False, **kwargs
             )
             course_sock_fragment = CourseSockFragmentView().render_to_fragment(request, course=course, **kwargs)
             if allow_public:
@@ -223,12 +229,8 @@ class CourseHomeFragmentView(EdxFragmentView):
             (settings.FEATURES.get('ENABLE_COURSEWARE_SEARCH_FOR_COURSE_STAFF') and user_access['is_staff'])
         )
 
-        # Compute course grade so that we can show badges
-        user_grade = CourseGradeFactory().read(request.user, course)
-
         # Send block tree
         course_block_tree = get_course_outline_block_tree(request, six.text_type(course.id), request.user)
-
         # Render the course home fragment
         context = {
             'request': request,
@@ -260,5 +262,6 @@ class CourseHomeFragmentView(EdxFragmentView):
             'has_discount': has_discount,
             'show_search': show_search,
         }
+
         html = render_to_string('course_experience/course-home-fragment.html', context)
         return Fragment(html)

@@ -36,10 +36,14 @@ from common.djangoapps.student.models import CourseEnrollment
 from common.djangoapps.util.milestones_helpers import get_course_content_milestones
 from xmodule.course_module import COURSE_VISIBILITY_PUBLIC
 from xmodule.modulestore.django import modulestore
+from lms.djangoapps.grades.api import CourseGradeFactory
 
 from ..utils import get_course_outline_block_tree, get_resume_block
 
 DEFAULT_COMPLETION_TRACKING_START = datetime.datetime(2018, 1, 24, tzinfo=UTC)
+
+import logging
+log = logging.getLogger()
 
 
 class CourseOutlineFragmentView(EdxFragmentView):
@@ -47,7 +51,7 @@ class CourseOutlineFragmentView(EdxFragmentView):
     Course outline fragment to be shown in the unified course view.
     """
 
-    def render_to_fragment(self, request, course_id, user_is_enrolled=True, **kwargs):  # pylint: disable=arguments-differ
+    def render_to_fragment(self,user_grade, request, course_id, user_is_enrolled=True, **kwargs):  # pylint: disable=arguments-differ
         """
         Renders the course outline as a fragment.
         """
@@ -78,7 +82,12 @@ class CourseOutlineFragmentView(EdxFragmentView):
 
         reset_deadlines_url = reverse(RESET_COURSE_DEADLINES_NAME)
 
+        # Compute course grade so that we can show badges
+        user_grade = CourseGradeFactory().read(request.user, course)
+
+
         context = {
+            'user_grade': user_grade,
             'csrf': csrf(request)['csrf_token'],
             'course': course_overview,
             'due_date_display_format': course.due_date_display_format,
@@ -98,6 +107,7 @@ class CourseOutlineFragmentView(EdxFragmentView):
             'missed_deadlines': missed_deadlines,
             'missed_gated_content': missed_gated_content,
             'has_ended': course.has_ended(),
+            'user_grade': user_grade
         }
 
         html = render_to_string('course_experience/course-outline-fragment.html', context)

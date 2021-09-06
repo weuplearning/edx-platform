@@ -134,6 +134,8 @@ from ..context_processor import user_timezone_locale_prefs
 from ..entrance_exams import user_can_skip_entrance_exam
 from ..module_render import get_module, get_module_by_usage_id, get_module_for_descriptor
 
+from .accordion import render_accordion
+
 log = logging.getLogger("edx.courseware")
 
 
@@ -359,6 +361,8 @@ def jump_to_id(request, course_id, module_id):
     This entry point allows for a shorter version of a jump to where just the id of the element is
     passed in. This assumes that id is unique within the course_id namespace
     """
+
+
     course_key = CourseKey.from_string(course_id)
     items = modulestore().get_items(course_key, qualifiers={'name': module_id})
 
@@ -375,6 +379,7 @@ def jump_to_id(request, course_id, module_id):
             request.META.get("HTTP_REFERER", ""),
             text_type(items[0].location)
         )
+        
 
     return jump_to(request, course_id, text_type(items[0].location))
 
@@ -416,6 +421,12 @@ def course_info(request, course_id):
         """
         Returns the courseware module URL that the user last accessed, or None if it cannot be found.
         """
+
+        loc = course.id.make_usage_key(
+        tab.type,
+        tab.url_slug,
+        )
+
         field_data_cache = FieldDataCache.cache_for_descriptor_descendents(
             course.id, request.user, course, depth=2
         )
@@ -429,6 +440,7 @@ def course_info(request, course_id):
             will_recheck_access=True,
         )
         chapter_module = get_current_child(course_module)
+
         if chapter_module is not None:
             section_module = get_current_child(chapter_module)
             if section_module is not None:
@@ -581,7 +593,45 @@ class StaticCourseTabView(EdxFragmentView):
         """
         Renders this static tab's fragment to HTML for a standalone page.
         """
+        staff_access = request.user.is_staff
+
+        loc = course.id.make_usage_key(
+        tab.type,
+        tab.url_slug,
+        )
+
+        field_data_cache = FieldDataCache.cache_for_descriptor_descendents(
+        course.id, request.user, modulestore().get_item(loc), depth=0
+        )
+
+        course_module = get_module_for_descriptor(
+            request.user,
+            request,
+            course,
+            field_data_cache,
+            course.id,
+            course=course,
+            will_recheck_access=True,
+        )
+        chapter_module = get_current_child(course_module)
+        log.info(chapter_module.url_name)
+
+        if chapter_module is not None:
+            section_module = get_current_child(chapter_module)
+        
+        log.info(section_module.url_name)
+
+        chapter_module_url = chapter_module.url_name
+        section_module_url = section_module.url_name
+
+        try:
+            accordion = render_accordion(request, str(course.id), chapter_module_url, section_module_url)
+        except:
+            accordion = None
+
         return render_to_response('courseware/static_tab.html', {
+            'staff_access': staff_access,
+            'accordion': accordion,
             'course': course,
             'active_page': 'static_tab_{0}'.format(tab['url_slug']),
             'tab': tab,
@@ -776,6 +826,7 @@ class CourseTabView(EdxFragmentView):
         tab = page_context['tab']
         page_context['fragment'] = fragment
         return render_to_response('courseware/tab-view.html', page_context)
+
 
 
 @ensure_csrf_cookie
@@ -1928,3 +1979,6 @@ def get_financial_aid_courses(user):
             )
 
     return financial_aid_courses
+
+
+
