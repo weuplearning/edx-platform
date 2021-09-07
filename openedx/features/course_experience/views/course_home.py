@@ -151,7 +151,6 @@ class CourseHomeFragmentView(EdxFragmentView):
 
         # Compute course grade so that we can show badges
         user_grade = CourseGradeFactory().read(request.user, course)
-
         course_overview = CourseOverview.get_from_id(course.id)
         if user_access['is_enrolled'] or user_access['is_staff']:
             outline_fragment = CourseOutlineFragmentView().render_to_fragment(
@@ -232,6 +231,7 @@ class CourseHomeFragmentView(EdxFragmentView):
         # Send block tree
         course_block_tree = get_course_outline_block_tree(request, six.text_type(course.id), request.user)
         # Render the course home fragment
+
         context = {
             'request': request,
             'course_block_tree': course_block_tree,

@@ -54,6 +54,9 @@ from openedx.features.enterprise_support.api import enterprise_enabled
 from common.djangoapps.student import views as student_views
 from common.djangoapps.util import views as util_views
 
+import logging
+log = logging.getLogger()
+
 RESET_COURSE_DEADLINES_NAME = 'reset_course_deadlines'
 RENDER_XBLOCK_NAME = 'render_xblock'
 COURSE_DATES_NAME = 'dates'
@@ -715,6 +718,7 @@ urlpatterns += [
 ]
 
 # discussion forums live within courseware, so courseware must be enabled first
+
 if settings.FEATURES.get('ENABLE_DISCUSSION_SERVICE'):
     urlpatterns += [
         url(

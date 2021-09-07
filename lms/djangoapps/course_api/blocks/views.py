@@ -1,4 +1,6 @@
 """
+/edx/app/edxapp/edx-platform/lms/djangoapps/course_api/blocks
+
 CourseBlocks API views
 """
 
@@ -21,6 +23,9 @@ from xmodule.modulestore.exceptions import ItemNotFoundError
 
 from .api import get_blocks
 from .forms import BlockListGetForm
+
+import logging
+log = logging.getLogger()
 
 
 @method_decorator(transaction.non_atomic_requests, name='dispatch')
@@ -294,6 +299,17 @@ class BlocksInCourseView(BlocksView):
 
         # convert the requested course_key to the course's root block's usage_key
         course_key_string = request.query_params.get('course_id', None)
+        
+        if course_key_string.find(' ') != -1:
+            puzzle = course_key_string.split(" ")
+            course_key_string = ""
+
+            for piece in puzzle:
+                course_key_string += piece + "+"
+
+            course_key_string = str(course_key_string)
+            course_key_string = course_key_string[0: len(course_key_string)-1]
+
         if not course_key_string:
             raise ValidationError('course_id is required.')
 

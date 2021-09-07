@@ -21,6 +21,8 @@ from openedx.features.course_experience import RELATIVE_DATES_FLAG
 from common.djangoapps.student.models import CourseEnrollment
 from xmodule.modulestore.django import modulestore
 
+import logging
+log = logging.getLogger()
 
 @request_cached()
 def get_course_outline_block_tree(request, course_id, user=None, allow_start_dates_in_future=False):
@@ -92,7 +94,9 @@ def get_course_outline_block_tree(request, course_id, user=None, allow_start_dat
         :return:
             block: course_outline_root_block block object or child block
         """
+
         block_key = block.serializer.instance
+
 
         if course_block_completions.get(block_key):
             block['complete'] = True

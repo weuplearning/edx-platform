@@ -15,6 +15,11 @@ from xmodule.seq_module import SequenceModule
 
 from .utils import collect_merged_boolean_field, collect_merged_date_field
 
+from logging import getLogger
+log = getLogger(__name__)  # pylint: disable=invalid-name
+
+
+
 MAXIMUM_DATE = utc.localize(datetime.max)
 
 

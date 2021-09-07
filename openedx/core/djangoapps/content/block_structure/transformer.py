@@ -7,6 +7,9 @@ Transformers.
 from abc import abstractmethod
 import functools
 
+from logging import getLogger
+log = getLogger(__name__)  # pylint: disable=invalid-name
+
 
 class BlockStructureTransformer(object):
     """
