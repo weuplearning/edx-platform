@@ -1,4 +1,5 @@
 """
+/edx/app/edxapp/edx-platform/lms/djangoapps/course_api/blocks/transformers
 Block Completion Transformer
 """
 
@@ -7,6 +8,9 @@ from completion.models import BlockCompletion
 from xblock.completable import XBlockCompletionMode as CompletionMode
 
 from openedx.core.djangoapps.content.block_structure.transformer import BlockStructureTransformer
+
+import logging
+log = logging.getLogger()
 
 
 class BlockCompletionTransformer(BlockStructureTransformer):

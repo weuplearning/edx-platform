@@ -9821,7 +9821,7 @@ msgstr "Aller à la page d'accueil %(platform_name)s"
 #: themes/red-theme/lms/templates/ace_common/edx_ace/common/base_body.html
 #: cms/templates/widgets/header.html
 msgid "Sign In"
-msgstr "Se Connecter"
+msgstr "Se connecter"
 
 #: openedx/core/djangoapps/ace_common/templates/ace_common/edx_ace/common/base_body.html
 #: themes/red-theme/lms/templates/ace_common/edx_ace/common/base_body.html

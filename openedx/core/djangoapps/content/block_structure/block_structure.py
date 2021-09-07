@@ -13,6 +13,7 @@ The following internal data structures are implemented:
 from copy import deepcopy
 from functools import partial
 from logging import getLogger
+log = getLogger(__name__)  # pylint: disable=invalid-name
 
 import six
 
@@ -20,7 +21,6 @@ from openedx.core.lib.graph_traversals import traverse_post_order, traverse_topo
 
 from .exceptions import TransformerException
 
-logger = getLogger(__name__)  # pylint: disable=invalid-name
 
 
 # A dictionary key value for storing a transformer's version number.
@@ -301,7 +301,10 @@ class FieldData(object):
         if self._is_own_field(field_name):
             return super(FieldData, self).__getattr__(field_name)
         try:
-            return self.fields[field_name]
+            if field_name == "end":
+                return None
+            else:
+                return self.fields[field_name]
         except KeyError:
             raise AttributeError(u"Field {0} does not exist".format(field_name))
 
@@ -683,6 +686,7 @@ class BlockStructureBlockData(BlockStructure):
             keep_descendants (bool) - See the description in
                 remove_block.
         """
+
         if removal_condition(block_key):
             self.remove_block(block_key, keep_descendants)
             return False

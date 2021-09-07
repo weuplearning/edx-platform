@@ -479,6 +479,7 @@ class SequenceModule(SequenceFields, ProctoringFields, XModule):
         if self.gated_sequence_fragment:
             params['gated_sequence_fragment'] = self.gated_sequence_fragment.content
 
+
         return params
 
     def _student_or_public_view(self, context, prereq_met, prereq_meta_info, banner_text=None, view=STUDENT_VIEW):

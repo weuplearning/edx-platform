@@ -9170,7 +9170,7 @@ msgstr "Pour continuer à apprendre avec ce compte, connectez-vous en bas."
 
 #: lms/templates/student_account/login.underscore
 msgid "Sign In"
-msgstr "Se Connecter"
+msgstr "Se connecter"
 
 #: lms/templates/student_account/login.underscore
 msgid ""

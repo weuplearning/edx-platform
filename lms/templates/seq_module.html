@@ -61,6 +61,7 @@
             % endif
             id="tab_${idx}">
             <span class="icon fa seq_${item['type']}" aria-hidden="true"></span>
+
             % if 'complete' in item:
               <span
                 class="fa fa-check-circle check-circle ${"is-hidden" if not item['complete'] else ""}"
