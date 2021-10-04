@@ -509,41 +509,13 @@ class CoursewareIndex(View):
 
 
         # fix to display accordion in courseware
-        courses_with_displayed_accordion = ["course-v1:bim+test+test"]
+
+        courses_with_displayed_accordion_qualif = ["course-v1:bim+test+test", "course-v1:bmd+bmd001+SP"]
+        courses_with_displayed_accordion_prod = ["course-v1:deeptechforbusiness+EN+2021", "course-v1:deeptechforbusiness+FR+2021"]
+        courses_with_displayed_accordion = courses_with_displayed_accordion_qualif + courses_with_displayed_accordion_prod
+        
         if str(self.course_key) in courses_with_displayed_accordion:
             courseware_context['disable_accordion'] = False
-
-
-        # log.info("coursewarecontext !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        # course_details = get_course_outline_block_tree(request, "course-v1:bim+test+test", request.user)
-        # course_sections = course_details.get('children')
-
-        # for idx, section in enumerate(course_sections):
-        #     log.info(idx)
-        #     log.info(section)
-
-        # sections_completed = []
-        # subsections_completed = []
-        # for section in course_sections:
-        #     if section.get('complete'):
-        #         sections_completed.append(section['block_id'])
-        #     for subsection in section.get('children', []):
-        #         if subsection.get('complete'):
-        #             subsections_completed.append(subsection['block_id'])
-
-        # log.info("***********************************")
-        # for table in table_of_contents['chapters']:
-        #     for section in table["sections"]:
-        #         if section['url_name'] in subsections_completed:
-        #             log.info(section['display_name'])
-
-
-        # courseware_context["sections_completed"] = sections_completed
-        # courseware_context["subsections_completed"] = subsections_completed
-        # for section in self.chapter["sections"]:
-        #     log.info(section)
-        # chapter_detail = courseware_context["chapter"]
-        # log.info(chapter_detail["display_name"])
 
         return courseware_context
 
