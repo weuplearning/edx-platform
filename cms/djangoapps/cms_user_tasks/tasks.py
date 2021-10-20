@@ -14,8 +14,8 @@ from common.djangoapps.edxmako.shortcuts import render_to_string
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 
 LOGGER = get_task_logger(__name__)
-TASK_COMPLETE_EMAIL_MAX_RETRIES = 3
-TASK_COMPLETE_EMAIL_TIMEOUT = 60
+TASK_COMPLETE_EMAIL_MAX_RETRIES = 5
+TASK_COMPLETE_EMAIL_TIMEOUT = 100
 
 
 @task(bind=True)
