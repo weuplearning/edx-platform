@@ -99,6 +99,8 @@ class MakoLoader(object):
                     pass
             except AttributeError:
                 pass
+            except TypeError:
+                pass
             try:
                 try:
                     return source_patch, origin_patch
