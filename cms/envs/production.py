@@ -26,6 +26,9 @@ from openedx.core.lib.derived import derive_settings
 from openedx.core.lib.logsettings import get_logger_config
 from xmodule.modulestore.modulestore_settings import convert_module_store_setting_if_needed
 
+import logging
+log = logging.getLogger()
+
 
 def get_env_setting(setting):
     """ Get the environment setting or return exception """
