@@ -631,7 +631,7 @@ FEATURES = {
     # .. toggle_target_removal_date: None
     # .. toggle_warnings: None
     # .. toggle_tickets: 'https://github.com/edx/edx-platform/pull/21616'
-    'ENABLE_CHANGE_USER_PASSWORD_ADMIN': False,
+    'ENABLE_CHANGE_USER_PASSWORD_ADMIN': True,
 
     # .. toggle_name: ENABLE_COURSEWARE_MICROFRONTEND
     # .. toggle_implementation: DjangoSetting
