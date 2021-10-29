@@ -350,7 +350,8 @@ class UserAdmin(BaseUserAdmin):
         """
         django_readonly = super(UserAdmin, self).get_readonly_fields(request, obj)
         if obj:
-            return django_readonly + ('username',)
+            # return django_readonly + ('username',)
+            return django_readonly
         return django_readonly
 
 
