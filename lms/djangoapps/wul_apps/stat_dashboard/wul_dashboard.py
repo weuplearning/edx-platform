@@ -344,8 +344,8 @@ class wul_dashboard():
                 'emails/enroll_email_allowedmessage.txt'
             ),
             'enrolled_enroll': (
-                'emails/enroll_email_enrolledsubject.txt',
-                'emails/enroll_email_enrolledmessage.txt'
+                'enrollenrolled/email/subject.txt',
+                'enrollenrolled/email/body.txt'
             ),
             'allowed_unenroll': (
                 'emails/unenroll_email_subject.txt',
@@ -451,6 +451,9 @@ class wul_dashboard():
 
         #TREATING EACH USER
 
+        new_users = []
+        already_enrolled_users = []
+
         for _user in valid_rows:
             #get current users values
             try:
@@ -519,6 +522,7 @@ class wul_dashboard():
                             'full_name':first_name+" "+last_name,
                             'course_key':str(self.course_key)
                         })
+                        already_enrolled_users.append(email)
                     else:
                     # IF THERE IS SSO THEN ACT AS IF THIS WAS A NEW USER IN TERMS OF EMAIL
                     # and change the password and update custom_fields if needed
@@ -553,6 +557,7 @@ class wul_dashboard():
                             'full_name':first_name+" "+last_name,
                             'course_key':str(self.course_key)
                         })
+                        new_users.append(email)
                     log.info("REGISTER USER TO COURSE")
                     self.send_mail_to_student(email, email_params)
                     #enroll_email(course_id=self.course_key, student_email=email, auto_enroll=True, email_students=True, email_params=email_params)
@@ -578,13 +583,14 @@ class wul_dashboard():
                 else:
                     _failed.append(
                         {"email":email,"reponse":"creation failed"})
+                new_users.append(email)
         log.warning(u'wul_dashboard.task_generate_user fin inscription users pour le microsite : '+microsite)
         log.warning(u'wul_dashboard.task_generate_user fin inscription users par le username '+_requester_user.username+' email : '+_requester_user.email)
 
         #Send an email to requester with potential failures
         generated_users_list = ''
-        for user in registered_users_list :
-            generated_users_list+="<li>{}</li>".format(user)
+        # for user in registered_users_list :
+        #     generated_users_list+="<li>{}</li>".format(user)
         status_text=''
         if not _failed :
             status_text='Tous les utilisateurs ont bien été créés et/ou inscrits au cours.'
@@ -595,8 +601,24 @@ class wul_dashboard():
             status_text+="</ul><p>Merci de remonter le problème au service IT pour identifier l'erreur sur ces profils. Les autres profils utilisateur ont été correctement créés et/ou inscrits au cours.</p>"
 
         course=get_course_by_id(self.course_key)
+        generated_users_list_enrolled = ""
 
-        html = "<html><head></head><body><p>Bonjour,<br><br> L'inscription par CSV de vos utilisateurs au cours "+course.display_name_with_default+" sur le microsite "+microsite+" est maintenant terminée, voici la liste des utilisateurs inscrits :<br><ul>"+generated_users_list+"</ul><br>"+status_text+"<br><br>The MOOC Agency<br></p></body></html>"
+        html = "<html><head></head><body><p>Bonjour,<br><br> L'inscription par CSV de vos utilisateurs au cours "+course.display_name_with_default+" sur le microsite "+microsite+" est maintenant terminée, voici la liste des utilisateurs inscrits:<br><ul>"+generated_users_list+"</ul><br>"+status_text+"<br><br>The MOOC Agency<br></p></body></html>"
+        if len(new_users) > 0 and len(already_enrolled_users) > 0 :
+            for user in new_users:
+                generated_users_list+="<li>{}</li>".format(user)
+
+            for user in already_enrolled_users:
+                generated_users_list_enrolled+="<li>{}</li>".format(user)
+            html = "<html><head></head><body><p>Bonjour,<br><br> L'inscription par CSV de vos utilisateurs au cours "+course.display_name_with_default+" sur le microsite "+microsite+" est maintenant terminée, voici la liste des utilisateurs inscrits:<br>- Nouveaux inscrits:<br><ul>"+generated_users_list+"</ul><br>-Déjà inscrits:<br><ul>"+generated_users_list_enrolled+"</ul><br>"+status_text+"<br><br>The MOOC Agency<br></p></body></html>"
+        elif len(new_users) > 0:
+            for user in new_users:
+                generated_users_list+="<li>{}</li>".format(user)
+            html = "<html><head></head><body><p>Bonjour,<br><br> L'inscription par CSV de vos utilisateurs au cours "+course.display_name_with_default+" sur le microsite "+microsite+" est maintenant terminée, voici la liste des utilisateurs nouvellement inscrits sur la plateforme :<br><ul>"+generated_users_list+"</ul><br>"+status_text+"<br><br>The MOOC Agency<br></p></body></html>"
+        elif len(already_enrolled_users) > 0: 
+            for user in already_enrolled_users:
+                generated_users_list_enrolled+="<li>{}</li>".format(user)
+            html = "<html><head></head><body><p>Bonjour,<br><br> L'inscription par CSV de vos utilisateurs au cours "+course.display_name_with_default+" sur le microsite "+microsite+" est maintenant terminée, voici la liste des utilisateurs déjà inscrits sur la plateforme :<br><ul>"+generated_users_list_enrolled+"</ul><br>"+status_text+"<br><br>The MOOC Agency<br></p></body></html>"     
         part2 = MIMEText(html.encode('utf-8'), 'html', 'utf-8')
         fromaddr = "ne-pas-repondre@themoocagency.com"
         toaddr = _requester_user.email
