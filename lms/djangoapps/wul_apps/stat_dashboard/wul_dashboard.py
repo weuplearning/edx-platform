@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+'''
+/edx/app/edxapp/edx-platform/lms/djangoapps/wul_apps/stat_dashboard/wul_dashboard.py
+'''
+
 import sys
 import importlib
 importlib.reload(sys)
@@ -14,7 +18,8 @@ import json
 from io import BytesIO
 from path import Path
 
-from opaque_keys.edx.locations import SlashSeparatedCourseKey
+from opaque_keys.edx.keys import CourseKey
+
 from xmodule.modulestore.django import modulestore
 from courseware.courses import get_course_by_id
 from student.models import User,CourseEnrollment,UserProfile,LoginFailures
@@ -31,7 +36,6 @@ from django.core.validators import validate_email
 import logging
 import json
 
-from instructor.views.api import generate_random_string,create_manual_course_enrollment
 
 from django.conf import settings
 
@@ -52,7 +56,7 @@ from django.contrib.auth.models import User
 #     CourseMode,
 #     CourseRegistrationCodeInvoiceItem,
 # )
-from student.models import (
+from common.djangoapps.student.models import (
     CourseEnrollment, unique_id_for_user, anonymous_id_for_user,
     UserProfile, Registration, EntranceExamConfiguration,
     ManualEnrollmentAudit, UNENROLLED_TO_ALLOWEDTOENROLL, ALLOWEDTOENROLL_TO_ENROLLED,
@@ -455,6 +459,7 @@ class wul_dashboard():
         already_enrolled_users = []
 
         for _user in valid_rows:
+            log.info(_user)
             #get current users values
             try:
                 email = _user.get('email')
@@ -543,8 +548,6 @@ class wul_dashboard():
                                 custom_field[key] = value
                         profile.custom_field = json.dumps(custom_field)
                         profile.save()
-                        
-
 
                         email_params.update({
                             'message': 'account_creation_and_enrollment',
@@ -561,6 +564,7 @@ class wul_dashboard():
                     log.info("REGISTER USER TO COURSE")
                     self.send_mail_to_student(email, email_params)
                     #enroll_email(course_id=self.course_key, student_email=email, auto_enroll=True, email_students=True, email_params=email_params)
+
             else:
                 # CREATE NEW ACCOUNT
                 password = self.generate_unique_password(generated_passwords)
@@ -584,6 +588,58 @@ class wul_dashboard():
                     _failed.append(
                         {"email":email,"reponse":"creation failed"})
                 new_users.append(email)
+
+            # Dev Cyril Start
+            # inspired from selective_register_fields feature from Ficus
+            if created_user != '':
+                try:
+                    # register_fields = configuration_helpers.get_value('FORM_EXTRA',{})
+                    if microsite == 'BVT' or microsite == 'bvt':
+                        register_fields = configuration_helpers.get_value_for_org('bvt', 'FORM_EXTRA',{})
+                        associated_courses = configuration_helpers.get_value_for_org('bvt', 'TMA_ASSOCIATED_COURSES',{})
+                    else:
+                        register_fields = configuration_helpers.get_value_for_org(microsite, 'FORM_EXTRA',{})
+                        associated_courses = configuration_helpers.get_value_for_org(microsite, 'TMA_ASSOCIATED_COURSES',{})
+
+
+                    custom_field = {}
+                    # log.info(register_fields)
+                    try:
+                        custom_field = json.loads(created_user.profile.custom_field)
+                        log.info(custom_field)
+                    except:
+                        log.info('no custom_field')
+                        pass
+
+
+                    user = User.objects.get(email=email)
+
+                    if associated_courses.get('selective_register_fields') and custom_field:
+                        for field_name in associated_courses.get('selective_register_fields'):
+                            custom_field_value = custom_field.get(field_name)
+
+                            for register_field in register_fields :
+
+                                if register_field.get('name') == field_name:
+                                    # courseList = []
+                                    course = register_field.get('course')
+                                    course_key = CourseKey.from_string(course)
+
+                                    if custom_field_value == 'true' :
+                                        # ENROLL
+                                        if not CourseEnrollment.is_enrolled(user, course_key):
+                                            CourseEnrollment.enroll(user, course_key)
+                                            log.info('enroll '+user+' to '+str(course_key))
+
+                                    # UNENROLL
+                                    else:
+                                        CourseEnrollment.unenroll(user, course_key)
+                                        log.info('unenroll '+user+' to '+str(course_key))
+                except:
+                    pass
+
+        # Dev Cyril End
+
         log.warning(u'wul_dashboard.task_generate_user fin inscription users pour le microsite : '+microsite)
         log.warning(u'wul_dashboard.task_generate_user fin inscription users par le username '+_requester_user.username+' email : '+_requester_user.email)
 
@@ -601,6 +657,7 @@ class wul_dashboard():
             status_text+="</ul><p>Merci de remonter le problème au service IT pour identifier l'erreur sur ces profils. Les autres profils utilisateur ont été correctement créés et/ou inscrits au cours.</p>"
 
         course=get_course_by_id(self.course_key)
+
         generated_users_list_enrolled = ""
 
         html = "<html><head></head><body><p>Bonjour,<br><br> L'inscription par CSV de vos utilisateurs au cours "+course.display_name_with_default+" sur le microsite "+microsite+" est maintenant terminée, voici la liste des utilisateurs inscrits:<br><ul>"+generated_users_list+"</ul><br>"+status_text+"<br><br>The MOOC Agency<br></p></body></html>"
@@ -618,7 +675,8 @@ class wul_dashboard():
         elif len(already_enrolled_users) > 0: 
             for user in already_enrolled_users:
                 generated_users_list_enrolled+="<li>{}</li>".format(user)
-            html = "<html><head></head><body><p>Bonjour,<br><br> L'inscription par CSV de vos utilisateurs au cours "+course.display_name_with_default+" sur le microsite "+microsite+" est maintenant terminée, voici la liste des utilisateurs déjà inscrits sur la plateforme :<br><ul>"+generated_users_list_enrolled+"</ul><br>"+status_text+"<br><br>The MOOC Agency<br></p></body></html>"     
+            html = "<html><head></head><body><p>Bonjour,<br><br> L'inscription par CSV de vos utilisateurs au cours "+course.display_name_with_default+" sur le microsite "+microsite+" est maintenant terminée, voici la liste des utilisateurs déjà inscrits sur la plateforme :<br><ul>"+generated_users_list_enrolled+"</ul><br>"+status_text+"<br><br>The MOOC Agency<br></p></body></html>"  
+        
         part2 = MIMEText(html.encode('utf-8'), 'html', 'utf-8')
         fromaddr = "ne-pas-repondre@themoocagency.com"
         toaddr = _requester_user.email
