@@ -67,4 +67,5 @@ urlpatterns +=(
 # Edx Converter
 urlpatterns += (
     url(r'^dashboard/BVT/converter_xlsx_to_targz', convert_to_tarfile_bvt,name='convert_to_tarfile_bvt'),
+    url(r'^dashboard/bvt/converter_xlsx_to_targz', convert_to_tarfile_bvt,name='convert_to_tarfile_bvt'),
 )
