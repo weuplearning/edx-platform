@@ -56,7 +56,7 @@ from django.contrib.auth.models import User
 #     CourseMode,
 #     CourseRegistrationCodeInvoiceItem,
 # )
-from common.djangoapps.student.models import (
+from student.models import (
     CourseEnrollment, unique_id_for_user, anonymous_id_for_user,
     UserProfile, Registration, EntranceExamConfiguration,
     ManualEnrollmentAudit, UNENROLLED_TO_ALLOWEDTOENROLL, ALLOWEDTOENROLL_TO_ENROLLED,
@@ -484,6 +484,7 @@ class wul_dashboard():
                 _failed.append({
                     'email': email, 'response': _('Invalid email {email_address}.').format(email_address=email)})
 
+            created_user = ''
             if User.objects.filter(email=email).exists():
                 # ENROLL EXISTING USER TO COURSE
                 user = User.objects.get(email=email)
@@ -676,7 +677,6 @@ class wul_dashboard():
             for user in already_enrolled_users:
                 generated_users_list_enrolled+="<li>{}</li>".format(user)
             html = "<html><head></head><body><p>Bonjour,<br><br> L'inscription par CSV de vos utilisateurs au cours "+course.display_name_with_default+" sur le microsite "+microsite+" est maintenant terminée, voici la liste des utilisateurs déjà inscrits sur la plateforme :<br><ul>"+generated_users_list_enrolled+"</ul><br>"+status_text+"<br><br>The MOOC Agency<br></p></body></html>"  
-        
         part2 = MIMEText(html.encode('utf-8'), 'html', 'utf-8')
         fromaddr = "ne-pas-repondre@themoocagency.com"
         toaddr = _requester_user.email
