@@ -81,10 +81,14 @@ class SiteConfiguration(models.Model):
             select_related (list or None): A list of values to pass as arguments to select_related
         """
         query = cls.objects.filter(site_values__contains=org, enabled=True).all()
+
         if select_related is not None:
             query = query.select_related(*select_related)
+
         for configuration in query:
             course_org_filter = configuration.get_value('course_org_filter', [])
+
+
             # The value of 'course_org_filter' can be configured as a string representing
             # a single organization or a list of strings representing multiple organizations.
             if not isinstance(course_org_filter, list):
@@ -108,10 +112,12 @@ class SiteConfiguration(models.Model):
             Configuration value for the given key.
         """
         configuration = cls.get_configuration_for_org(org)
+
         if configuration is None:
             return default
         else:
-            return configuration.get_value(name, default)
+            # return configuration.get_value(name, default) #dimitri => old version, return LMS_BASE
+            return configuration.site #dimitri 23/11/2021 => return the correct domain
 
     @classmethod
     def get_all_orgs(cls):

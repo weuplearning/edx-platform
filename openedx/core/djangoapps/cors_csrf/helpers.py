@@ -52,7 +52,13 @@ def is_cross_domain_request_allowed(request):
         getattr(settings, 'CORS_ORIGIN_ALLOW_ALL', False) or
         referer_hostname in getattr(settings, 'CORS_ORIGIN_WHITELIST', [])
     )
+    # log.info(getattr(settings, 'CORS_ORIGIN_WHITELIST', False))
+    # log.info(referer_hostname)
+    # log.info(domain_is_whitelisted)
+    # log.info("hey")
     if not domain_is_whitelisted:
+        # log.info(referer_hostname)
+        # log.info(request.get_host())
         if referer_hostname is None:
             # If no referer is specified, we can't check if it's a cross-domain
             # request or not.
