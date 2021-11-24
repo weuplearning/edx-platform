@@ -344,28 +344,28 @@ class wul_dashboard():
 
         email_template_dict = {
             'allowed_enroll': (
-                'emails/enroll_email_allowedsubject.txt',
-                'emails/enroll_email_allowedmessage.txt'
+                'allowed_enroll/email/subject.txt',
+                'allowed_enroll/email/body.txt'
             ),
             'enrolled_enroll': (
                 'enrollenrolled/email/subject.txt',
                 'enrollenrolled/email/body.txt'
             ),
             'allowed_unenroll': (
-                'emails/unenroll_email_subject.txt',
-                'emails/unenroll_email_allowedmessage.txt'
+                'allowed_unenroll/email/subject.txt',
+                'allowed_unenroll/email/body.txt'
             ),
             'enrolled_unenroll': (
-                'emails/unenroll_email_subject.txt',
-                'emails/unenroll_email_enrolledmessage.txt'
+                'enrolled_unenroll/email/subject.txt',
+                'enrolled_unenroll/email/body.txt'
             ),
             'add_beta_tester': (
-                'emails/add_beta_tester_email_subject.txt',
-                'emails/add_beta_tester_email_message.txt'
+                'add_beta_tester/email/subject.txt',
+                'add_beta_tester/email/body.txt'
             ),
             'remove_beta_tester': (
-                'emails/remove_beta_tester_email_subject.txt',
-                'emails/remove_beta_tester_email_message.txt'
+                'remove_beta_tester/email/subject.txt',
+                'remove_beta_tester/email/body.txt'
             ),
             'account_creation_and_enrollment': (
                 'accountcreationandenrollment/email/subject.txt',
@@ -430,8 +430,9 @@ class wul_dashboard():
         _requester_user = User.objects.get(pk=requester_id)
         self.site_name = task_input.get('site_name')+' '
 
-        log.warning(u'wul_dashboard.task_generate_user inscription users pour le microsite : '+microsite)
+        log.warning(u'wul_dashboard.task_generate_user inscription users pour le microsite : '+microsite)  
         log.warning(u'wul_dashboard.task_generate_user inscription users par le username '+_requester_user.username+' email : '+_requester_user.email)
+
         generated_passwords = []
         _generates = []
         _failed = []
