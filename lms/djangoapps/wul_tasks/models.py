@@ -157,8 +157,8 @@ class WulTask(models.Model):
         # In future, there should be a check here that the resulting JSON
         # will fit in the column.  In the meantime, just return an exception.
         json_output = json.dumps(returned_result)
-        if len(json_output) > 1023:
-            raise ValueError(u"Length of task output is too long: {0}".format(json_output))
+        # if len(json_output) > 1023:
+        #     raise ValueError(u"Length of task output is too long: {0}".format(json_output))
         return json_output
 
     @staticmethod
