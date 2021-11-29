@@ -310,6 +310,8 @@ def get_next_url_for_login_page(request, include_host=False):
 
 
 def _get_redirect_to(request_host, request_headers, request_params, request_is_https):
+
+
     """
     Determine the redirect url and return if safe
 
@@ -322,13 +324,22 @@ def _get_redirect_to(request_host, request_headers, request_params, request_is_h
     Returns: str
         redirect url if safe else None
     """
+
+    fix_studio_redirection = False
+    raw_uri = request_headers.get('RAW_URI', None)
+    if '/login?next=https://studio' in raw_uri:
+        fix_studio_redirection = True
+
     redirect_to = request_params.get('next')
+    raw_uri_redirection = raw_uri.replace('/login?next=', '')
+
     header_accept = request_headers.get('HTTP_ACCEPT', '')
     accepts_text_html = any(
         mime_type in header_accept
         for mime_type in {'*/*', 'text/*', 'text/html'}
     )
 
+    log.info(redirect_to)
     # If we get a redirect parameter, make sure it's safe i.e. not redirecting outside our domain.
     # Also make sure that it is not redirecting to a static asset and redirected page is web page
     # not a static file. As allowing assets to be pointed to by "next" allows 3rd party sites to
@@ -379,8 +390,9 @@ def _get_redirect_to(request_host, request_headers, request_params, request_is_h
                         {"redirect_to": redirect_to}
                     )
                     redirect_to = None
+                    if fix_studio_redirection:
+                        redirect_to = raw_uri_redirection
                     break
-
     return redirect_to
 
 
