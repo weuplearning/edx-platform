@@ -325,13 +325,14 @@ def _get_redirect_to(request_host, request_headers, request_params, request_is_h
         redirect url if safe else None
     """
 
-    fix_studio_redirection = False
-    raw_uri = request_headers.get('RAW_URI', None)
-    if '/login?next=https://studio' in raw_uri:
-        fix_studio_redirection = True
-
     redirect_to = request_params.get('next')
-    raw_uri_redirection = raw_uri.replace('/login?next=', '')
+
+    fix_studio_redirection = False
+    try:
+        if 'studio.weup.in' in redirect_to:
+            fix_studio_redirection = True
+    except:
+        pass
 
     header_accept = request_headers.get('HTTP_ACCEPT', '')
     accepts_text_html = any(
@@ -389,9 +390,11 @@ def _get_redirect_to(request_host, request_headers, request_params, request_is_h
                         u"Redirect to theme content detected after login page: '%(redirect_to)s'",
                         {"redirect_to": redirect_to}
                     )
-                    redirect_to = None
                     if fix_studio_redirection:
-                        redirect_to = raw_uri_redirection
+                        pass
+                    else:
+                        redirect_to = None
+
                     break
     return redirect_to
 
