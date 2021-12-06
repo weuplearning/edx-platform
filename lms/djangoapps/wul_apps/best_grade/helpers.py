@@ -1,3 +1,7 @@
+'''
+/edx/app/edxapp/edx-platform/lms/djangoapps/wul_apps/best_grade/
+'''
+
 from lms.djangoapps.grades.course_grade_factory import CourseGradeFactory
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 from lms.djangoapps.wul_apps.models import WulCourseEnrollment
@@ -8,12 +12,18 @@ log = logging.getLogger()
 
 def check_best_grade(user, course, force_best_grade=None):
     log.info("CHECK BEST GRADE")
-    grade_info = CourseGradeFactory().create(user, course)
+
+    try:
+        # 30/11/21 create is not yet define on Koa
+        grade_info = CourseGradeFactory().create(user, course)
+    except:
+        grade_info = CourseGradeFactory().read(user, course)
+
     grade_info.percent_tma = grade_info.percent
     grade_info.passed_tma = grade_info.passed
 
     if configuration_helpers.get_value('tma_best_grade_mode') or force_best_grade:
-        course_enrollment = TmaCourseEnrollment.get_enrollment(str(course.id), user)
+        course_enrollment = WulCourseEnrollment.get_enrollment(str(course.id), user)
         grader = course._grading_policy.get('GRADE_CUTOFFS').get('Pass')
 
         log.info('GRADER')
