@@ -99,6 +99,7 @@ class SiteConfiguration(models.Model):
 
     @classmethod
     def get_value_for_org(cls, org, name, default=None):
+
         """
         This returns site configuration value which has an org_filter that matches
         what is passed in,
@@ -112,12 +113,13 @@ class SiteConfiguration(models.Model):
             Configuration value for the given key.
         """
         configuration = cls.get_configuration_for_org(org)
-
         if configuration is None:
             return default
         else:
-            # return configuration.get_value(name, default) #dimitri => old version, return LMS_BASE
-            return configuration.site #dimitri 23/11/2021 => return the correct domain
+            if name == "LMS_BASE" or name == "PREVIEW_LMS_BASE":
+                return configuration.site #dimitri 23/11/2021 => return the correct domain
+            else:
+                return configuration.get_value(name, default) 
 
     @classmethod
     def get_all_orgs(cls):
