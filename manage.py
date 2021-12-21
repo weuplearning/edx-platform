@@ -14,7 +14,7 @@ Any arguments not understood by this manage.py will be passed to django-admin.py
 
 
 from openedx.core.lib.logsettings import log_python_warnings
-log_python_warnings()
+# log_python_warnings()
 
 # Patch the xml libs before anything else.
 from safe_lxml import defuse_xml_libs
