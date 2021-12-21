@@ -31,6 +31,7 @@ class CustomFieldView(APIView):
         user_email = request.user.email
 
         user = User.objects.get(email=user_email)
+
         form_factory = ensure_form_factory()
         db = 'ensure_form'
         collection = 'certificate_form'
@@ -89,6 +90,7 @@ class CustomFieldView(APIView):
 
 class CustomFieldEditor(APIView):
     def get(self, request):
+
         if not wul_verify_access(request.user).has_dashboard_access(course_id=None):
             return HttpResponseForbidden
         user_id = request.user_id
@@ -108,11 +110,14 @@ class CustomFieldEditor(APIView):
         return JsonResponse(custom_field, status=200)
     
     def post(self, request, format='json'):
+
         if not wul_verify_access(request.user).has_dashboard_access():
             return HttpResponseForbidden
         # if not wul_verify_access(request.user).has_dashboard_access(course_id=None):
         #     return HttpResponseForbidden
         user_id = request.data['user_id_for_api']
+
+        user = User.objects.get(id=user_id)
         user_profile = UserProfile.objects.get(user_id=user_id)
 
         log.info('[WUL] User {} POST new values for his custom fields'.format(user_id))
@@ -140,6 +145,10 @@ class CustomFieldEditor(APIView):
             custom_fields["last_update_maker"] = request.user.email
             custom_fields["last_update_date"] = int(round(time.time() * 1000))
             user_profile.custom_field = json.dumps(custom_fields)
+            user.first_name = custom_fields["first_name"]
+            user.last_name = custom_fields["last_name"]
+            user.save()
+
             user_profile.save()
         except:
             context['status'] = False

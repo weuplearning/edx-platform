@@ -310,6 +310,8 @@ def get_next_url_for_login_page(request, include_host=False):
 
 
 def _get_redirect_to(request_host, request_headers, request_params, request_is_https):
+
+
     """
     Determine the redirect url and return if safe
 
@@ -322,13 +324,23 @@ def _get_redirect_to(request_host, request_headers, request_params, request_is_h
     Returns: str
         redirect url if safe else None
     """
+
     redirect_to = request_params.get('next')
+
+    fix_studio_redirection = False
+    try:
+        if 'studio.weup.in' in redirect_to:
+            fix_studio_redirection = True
+    except:
+        pass
+
     header_accept = request_headers.get('HTTP_ACCEPT', '')
     accepts_text_html = any(
         mime_type in header_accept
         for mime_type in {'*/*', 'text/*', 'text/html'}
     )
 
+    log.info(redirect_to)
     # If we get a redirect parameter, make sure it's safe i.e. not redirecting outside our domain.
     # Also make sure that it is not redirecting to a static asset and redirected page is web page
     # not a static file. As allowing assets to be pointed to by "next" allows 3rd party sites to
@@ -378,9 +390,12 @@ def _get_redirect_to(request_host, request_headers, request_params, request_is_h
                         u"Redirect to theme content detected after login page: '%(redirect_to)s'",
                         {"redirect_to": redirect_to}
                     )
-                    redirect_to = None
-                    break
+                    if fix_studio_redirection:
+                        pass
+                    else:
+                        redirect_to = None
 
+                    break
     return redirect_to
 
 

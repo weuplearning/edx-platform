@@ -307,14 +307,14 @@ def convert_to_tarfile_bvt(request):
     # WRITE FILE " questions.xls "
     wb_question = xlwt.Workbook()
 
+
     # WRITE JSON list_correct_answer
     json_file_name = 'list_corrected_answer_' + str(course_title).replace(' ', '_') +'.json'
     log.info(json_file_name)
     with open('/edx/var/edxapp/media/microsites/bvt/answers_lists_files/'+ json_file_name, 'w') as json_file :
         json.dump(data_list_correct_answer ,json_file)
-        log.info(data_list_correct_answer)
-        log.info(json_file)
         log.info('------------> Save corrected answers')
+
 
     for i, question in enumerate(data):
 
@@ -352,7 +352,7 @@ def convert_to_tarfile_bvt(request):
 
         # #image
         # if data[question]["image"] != None:
-        #     ws.write(1, 7, data[question]["image"])
+        #     ws.write(1, 7, data[question]["image"]
 
         #Display_name
         ws.write(1, 8, data[question]["unit"])
