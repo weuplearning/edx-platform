@@ -7,51 +7,18 @@ Converter xls to targz courses feature
 
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
-from django.contrib.admin.views.decorators import staff_member_required
-from django.views.decorators.csrf import ensure_csrf_cookie
-from edxmako.shortcuts import render_to_response
-from opaque_keys.edx.locations import SlashSeparatedCourseKey
-from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
-from opaque_keys.edx.keys import CourseKey
-from courseware.courses import get_course_by_id, get_courses
-from django.core.exceptions import ObjectDoesNotExist
-#updated arbo
-from lms.djangoapps.grades.course_grade_factory import CourseGradeFactory
-from student.models import CourseEnrollment, UserProfile, LoginFailures
-from lms.djangoapps.wul_apps.wul_support_functions import is_course_opened, is_enrollment_opened, wul_verify_access
-from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse
-from lms.djangoapps.wul_apps.models import WulCourseEnrollment
-from lms.djangoapps.wul_apps.wul_methods import WulUserActions
-from openedx.core.djangoapps.course_groups.cohorts import get_cohort_by_id, get_cohort_id, get_cohort_names, is_course_cohorted
-from lms.djangoapps.wul_apps.ensure_form.utils import ensure_form_factory
-from django.utils.translation import ugettext as _
 import json
 import os, xlrd, tarfile, xlwt
 
-from collections import OrderedDict
-
-# Related to time sheet pdf generation
-from reportlab.pdfgen import canvas
-from reportlab.pdfbase.pdfmetrics import stringWidth
-from reportlab.rl_config import defaultPageSize
-from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.pdfbase import pdfmetrics
-import datetime
-
-#password generator
-from django.urls import reverse
-from django.utils.http import int_to_base36
-from django.contrib.auth.tokens import default_token_generator
-
 from lxml import etree
-from openpyxl import load_workbook, Workbook
+from openpyxl import load_workbook
 import shutil
 
 import logging
 log = logging.getLogger()
 
-################################################## EDX CONVERTER FEATURE START ################################################## 
+
 
 PROBLEMSHEET = "problem"
 PROBLEMINDEX = 0
@@ -68,7 +35,6 @@ PROBLEMTYPE = 8
 class Problem_checkbox:
 
 	def __init__(self,info):
-
 		wb_prob = xlrd.open_workbook('/edx/var/edxapp/media/microsites/bvt/edx_converter/problem_source/questions.xls')
 		self.sheetstruc = wb_prob.sheet_by_name( info['sheet'])
 		self.n_checkbox= (self.sheetstruc.ncols-4)//3
@@ -110,11 +76,9 @@ class Problem_checkbox:
 	
 	def checkbox(self,element_obj):
 		for checkboxs_idx in range(0,self.n_checkbox):
-			print(checkboxs_idx)
 			for row_ in range(1,self.sheetstruc.nrows):
 				tmp = self.sheetstruc.cell_value(row_,self.question_col)
 				if tmp != '':
-
 					question_page=etree.SubElement(element_obj,'p')
 					question_page.text = tmp
 
@@ -143,16 +107,16 @@ class Problem_checkbox:
 			hint = etree.SubElement(demand_hint,'hint')
 			hint.text = self.hint() 
 			
-		print(etree.tostring(element_obj))
 		return(element_obj)
 
 
 	def create_file(self,filename,course_path):
 		new_problem_file = os.path.join(course_path,'problem',filename)
-		
+
 		page = etree.Element('problem', display_name=self.display_name()) 
 		if self.weight() != '':
 			page.set('weight',self.weight())
+
 		if self.attempt() != '':
 			page.set('max_attempts',self.attempt())
 
@@ -161,131 +125,9 @@ class Problem_checkbox:
 		doc.write(new_problem_file, pretty_print=True, xml_declaration=False, encoding='utf-8')
 
 
-
-class Problem_multichoice:
-
-    def __init__(self,info):
-        # prob_detail_path = os.path.join(info['dir'],info['filename'])
-        prob_detail_path = '/edx/var/edxapp/media/microsites/bvt/edx_converter/problem_source/questions.xls'
-        wb_prob = xlrd.open_workbook(prob_detail_path)
-        self.sheetstruc = wb_prob.sheet_by_name( info['sheet'])
-        self.n_multichoice= (self.sheetstruc.ncols-4)//3
-        self.prob_disp = 0
-        self.prob_weight = 1
-        self.prob_attempt = 2
-        self.prob_hint = 3
-        self.question_col = 4
-        self.multichoice_col = 5
-        self.ans_col = 6
-        self.img = 7
-        self.displ_name = 8
-        log.info('number of question is '+str(self.n_multichoice))
-        if self.n_multichoice is float:
-            error_msg = 'Le nombre de colonnes ne correspond pas au format nécessaire'
-            # error_msg = 'number of column does not match with number of droplist'
-            log.info (error_msg)
-            return JsonResponse({"message" : error_msg})
-
-        
-    def display_name(self):
-        return(self.sheetstruc.cell_value(1,self.displ_name))
-        # return(self.sheetstruc.cell_value(1,self.prob_disp))
-
-    def hint(self):
-        return(self.sheetstruc.cell_value(1,self.prob_hint))
-
-
-    def weight(self):
-        weigth_per_question = self.sheetstruc.cell_value(1,self.prob_weight)
-        if weigth_per_question == '':
-            return('')
-        else:
-            total_weight=float(float(weigth_per_question)*self.n_multichoice)
-            return(str(total_weight))
-
-    def attempt(self):
-        if self.sheetstruc.cell_value(1,self.prob_attempt) == '':
-            return('')
-        else:
-            attempt = int(self.sheetstruc.cell_value(1,self.prob_attempt))
-            return(str(attempt))
-
-    
-    def multichoice(self,element_obj):
-        for multichoice_idx in range(0,self.n_multichoice):
-            log.info(multichoice_idx)
-            for row_ in range(1,self.sheetstruc.nrows):
-                tmp = self.sheetstruc.cell_value(row_,self.question_col)
-                if tmp != '':
-                    question_page=etree.SubElement(element_obj,'p')
-                    list_tmp = str(tmp).split("_x000D_")
-                    for i, e in enumerate(list_tmp) :
-                        if i == 0:
-                            # question_page.text = str(e).encode('utf-8')
-                            question_page.text = str(e)
-                            
-                        else:
-                            br = etree.SubElement(question_page, 'br')
-                            br.tail = str(e)
-                            # br.tail = str(e).encode('utf-8')
-
-            if self.sheetstruc.cell_value(1,self.img) == "":
-                log.info("image : no")
-            else:
-                log.info("image: yes")
-                img_tag=etree.SubElement(element_obj,'img', src=self.sheetstruc.cell_value(1,self.img))
-                img_tag.set('style', "display: block; margin: auto;")
-
-            multi_response_page = etree.SubElement(element_obj,'multiplechoiceresponse')
-            choice_group_page= etree.SubElement(multi_response_page,'choicegroup',type='MultipleChoice')
-            for row_ in range(1,self.sheetstruc.nrows):
-                answer_text = self.sheetstruc.cell_value(row_,self.ans_col)
-                choice_text = self.sheetstruc.cell_value(row_,self.multichoice_col)
-
-                if answer_text == '':
-                    continue
-
-                if answer_text.lower() == 't'.lower():
-                    choice = etree.SubElement(choice_group_page,'choice',correct='True')
-                    choice.text = str(choice_text)
-                    # choice.text = str(choice_text).encode('utf-8')
-
-                else:
-                    choice = etree.SubElement(choice_group_page,'choice',correct='False')
-                    choice.text = str(choice_text)
-                    # choice.text = str(choice_text).encode('utf-8')
-
-
-            self.question_col = self.question_col + 3
-            self.multichoice_col = self.multichoice_col+3
-            self.ans_col = self.ans_col+3
-
-        if self.hint() != '':
-            demand_hint = etree.SubElement(element_obj,'demandhint') 
-            hint = etree.SubElement(demand_hint,'hint')
-            hint.text = self.hint() 
-            
-        log.info(etree.tostring(element_obj))
-        return(element_obj)
-
-
-    def create_file(self,filename,course_path):
-        new_problem_file = os.path.join(course_path,'problem',filename)
-        page = etree.Element('problem', display_name=self.display_name()) 
-        if self.weight() != '':
-            page.set('weight',self.weight())
-        if self.attempt() != '':
-            page.set('max_attempts',self.attempt())
-
-        full_xml_obj = self.multichoice(page)
-        doc = etree.ElementTree(page)
-        doc.write(new_problem_file, pretty_print=True, xml_declaration=False, encoding='utf-8')
-
-
 def problem_excel2list(row,sheetproblem):
 
     problem_info = []
-
     problem_idx = sheetproblem.cell_value(row,PROBLEMINDEX)
     problem_section = sheetproblem.cell_value(row,PROBLEMSECTION)
     problem_subsection = sheetproblem.cell_value(row,PROBLEMSUBSECTION)
@@ -305,9 +147,8 @@ def problem_excel2list(row,sheetproblem):
         'type':problem_type
     }) 
     return(problem_info[0])
-       
+
 def find_section_name(row_section,course_section):
-    
     for course_sec_row in course_section:
         course_sec_row['section_name'] = course_sec_row['section_name'].rstrip()
         row_section['section'] = row_section['section'].rstrip()
@@ -317,12 +158,9 @@ def find_section_name(row_section,course_section):
             return selected_section
 
     error_msg = 'Pas de section: ' + (row_section['section']) + ' dans le cours exporté'
-    # error_msg = 'no section: ' + (row_section['section']) + ' in the exported course'
-    log.info(error_msg)
     return JsonResponse({"message" : error_msg})
 
 def find_subsection_name(row_subsection,course_subsection,selected_section):
-    
     for course_subsec_row in course_subsection:
         course_subsec_row['subsection_name'] = course_subsec_row['subsection_name'].rstrip()
         row_subsection['subsection'] = row_subsection['subsection'].rstrip()
@@ -333,8 +171,6 @@ def find_subsection_name(row_subsection,course_subsection,selected_section):
                 return selected_subsection
 
     error_msg = 'Pas de sous-section: ' + (row_subsection['subsection']) + ' dans le cours exporté'
-    # error_msg = 'no subsection: ' + (row_subsection['subsection']) + ' in the exported course'
-    log.info (error_msg)
     return JsonResponse({"message" : error_msg})
 
 
@@ -358,8 +194,6 @@ def find_unit_name(row_unit,course_unit,selected_subsection,course_path):
                 return selected_unit
 
     error_msg = "Pas d'unité: " + (row_unit['unit']) + ' dans le cours exporté'
-    # error_msg = 'no unit: ' + (row_unit['unit']) + ' in the exported course'
-    log.info (error_msg)
     return JsonResponse({"message" : error_msg})
 
 
@@ -367,31 +201,30 @@ def find_unit_name(row_unit,course_unit,selected_subsection,course_path):
 def add_problem(problem_source_info,selected_unit,course_path):
     new_problem_link = "problem" +  "{0:0=2d}".format(int(problem_source_info['idx']))
 
-    #link2unit(selected_unit_path,new_problem_link)
-    log.info(problem_source_info['type'])
-    if problem_source_info['type'] == 'multiple_choice':
-        problem_instance = Problem_multichoice(problem_source_info)
+    # if problem_source_info['type'] == 'multiple_choice':
+    #     problem_instance = Problem_multichoice(problem_source_info)
     # elif problem_source_info['type'] == 'droplist':
     # 	problem_instance = Problem_droplist(problem_source_info)
-    elif problem_source_info['type'] == 'checkbox':
+    # elif problem_source_info['type'] == 'checkbox':
+
+    if problem_source_info['type'] == 'checkbox':
     	problem_instance = Problem_checkbox(problem_source_info)
+
     # elif problem_source_info['type'] == 'fill_blank':
     # 	problem_instance = Problem_fillblank(problem_source_info)
     else:
         error_msg = 'Argument "type de problème" est manquant'
-        # error_msg = 'no problem type available'
-        log.info (error_msg)
         return JsonResponse({"message" : error_msg})
 
-    
+
     problem_instance.create_file(new_problem_link+'.xml',course_path)
-        
+
 
 def search_problem_in_course(row_from_excel,course_structure,course_path):
     
     selected_section = find_section_name(row_from_excel,course_structure.sections())
     selected_subsection = find_subsection_name(row_from_excel,course_structure.subsections(),selected_section)
-    selected_unit=find_unit_name(row_from_excel,course_structure.units(),selected_subsection,course_path)
+    selected_unit = find_unit_name(row_from_excel,course_structure.units(),selected_subsection,course_path)
     add_problem(row_from_excel,selected_unit,course_path)
 
 
@@ -403,10 +236,13 @@ def convert_to_tarfile_bvt(request):
     degree_of_cert = request.POST['degreeOfCert'] 
     wbinput = load_workbook(request.FILES['excelFile'], data_only=True)
     sheet = wbinput.worksheets[0]
-    
+
     # CREATE A DICT FROM DATA
     data = dict()
     row_count = sheet.max_row-1
+
+    # CREATE DICT FOR list_correct_answer JSON
+    data_list_correct_answer = dict()
     for i in range(row_count):
         try:
             data_current=dict()
@@ -421,12 +257,9 @@ def convert_to_tarfile_bvt(request):
                 list_answer.append(sheet.cell(row=i+2, column=12).value)
                 data_current["answer_list"]=list_answer
 
-                # Question type
-                if sheet.cell(row=i+2, column=7).value + sheet.cell(row=i+2, column=9).value + sheet.cell(row=i+2, column=11).value + sheet.cell(row=i+2, column=13).value == 1:
-                    data_current["type"] = 'multiple_choice'
-                else:
-                    data_current["type"] = 'checkbox'
-                
+                # Question type :- We only want checkbox, multiple_choice will gave a hint to the student
+                data_current["type"] = 'checkbox'
+
                 # Answer list
                 list_correct_answer = []
                 if sheet.cell(row=i+2, column=7).value == 1:
@@ -439,11 +272,15 @@ def convert_to_tarfile_bvt(request):
                     list_correct_answer.append('3')
                 data_current["correct_answer_index"] = list_correct_answer
 
+                problem_index = sheet.cell(row=i+2, column=16).value.split(' ')[1]
+
+                if len(problem_index) == 1 :
+                    problem_index = '0' + problem_index
+
+                data_list_correct_answer['problem'+problem_index] = list_correct_answer
+
                 # max_attempts
-                if sheet.cell(row=2, column=2).value == "Exam":
-                    data_current['max_attempts'] = 1
-                else:
-                    data_current['max_attempts'] = None
+                # data_current['max_attempts'] = 1
 
                 #hint 
                 if sheet.cell(row=i+2, column=14).value != None:
@@ -465,83 +302,60 @@ def convert_to_tarfile_bvt(request):
         except:
             index = i+2
             error_msg = "Une erreur a été détectée à la ligne " + str(index) + ", vérifiez le fichier importé ou contactez le service technique de WeUp Learning"
-            # error_msg = "Problem detected at line " + str(index) +", please check your file or contact WeUp Learning technical service"
-            log.info(error_msg)
             return JsonResponse({"message" : error_msg})
 
     # WRITE FILE " questions.xls "
     wb_question = xlwt.Workbook()
 
+    # WRITE JSON list_correct_answer
+    json_file_name = 'list_corrected_answer_' + str(course_title).replace(' ', '_') +'.json'
+    log.info(json_file_name)
+    with open('/edx/var/edxapp/media/microsites/bvt/answers_lists_files/'+ json_file_name, 'w') as json_file :
+        json.dump(data_list_correct_answer ,json_file)
+        log.info(data_list_correct_answer)
+        log.info(json_file)
+        log.info('------------> Save corrected answers')
+
     for i, question in enumerate(data):
 
-        if data[question]['type'] == 'multiple_choice':
-            headers = ["problem_display_name","grade_weight", "max_attempts", "hint", "subquestion", "droplist", "answer", "image", "displ_name"]
-            #new sheet
-            ws = wb_question.add_sheet("Q "+str(question))
-            #headers
-            for j, header in enumerate(headers):
-                ws.write(0, j, header)
-            #question
-            ws.write(1, 4, data[question]['question'])
-            #unit-name
-            ws.write(1, 0, data[question]['unit'])
+        headers = ["problem_display_name","grade_weight", "max_attempts", "hint", "subquestion", "choice", "answer", "image", "displ_name"]
+        #new sheet
+        ws = wb_question.add_sheet("Q "+str(question))
 
-            #max_attempts
-            if data[question]['max_attempts'] != None:
-                ws.write(1, 2, data[question]['max_attempts'])
-            
-            #hint
-            if data[question]['hint'] != None:
-                ws.write(1, 3, data[question]['hint'])
-            #answer list and correct answer
-            for k, answer in enumerate(data[question]["answer_list"]):
-                ws.write(k+1, 5, answer)
+        #headers
+        for j, header in enumerate(headers):
+            ws.write(0, j, header)
 
-                if str(k) in data[question]['correct_answer_index'] :
-                    ws.write(k+1, 6, "t")
-                else: 
-                    ws.write(k+1, 6, "f")
-            # #image
-            # if data[question]["image"] != None:
-            #     ws.write(1, 7, data[question]["image"])
-            #Display_name
-            ws.write(1, 8, data[question]["displ_name"])
+        #question
+        ws.write(1, 4, data[question]['question'])
 
+        #unit-name
+        ws.write(1, 0, data[question]['displ_name'])
+        # ws.write(1, 0, data[question]['unit'])
 
-        elif data[question]['type'] == 'checkbox':
-            headers = ["problem_display_name","grade_weight", "max_attempts", "hint", "subquestion", "choice", "answer", "image", "displ_name"]
-            #new sheet
-            ws = wb_question.add_sheet("Q "+str(question))
-            #headers
-            for j, header in enumerate(headers):
-                ws.write(0, j, header)
-            #question
-            ws.write(1, 4, data[question]['question'])
-            #unit-name
-            ws.write(1, 0, data[question]['unit'])
+        #max_attempts
+        # if data[question]['max_attempts'] != None:
+        #     ws.write(1, 2, data[question]['max_attempts'])
 
-            #max_attempts
-            if data[question]['max_attempts'] != None:
-                ws.write(1, 2, data[question]['max_attempts'])
-            
-            #hint
-            if data[question]['hint'] != None:
-                ws.write(1, 3, data[question]['hint'])
-            #answer list and correct answer
-            for k, answer in enumerate(data[question]["answer_list"]):
-                ws.write(k+1, 5, answer)
+        #hint
+        if data[question]['hint'] != None:
+            ws.write(1, 3, data[question]['hint'])
 
-                if str(k) in data[question]['correct_answer_index'] :
-                    ws.write(k+1, 6, "t")
-                else: 
-                    ws.write(k+1, 6, "f")
-            # #image
-            # if data[question]["image"] != None:
-            #     ws.write(1, 7, data[question]["image"])
-            #Display_name
-            ws.write(1, 8, data[question]["displ_name"])
+        #answer list and correct answer
+        for k, answer in enumerate(data[question]["answer_list"]):
+            ws.write(k+1, 5, answer)
 
+            if str(k) in data[question]['correct_answer_index'] :
+                ws.write(k+1, 6, "t")
+            else: 
+                ws.write(k+1, 6, "f")
 
+        # #image
+        # if data[question]["image"] != None:
+        #     ws.write(1, 7, data[question]["image"])
+
+        #Display_name
+        ws.write(1, 8, data[question]["unit"])
 
     filename_output= "questions.xls"
     filepath1 = '/edx/var/edxapp/media/microsites/bvt/edx_converter/problem_source/{}'.format( filename_output)
@@ -658,7 +472,7 @@ def convert_to_tarfile_bvt(request):
     # sheetvideo = wb.sheet_by_name(VIDEOSHEET)
     sheetproblem = wb.sheet_by_name("problem")
     # sheethtml = wb.sheet_by_name(HTMLSHEET)
-    
+
 
     class Course_extraction:
 
@@ -727,7 +541,7 @@ def convert_to_tarfile_bvt(request):
                 subsection_link = subsection_file.replace( '.xml', '')
                 unit_objs = root.findall(".vertical")
                 unit_url = []
-                for unit_obj in unit_objs:	
+                for unit_obj in unit_objs:
                     unit_url.append(unit_obj.get('url_name'))
 
                 self.all_subsection.append({'subsection_link':subsection_link,
@@ -756,16 +570,17 @@ def convert_to_tarfile_bvt(request):
         list_section = from_course.course_()
         tree = etree.parse(os.path.join(course_path,'course','course.xml'))
         root = tree.getroot()
-    
-        # MODIFY DISPLAY_NAME 
+
+        # MODIFY DISPLAY_NAME
+        # MODIFY DISPLAY_NAME
         root.set('display_name', course_title)
-            
+
         if str(degree_of_cert) == "false" :
             # root.set('degree_of_certainty', '')
             root.set('cert_html_view_enabled', 'false')
         else:
             root.set('cert_html_view_enabled', 'true')
-            
+
         currentsection = ''
         section_idx = 1
 
@@ -774,14 +589,18 @@ def convert_to_tarfile_bvt(request):
             if currentsection != sheetstruc.cell_value(row, STRUCSECTION ):
                 currentsection = sheetstruc.cell_value(row, STRUCSECTION )
                 urlName = "section" +  "{0:0=2d}".format(section_idx)
-
                 if urlName not in list_section['section_url']:
                     log.info('no section: "'+ urlName +'"" in course. Add link to course.xml')
                     etree.SubElement(root, 'chapter',url_name=urlName)
                 else:
                     log.info('section: "'+ urlName +'" exists in course.')
-
                 section_idx+=1
+        
+        # Add completion section here
+        urlName = "d4a9392d58cb49fba5afe41b33aa8f9e"
+        if urlName not in list_section['section_url']:
+            log.info('no section: "'+ urlName +'" in course. Add link to course.xml')
+            etree.SubElement(root, 'chapter',url_name=urlName)
 
         doc = etree.ElementTree(root)
         doc.write(os.path.join(course_path,'course','course.xml'), pretty_print=True, xml_declaration=False, encoding='utf-8')
@@ -789,9 +608,8 @@ def convert_to_tarfile_bvt(request):
 
     def create_section():
         """
-        creates a section file
+        Creates a section file
         """
-
         currentsection = sheetstruc.cell_value(1, STRUCSECTION )
         currentsubsection = sheetstruc.cell_value(1,STRUCSUBSECTION)
         section_idx = 1
@@ -826,22 +644,32 @@ def convert_to_tarfile_bvt(request):
                     etree.SubElement(page, 'sequential',url_name=subsection_url_name)
                     subsection_idx += 1
                     log.info('      added new subsection link "'+ subsection_url_name +'"" in file: ' +filename )
-                
+
         doc = etree.ElementTree(page)
         doc.write(os.path.join(course_path,'chapter',filename), pretty_print=True, xml_declaration=False, encoding='utf-8')
+        log.info('added new section: "'+ filename +'" file at chapter directory')
+
+        # Add a xml in chapter for completion block
+        page_completion = etree.Element('chapter', display_name="Completion")
+        subsection_url_name = '310e3b2e46784b028a88a55034f35ce7' 
+
+        etree.SubElement(page_completion, 'sequential',url_name=subsection_url_name)
+
+        doc = etree.ElementTree(page_completion)
+        doc.write(os.path.join(course_path,'chapter','d4a9392d58cb49fba5afe41b33aa8f9e.xml'), pretty_print=True, xml_declaration=False, encoding='utf-8')
         log.info('added new section: "'+ filename +'" file at chapter directory')
 
 
     def create_subsection():
         """
-        creates subsection files
+        Creates subsection files
         """
         currentsubsection = sheetstruc.cell_value(1,STRUCSUBSECTION)
         currentunit = sheetstruc.cell_value(1, STRUCUNIT)
         subsection_idx = 1
         unit_idx = 1
         filename = 'subsection' +  '{0:0=2d}'.format(subsection_idx) + '.xml'
-        page = etree.Element('sequential', display_name= currentsubsection)
+        page = etree.Element('sequential', display_name= currentsubsection, format="Exam", graded="true")
         unit_url_name = 'unit' +  '{0:0=2d}'.format(subsection_idx) 
         etree.SubElement(page, 'vertical',url_name=unit_url_name)
         unit_idx += 1
@@ -863,7 +691,7 @@ def convert_to_tarfile_bvt(request):
                 etree.SubElement(page, 'vertical',url_name=unit_url_name)
                 unit_idx += 1
                 log.info('      added new unit "'+  unit_url_name +'"" in file: ' +filename )
-                
+
             else:
                 if currentunit != sheetstruc.cell_value(row,STRUCUNIT):
                     currentunit = sheetstruc.cell_value(row,STRUCUNIT)
@@ -871,17 +699,25 @@ def convert_to_tarfile_bvt(request):
                     etree.SubElement(page, 'vertical',url_name=unit_url_name)
                     unit_idx += 1
                     log.info('      added new unit "'+ unit_url_name +'"" in file: ' +filename )
-                
+
         doc = etree.ElementTree(page)
         doc.write(os.path.join(course_path,'sequential',filename), pretty_print=True, xml_declaration=False, encoding='utf-8')
         log.info('added new subsection: "'+ filename +'" file at sequential directory')
 
+        # Add subsection for completion block
+        subsection_completion = etree.Element('sequential', display_name="Completion")
+        unit_url_name_compl = "9a65db5a76504695ba4aab3889de22b9"
+
+        etree.SubElement(subsection_completion, 'vertical', url_name=unit_url_name_compl)
+
+        doc = etree.ElementTree(subsection_completion)
+        doc.write(os.path.join(course_path,'sequential','310e3b2e46784b028a88a55034f35ce7.xml'), pretty_print=True, xml_declaration=False, encoding='utf-8')
+
 
     def create_unit():
         """
-        creates unit files
+        Creates unit files
         """
-
         currentunit = sheetstruc.cell_value(1, STRUCUNIT)
         unit_idx = 1
         filename = 'unit' +  '{0:0=2d}'.format(unit_idx) +'.xml'
@@ -897,17 +733,26 @@ def convert_to_tarfile_bvt(request):
                 currentunit = sheetstruc.cell_value(row, STRUCUNIT )
                 filename = 'unit' +  '{0:0=2d}'.format(unit_idx) + '.xml'
                 page = etree.Element('chapter', display_name= currentunit)
-                    
+
         doc = etree.ElementTree(page)
         doc.write(os.path.join(course_path,'vertical',filename), pretty_print=True, xml_declaration=False, encoding='utf-8')
         log.info('added new unit: "'+ filename +'" file at vertical directory')
 
+        # Add unit for completion block
+        completion_unit = 'completion_unit'
+        page = etree.Element('vertical', display_name= completion_unit)
+
+        html_id = '688887f23f184366934880290c4e9731'
+        etree.SubElement(page, 'html', url_name=html_id)
+
+        doc = etree.ElementTree(page)
+        doc.write(os.path.join(course_path,'vertical','9a65db5a76504695ba4aab3889de22b9.xml'), pretty_print=True, xml_declaration=False, encoding='utf-8')
+
 
     def add_component():
         '''
-        start adding component with respect to macro excel
+        Start adding component with respect to macro excel
         '''
-
         problem_idx = 1
         for row in range(1, sheetstruc.nrows):
             comp_type = sheetstruc.cell_value(row,STRUCTYPECOMPONENT)
@@ -918,13 +763,11 @@ def convert_to_tarfile_bvt(request):
 
     def make_tarfile():
         '''
-        compile the targeted directories into a tar.gz file (open edX readable)
+        Compile the targeted directories into a tar.gz file (open edX readable)
         '''
-
         tar_path = '/edx/var/edxapp/media/microsites/bvt/course'
         # compress course content in a targz file and ready to import.
         log.info("file is being compressed as tar.gz ")
-        # with tarfile.open(course_path + '/' + course_path + '.tar.gz', 'w:gz') as tar:
         with tarfile.open(tar_path + '.tar.gz', 'w:gz') as tar:
             for f in os.listdir(course_path):
                 tar.add(course_path + "/" + f, arcname=os.path.basename(f))
@@ -934,19 +777,20 @@ def convert_to_tarfile_bvt(request):
 
     def update_json():
         '''
-        write into policy.json to update advanced parameters
+        Write into policy.json to update advanced parameters
         '''
-
         json_path = course_path + "/policies/course/policy.json"
-        
+
         with open(json_path, "r") as json_file:
             update_title = json.load(json_file)
             update_title["course/course"]["display_name"]= course_title
+            update_title["course/course"]["course_image"]= "vignette_test.png"
+            update_title["course/course"]["start"]= "2021-01-01T00:00:00Z"
 
-            if str(degree_of_cert) == "false":
-                update_title["course/course"]["degree_of_certainty"]["_on"]= False
-            else :
-                update_title["course/course"]["degree_of_certainty"]["_on"]= True
+            # if str(degree_of_cert) == "false":
+            #     update_title["course/course"]["degree_of_certainty"]["_on"]= False
+            # else :
+            #     update_title["course/course"]["degree_of_certainty"]["_on"]= True
 
         os.remove(json_path)
         with open(json_path, "w") as f:
@@ -955,10 +799,9 @@ def convert_to_tarfile_bvt(request):
 
     def delete_directories():
         '''
-        clean the implemented directories to start over the main process 
+        Clean the implemented directories to start over the main process 
         '''
-
-        dir_list = ["chapter", "html", "problem", "sequential", "static","vertical", "video"]
+        dir_list = ["chapter", "problem", "sequential", "vertical", "video"]
         for directory in dir_list:
             dir_path = "/edx/var/edxapp/media/microsites/bvt/edx_converter/course/" + directory
             try:
