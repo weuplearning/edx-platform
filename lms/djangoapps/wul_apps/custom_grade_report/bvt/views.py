@@ -264,9 +264,3 @@ def run_script_from_back(request):
     already_running_status = _("La création d'utilisateurs est en cours, veuillez attendre quelle se finisse")
     return JsonResponse({"status": already_running_status})
 
-
-
-
-# NOW IN A VIEW !!
-# exemple Koa-prod
-# source /edx/app/edxapp/edxapp_env && /edx/app/edxapp/edx-platform/manage.py lms shell < /edx/app/edxapp/edx-themes/bvt/lms/static/utils/custom_grade_report_bvt.py
