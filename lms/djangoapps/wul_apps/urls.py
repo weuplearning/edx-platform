@@ -14,6 +14,7 @@ from lms.djangoapps.wul_apps.ensure_form.views import ensure_form
 from lms.djangoapps.wul_apps.stat_dashboard.views import tma_create_user_from_csv, calculate_grades_xls
 # BVT specific file
 from lms.djangoapps.wul_apps.converter_xlsx_to_targz.bvt.views import convert_to_tarfile_bvt 
+from lms.djangoapps.wul_apps.custom_grade_report.bvt.views import run_script_from_back 
 import logging
 log = logging.getLogger()
 
@@ -64,8 +65,12 @@ urlpatterns +=(
     # url(r'^{}/wul_stats/course_state$'.format(settings.COURSE_ID_PATTERN), 'tma_apps.tma_statistics.views.update_user_course_state' ,name='update_user_course_state'),
 )
 
-# Edx Converter
+# BVT specific
+# Edx Converter + custom_grade_report
 urlpatterns += (
     url(r'^dashboard/BVT/converter_xlsx_to_targz', convert_to_tarfile_bvt,name='convert_to_tarfile_bvt'),
     url(r'^dashboard/bvt/converter_xlsx_to_targz', convert_to_tarfile_bvt,name='convert_to_tarfile_bvt'),
+    url(r'^dashboard/BVT/run_script_from_back/', run_script_from_back, name='run_script_from_back'),
+    url(r'^dashboard/bvt/run_script_from_back/', run_script_from_back, name='run_script_from_back')
+
 )
