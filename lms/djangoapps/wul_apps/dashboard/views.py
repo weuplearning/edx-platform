@@ -240,7 +240,7 @@ def view_enrollments(request):
 
 @login_required
 def wul_dashboard_view(request):
-    if not wul_verify_access(request.user).has_dashboard_access():
+    if not wul_verify_access(request.user).has_dashboard_access() or not configuration_helpers.get_value('WUL_DASHBOARD_CONFIG'):
         return HttpResponseForbidden
     context = {}
 
