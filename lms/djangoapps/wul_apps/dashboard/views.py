@@ -247,6 +247,8 @@ def wul_dashboard_view(request):
     microsite = configuration_helpers.get_value('domain_prefix')
     translations = json.load(open("/edx/var/edxapp/media/wul_apps/dashboard/trads/dashboard_trads.json"))
     endpoints = json.load(open("/edx/var/edxapp/media/wul_apps/dashboard/endpoints/wul_endpoints.json"))
+    #new endpoints since 29/12/2021
+    dashboard_endpoints = json.load(open("/edx/var/edxapp/media/wul_apps/dashboard/endpoints/dashboard_endpoints.json"))
     user_language = request.LANGUAGE_CODE if request.LANGUAGE_CODE in translations.keys() else 'en'
 
     primary_color = configuration_helpers.get_value('primary_color', '#333333')
@@ -260,11 +262,13 @@ def wul_dashboard_view(request):
         'error': error_color,
     }
 
+    context['OPENEDX_VERSION'] = "openedx_koa"
     context['colors'] = colors
     context['translations'] = translations[user_language]
     context['dashboard_config'] = dashboard_config
     context['user_email'] = str(request.user.email)
     context['endpoints'] = endpoints
+    context['dashboard_endpoints'] = dashboard_endpoints
     return render_to_response('wul_apps/dashboard.html', {"props": context})
 
 @login_required
