@@ -24,6 +24,9 @@ from django.utils.translation import ugettext as _
 import json
 import logging
 import os
+from os import listdir
+from os.path import isfile, join
+import re
 
 from collections import OrderedDict
 
@@ -261,6 +264,16 @@ def wul_dashboard_view(request):
         'secondary_color': secondary_color,
         'error': error_color,
     }
+
+    mypath = "/edx/var/edxapp/media/wul_apps/dashboard/global_hash"
+    react_built_hash = [f for f in listdir(mypath) if isfile(join(mypath, f))]
+
+    context['hash'] = []
+    for each_hash in react_built_hash :
+        if re.search("^2.*.js$", each_hash):
+            context['hash'].append(each_hash)
+        if re.search("^main.*.js$", each_hash):
+            context['hash'].append(each_hash)
 
     context['OPENEDX_VERSION'] = "openedx_koa"
     context['colors'] = colors

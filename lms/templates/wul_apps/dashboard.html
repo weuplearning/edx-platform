@@ -120,8 +120,20 @@
     <script>
         window.props = ${ dump_js_escaped_json(props) | n, decode.utf8 };
         window.props.csrfToken = "${csrf_token}"
+        console.log(window.props)
     </script>
-    <script src="/media/wul_apps/dashboard/static/update_310321/js/2.8565d447.chunk.js"></script>
-    <script src="/media/wul_apps/dashboard/static/update_310321/js/main.f8a2547b.chunk.js"></script>
+
+<script>
+  for (let i = 0; i < 2; i++) {
+    var source="/media/wul_apps/dashboard/global_hash/" + window.props.hash[i];
+    var script = document.createElement("script");
+    script.src = source
+    document.body.appendChild(script);
+  }
+</script>
+
+ <!-- <script src="/media/wul_apps/dashboard/global_hash/2.7527329a.chunk.js"></script>
+ <script src="/media/wul_apps/dashboard/global_hash/main.f7ac9f85.chunk.js"></script>  -->
+
   </body>
 </html>
