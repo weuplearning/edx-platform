@@ -258,8 +258,6 @@ class wul_dashboard():
         else:
             try:
                 desired_start_date =custom_field['desired_start_date']
-                log.info('desired_start_date')
-                log.info(desired_start_date)
                 email_params.update({
                     'desired_start_date': desired_start_date
                 })
@@ -460,7 +458,6 @@ class wul_dashboard():
         already_enrolled_users = []
 
         for _user in valid_rows:
-            log.info(_user)
             #get current users values
             try:
                 email = _user.get('email')
@@ -487,6 +484,7 @@ class wul_dashboard():
 
             created_user = ''
             if User.objects.filter(email=email).exists():
+
                 # ENROLL EXISTING USER TO COURSE
                 user = User.objects.get(email=email)
                 # see if it is an exact match with email and username if it's not an exact match then just display a warning message, but continue onwards
@@ -509,6 +507,7 @@ class wul_dashboard():
 
                 # enroll a user if it is not already enrolled.
                 if not CourseEnrollment.is_enrolled(user, self.course_key):
+
                     registered_users_list.append(email)
                     create_manual_course_enrollment(
                         user=user,
@@ -519,6 +518,10 @@ class wul_dashboard():
                         state_transition=UNENROLLED_TO_ENROLLED,
                     )
                     # IF THERE IS NO SSO GO FOR STANDARD BEHAVIOUR
+
+                    log.info('test UserSocialAuth.objects.filter(user=user).exists()  -->')
+                    log.info(UserSocialAuth.objects.filter(user=user).exists())
+
                     if not UserSocialAuth.objects.filter(user=user).exists():
                         email_params.update({
                             'message':'enrolled_enroll',
@@ -662,22 +665,24 @@ class wul_dashboard():
 
         generated_users_list_enrolled = ""
 
-        html = "<html><head></head><body><p>Bonjour,<br><br> L'inscription par CSV de vos utilisateurs au cours "+course.display_name_with_default+" sur le microsite "+microsite+" est maintenant terminée, voici la liste des utilisateurs inscrits:<br><ul>"+generated_users_list+"</ul><br>"+status_text+"<br><br>The MOOC Agency<br></p></body></html>"
+        html = "<html><head></head><body><p>Bonjour,<br><br> L'inscription par CSV de vos utilisateurs au cours "+course.display_name_with_default+" sur le microsite "+microsite+" est maintenant terminée, voici la liste des utilisateurs inscrits:<br><ul>"+generated_users_list+"</ul><br>"+status_text+"<br><br>L'équipe WeUp Learning<br></p></body></html>"
+
         if len(new_users) > 0 and len(already_enrolled_users) > 0 :
             for user in new_users:
                 generated_users_list+="<li>{}</li>".format(user)
 
             for user in already_enrolled_users:
                 generated_users_list_enrolled+="<li>{}</li>".format(user)
-            html = "<html><head></head><body><p>Bonjour,<br><br> L'inscription par CSV de vos utilisateurs au cours "+course.display_name_with_default+" sur le microsite "+microsite+" est maintenant terminée, voici la liste des utilisateurs inscrits:<br>- Nouveaux inscrits:<br><ul>"+generated_users_list+"</ul><br>-Déjà inscrits:<br><ul>"+generated_users_list_enrolled+"</ul><br>"+status_text+"<br><br>The MOOC Agency<br></p></body></html>"
+            html = "<html><head></head><body><p>Bonjour,<br><br> L'inscription par CSV de vos utilisateurs au cours "+course.display_name_with_default+" sur le microsite "+microsite+" est maintenant terminée, voici la liste des utilisateurs inscrits:<br>- Nouveaux inscrits:<br><ul>"+generated_users_list+"</ul><br>-Déjà inscrits:<br><ul>"+generated_users_list_enrolled+"</ul><br>"+status_text+"<br><br>L'équipe WeUp Learning<br></p></body></html>"
         elif len(new_users) > 0:
             for user in new_users:
                 generated_users_list+="<li>{}</li>".format(user)
-            html = "<html><head></head><body><p>Bonjour,<br><br> L'inscription par CSV de vos utilisateurs au cours "+course.display_name_with_default+" sur le microsite "+microsite+" est maintenant terminée, voici la liste des utilisateurs nouvellement inscrits sur la plateforme :<br><ul>"+generated_users_list+"</ul><br>"+status_text+"<br><br>The MOOC Agency<br></p></body></html>"
+            html = "<html><head></head><body><p>Bonjour,<br><br> L'inscription par CSV de vos utilisateurs au cours "+course.display_name_with_default+" sur le microsite "+microsite+" est maintenant terminée, voici la liste des utilisateurs nouvellement inscrits sur la plateforme :<br><ul>"+generated_users_list+"</ul><br>"+status_text+"<br><br>L'équipe WeUp Learning<br></p></body></html>"
         elif len(already_enrolled_users) > 0: 
             for user in already_enrolled_users:
                 generated_users_list_enrolled+="<li>{}</li>".format(user)
-            html = "<html><head></head><body><p>Bonjour,<br><br> L'inscription par CSV de vos utilisateurs au cours "+course.display_name_with_default+" sur le microsite "+microsite+" est maintenant terminée, voici la liste des utilisateurs déjà inscrits sur la plateforme :<br><ul>"+generated_users_list_enrolled+"</ul><br>"+status_text+"<br><br>The MOOC Agency<br></p></body></html>"  
+            html = "<html><head></head><body><p>Bonjour,<br><br> L'inscription par CSV de vos utilisateurs au cours "+course.display_name_with_default+" sur le microsite "+microsite+" est maintenant terminée, voici la liste des utilisateurs déjà inscrits sur la plateforme :<br><ul>"+generated_users_list_enrolled+"</ul><br>"+status_text+"<br><br>L'équipe WeUp Learning<br></p></body></html>"
+
         part2 = MIMEText(html.encode('utf-8'), 'html', 'utf-8')
         fromaddr = "ne-pas-repondre@themoocagency.com"
         toaddr = _requester_user.email
@@ -915,7 +920,7 @@ class wul_dashboard():
     #             feedback+="<li>Aucun participant dans la liste</li>"
     #         feedback+="</ul>"
         
-    #     html = "<html><head></head><body><p>Bonjour,<br><br> L'ajout de temps sur votre liste d'utilisateurs pour le cours "+course.display_name_with_default+" sur le microsite "+microsite+" est maintenant terminé.<br> "+feedback+"<br><br>The MOOC Agency<br></p></body></html>"
+    #     html = "<html><head></head><body><p>Bonjour,<br><br> L'ajout de temps sur votre liste d'utilisateurs pour le cours "+course.display_name_with_default+" sur le microsite "+microsite+" est maintenant terminé.<br> "+feedback+"<br><br>L'équipe WeUp Learning<br></p></body></html>"
     #     part2 = MIMEText(html.encode('utf-8'), 'html', 'utf-8')
     #     fromaddr = "ne-pas-repondre@themoocagency.com"
     #     toaddr = task_input.get('requester_email')
