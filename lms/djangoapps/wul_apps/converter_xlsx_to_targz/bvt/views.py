@@ -209,7 +209,6 @@ def add_problem(problem_source_info,selected_unit,course_path):
 
     if problem_source_info['type'] == 'checkbox':
     	problem_instance = Problem_checkbox(problem_source_info)
-
     # elif problem_source_info['type'] == 'fill_blank':
     # 	problem_instance = Problem_fillblank(problem_source_info)
     else:
@@ -318,7 +317,7 @@ def convert_to_tarfile_bvt(request):
 
     for i, question in enumerate(data):
 
-        headers = ["problem_display_name","grade_weight", "max_attempts", "hint", "subquestion", "choice", "answer", "image", "displ_name"]
+        headers = ["problem_display_name", "grade_weight", "max_attempts", "hint", "subquestion", "choice", "answer", "image", "displ_name"]
         #new sheet
         ws = wb_question.add_sheet("Q "+str(question))
 
@@ -352,7 +351,7 @@ def convert_to_tarfile_bvt(request):
 
         # #image
         # if data[question]["image"] != None:
-        #     ws.write(1, 7, data[question]["image"]
+        #     ws.write(1, 7, data[question]["image"])
 
         #Display_name
         ws.write(1, 8, data[question]["unit"])
@@ -572,7 +571,6 @@ def convert_to_tarfile_bvt(request):
         root = tree.getroot()
 
         # MODIFY DISPLAY_NAME
-        # MODIFY DISPLAY_NAME
         root.set('display_name', course_title)
 
         if str(degree_of_cert) == "false" :
@@ -595,7 +593,7 @@ def convert_to_tarfile_bvt(request):
                 else:
                     log.info('section: "'+ urlName +'" exists in course.')
                 section_idx+=1
-        
+
         # Add completion section here
         urlName = "d4a9392d58cb49fba5afe41b33aa8f9e"
         if urlName not in list_section['section_url']:
@@ -682,15 +680,15 @@ def convert_to_tarfile_bvt(request):
                 doc = etree.ElementTree(page)
                 doc.write(os.path.join(course_path,'sequential',filename), pretty_print=True, xml_declaration=False, encoding='utf-8')
                 log.info('added new subsection: "'+ filename +'" file at sequential directory')
-                subsection_idx +=1
+                subsection_idx += 1
                 currentsubsection = sheetstruc.cell_value(row, STRUCSUBSECTION )
                 currentunit = sheetstruc.cell_value(row,STRUCUNIT)
                 filename = 'subsection' +  '{0:0=2d}'.format(subsection_idx) + '.xml'
-                page = etree.Element('sequential', display_name= currentsubsection)
+                page = etree.Element('sequential', display_name= currentsubsection, format="Exam", graded="true")
                 unit_url_name = 'unit' +  '{0:0=2d}'.format(unit_idx) 
                 etree.SubElement(page, 'vertical',url_name=unit_url_name)
                 unit_idx += 1
-                log.info('      added new unit "'+  unit_url_name +'"" in file: ' +filename )
+                log.info('      added new unit "'+  unit_url_name +'" in file: ' +filename )
 
             else:
                 if currentunit != sheetstruc.cell_value(row,STRUCUNIT):
@@ -698,7 +696,7 @@ def convert_to_tarfile_bvt(request):
                     unit_url_name = 'unit' +  '{0:0=2d}'.format(unit_idx) 
                     etree.SubElement(page, 'vertical',url_name=unit_url_name)
                     unit_idx += 1
-                    log.info('      added new unit "'+ unit_url_name +'"" in file: ' +filename )
+                    log.info('      added new unit "'+ unit_url_name +'" in file: ' +filename )
 
         doc = etree.ElementTree(page)
         doc.write(os.path.join(course_path,'sequential',filename), pretty_print=True, xml_declaration=False, encoding='utf-8')
@@ -772,7 +770,7 @@ def convert_to_tarfile_bvt(request):
             for f in os.listdir(course_path):
                 tar.add(course_path + "/" + f, arcname=os.path.basename(f))
             tar.close()
-        log.info("uploadable file is created at " + tar_path + '.tar.gz')
+        log.info('uploadable file is created at ' + tar_path + '.tar.gz')
 
 
     def update_json():
@@ -786,7 +784,6 @@ def convert_to_tarfile_bvt(request):
             update_title["course/course"]["display_name"]= course_title
             update_title["course/course"]["course_image"]= "vignette_test.png"
             update_title["course/course"]["start"]= "2021-01-01T00:00:00Z"
-
             # if str(degree_of_cert) == "false":
             #     update_title["course/course"]["degree_of_certainty"]["_on"]= False
             # else :
