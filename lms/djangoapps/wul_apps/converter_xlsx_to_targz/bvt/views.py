@@ -14,6 +14,7 @@ import os, xlrd, tarfile, xlwt
 from lxml import etree
 from openpyxl import load_workbook
 import shutil
+from datetime import date
 
 import logging
 log = logging.getLogger()
@@ -778,12 +779,16 @@ def convert_to_tarfile_bvt(request):
         Write into policy.json to update advanced parameters
         '''
         json_path = course_path + "/policies/course/policy.json"
+        # UPDATE DATE HERE
+        today = date.today()
+        formatedDate = today.strftime('%Y-%m-%d')
 
         with open(json_path, "r") as json_file:
             update_title = json.load(json_file)
             update_title["course/course"]["display_name"]= course_title
             update_title["course/course"]["course_image"]= "vignette_test.png"
-            update_title["course/course"]["start"]= "2021-01-01T00:00:00Z"
+            update_title["course/course"]["start"]= str(formatedDate) +"T00:00:00Z"
+
             # if str(degree_of_cert) == "false":
             #     update_title["course/course"]["degree_of_certainty"]["_on"]= False
             # else :
