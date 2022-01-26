@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+'''
+/edx/app/edxapp/edx-platform/lms/djangoapps/wul_apps/dashboard
+'''
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
@@ -248,7 +251,10 @@ def wul_dashboard_view(request):
     context = {}
 
     microsite = configuration_helpers.get_value('domain_prefix')
-    translations = json.load(open("/edx/var/edxapp/media/wul_apps/dashboard/trads/dashboard_trads.json"))
+    try:
+        translations = json.load(open("/edx/var/edxapp/media/wul_apps/dashboard/trads/dashboard_trads_"+microsite.lower()+".json"))
+    except:
+        translations = json.load(open("/edx/var/edxapp/media/wul_apps/dashboard/trads/dashboard_trads.json"))
     endpoints = json.load(open("/edx/var/edxapp/media/wul_apps/dashboard/endpoints/wul_endpoints.json"))
     #new endpoints since 29/12/2021
     dashboard_endpoints = json.load(open("/edx/var/edxapp/media/wul_apps/dashboard/endpoints/dashboard_endpoints.json"))
