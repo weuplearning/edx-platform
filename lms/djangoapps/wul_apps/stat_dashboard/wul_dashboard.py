@@ -468,7 +468,7 @@ class wul_dashboard():
 
                 #check valid email
                 email_params = get_email_params(self.course, True, secure=True)
-                new_course_url='https://'+self.site_name.replace(' ','')+'/dashboard/'+str(self.course.id)
+                new_course_url='https://'+self.site_name.replace(' ','')+'/courses/'+str(self.course.id)
                 email_params.update({
                     'site_name': self.site_name,
                     'course_url':new_course_url,
