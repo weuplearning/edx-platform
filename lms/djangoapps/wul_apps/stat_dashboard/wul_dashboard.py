@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 '''
-/edx/app/edxapp/edx-platform/lms/djangoapps/wul_apps/stat_dashboard/wul_dashboard.py
+/edx/app/edxapp/edx-platform/lms/djangoapps/wul_apps/stat_dashboard/
 '''
 
 import sys
@@ -22,7 +22,7 @@ from opaque_keys.edx.keys import CourseKey
 
 from xmodule.modulestore.django import modulestore
 from courseware.courses import get_course_by_id
-from student.models import User,CourseEnrollment,UserProfile,LoginFailures
+from student.models import User, CourseEnrollment, UserProfile, LoginFailures
 from course_api.blocks.api import get_blocks
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 # from lms.djangoapps.tma_grade_tracking.models import dashboardStats
@@ -57,7 +57,7 @@ from django.contrib.auth.models import User
 #     CourseRegistrationCodeInvoiceItem,
 # )
 from student.models import (
-    CourseEnrollment, unique_id_for_user, anonymous_id_for_user,
+    unique_id_for_user, anonymous_id_for_user,
     UserProfile, Registration, EntranceExamConfiguration,
     ManualEnrollmentAudit, UNENROLLED_TO_ALLOWEDTOENROLL, ALLOWEDTOENROLL_TO_ENROLLED,
     ENROLLED_TO_ENROLLED, ENROLLED_TO_UNENROLLED, UNENROLLED_TO_ENROLLED,
@@ -484,6 +484,7 @@ class wul_dashboard():
 
             created_user = ''
             if User.objects.filter(email=email).exists():
+                log.info("in iF - 487")
 
                 # ENROLL EXISTING USER TO COURSE
                 user = User.objects.get(email=email)
@@ -599,12 +600,8 @@ class wul_dashboard():
             if created_user != '':
                 try:
                     # register_fields = configuration_helpers.get_value('FORM_EXTRA',{})
-                    if microsite == 'BVT' or microsite == 'bvt':
-                        register_fields = configuration_helpers.get_value_for_org('bvt', 'FORM_EXTRA',{})
-                        associated_courses = configuration_helpers.get_value_for_org('bvt', 'TMA_ASSOCIATED_COURSES',{})
-                    else:
-                        register_fields = configuration_helpers.get_value_for_org(microsite, 'FORM_EXTRA',{})
-                        associated_courses = configuration_helpers.get_value_for_org(microsite, 'TMA_ASSOCIATED_COURSES',{})
+                    register_fields = configuration_helpers.get_value_for_org(microsite.lower(), 'FORM_EXTRA',{})
+                    associated_courses = configuration_helpers.get_value_for_org(microsite.lower(), 'TMA_ASSOCIATED_COURSES',{})
 
 
                     custom_field = {}
@@ -615,34 +612,38 @@ class wul_dashboard():
                     except:
                         log.info('no custom_field')
                         pass
-
-
                     user = User.objects.get(email=email)
 
                     if associated_courses.get('selective_register_fields') and custom_field:
                         for field_name in associated_courses.get('selective_register_fields'):
+
                             custom_field_value = custom_field.get(field_name)
-
                             for register_field in register_fields :
-
                                 if register_field.get('name') == field_name:
                                     # courseList = []
                                     course = register_field.get('course')
                                     course_key = CourseKey.from_string(course)
-
                                     if custom_field_value == 'true' :
                                         # ENROLL
                                         if not CourseEnrollment.is_enrolled(user, course_key):
-                                            CourseEnrollment.enroll(user, course_key)
-                                            log.info('enroll '+user+' to '+str(course_key))
-
+                                            # CourseEnrollment.enroll(user, course_key)
+                                            create_manual_course_enrollment(
+                                                user=user,
+                                                course_id=course_key,
+                                                mode=course_mode,
+                                                enrolled_by=_requester_user,
+                                                reason='Enrolling via csv upload',
+                                                state_transition=UNENROLLED_TO_ENROLLED,
+                                            )
+                                            log.info('enroll :'+str(user) + ' to '+ str(course_key))
+                                            continue
                                     # UNENROLL
-                                    else:
-                                        CourseEnrollment.unenroll(user, course_key)
-                                        log.info('unenroll '+user+' to '+str(course_key))
+                                    # else:
+                                    #     CourseEnrollment.unenroll(user, course_key)
+                                    #     log.info('unenroll '+user+' to '+str(course_key))
                 except:
+                    log.info('EXCEPT error')
                     pass
-
         # Dev Cyril End
 
         log.warning(u'wul_dashboard.task_generate_user fin inscription users pour le microsite : '+microsite)
