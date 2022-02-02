@@ -511,7 +511,7 @@ class CoursewareIndex(View):
         # fix to display accordion in courseware
 
         courses_with_displayed_accordion_qualif = ["course-v1:bim+test+test", "course-v1:bmd+bmd001+SP"]
-        courses_with_displayed_accordion_prod = ["course-v1:bmd+FR+2021-2","course-v1:deeptechforbusiness+EN+2021", "course-v1:deeptechforbusiness+FR+2021", "course-v1:bmd+EN+2021", "course-v1:bmd+FR+2021","course-v1:bim+FR+2021"]
+        courses_with_displayed_accordion_prod = ["course-v1:bmd+FR+2022-03_04-02","course-v1:bmd+FR+2021-2","course-v1:deeptechforbusiness+EN+2021", "course-v1:deeptechforbusiness+FR+2021", "course-v1:bmd+EN+2021", "course-v1:bmd+FR+2021","course-v1:bim+FR+2021"]
         courses_with_displayed_accordion = courses_with_displayed_accordion_qualif + courses_with_displayed_accordion_prod
         
         if str(self.course_key) in courses_with_displayed_accordion:
