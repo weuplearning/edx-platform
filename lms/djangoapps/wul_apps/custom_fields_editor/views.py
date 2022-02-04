@@ -126,30 +126,32 @@ class CustomFieldEditor(APIView):
             "status":True,
             "message":'[WUL] custom_field for User {} successfully updated'.format(user_id)
         }
-
+        log.info(user_profile.custom_field)
         try: 
             custom_fields = json.loads(user_profile.custom_field)
             # As request.data is a querydict with multiplevalues for keys we update manually
             for key in request.data.keys():
                 # if key != 'user_id_for_api':
                 #     custom_fields[key] = request.data[key]
-                #     log.info(request.data[key])
-                #     log.info(type(request.data[key]))
 
                 if key != 'user_id_for_api':
                     if key == "virtual_class_1" or key == "virtual_class_2":
-                        custom_fields[key] =json.loads(request.data[key]) 
+                        custom_fields[key] = json.loads(request.data[key]) 
                     else:
                         custom_fields[key] = request.data[key]
 
+                    if key == "first_name":
+                        user.first_name = custom_fields["first_name"]
+
+                    if key == "last_name":
+                        user.first_name = custom_fields["last_name"]
             custom_fields["last_update_maker"] = request.user.email
             custom_fields["last_update_date"] = int(round(time.time() * 1000))
-            user_profile.custom_field = json.dumps(custom_fields)
-            user.first_name = custom_fields["first_name"]
-            user.last_name = custom_fields["last_name"]
-            user.save()
 
+            user_profile.custom_field = json.dumps(custom_fields)
+            user.save()
             user_profile.save()
+
         except:
             context['status'] = False
             context['message'] = '[WUL] Custom_field update for User {} failed'.format(user_id)
