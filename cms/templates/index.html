@@ -21,6 +21,11 @@ from openedx.core.djangolib.js_utils import (
 </%block>
 
 <%block name="content">
+
+<%
+authorized_user_fix = ["romain.delhez@eurotunnel.com"]
+%>
+
 <div class="wrapper-mast wrapper">
   <header class="mast has-actions">
     <h1 class="page-header">${_("{studio_name} Home").format(studio_name=settings.STUDIO_SHORT_NAME)}</h1>
@@ -33,6 +38,9 @@ from openedx.core.djangolib.js_utils import (
           % if course_creator_status=='granted':
           <a href="#" class="button new-button new-course-button"><span class="icon fa fa-plus icon-inline" aria-hidden="true"></span>
               ${_("New Course")}</a>
+          % elif str(user.email) in authorized_user_fix:
+          <a href="#" class="button new-button new-course-button"><span class="icon fa fa-plus icon-inline" aria-hidden="true"></span>
+            ${_("New Course")}</a>
           % elif course_creator_status=='disallowed_for_this_site' and settings.FEATURES.get('STUDIO_REQUEST_EMAIL',''):
           <a href="mailto:${settings.FEATURES.get('STUDIO_REQUEST_EMAIL','')}">${_("Email staff to create course")}</a>
           % endif
@@ -590,3 +598,4 @@ from openedx.core.djangolib.js_utils import (
   %endif
 </div>
 </%block>
+
