@@ -817,8 +817,17 @@ def _create_or_rerun_course(request):
     Returns the destination course_key and overriding fields for the new course.
     Raises DuplicateCourseError and InvalidKeyError
     """
-    if not auth.user_has_role(request.user, CourseCreatorRole()):
+    # fix to authorize some user to create courses in studio #dimitri / 15/02/2022
+    auth_has_role = auth.user_has_role(request.user, CourseCreatorRole())
+    authorized_users = ["vmorel"]
+
+    if str(request.user) in authorized_users:
+        auth_has_role = True
+
+    if not auth_has_role:
         raise PermissionDenied()
+    # if not auth.user_has_role(request.user, CourseCreatorRole()):
+    #     raise PermissionDenied()
 
     try:
         org = request.json.get('org')
