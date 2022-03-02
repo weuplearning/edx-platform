@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 '''
-Converter xls to targz courses feature 
+Converter xls to targz courses feature
 
 /edx/app/edxapp/edx-platform/lms/djangoapps/wul_apps/converter_xlsx_to_targz/bvt/
 '''
@@ -9,7 +9,10 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponse
 import json
-import os, xlrd, tarfile, xlwt
+import os
+import xlrd
+import tarfile
+import xlwt
 
 from lxml import etree
 from openpyxl import load_workbook
@@ -18,7 +21,6 @@ from datetime import date
 
 import logging
 log = logging.getLogger()
-
 
 
 PROBLEMSHEET = "problem"
@@ -35,95 +37,104 @@ PROBLEMTYPE = 8
 
 class Problem_checkbox:
 
-	def __init__(self,info):
-		wb_prob = xlrd.open_workbook('/edx/var/edxapp/media/microsites/bvt/edx_converter/problem_source/questions.xls')
-		self.sheetstruc = wb_prob.sheet_by_name( info['sheet'])
-		self.n_checkbox= (self.sheetstruc.ncols-4)//3
-		self.prob_disp = 0
-		self.prob_weight = 1
-		self.prob_attempt = 2
-		self.prob_hint = 3
-		self.question_col = 4
-		self.checkbox_col = 5
-		self.ans_col = 6
-		print('number of question is '+str(self.n_checkbox))
-		if self.n_checkbox is float:
-			print('number of column does not match with number of droplist')
-			exit()
+    def __init__(self, info):
+        wb_prob = xlrd.open_workbook(
+            '/edx/var/edxapp/media/microsites/bvt/edx_converter/problem_source/questions.xls')
+        self.sheetstruc = wb_prob.sheet_by_name(info['sheet'])
+        self.n_checkbox = (self.sheetstruc.ncols-4)//3
+        self.prob_disp = 0
+        self.prob_weight = 1
+        self.prob_attempt = 2
+        self.prob_hint = 3
+        self.question_col = 4
+        self.checkbox_col = 5
+        self.ans_col = 6
+        self.img = 7
+        print('number of question is '+str(self.n_checkbox))
+        if self.n_checkbox is float:
+            print('number of column does not match with number of droplist')
+            exit()
 
-		
-	def display_name(self):
-		return(self.sheetstruc.cell_value(1,self.prob_disp))
+    def display_name(self):
+        return(self.sheetstruc.cell_value(1, self.prob_disp))
 
-	def hint(self):
-		return(self.sheetstruc.cell_value(1,self.prob_hint))
+    def hint(self):
+        return(self.sheetstruc.cell_value(1, self.prob_hint))
 
+    def weight(self):
+        weigth_per_question = self.sheetstruc.cell_value(1, self.prob_weight)
+        if weigth_per_question == '':
+            return('')
+        else:
+            total_weight = float(float(weigth_per_question)*self.n_checkbox)
+            return(str(total_weight))
 
-	def weight(self):
-		weigth_per_question = self.sheetstruc.cell_value(1,self.prob_weight)
-		if weigth_per_question == '':
-			return('')
-		else:
-			total_weight=float(float(weigth_per_question)*self.n_checkbox)
-			return(str(total_weight))
+    def attempt(self):
+        if self.sheetstruc.cell_value(1, self.prob_attempt) == '':
+            return('')
+        else:
+            attempt = int(self.sheetstruc.cell_value(1, self.prob_attempt))
+            return(str(attempt))
 
-	def attempt(self):
-		if self.sheetstruc.cell_value(1,self.prob_attempt) == '':
-			return('')
-		else:
-			attempt = int(self.sheetstruc.cell_value(1,self.prob_attempt))
-			return(str(attempt))
+    def checkbox(self, element_obj):
 
-	
-	def checkbox(self,element_obj):
-		for checkboxs_idx in range(0,self.n_checkbox):
-			for row_ in range(1,self.sheetstruc.nrows):
-				tmp = self.sheetstruc.cell_value(row_,self.question_col)
-				if tmp != '':
-					question_page=etree.SubElement(element_obj,'p')
-					question_page.text = tmp
+        for checkboxs_idx in range(0, self.n_checkbox):
+            for row_ in range(1, self.sheetstruc.nrows):
+                tmp = self.sheetstruc.cell_value(row_, self.question_col)
+                if tmp != '':
+                    question_page = etree.SubElement(element_obj, 'p')
+                    question_page.text = tmp
 
-			choice_response_page = etree.SubElement(element_obj,'choiceresponse')
-			checkbox_group_page= etree.SubElement(choice_response_page,'checkboxgroup')
-			for row_ in range(1,self.sheetstruc.nrows):
-				answer_text = self.sheetstruc.cell_value(row_,self.ans_col)
-				checkbox_text = self.sheetstruc.cell_value(row_,self.checkbox_col)
+            if self.sheetstruc.cell_value(1,self.img) == "" or self.sheetstruc.cell_value(1,self.img) == 0:
+                log.info("image : no")
+            else:
+                log.info("image: yes")
+                img_tag=etree.SubElement(element_obj,'img', src=self.sheetstruc.cell_value(1,self.img))
+                img_tag.set('style', "display: block; margin: auto; max-height: 500px;")
 
-				if answer_text == '':
-					continue
+            choice_response_page = etree.SubElement(element_obj,'choiceresponse')
+            checkbox_group_page= etree.SubElement(choice_response_page,'checkboxgroup')
+            for row_ in range(1,self.sheetstruc.nrows):
+                answer_text = self.sheetstruc.cell_value(row_,self.ans_col)
+                checkbox_text = self.sheetstruc.cell_value(row_,self.checkbox_col)
 
-				if answer_text.lower() == 't'.lower():
-					checkbox_obj = etree.SubElement(checkbox_group_page,'choice',correct='True')
-					checkbox_obj.text = checkbox_text
-				else:
-					checkbox_obj = etree.SubElement(checkbox_group_page,'choice',correct='False')
-					checkbox_obj.text = checkbox_text
+                if answer_text == '':
+                    continue
 
-			self.question_col = self.question_col + 3
-			self.checkbox_col = self.checkbox_col+3
-			self.ans_col = self.ans_col+3
+                if answer_text.lower() == 't'.lower():
+                    checkbox_obj = etree.SubElement(checkbox_group_page,'choice',correct='True')
+                    checkbox_obj.text = checkbox_text
+                else:
+                    checkbox_obj = etree.SubElement(checkbox_group_page,'choice',correct='False')
+                    checkbox_obj.text = checkbox_text
 
-		if self.hint() != '':
-			demand_hint = etree.SubElement(element_obj,'demandhint') 
-			hint = etree.SubElement(demand_hint,'hint')
-			hint.text = self.hint() 
-			
-		return(element_obj)
+            self.question_col = self.question_col + 3
+            self.checkbox_col = self.checkbox_col+3
+            self.ans_col = self.ans_col+3
 
 
-	def create_file(self,filename,course_path):
-		new_problem_file = os.path.join(course_path,'problem',filename)
+        if self.hint() != '':
+            demand_hint = etree.SubElement(element_obj,'demandhint') 
+            hint = etree.SubElement(demand_hint,'hint')
+            hint.text = self.hint() 
 
-		page = etree.Element('problem', display_name=self.display_name()) 
-		if self.weight() != '':
-			page.set('weight',self.weight())
+            
+        return(element_obj)
 
-		if self.attempt() != '':
-			page.set('max_attempts',self.attempt())
 
-		full_xml_obj = self.checkbox(page)
-		doc = etree.ElementTree(page)
-		doc.write(new_problem_file, pretty_print=True, xml_declaration=False, encoding='utf-8')
+    def create_file(self,filename,course_path):
+        new_problem_file = os.path.join(course_path,'problem',filename)
+
+        page = etree.Element('problem', display_name=self.display_name()) 
+        if self.weight() != '':
+            page.set('weight',self.weight())
+
+        if self.attempt() != '':
+            page.set('max_attempts',self.attempt())
+
+        full_xml_obj = self.checkbox(page)
+        doc = etree.ElementTree(page)
+        doc.write(new_problem_file, pretty_print=True, xml_declaration=False, encoding='utf-8')
 
 
 def problem_excel2list(row,sheetproblem):
@@ -205,13 +216,13 @@ def add_problem(problem_source_info,selected_unit,course_path):
     # if problem_source_info['type'] == 'multiple_choice':
     #     problem_instance = Problem_multichoice(problem_source_info)
     # elif problem_source_info['type'] == 'droplist':
-    # 	problem_instance = Problem_droplist(problem_source_info)
+    #     problem_instance = Problem_droplist(problem_source_info)
     # elif problem_source_info['type'] == 'checkbox':
 
     if problem_source_info['type'] == 'checkbox':
-    	problem_instance = Problem_checkbox(problem_source_info)
+        problem_instance = Problem_checkbox(problem_source_info)
     # elif problem_source_info['type'] == 'fill_blank':
-    # 	problem_instance = Problem_fillblank(problem_source_info)
+    #     problem_instance = Problem_fillblank(problem_source_info)
     else:
         error_msg = 'Argument "type de problème" est manquant'
         return JsonResponse({"message" : error_msg})
@@ -249,7 +260,7 @@ def convert_to_tarfile_bvt(request):
             if sheet.cell(row=i+2, column=5).value != None:
                 data_current["question"] = sheet.cell(row=i+2, column=5).value
 
-                #answer list
+                # answer list
                 list_answer = []
                 list_answer.append(sheet.cell(row=i+2, column=6).value)
                 list_answer.append(sheet.cell(row=i+2, column=8).value)
@@ -282,22 +293,49 @@ def convert_to_tarfile_bvt(request):
                 # max_attempts
                 # data_current['max_attempts'] = 1
 
-                #hint 
+                # hint 
                 if sheet.cell(row=i+2, column=14).value != None:
                     data_current["hint"] = sheet.cell(row=i+2, column=14).value
                 else:
                     data_current["hint"] = None
 
-                #section, subsection and, unit
+                # section, subsection and, unit
                 data_current["title"]=course_title
                 data_current["section"]=sheet.cell(row=i+2, column=17).value
                 data_current["subsection"]=sheet.cell(row=i+2, column=18).value
                 data_current["unit"]= sheet.cell(row=i+2, column=19).value
 
+                if sheet.cell(row=i+2, column=15).value != None:
+
+                    image_name= sheet.cell(row=i+2, column=15).value
+                    log.info('image_name')
+                    log.info(image_name)
+                    try:
+                        image_name = image_name.replace("<<< Fig/  ", "")
+                    except: 
+                        log.info("error image 1")
+                        index = i+2
+                        error_msg = "Problem detected regarding image reference at line " + str(index)
+                        return JsonResponse({"message" : error_msg})
+
+                    try:
+                        image_name = image_name.replace(" >>>", ".jpg")
+                    except: 
+                        log.info("error image 2")
+                        index = i+2
+                        error_msg = "Problem detected regarding image reference at line " + str(index)
+                        return JsonResponse({"message" : error_msg})
+
+                    data_current["image"]= "https://bvt.koa.qualif.dev/media/microsites/bvt/img_bvt_converter/" + image_name
+                
+                else:
+                    data_current["image"]= None
+
+
                 # displ_name
                 data_current["displ_name"] = sheet.cell(row=i+2, column=16).value
 
-                #save each
+                # save each
                 data[i+1]= data_current
         except:
             index = i+2
@@ -319,29 +357,29 @@ def convert_to_tarfile_bvt(request):
     for i, question in enumerate(data):
 
         headers = ["problem_display_name", "grade_weight", "max_attempts", "hint", "subquestion", "choice", "answer", "image", "displ_name"]
-        #new sheet
+        # new sheet
         ws = wb_question.add_sheet("Q "+str(question))
 
-        #headers
+        # headers
         for j, header in enumerate(headers):
             ws.write(0, j, header)
 
-        #question
+        # question
         ws.write(1, 4, data[question]['question'])
 
-        #unit-name
+        # unit-name
         ws.write(1, 0, data[question]['displ_name'])
         # ws.write(1, 0, data[question]['unit'])
 
-        #max_attempts
+        # max_attempts
         # if data[question]['max_attempts'] != None:
         #     ws.write(1, 2, data[question]['max_attempts'])
 
-        #hint
+        # hint
         if data[question]['hint'] != None:
             ws.write(1, 3, data[question]['hint'])
 
-        #answer list and correct answer
+        # answer list and correct answer
         for k, answer in enumerate(data[question]["answer_list"]):
             ws.write(k+1, 5, answer)
 
@@ -350,11 +388,12 @@ def convert_to_tarfile_bvt(request):
             else: 
                 ws.write(k+1, 6, "f")
 
-        # #image
-        # if data[question]["image"] != None:
-        #     ws.write(1, 7, data[question]["image"])
+        # image
+        log.info(data[question]["image"])
+        if data[question]["image"] != None:
+            ws.write(1, 7, data[question]["image"])
 
-        #Display_name
+        # Display_name
         ws.write(1, 8, data[question]["unit"])
 
     filename_output= "questions.xls"
@@ -397,13 +436,13 @@ def convert_to_tarfile_bvt(request):
         ws.write(i+1, 1, data[question]['section'])
         ws.write(i+1, 2, data[question]['subsection'])
         ws.write(i+1, 3, data[question]['unit'])
-        #directory name
+        # directory name
         ws.write(i+1, 4, "{}_source".format(component_types[2]))
-        #file name
+        # file name
         ws.write(i+1, 5, "questions.xls")
-        #sheet name
+        # sheet name
         ws.write(i+1, 6, "Q "+str(question))
-        #probleme name
+        # probleme name
         ws.write(i+1, 7, question)
         ws.write(i+1, 8, data[question]['type'])
 
@@ -522,7 +561,7 @@ def convert_to_tarfile_bvt(request):
                 section_link = section_file.replace('.xml', '')
                 subsection_objs = root.findall(".sequential")
                 subsection_url = []
-                for subsection_obj in subsection_objs:	
+                for subsection_obj in subsection_objs:    
                     subsection_url.append(subsection_obj.get('url_name'))
 
                 self.all_section.append({'section_link':section_link,
