@@ -276,6 +276,11 @@ class wul_dashboard():
                     'full_name':first_name+" "+last_name,
                     'course_key':str(self.course_key)
                 })
+                log.info('info send to send_mail_to_student')
+                log.info(email)
+                log.info(email_params)
+                log.info('info send to send_mail_to_student')
+
                 #update sitename params
                 self.send_mail_to_student(email, email_params)
             except Exception as ex:  # pylint: disable=broad-except
@@ -297,7 +302,6 @@ class wul_dashboard():
 
     #enroll
     def send_mail_to_student(self,student, param_dict, language=None):
-        log.info("send_mail_to_students")
         """
         Construct the email using templates and then send it.
         `student` is the student's email address (a `str`),
@@ -320,6 +324,7 @@ class wul_dashboard():
         Returns a boolean indicating whether the email was sent successfully.
         """
 
+        log.info("send_mail_to_students")
         # add some helpers and microconfig subsitutions
 
         if 'display_name' in param_dict:
@@ -339,6 +344,8 @@ class wul_dashboard():
         template_base= dest_path + "/" + param_dict['microsite']+"/lms/templates/instructor/edx_ace/"
 
         log.info(template_base)
+        log.info(message_type)
+        log.info(param_dict)
 
         email_template_dict = {
             'allowed_enroll': (
@@ -372,11 +379,18 @@ class wul_dashboard():
         }
 
         subject_template, message_template = email_template_dict.get(message_type, (None, None))
+
+        # ADD log 080322
         log.info(template_base+subject_template)
+        log.info(message_template)
+        
         if subject_template is not None and message_template is not None:
             subject, message = render_message_to_string(
                 template_base+subject_template, template_base+message_template, param_dict, language=language
             )
+
+        log.info(subject)
+        log.info(message)
 
         if subject and message:
             # Remove leading and trailing whitespace from body
@@ -396,6 +410,10 @@ class wul_dashboard():
                 html_message=message
             else:
                 plain_message=message
+            
+            log.info('info send to send_mail method')
+            log.info(plain_message)
+            log.info('info send to send_mail method')
 
             send_mail(subject, message=plain_message, from_email=from_address, recipient_list=[student], fail_silently=False, html_message=html_message)
 

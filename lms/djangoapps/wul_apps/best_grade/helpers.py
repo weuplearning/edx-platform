@@ -13,17 +13,15 @@ log = logging.getLogger()
 def check_best_grade(user, course, force_best_grade=None):
     log.info("CHECK BEST GRADE")
 
-    try:
-        # 30/11/21 create is not yet define on Koa
-        grade_info = CourseGradeFactory().create(user, course)
-    except:
-        grade_info = CourseGradeFactory().read(user, course)
 
+    grade_info = CourseGradeFactory().read(user, course)
     grade_info.percent_tma = grade_info.percent
     grade_info.passed_tma = grade_info.passed
 
     if configuration_helpers.get_value('tma_best_grade_mode') or force_best_grade:
         course_enrollment = WulCourseEnrollment.get_enrollment(str(course.id), user)
+
+        # limite établie dans le studio
         grader = course._grading_policy.get('GRADE_CUTOFFS').get('Pass')
 
         log.info('GRADER')
