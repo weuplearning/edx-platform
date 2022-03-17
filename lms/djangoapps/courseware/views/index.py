@@ -72,8 +72,10 @@ from ..toggles import COURSEWARE_MICROFRONTEND_COURSE_TEAM_PREVIEW, REDIRECT_TO_
 from ..url_helpers import get_microfrontend_url
 from .views import CourseTabView
 from openedx.features.course_experience.utils import get_course_outline_block_tree
+from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 
-log = logging.getLogger("edx.courseware.views.index")
+
+log = logging.getLogger()
 
 TEMPLATE_IMPORTS = {'urllib': urllib}
 CONTENT_DEPTH = 2
@@ -510,12 +512,7 @@ class CoursewareIndex(View):
             courseware_context['microfrontend_link'] = None
 
 
-        # fix to display accordion in courseware
-
-        courses_with_displayed_accordion_qualif = ["course-v1:bim+test+test", "course-v1:bmd+bmd001+SP"]
-        courses_with_displayed_accordion_prod = ["course-v1:bmd+FR+2022-03_04-02","course-v1:bmd+FR+2021-2","course-v1:deeptechforbusiness+EN+2021", "course-v1:deeptechforbusiness+FR+2021", "course-v1:bmd+EN+2021", "course-v1:bmd+FR+2021","course-v1:bim+FR+2021", "course-v1:deeptechforbusiness+FR+2022-20_21-01","course-v1:bmd+FR+2022-03-7_8"]
-        courses_with_displayed_accordion = courses_with_displayed_accordion_qualif + courses_with_displayed_accordion_prod
-
+        courses_with_displayed_accordion = configuration_helpers.get_value('DISPLAY_ACCORDEON_ON_COURSEWARE', [])
         if str(self.course_key) in courses_with_displayed_accordion:
             courseware_context['disable_accordion'] = False
 
