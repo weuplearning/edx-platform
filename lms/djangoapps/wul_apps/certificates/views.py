@@ -92,13 +92,18 @@ def generate_pdf(request,course_id):
     except:
         font_color = [255, 255, 255]
     p.setFillColorRGB(font_color[0]/255, font_color[1]/255, font_color[2]/255) 
+
     try:
-        user_name = (request.user.first_name).capitalize() + " " + (request.user.last_name).upper()
+        user_name = request.user.profile.name
     except:
         try:
-            user_name = json.loads(request.user.profile.custom_field).get('first_name').capitalize() + " " + json.loads(request.user.profile.custom_field).get('last_name').upper()
+            user_name = (request.user.first_name).capitalize() + " " + (request.user.last_name).upper()
         except:
-            user_name = 'Missing information'
+            try:
+                user_name = json.loads(request.user.profile.custom_field).get('first_name').capitalize() + " " + json.loads(request.user.profile.custom_field).get('last_name').upper()
+            except:
+                user_name = 'Missing information'
+
     try:
         name_position_y = certificate_config['name_position_y']
     except:
@@ -107,6 +112,7 @@ def generate_pdf(request,course_id):
         p.drawString(name_position_y, name_position_x, user_name)
     else:
         # Center the text horizontally
+
         text_width = stringWidth(user_name, font_name, font_size)
         centered_text = (page_width - text_width) / 2.0
         p.drawString(centered_text, name_position_x, user_name)
@@ -135,9 +141,18 @@ def generate_pdf(request,course_id):
 
         # Switch to multilingue
         if date_lang == 'en' :
-            certificate_date = string_date_en
+            certificate_date += string_date_en
         else:
-            certificate_date = 'le ' + string_date_fr
+            certificate_date += string_date_fr
+        # COLOR
+        try:
+            font_color_2 = certificate_config['font_color_2']
+        except:
+            font_color_2 = [255, 255, 255]
+        p.setFillColorRGB(font_color_2[0]/255, font_color_2[1]/255, font_color_2[2]/255) 
+
+
+
         # Write date at x and y with font_size_2
         date_position_x = certificate_config['date_position_x']
         try:
@@ -148,11 +163,11 @@ def generate_pdf(request,course_id):
 
         p.setFont(font_name, font_size_2)
         if date_position_y:
-            p.drawString(date_position_y, date_position_x , certificate_date)
+            p.drawString(date_position_y, date_position_x , str(certificate_date))
         else:
             text_width_date = stringWidth(certificate_date, font_name, font_size_2)
             centered_date = (page_width - text_width_date) / 2.0
-            p.drawString(centered_date, date_position_x , certificate_date)
+            p.drawString(centered_date, date_position_x , str(certificate_date))
 
 
 
