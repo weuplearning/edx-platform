@@ -85,7 +85,8 @@ def google_analytics_tracking_pixel(context):
         str: A string containing an HTML image tag that implements the GA measurement protocol or an empty string if
              GA is not configured. For this to work, the site or settings must include the GA tracking ID.
     """
-    image_url = _get_google_analytics_tracking_url(context)
+    # image_url = _get_google_analytics_tracking_url(context) #HOTFIX 2022-04-13 dimitri : remove ga pixel image to prevent mail to go to the spam section
+    image_url = ''
     if image_url is not None:
         return mark_safe(
             HTML(u'<img src="{0}" alt="" role="presentation" aria-hidden="true" />').format(HTML(image_url))
