@@ -49,7 +49,7 @@ logger = logging.getLogger(__name__)
 # define custom states used by InstructorTask
 QUEUING = 'QUEUING'
 PROGRESS = 'PROGRESS'
-TASK_INPUT_LENGTH = 10000
+TASK_INPUT_LENGTH = 30000
 
 
 @python_2_unicode_compatible
