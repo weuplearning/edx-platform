@@ -460,6 +460,9 @@ class WulCourseGradeReport(object):
         """
         Returns a list of all applicable column headers for this grade report.
         """
+
+        if task_input["extra_fields"] == {}:
+            task_input["extra_fields"] = []
         
         return (
             ["Student ID", "Email"] +
