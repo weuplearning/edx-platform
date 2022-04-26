@@ -48,6 +48,8 @@ def submit_calculate_grades_xls(request, course_key):
     include_days_left_in_report = False
     time_tracking = False
 
+    extra_fields = configuration_helpers.get_value('GRADE_REPORT_EXTRA_FIELDS', [])
+
     try :
         time_tracking = configuration_helpers.get_value("WUL_DASHBOARD_CONFIG").get("DISPLAY_TIME_TRACKING")
     except:
@@ -80,7 +82,8 @@ def submit_calculate_grades_xls(request, course_key):
         "users_admin": users_admin,
         "include_days_left_in_report": include_days_left_in_report,
         "certificate_advanced_config": certificate_advanced_config,
-        "time_tracking": time_tracking
+        "time_tracking": time_tracking,
+        "extra_fields": extra_fields
     }
     task_key = ""
 

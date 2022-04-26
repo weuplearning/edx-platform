@@ -41,6 +41,7 @@ from lms.djangoapps.verify_student.services import IDVerificationService
 from openedx.core.djangoapps.content.block_structure.api import get_course_in_cache
 from openedx.core.djangoapps.course_groups.cohorts import bulk_cache_cohorts, get_cohort, is_course_cohorted
 from openedx.core.djangoapps.user_api.course_tag.api import BulkCourseTags
+from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 from openedx.core.lib.cache_utils import get_cache
 from common.djangoapps.student.models import CourseEnrollment
 from common.djangoapps.student.roles import BulkRoleCache
@@ -441,7 +442,7 @@ class WulCourseGradeReport(object):
         time_tracking = _task_input['time_tracking']
 
         context.update_status(u'Starting grades')
-        success_headers = self._success_headers(context, custom_fields_header, time_tracking)
+        success_headers = self._success_headers(context, custom_fields_header, time_tracking, _task_input)
         error_headers = self._error_headers()
         batched_rows = self._batched_rows(context, custom_fields_header, _task_input)
 
@@ -454,19 +455,20 @@ class WulCourseGradeReport(object):
 
         return context.update_status(u'Completed grades')
 
-    def _success_headers(self, context, custom_fields_header, time_tracking):
+    def _success_headers(self, context, custom_fields_header, time_tracking, task_input):
 
         """
         Returns a list of all applicable column headers for this grade report.
         """
-
+        
         return (
             ["Student ID", "Email"] +
             custom_fields_header +
             ["Last login", "Inscription date"] +
             (["Time tracking"] if time_tracking else []) +
             self._grades_header(context) +
-            (['Cohort Name'] if context.cohorts_enabled else []) 
+            (['Cohort Name'] if context.cohorts_enabled else []) +
+            task_input["extra_fields"]
             # [u'Experiment Group ({})'.format(partition.name) for partition in context.course_experiments] +
             # (['Team Name'] if context.teams_enabled else []) +
             # ['Enrollment Track', 'Verification Status'] +
@@ -614,7 +616,6 @@ class WulCourseGradeReport(object):
             assignment_average = self._user_assignment_average(course_grade, subsection_grades, assignment_info)
             if assignment_average is not None:
                 grade_results.append([assignment_average])
-
         return [course_grade.percent] + _flatten(grade_results)
 
     def _user_subsection_grades(self, course_grade, subsection_headers):
@@ -735,8 +736,6 @@ class WulCourseGradeReport(object):
                 course_key=context.course_id,
             ):
 
-                # log.info(_task_input["scope"])
-
                 # Filtered reports
                 if not _task_input['scope']['admin'] and (user.email.find("@yopmail") != -1 or user.email.find("@weuplearning") != -1 or user.email.find("@themoocagency") != -1): 
                     pass
@@ -778,12 +777,24 @@ class WulCourseGradeReport(object):
                         except:
                             date_joined = None
 
+                        extra_fields = []
+                        if _task_input["extra_fields"]:
+                            for field in _task_input["extra_fields"]:
+                                extra_fields.append("")
+                            if "certificate" in _task_input["extra_fields"]:
+                                certificate = "no"
+                                if course_grade.percent > 0.7:
+                                    certificate = "yes"
+                                index = _task_input["extra_fields"].index("certificate")
+                                extra_fields[index] = certificate
+
                         success_rows.append(
                             [user.id, user.email] +
                             custom_field_array +
                             [last_login, date_joined] +
                             ([time_tracking] if display_time_tracking else []) +
-                            self._user_grades(course_grade, context) 
+                            self._user_grades(course_grade, context) +
+                            extra_fields
                             # self._user_cohort_group_names(user, context) +
                             # self._user_experiment_group_names(user, context) +
                             # self._user_team_names(user, bulk_context.teams) +
