@@ -233,7 +233,9 @@ def view_enrollments(request):
                                 'name':cohort_name,
                                 'id':cohort_id
                             }
-                    except ObjectDoesNotExist:
+
+                    # except ObjectDoesNotExist:
+                    except :  #  -->  Modifs 29/04/22 - CA
                         pass
 
 
