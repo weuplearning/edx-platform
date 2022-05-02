@@ -30,6 +30,7 @@ from rest_framework.views import APIView
 from six import text_type
 from social_core.exceptions import AuthAlreadyAssociated, AuthException
 from social_django import utils as social_utils
+from opaque_keys.edx.locations import SlashSeparatedCourseKey
 
 from common.djangoapps import third_party_auth
 # Note that this lives in LMS, so this dependency should be refactored.
@@ -57,6 +58,7 @@ from openedx.core.djangoapps.user_authn.views.registration_form import (
     RegistrationFormFactory,
     get_registration_extension_form
 )
+from openedx.core.djangoapps.course_groups.cohorts import get_cohort_names, get_cohort_by_name, add_user_to_cohort
 from common.djangoapps.student.helpers import (
     AccountValidationError,
     authenticate_new_user,
@@ -548,6 +550,9 @@ class RegistrationView(APIView):
             response = self._create_response(request, errors, status_code=400)
         except PermissionDenied:
             response = HttpResponseForbidden(_("Account creation not allowed."))
+
+
+        cohort_enrollment_enabled_field = configuration_helpers.get_value('ENABLE_COHORT_ENROLLMENT', None)
         
         # WUL - Custom field params on registration
         if user:
@@ -559,6 +564,20 @@ class RegistrationView(APIView):
                         if key == 'name':
                             form_extra_fields.append(value)
 
+                    # WUL enroll user in a selected cohort
+                    if cohort_enrollment_enabled_field is not None:
+                        if field["name"] == cohort_enrollment_enabled_field:
+                            try:
+                                course_id = data["course_id"]
+                                cohort_name = data[cohort_enrollment_enabled_field]
+                                course_key = SlashSeparatedCourseKey.from_string(str(course_id))
+                                cohort = get_cohort_by_name(course_key, cohort_name )
+                                add_user_to_cohort(cohort, user)
+                                log.info("WUL - user {user} has been successfully enrolled into this following cohort {cohort} ".format(user=user, cohort=cohort_name))
+                            except:
+                                log.info("WUL ERROR - an error occurred during this user's registration into a cohort ")
+                                pass
+                            
                 self._update_custom_field_on_account_creation(user, form_extra_fields, data.dict())
 
             
@@ -566,16 +585,11 @@ class RegistrationView(APIView):
 
     def _update_custom_field_on_account_creation(self, user, form_extra_fields, data):
         custom_fields = json.loads(user.profile.custom_field)
-        log.info('data')
-        log.info(data)
         for field in form_extra_fields:
             if field in data.keys():
                 custom_fields[field] = data[field]
         user.profile.custom_field = json.dumps(custom_fields)
         user.profile.save()
-
-        log.info('custom_fields')
-        log.info(custom_fields)
 
 
 
