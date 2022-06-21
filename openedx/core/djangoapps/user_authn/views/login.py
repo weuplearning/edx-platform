@@ -224,6 +224,9 @@ def _handle_failed_authentication(user, authenticated_user):
             AUDIT_LOG.warning(u"Login failed - password for user.id: {0} is invalid".format(loggable_id))
         else:
             AUDIT_LOG.warning(u"Login failed - password for {0} is invalid".format(user.email))
+    
+    else:
+        raise AuthFailedError(_("User with this email doesn't exist in system."))
 
     if user and LoginFailures.is_feature_enabled():
         blocked_threshold, failure_count = LoginFailures.check_user_reset_password_threshold(user)
