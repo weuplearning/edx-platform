@@ -465,7 +465,7 @@ class WulCourseGradeReport(object):
             task_input["extra_fields"] = []
         
         return (
-            ["Student ID", "Email"] +
+            ["Student ID", "Email", "Pseudo", "Prénom", "Nom" ] +
             custom_fields_header +
             ["Last login", "Inscription date"] +
             (["Time tracking"] if time_tracking else []) +
@@ -743,7 +743,6 @@ class WulCourseGradeReport(object):
                 if not _task_input['scope']['admin'] and (user.email.find("@yopmail") != -1 or user.email.find("@weuplearning") != -1 or user.email.find("@themoocagency") != -1): 
                     pass
                 else :
-                    # log.info(user.email)
                     user_enrollment = [user_enrolled for user_enrolled in course_enrollments if user_enrolled.user_id == user.id]
 
 
@@ -790,9 +789,17 @@ class WulCourseGradeReport(object):
                                     certificate = "yes"
                                 index = _task_input["extra_fields"].index("certificate")
                                 extra_fields[index] = certificate
+                        
+                        try:
+                            first_name = custom_field['first_name']
+                            last_name = custom_field['last_name']
+                        except:
+                            first_name = user.first_name
+                            last_name = user.last_name
+
 
                         success_rows.append(
-                            [user.id, user.email] +
+                            [user.id, user.email, user.username, first_name, last_name] +
                             custom_field_array +
                             [last_login, date_joined] +
                             ([time_tracking] if display_time_tracking else []) +

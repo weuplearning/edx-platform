@@ -324,7 +324,7 @@ class DjangoStorageReportStore(ReportStore):
         csv_file_to_sent = output_buffer.file.getvalue()
         filename = filename
 
-        html = "<html><head></head><body><p>Bonjour,<br/><br/>Vous trouverez en PJ le rapport de donnees du MOOC {}<br/><br/>Si vous disposez d'accès suffisants vous pouvez accéder au dashboard du cours: https://{}/wul_apps/dashboard/home <br><br> et au studio du cours : https://studio.weup.in/course/{}    <br/><br/>Bonne reception<br>The MOOC Agency<br></p></body></html>".format(course.display_name ,site_name , course_id)
+        html = "<html><head></head><body><p>Bonjour,<br/><br/>Vous trouverez en pièce jointe le rapport de données du MOOC {}<br/><br/>Si vous disposez d'accès suffisants vous pouvez accéder au dashboard du cours: https://{}/wul_apps/dashboard/home <br><br> et au studio du cours : https://studio.weup.in/course/{}    <br/><br/>Bonne réception<br>L'équipe WeUp Learning<br></p></body></html>".format(course.display_name ,site_name , course_id)
         part2 = MIMEText(html.encode('utf-8'), 'html', 'utf-8')
 
         fromaddr = "ne-pas-repondre@themoocagency.com"
