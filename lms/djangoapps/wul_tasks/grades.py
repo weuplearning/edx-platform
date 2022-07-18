@@ -1,5 +1,7 @@
 """
 Functionality for generating grade reports.
+
+/edx/app/edxapp/edx-platform/lms/djangoapps/wul_tasks
 """
 
 import logging
@@ -295,7 +297,8 @@ class _WulCourseGradeReportContext(object):
         Updates the status on the celery task to the given message.
         Also logs the update.
         """
-        TASK_LOG.info(u'%s, Task type: %s, %s', self.task_info_string, self.action_name, message)
+        # TASK_LOG.info(u'%s, Task type: %s, %s', self.task_info_string, self.action_name, message)
+        log.info('in update_status from grades.py')
         return self.task_progress.update_task_state(extra_meta={'step': message})
 
 
@@ -557,7 +560,8 @@ class WulCourseGradeReport(object):
                 TASK_LOG.info(u'%s, Creating Course Grade with optimization', task_log_message)
                 return users_for_course_v2(course_id, verified_only=verified_only)
 
-            TASK_LOG.info(u'%s, Creating Course Grade without optimization', task_log_message)
+            # TASK_LOG.info(u'%s, Creating Course Grade without optimization', task_log_message)
+            log.info('in get_enrolled_learners_for_course function from grades.py')
             return users_for_course(course_id, verified_only=verified_only)
 
         def users_for_course(course_id, verified_only=False):
@@ -791,8 +795,8 @@ class WulCourseGradeReport(object):
                                 extra_fields[index] = certificate
                         
                         try:
-                            first_name = custom_field['first_name']
-                            last_name = custom_field['last_name']
+                            first_name = user.profile.name.split(' ')[0]
+                            last_name = user.profile.name.split(' ')[1]
                         except:
                             first_name = user.first_name
                             last_name = user.last_name
