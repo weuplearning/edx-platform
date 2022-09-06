@@ -70,8 +70,8 @@ from lms.djangoapps.instructor.enrollment import (
     get_email_params,
     send_beta_role_email,
     unenroll_email,
+    render_message_to_string
 )
-from instructor.enrollment import render_message_to_string
 from django.core.mail import send_mail
 
 #taskmodel
@@ -263,6 +263,7 @@ class wul_dashboard():
                 })
             except:
                 pass
+
             try:
                 # It's a new user, an email will be sent to each newly created user.
                 email_params.update({
@@ -276,11 +277,6 @@ class wul_dashboard():
                     'full_name':first_name+" "+last_name,
                     'course_key':str(self.course_key)
                 })
-                log.info('info send to send_mail_to_student')
-                log.info(email)
-                log.info(email_params)
-                log.info('info send to send_mail_to_student')
-
                 #update sitename params
                 self.send_mail_to_student(email, email_params)
             except Exception as ex:  # pylint: disable=broad-except
@@ -323,7 +319,6 @@ class wul_dashboard():
         be used.
         Returns a boolean indicating whether the email was sent successfully.
         """
-
         log.info("send_mail_to_students")
         # add some helpers and microconfig subsitutions
 
@@ -343,9 +338,6 @@ class wul_dashboard():
         # template_base="/edx/app/edxapp/edx-themes/"+param_dict['microsite']+"/lms/templates/instructor/edx_ace/"
         template_base= dest_path + "/" + param_dict['microsite']+"/lms/templates/instructor/edx_ace/"
 
-        log.info(template_base)
-        log.info(message_type)
-        log.info(param_dict)
 
         email_template_dict = {
             'allowed_enroll': (
@@ -382,15 +374,16 @@ class wul_dashboard():
 
         # ADD log 080322
         log.info(template_base+subject_template)
-        log.info(message_template)
+        log.info(template_base+message_template)
         
-        if subject_template is not None and message_template is not None:
+        if subject_template and message_template :
+            log.info('in IF subject_template')
             subject, message = render_message_to_string(
-                template_base+subject_template, template_base+message_template, param_dict, language=language
+                template_base+subject_template, 
+                template_base+message_template, 
+                param_dict
             )
 
-        log.info(subject)
-        log.info(message)
 
         if subject and message:
             # Remove leading and trailing whitespace from body
@@ -411,10 +404,6 @@ class wul_dashboard():
             else:
                 plain_message=message
             
-            log.info('info send to send_mail method')
-            log.info(plain_message)
-            log.info('info send to send_mail method')
-
             send_mail(subject, message=plain_message, from_email=from_address, recipient_list=[student], fail_silently=False, html_message=html_message)
 
     def generate_unique_password(self,generated_passwords, password_length=12):
