@@ -4,6 +4,8 @@ import importlib
 importlib.reload(sys)
 """
 Instructor Dashboard Views
+
+/edx/app/edxapp/edx-platform/lms/djangoapps/wul_apps/stat_dashboard/
 """
 
 import logging
@@ -24,7 +26,7 @@ from openedx.core.djangoapps.site_configuration import helpers as configuration_
 # #TASK
 from django.views.decorators.cache import cache_control
 from django.db import IntegrityError, transaction
-# from lms.djangoapps.instructor_task.api_helper import AlreadyRunningError
+from lms.djangoapps.instructor_task.api_helper import AlreadyRunningError
 from django.utils.translation import ugettext as _
 log = logging.getLogger(__name__)
 
@@ -229,6 +231,7 @@ def tma_create_user_from_csv(request,course_id):
         success_status = _("La création des utilisateurs a été lancée.")
         return JsonResponse({"status": success_status})
     except AlreadyRunningError:
+        log.info('in except tma_create_user_from_csv')
         already_running_status = _("La création d'utilisateurs est en cours, veuillez attendre quelle se finisse")
         return JsonResponse({"status": already_running_status})
 
