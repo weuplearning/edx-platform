@@ -15,9 +15,10 @@ from lms.djangoapps.wul_apps.stat_dashboard.views import tma_create_user_from_cs
 
 from lms.djangoapps.wul_apps.certificates.views import generate_pdf, ensure
 
-# BVT specific file
 from lms.djangoapps.wul_apps.converter_xlsx_to_targz.bvt.views import convert_to_tarfile_bvt 
 from lms.djangoapps.wul_apps.custom_grade_report.bvt.views import run_script_from_back 
+
+from lms.djangoapps.wul_apps.custom_sso_tasks.views import sso_registration_views 
 
 import logging
 log = logging.getLogger()
@@ -75,7 +76,6 @@ urlpatterns += (
     url(r'^{}/certificate/generate_pdf$'.format(settings.COURSE_ID_PATTERN), generate_pdf, name="generate_pdf"),
 )
 
-# BVT specific
 # Edx Converter + custom_grade_report
 urlpatterns += (
     url(r'^dashboard/BVT/converter_xlsx_to_targz', convert_to_tarfile_bvt,name='convert_to_tarfile_bvt'),
@@ -83,4 +83,9 @@ urlpatterns += (
     url(r'^dashboard/BVT/run_script_from_back/', run_script_from_back, name='run_script_from_back'),
     url(r'^dashboard/bvt/run_script_from_back/', run_script_from_back, name='run_script_from_back')
 
+)
+
+# Enrollment after SSO registration 
+urlpatterns += (
+    url(r'^{}/sso_registration$'.format(settings.COURSE_ID_PATTERN), sso_registration_views, name="sso_registration_views"),
 )
