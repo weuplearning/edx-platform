@@ -1,0 +1,84 @@
+<% from openedx.core.djangolib.js_utils import dump_js_escaped_json,js_escaped_string %>
+<% csrf_token %>
+<%inherit file="../main.html" />
+<% css = '/media/wul_apps/dashboard/reset.css' %>
+
+<style>
+  #container-sso {
+    height: calc(100vh - 172px) ;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-size: 22px;
+    line-height: normal;
+  }
+  #color-box{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: column;
+    height: 40vh;
+    width: 65vh;
+    background-color: rgb(174, 213, 236);
+    border: solid 3px black;
+    border-radius: 20px;
+    padding: 5%;
+    text-align: center;
+    box-shadow: 9px 3px 16px black;
+  }
+  #auto_enrollment:hover  {
+    background-color: white;
+  }
+  #auto_enrollment:hover #auto_enrollment_text {
+    color:black;
+    text-decoration: none;
+  }
+  #auto_enrollment_text {
+    color: white;
+  }
+</style>
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <link rel="stylesheet" type="text/css" href="${css}" />
+  <body style="margin: 0; padding: 0">
+    <div id="container-sso">
+      <div id="color-box">
+
+        <div>
+          Bienvenue sur la plateforme de formation <br><strong>MOOC</strong> 
+        </div>
+        <div>
+          Afin de continuer vers le cours veuillez cliquer sur le bouton ci-dessous: 
+        </div>
+        <div id="auto_enrollment">
+          <button>
+            <a id="auto_enrollment_text" href="/" >
+              J'y vais !
+            </a>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  // update href
+  var course_id_string = "${props['course_id']}"
+  $("#auto_enrollment_text")[0].href = "/register?course_id="+course_id_string+"&enrollment_action=enroll"
+</script>
