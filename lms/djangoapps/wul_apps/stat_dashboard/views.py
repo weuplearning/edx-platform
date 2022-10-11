@@ -208,12 +208,12 @@ def calculate_grades_xls(request,course_id):
         submit_calculate_grades_xls(request, course_key)
         success_status = _("The grade report is being created."
                            " To view the status of the report, see Pending Tasks below.")
-        return JsonResponse({"status": success_status,"user_email":request.user.email})
-    except AlreadyRunningError:
+        return JsonResponse({"status": success_status,"user_email":request.user.email,"request_status": "success"})
+    except:
         already_running_status = _("The grade report is currently being created."
                                    " To view the status of the report, see Pending Tasks below."
                                    " You will be able to download the report when it is complete.")
-        return JsonResponse({"status": already_running_status})
+        return JsonResponse({"status": already_running_status,  "request_status": "failed"})
 
 
 
@@ -229,11 +229,11 @@ def tma_create_user_from_csv(request,course_id):
     try:
         submit_generate_users(request, course_key)
         success_status = _("La création des utilisateurs a été lancée.")
-        return JsonResponse({"status": success_status})
-    except AlreadyRunningError:
+        return JsonResponse({"status": success_status,"request_status": "success"})
+    except:
         log.info('in except tma_create_user_from_csv')
         already_running_status = _("La création d'utilisateurs est en cours, veuillez attendre quelle se finisse")
-        return JsonResponse({"status": already_running_status})
+        return JsonResponse({"status": already_running_status, "request_status": "failed"})
 
 # #TMA platform dashboard
 # @login_required
