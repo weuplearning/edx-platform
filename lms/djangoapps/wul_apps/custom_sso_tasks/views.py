@@ -26,7 +26,7 @@ def sso_registration_views(request, course_id):
     request contain logged user info
     course_id is accessed through the URL (params)
     """
-    
+
     user = request.user
     enrollment_list_for_a_given_user = CourseEnrollment.objects.filter(user=user)
 
@@ -34,9 +34,9 @@ def sso_registration_views(request, course_id):
 
         if course_id == str(enrollment.course_id):
 
-            url_value = '/courses/'+course_id+'/course'
+            url_value = '/courses/'+course_id+'/course/'
             return HttpResponseRedirect(url_value)
 
     context = {'course_id': course_id}
-    
+
     return render_to_response('wul_apps/sso_registration.html', {"props": context})
