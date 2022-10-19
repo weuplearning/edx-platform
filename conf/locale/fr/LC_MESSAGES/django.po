@@ -12051,7 +12051,7 @@ msgstr "Sélectionner l'objectif suivant : {goal_text}"
 
 #: openedx/features/course_experience/views/course_home_messages.py
 msgid "Welcome! Activate your account from your mailbox."
-msgstr "Bievenue ! Activez votre compte depuis votre boîte mail."
+msgstr "Bienvenue ! Activez votre compte depuis votre boîte mail."
 
 #: openedx/features/course_experience/views/course_home_messages.py
 msgid ""
@@ -12059,7 +12059,7 @@ msgid ""
 "needed."
 msgstr ""
 "Vérifiez votre boîte de réception, vous devriez avoir reçu un mail "
-"d'acitivation de compte. Vérifiez vos SPAMS si besoin."
+"d'activation de compte. Vérifiez vos SPAMS si besoin."
 
 #: openedx/features/discounts/admin.py
 msgid ""
