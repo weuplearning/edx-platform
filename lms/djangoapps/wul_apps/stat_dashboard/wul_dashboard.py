@@ -377,7 +377,6 @@ class wul_dashboard():
         log.info(template_base+message_template)
         
         if subject_template and message_template :
-            log.info('in IF subject_template')
             subject, message = render_message_to_string(
                 template_base+subject_template, 
                 template_base+message_template, 
@@ -418,6 +417,56 @@ class wul_dashboard():
         generated_passwords.append(password)
 
         return password
+
+
+    def enroll_user_to_multiple_course(self, microsite, created_user, email, course_mode, _requester_user, new_custom_fields=None):
+        """
+            - allows to enroll users in multiple courses
+            - works if selective_register_fields key exists on django admin - currently on BVT
+        """
+        try:        
+            register_fields = configuration_helpers.get_value_for_org(microsite.lower(), 'FORM_EXTRA',{})
+            associated_courses = configuration_helpers.get_value_for_org(microsite.lower(), 'TMA_ASSOCIATED_COURSES',{})
+
+
+            custom_field = {}
+
+            if new_custom_fields is not None:
+                custom_field = new_custom_fields
+            else:
+                try:
+                    custom_field = json.loads(created_user.profile.custom_field)
+                except:
+                    log.info('no custom_field')
+                    pass
+            user = User.objects.get(email=email)
+
+            if associated_courses.get('selective_register_fields') and custom_field:
+                for field_name in associated_courses.get('selective_register_fields'):
+
+                    custom_field_value = custom_field.get(field_name)
+                    for register_field in register_fields :
+                        if register_field.get('name') == field_name:
+                            # courseList = []
+                            course = register_field.get('course')
+                            course_key = CourseKey.from_string(course)
+                            if custom_field_value == 'true' :
+                                # ENROLL
+                                if not CourseEnrollment.is_enrolled(user, course_key):
+                                    # CourseEnrollment.enroll(user, course_key)
+                                    create_manual_course_enrollment(
+                                        user=user,
+                                        course_id=course_key,
+                                        mode=course_mode,
+                                        enrolled_by=_requester_user,
+                                        reason='Enrolling via csv upload',
+                                        state_transition=UNENROLLED_TO_ENROLLED,
+                                    )
+                                    log.info('enroll :'+str(user) + ' to '+ str(course_key))
+                                    continue
+        except:
+            log.info('EXCEPT error')
+            pass
 
     def task_generate_user(self):
         """
@@ -465,6 +514,7 @@ class wul_dashboard():
         already_enrolled_users = []
 
         for _user in valid_rows:
+            log.info(_user)
             #get current users values
             try:
                 email = _user.get('email')
@@ -491,7 +541,6 @@ class wul_dashboard():
 
             created_user = ''
             if User.objects.filter(email=email).exists():
-                log.info("in iF - 487")
 
                 # ENROLL EXISTING USER TO COURSE
                 user = User.objects.get(email=email)
@@ -578,6 +627,10 @@ class wul_dashboard():
                     self.send_mail_to_student(email, email_params)
                     #enroll_email(course_id=self.course_key, student_email=email, auto_enroll=True, email_students=True, email_params=email_params)
 
+                new_custom_fields = _user
+                self.enroll_user_to_multiple_course(microsite, user, email, course_mode, _requester_user, new_custom_fields)
+
+
             else:
                 # CREATE NEW ACCOUNT
                 password = self.generate_unique_password(generated_passwords)
@@ -597,61 +650,12 @@ class wul_dashboard():
                     _generates.append(
                         {"id":created_user.id,"email":created_user.email})
                     registered_users_list.append(created_user.email)
+                    self.enroll_user_to_multiple_course(microsite, created_user, email, course_mode, _requester_user)
+
                 else:
                     _failed.append(
                         {"email":email,"reponse":"creation failed"})
                 new_users.append(email)
-
-            # Dev Cyril Start
-            # inspired from selective_register_fields feature from Ficus
-            if created_user != '':
-                try:
-                    # register_fields = configuration_helpers.get_value('FORM_EXTRA',{})
-                    register_fields = configuration_helpers.get_value_for_org(microsite.lower(), 'FORM_EXTRA',{})
-                    associated_courses = configuration_helpers.get_value_for_org(microsite.lower(), 'TMA_ASSOCIATED_COURSES',{})
-
-
-                    custom_field = {}
-                    # log.info(register_fields)
-                    try:
-                        custom_field = json.loads(created_user.profile.custom_field)
-                        log.info(custom_field)
-                    except:
-                        log.info('no custom_field')
-                        pass
-                    user = User.objects.get(email=email)
-
-                    if associated_courses.get('selective_register_fields') and custom_field:
-                        for field_name in associated_courses.get('selective_register_fields'):
-
-                            custom_field_value = custom_field.get(field_name)
-                            for register_field in register_fields :
-                                if register_field.get('name') == field_name:
-                                    # courseList = []
-                                    course = register_field.get('course')
-                                    course_key = CourseKey.from_string(course)
-                                    if custom_field_value == 'true' :
-                                        # ENROLL
-                                        if not CourseEnrollment.is_enrolled(user, course_key):
-                                            # CourseEnrollment.enroll(user, course_key)
-                                            create_manual_course_enrollment(
-                                                user=user,
-                                                course_id=course_key,
-                                                mode=course_mode,
-                                                enrolled_by=_requester_user,
-                                                reason='Enrolling via csv upload',
-                                                state_transition=UNENROLLED_TO_ENROLLED,
-                                            )
-                                            log.info('enroll :'+str(user) + ' to '+ str(course_key))
-                                            continue
-                                    # UNENROLL
-                                    # else:
-                                    #     CourseEnrollment.unenroll(user, course_key)
-                                    #     log.info('unenroll '+user+' to '+str(course_key))
-                except:
-                    log.info('EXCEPT error')
-                    pass
-        # Dev Cyril End
 
         log.warning(u'wul_dashboard.task_generate_user fin inscription users pour le microsite : '+microsite)
         log.warning(u'wul_dashboard.task_generate_user fin inscription users par le username '+_requester_user.username+' email : '+_requester_user.email)
