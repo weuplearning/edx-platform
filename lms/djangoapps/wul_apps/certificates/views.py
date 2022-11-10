@@ -20,6 +20,8 @@ from reportlab.pdfbase import pdfmetrics
 from PyPDF2 import PdfFileWriter, PdfFileReader
 from datetime import date
 
+from lms.djangoapps.wul_apps.models import WulCourseEnrollment
+
 log = logging.getLogger(__name__)
 
 
@@ -168,6 +170,46 @@ def generate_pdf(request,course_id):
             text_width_date = stringWidth(certificate_date, font_name, font_size_2)
             centered_date = (page_width - text_width_date) / 2.0
             p.drawString(centered_date, date_position_x , str(certificate_date))
+
+
+
+
+    # COURSE DURATION
+
+    try:
+        course_duration = certificate_config['course_duration']
+    except:
+        course_duration = False
+    
+    if course_duration :
+
+        enrollment = WulCourseEnrollment.get_enrollment(course_id, request.user)
+
+        timeInSecond = enrollment.global_time_tracking
+
+        def getTimeSpent():
+            hours = timeInSecond // 3600
+            seconds = timeInSecond % 3600
+            minutes = seconds // 60
+
+            timeSpent = "Temps passé sur le cours : "+str(hours)+"h "+str(minutes)+"min"
+
+            return timeSpent
+
+        try:
+            course_duration_position_x = certificate_config['course_duration_position_x']
+        except:
+            course_duration_position_x = False
+
+        try:
+            course_duration_position_y = certificate_config['course_duration_position_y']
+        except:
+            course_duration_position_y = False
+
+        if course_duration_position_x or course_duration_position_y:
+            p.drawString(course_duration_position_x,course_duration_position_y,getTimeSpent())
+
+
 
 
 
