@@ -33,7 +33,7 @@
       <span class="sequence-nav-button-label">${pgettext('unit', 'Next')}</span>
       <span class="icon fa fa-chevron-next" aria-hidden="true"></span>
     </button>
-    <nav class="sequence-list-wrapper" aria-label="${_('Sequence')}">
+    <nav class="sequence-list-wrapper" aria-label="${_('Sequence')}" style="overflow-y: auto;">
       <ol id="sequence-list" role="tablist">
         % if gated_content['gated']:
         <li>
