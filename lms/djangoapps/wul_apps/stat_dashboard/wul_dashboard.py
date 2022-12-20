@@ -16,7 +16,7 @@ import time
 # from xlwt import *
 import json
 from io import BytesIO
-from path import Path
+from pathlib import Path
 
 from opaque_keys.edx.keys import CourseKey
 
@@ -80,14 +80,9 @@ from lms.djangoapps.wul_tasks.models import WulTask
 #USER MANAGEMENT
 from django.utils.http import int_to_base36
 from django.contrib.auth.tokens import default_token_generator
-# from student.views import password_reset_confirm_wrapper
-# from django.core.urlresolvers import reverse
 
 #EMAIL MANAGEMENT
 import smtplib
-# from email.MIMEMultipart import MIMEMultipart
-# from email.MIMEText import MIMEText
-# from email.MIMEBase import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
@@ -150,9 +145,7 @@ class wul_dashboard():
 
     def required_certificates_fields(self):
 
-        certificates_fields = [
-
-        ]
+        certificates_fields = []
 
         _microsite_certificates_fields = configuration_helpers.get_value("CERTIFICATE_FORM_EXTRA")
 
@@ -173,8 +166,6 @@ class wul_dashboard():
 
         return certificates_fields
 
-
-    #password generator
 
     def create_user_and_user_profile(self,email, username, password, custom_field, complete_name, first_name, last_name):
         """
@@ -245,7 +236,7 @@ class wul_dashboard():
                     state_transition=UNENROLLED_TO_ENROLLED,
                 )
 
-                #add custom_field
+                # add custom_field
         except IntegrityError:
             errors.append({
                 'username': username, 'email': email, 'response': _('Username {user} already exists.').format(user=username)
@@ -333,8 +324,8 @@ class wul_dashboard():
         # see if there is an activation email template definition available as configuration,
         # if so, then render that
         message_type = param_dict['message']
-        dest_path = Path(settings.COMPREHENSIVE_THEME_DIRS[0])
-        
+        dest_path = "/edx/app/edxapp/edx-themes"
+        # dest_path = Path(settings.COMPREHENSIVE_THEME_DIRS[0])        
         # template_base="/edx/app/edxapp/edx-themes/"+param_dict['microsite']+"/lms/templates/instructor/edx_ace/"
         template_base= dest_path + "/" + param_dict['microsite']+"/lms/templates/instructor/edx_ace/"
 
@@ -372,14 +363,13 @@ class wul_dashboard():
 
         subject_template, message_template = email_template_dict.get(message_type, (None, None))
 
-        # ADD log 080322
-        log.info(template_base+subject_template)
-        log.info(template_base+message_template)
-        
+        path_subject = Path(template_base+subject_template)
+        path_message = Path(template_base+message_template)
+
         if subject_template and message_template :
             subject, message = render_message_to_string(
-                template_base+subject_template, 
-                template_base+message_template, 
+                path_subject, 
+                path_message, 
                 param_dict
             )
 
@@ -437,7 +427,6 @@ class wul_dashboard():
                 try:
                     custom_field = json.loads(created_user.profile.custom_field)
                 except:
-                    log.info('no custom_field')
                     pass
             user = User.objects.get(email=email)
 
@@ -514,7 +503,6 @@ class wul_dashboard():
         already_enrolled_users = []
 
         for _user in valid_rows:
-            log.info(_user)
             #get current users values
             try:
                 email = _user.get('email')
@@ -575,10 +563,6 @@ class wul_dashboard():
                         state_transition=UNENROLLED_TO_ENROLLED,
                     )
                     # IF THERE IS NO SSO GO FOR STANDARD BEHAVIOUR
-
-                    log.info('test UserSocialAuth.objects.filter(user=user).exists()  -->')
-                    log.info(UserSocialAuth.objects.filter(user=user).exists())
-
                     if not UserSocialAuth.objects.filter(user=user).exists():
                         email_params.update({
                             'message':'enrolled_enroll',
@@ -623,7 +607,7 @@ class wul_dashboard():
                             'course_key':str(self.course_key)
                         })
                         new_users.append(email)
-                    log.info("REGISTER USER TO COURSE")
+
                     self.send_mail_to_student(email, email_params)
                     #enroll_email(course_id=self.course_key, student_email=email, auto_enroll=True, email_students=True, email_params=email_params)
 
