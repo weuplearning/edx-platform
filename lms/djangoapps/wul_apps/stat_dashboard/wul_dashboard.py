@@ -16,7 +16,7 @@ import time
 # from xlwt import *
 import json
 from io import BytesIO
-from pathlib import Path
+# from pathlib import Path
 
 from opaque_keys.edx.keys import CourseKey
 
@@ -324,10 +324,10 @@ class wul_dashboard():
         # see if there is an activation email template definition available as configuration,
         # if so, then render that
         message_type = param_dict['message']
-        dest_path = "/edx/app/edxapp/edx-themes"
+        # dest_path = "/edx/app/edxapp/edx-themes"
         # dest_path = Path(settings.COMPREHENSIVE_THEME_DIRS[0])        
         # template_base="/edx/app/edxapp/edx-themes/"+param_dict['microsite']+"/lms/templates/instructor/edx_ace/"
-        template_base= dest_path + "/" + param_dict['microsite']+"/lms/templates/instructor/edx_ace/"
+        template_base = "/edx/app/edxapp/edx-themes/" + param_dict['microsite'] + "/lms/templates/instructor/edx_ace/"
 
 
         email_template_dict = {
@@ -363,8 +363,10 @@ class wul_dashboard():
 
         subject_template, message_template = email_template_dict.get(message_type, (None, None))
 
-        path_subject = Path(template_base+subject_template)
-        path_message = Path(template_base+message_template)
+        path_subject = template_base + subject_template
+        path_message = template_base + message_template
+        # path_subject = Path(template_base+subject_template)
+        # path_message = Path(template_base+message_template)
 
         if subject_template and message_template :
             subject, message = render_message_to_string(
@@ -550,6 +552,10 @@ class wul_dashboard():
                         email
                     )
 
+
+                log.info(self.course_key)
+                log.info(user)
+                log.info(CourseEnrollment.is_enrolled(user, self.course_key))
                 # enroll a user if it is not already enrolled.
                 if not CourseEnrollment.is_enrolled(user, self.course_key):
 
