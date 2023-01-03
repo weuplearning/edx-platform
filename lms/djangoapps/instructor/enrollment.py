@@ -2,11 +2,12 @@
 Enrollment operations for use by instructor APIs.
 
 Does not include any access control, be sure to check access before calling.
+
+/edx/app/edxapp/edx-platform/lms/djangoapps/instructor/enrollment.py
 """
 
 
 import json
-import logging
 from datetime import datetime
 
 import pytz
@@ -52,6 +53,7 @@ from common.djangoapps.track.event_transaction_utils import (
 from xmodule.modulestore.django import modulestore
 from xmodule.modulestore.exceptions import ItemNotFoundError
 
+import logging
 log = logging.getLogger(__name__)
 
 
@@ -118,6 +120,67 @@ def get_user_email_language(user):
     # Calling UserPreference directly instead of get_user_preference because the user requesting the
     # information is not "user" and also may not have is_staff access.
     return UserPreference.get_value(user, LANGUAGE_KEY)
+
+
+def send_mail_to_student(student, param_dict, language=None):
+    """
+    Construct the email using templates and then send it.
+    `student` is the student's email address (a `str`),
+
+    `param_dict` is a `dict` with keys
+    [
+        `site_name`: name given to edX instance (a `str`)
+        `registration_url`: url for registration (a `str`)
+        `display_name` : display name of a course (a `str`)
+        `course_id`: id of course (a `str`)
+        `auto_enroll`: user input option (a `str`)
+        `course_url`: url of course (a `str`)
+        `email_address`: email of student (a `str`)
+        `full_name`: student full name (a `str`)
+        `message_type`: type of email to send and template to use (a `str`)
+        `is_shib_course`: (a `boolean`)
+    ]
+
+    `language` is the language used to render the email. If None the language
+    of the currently-logged in user (that is, the user sending the email) will
+    be used.
+
+    Returns a boolean indicating whether the email was sent successfully.
+    """
+
+    # Add some helpers and microconfig subsitutions
+    if 'display_name' in param_dict:
+        param_dict['course_name'] = param_dict['display_name']
+    elif 'course' in param_dict:
+        param_dict['course_name'] = Text(param_dict['course'].display_name_with_default)
+
+    param_dict['site_name'] = configuration_helpers.get_value(
+        'SITE_NAME',
+        param_dict['site_name']
+    )
+
+    # see if there is an activation email template definition available as configuration,
+    # if so, then render that
+    message_type = param_dict['message_type']
+
+    ace_emails_dict = {
+        'account_creation_and_enrollment': AccountCreationAndEnrollment,
+        'add_beta_tester': AddBetaTester,
+        'allowed_enroll': AllowedEnroll,
+        'allowed_unenroll': AllowedUnenroll,
+        'enrolled_enroll': EnrollEnrolled,
+        'enrolled_unenroll': EnrolledUnenroll,
+        'remove_beta_tester': RemoveBetaTester,
+    }
+
+    message_class = ace_emails_dict[message_type]
+    message = message_class().personalize(
+        recipient=Recipient(username='', email_address=student),
+        language=language,
+        user_context=param_dict,
+    )
+
+    ace.send(message)
 
 
 def enroll_email(course_id, student_email, auto_enroll=False, email_students=False, email_params=None, language=None):
@@ -339,11 +402,9 @@ def reset_student_attempts(course_id, student, module_state_key, requesting_user
         )
         _reset_or_delete_module(module_to_reset)
 
-
 def _reset_module_attempts(studentmodule):
     """
     Reset the number of attempts on a studentmodule.
-
     Throws ValueError if `problem_state` is invalid JSON.
     """
     # load the state json
@@ -439,65 +500,19 @@ def get_email_params(course, auto_enroll, secure=True, course_key=None, display_
     return email_params
 
 
-def send_mail_to_student(student, param_dict, language=None):
+
+def get_subject_and_message(subject_template, message_template, param_dict):
     """
-    Construct the email using templates and then send it.
-    `student` is the student's email address (a `str`),
-
-    `param_dict` is a `dict` with keys
-    [
-        `site_name`: name given to edX instance (a `str`)
-        `registration_url`: url for registration (a `str`)
-        `display_name` : display name of a course (a `str`)
-        `course_id`: id of course (a `str`)
-        `auto_enroll`: user input option (a `str`)
-        `course_url`: url of course (a `str`)
-        `email_address`: email of student (a `str`)
-        `full_name`: student full name (a `str`)
-        `message_type`: type of email to send and template to use (a `str`)
-        `is_shib_course`: (a `boolean`)
-    ]
-
-    `language` is the language used to render the email. If None the language
-    of the currently-logged in user (that is, the user sending the email) will
-    be used.
-
-    Returns a boolean indicating whether the email was sent successfully.
+    Return the rendered subject and message with the appropriate parameters.
     """
+    log.info('in get_subject_and_message ---- 88888888888888')
+    log.info(subject_template)
+    log.info(param_dict)
+    
+    subject = render_to_string(subject_template, param_dict)
+    message = render_to_string(message_template, param_dict)
 
-    # Add some helpers and microconfig subsitutions
-    if 'display_name' in param_dict:
-        param_dict['course_name'] = param_dict['display_name']
-    elif 'course' in param_dict:
-        param_dict['course_name'] = Text(param_dict['course'].display_name_with_default)
-
-    param_dict['site_name'] = configuration_helpers.get_value(
-        'SITE_NAME',
-        param_dict['site_name']
-    )
-
-    # see if there is an activation email template definition available as configuration,
-    # if so, then render that
-    message_type = param_dict['message_type']
-
-    ace_emails_dict = {
-        'account_creation_and_enrollment': AccountCreationAndEnrollment,
-        'add_beta_tester': AddBetaTester,
-        'allowed_enroll': AllowedEnroll,
-        'allowed_unenroll': AllowedUnenroll,
-        'enrolled_enroll': EnrollEnrolled,
-        'enrolled_unenroll': EnrolledUnenroll,
-        'remove_beta_tester': RemoveBetaTester,
-    }
-
-    message_class = ace_emails_dict[message_type]
-    message = message_class().personalize(
-        recipient=Recipient(username='', email_address=student),
-        language=language,
-        user_context=param_dict,
-    )
-
-    ace.send(message)
+    return subject, message
 
 
 def render_message_to_string(subject_template, message_template, param_dict, language=None):
@@ -509,18 +524,11 @@ def render_message_to_string(subject_template, message_template, param_dict, lan
     Returns two strings that correspond to the rendered, translated email
     subject and message.
     """
+    log.info('in render_message_to_string')
+
     language = language or settings.LANGUAGE_CODE
     with override_language(language):
         return get_subject_and_message(subject_template, message_template, param_dict)
-
-
-def get_subject_and_message(subject_template, message_template, param_dict):
-    """
-    Return the rendered subject and message with the appropriate parameters.
-    """
-    subject = render_to_string(subject_template, param_dict)
-    message = render_to_string(message_template, param_dict)
-    return subject, message
 
 
 def uses_shib(course):
