@@ -553,9 +553,6 @@ class wul_dashboard():
                     )
 
 
-                log.info(self.course_key)
-                log.info(user)
-                log.info(CourseEnrollment.is_enrolled(user, self.course_key))
                 # enroll a user if it is not already enrolled.
                 if not CourseEnrollment.is_enrolled(user, self.course_key):
 
@@ -616,6 +613,12 @@ class wul_dashboard():
 
                     self.send_mail_to_student(email, email_params)
                     #enroll_email(course_id=self.course_key, student_email=email, auto_enroll=True, email_students=True, email_params=email_params)
+
+                # START - BVT specific treatment, enrollment via CF and notification to admin
+                elif str(self.course_key).find('course-v1:bvt') != -1 : 
+                    already_enrolled_users.append(email)
+                # END - BVT specific treatment
+
 
                 new_custom_fields = _user
                 self.enroll_user_to_multiple_course(microsite, user, email, course_mode, _requester_user, new_custom_fields)
