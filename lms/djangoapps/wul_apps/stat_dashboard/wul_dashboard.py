@@ -66,7 +66,6 @@ from student.models import (
 from lms.djangoapps.instructor.enrollment import (
     get_user_email_language,
     enroll_email,
-    send_mail_to_student,
     get_email_params,
     send_beta_role_email,
     unenroll_email,
@@ -200,6 +199,126 @@ class wul_dashboard():
 
         return user
 
+    #enroll
+    def send_mail_to_student(self,student, param_dict, language=None):
+        """
+        Construct the email using templates and then send it.
+        `student` is the student's email address (a `str`),
+        `param_dict` is a `dict` with keys
+        [
+            `site_name`: name given to edX instance (a `str`)
+            `registration_url`: url for registration (a `str`)
+            `display_name` : display name of a course (a `str`)
+            `course_id`: id of course (a `str`)
+            `auto_enroll`: user input option (a `str`)
+            `course_url`: url of course (a `str`)
+            `email_address`: email of student (a `str`)
+            `full_name`: student full name (a `str`)
+            `message`: type of email to send and template to use (a `str`)
+            `is_shib_course`: (a `boolean`)
+        ]
+        `language` is the language used to render the email. If None the language
+        of the currently-logged in user (that is, the user sending the email) will
+        be used.
+        Returns a boolean indicating whether the email was sent successfully.
+        """
+        log.info("send_mail_to_students")
+        # add some helpers and microconfig subsitutions
+
+        if 'display_name' in param_dict:
+            param_dict['course_name'] = param_dict['display_name']
+
+        subject = None
+        message = None
+        plain_message = None
+        html_message = None
+
+        # see if there is an activation email template definition available as configuration,
+        # if so, then render that
+        message_type = param_dict['message']
+        # dest_path = "/edx/app/edxapp/edx-themes"
+        # dest_path = Path(settings.COMPREHENSIVE_THEME_DIRS[0])        
+        # template_base="/edx/app/edxapp/edx-themes/"+param_dict['microsite']+"/lms/templates/instructor/edx_ace/"
+        template_base = "/edx/app/edxapp/edx-themes/" + param_dict['microsite'] + "/lms/templates/instructor/edx_ace/"
+
+
+        email_template_dict = {
+            'allowed_enroll': (
+                'allowed_enroll/email/subject.txt',
+                'allowed_enroll/email/body.txt'
+            ),
+            'enrolled_enroll': (
+                'enrollenrolled/email/subject.txt',
+                'enrollenrolled/email/body.txt'
+            ),
+            'allowed_unenroll': (
+                'allowed_unenroll/email/subject.txt',
+                'allowed_unenroll/email/body.txt'
+            ),
+            'enrolled_unenroll': (
+                'enrolled_unenroll/email/subject.txt',
+                'enrolled_unenroll/email/body.txt'
+            ),
+            'add_beta_tester': (
+                'add_beta_tester/email/subject.txt',
+                'add_beta_tester/email/body.txt'
+            ),
+            'remove_beta_tester': (
+                'remove_beta_tester/email/subject.txt',
+                'remove_beta_tester/email/body.txt'
+            ),
+            'account_creation_and_enrollment': (
+                'accountcreationandenrollment/email/subject.txt',
+                'accountcreationandenrollment/email/body.txt'
+            ),
+        }
+
+
+        subject_template = email_template_dict.get(message_type, (None, None))[0] 
+        message_template = email_template_dict.get(message_type, (None, None))[1]
+
+        log.info(subject_template)
+        log.info(type(subject_template))
+        log.info(type(template_base))
+
+        path_subject = template_base + subject_template
+        path_message = template_base + message_template
+        log.info('type(path_subject)')
+        log.info(type(path_subject))
+
+        # path_subject = Path(template_base+subject_template)
+        # path_message = Path(template_base+message_template)
+
+        if subject_template and message_template :
+            subject, message = render_message_to_string(
+                path_subject, 
+                path_message, 
+                param_dict
+            )
+
+
+        if subject and message:
+            # Remove leading and trailing whitespace from body
+            message = message.strip()
+
+            # Email subject *must not* contain newlines
+            subject = ''.join(subject.splitlines())
+            from_address = configuration_helpers.get_value(
+                'email_from_address',
+                settings.DEFAULT_FROM_EMAIL
+            )
+
+            # set email type : plain/text or html/text
+            org = self.course_id.split(":")[1].split("+")[0]
+            email_type = configuration_helpers.get_value_for_org(org, 'LIST_EMAIL_IN_HTML_TYPE')
+            if isinstance(email_type, list) and message_type in email_type :
+                html_message=message
+            else:
+                plain_message=message
+            
+            send_mail(subject, message=plain_message, from_email=from_address, recipient_list=[student], fail_silently=False, html_message=html_message)
+
+
     def create_and_enroll_user(self,email, username, custom_field, password,complete_name, course_id, course_mode, enrolled_by, email_params, first_name, last_name, microsite):
         """
         Create a new user and enroll him/her to the given course, return list of errors in the following format
@@ -287,115 +406,6 @@ class wul_dashboard():
 
         return user
 
-    #enroll
-    def send_mail_to_student(self,student, param_dict, language=None):
-        """
-        Construct the email using templates and then send it.
-        `student` is the student's email address (a `str`),
-        `param_dict` is a `dict` with keys
-        [
-            `site_name`: name given to edX instance (a `str`)
-            `registration_url`: url for registration (a `str`)
-            `display_name` : display name of a course (a `str`)
-            `course_id`: id of course (a `str`)
-            `auto_enroll`: user input option (a `str`)
-            `course_url`: url of course (a `str`)
-            `email_address`: email of student (a `str`)
-            `full_name`: student full name (a `str`)
-            `message`: type of email to send and template to use (a `str`)
-            `is_shib_course`: (a `boolean`)
-        ]
-        `language` is the language used to render the email. If None the language
-        of the currently-logged in user (that is, the user sending the email) will
-        be used.
-        Returns a boolean indicating whether the email was sent successfully.
-        """
-        log.info("send_mail_to_students")
-        # add some helpers and microconfig subsitutions
-
-        if 'display_name' in param_dict:
-            param_dict['course_name'] = param_dict['display_name']
-
-        subject = None
-        message = None
-        plain_message = None
-        html_message = None
-
-        # see if there is an activation email template definition available as configuration,
-        # if so, then render that
-        message_type = param_dict['message']
-        # dest_path = "/edx/app/edxapp/edx-themes"
-        # dest_path = Path(settings.COMPREHENSIVE_THEME_DIRS[0])        
-        # template_base="/edx/app/edxapp/edx-themes/"+param_dict['microsite']+"/lms/templates/instructor/edx_ace/"
-        template_base = "/edx/app/edxapp/edx-themes/" + param_dict['microsite'] + "/lms/templates/instructor/edx_ace/"
-
-
-        email_template_dict = {
-            'allowed_enroll': (
-                'allowed_enroll/email/subject.txt',
-                'allowed_enroll/email/body.txt'
-            ),
-            'enrolled_enroll': (
-                'enrollenrolled/email/subject.txt',
-                'enrollenrolled/email/body.txt'
-            ),
-            'allowed_unenroll': (
-                'allowed_unenroll/email/subject.txt',
-                'allowed_unenroll/email/body.txt'
-            ),
-            'enrolled_unenroll': (
-                'enrolled_unenroll/email/subject.txt',
-                'enrolled_unenroll/email/body.txt'
-            ),
-            'add_beta_tester': (
-                'add_beta_tester/email/subject.txt',
-                'add_beta_tester/email/body.txt'
-            ),
-            'remove_beta_tester': (
-                'remove_beta_tester/email/subject.txt',
-                'remove_beta_tester/email/body.txt'
-            ),
-            'account_creation_and_enrollment': (
-                'accountcreationandenrollment/email/subject.txt',
-                'accountcreationandenrollment/email/body.txt'
-            ),
-        }
-
-        subject_template, message_template = email_template_dict.get(message_type, (None, None))
-
-        path_subject = template_base + subject_template
-        path_message = template_base + message_template
-        # path_subject = Path(template_base+subject_template)
-        # path_message = Path(template_base+message_template)
-
-        if subject_template and message_template :
-            subject, message = render_message_to_string(
-                path_subject, 
-                path_message, 
-                param_dict
-            )
-
-
-        if subject and message:
-            # Remove leading and trailing whitespace from body
-            message = message.strip()
-
-            # Email subject *must not* contain newlines
-            subject = ''.join(subject.splitlines())
-            from_address = configuration_helpers.get_value(
-                'email_from_address',
-                settings.DEFAULT_FROM_EMAIL
-            )
-
-            # set email type : plain/text or html/text
-            org = self.course_id.split(":")[1].split("+")[0]
-            email_type = configuration_helpers.get_value_for_org(org, 'LIST_EMAIL_IN_HTML_TYPE')
-            if isinstance(email_type, list) and message_type in email_type :
-                html_message=message
-            else:
-                plain_message=message
-            
-            send_mail(subject, message=plain_message, from_email=from_address, recipient_list=[student], fail_silently=False, html_message=html_message)
 
     def generate_unique_password(self,generated_passwords, password_length=12):
         """
@@ -552,7 +562,6 @@ class wul_dashboard():
                         email
                     )
 
-
                 # enroll a user if it is not already enrolled.
                 if not CourseEnrollment.is_enrolled(user, self.course_key):
 
@@ -618,7 +627,6 @@ class wul_dashboard():
                 elif str(self.course_key).find('course-v1:bvt') != -1 : 
                     already_enrolled_users.append(email)
                 # END - BVT specific treatment
-
 
                 new_custom_fields = _user
                 self.enroll_user_to_multiple_course(microsite, user, email, course_mode, _requester_user, new_custom_fields)
