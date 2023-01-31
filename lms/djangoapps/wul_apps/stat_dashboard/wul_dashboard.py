@@ -69,9 +69,11 @@ from lms.djangoapps.instructor.enrollment import (
     get_email_params,
     send_beta_role_email,
     unenroll_email,
+    send_mail_to_student as send_mail_to_student_2,
     render_message_to_string
 )
 from django.core.mail import send_mail
+from django.template.loader import render_to_string
 
 #taskmodel
 from lms.djangoapps.wul_tasks.models import WulTask
@@ -277,24 +279,21 @@ class wul_dashboard():
         subject_template = email_template_dict.get(message_type, (None, None))[0] 
         message_template = email_template_dict.get(message_type, (None, None))[1]
 
-        log.info(subject_template)
-        log.info(type(subject_template))
-        log.info(type(template_base))
 
         path_subject = template_base + subject_template
         path_message = template_base + message_template
-        log.info('type(path_subject)')
-        log.info(type(path_subject))
-
         # path_subject = Path(template_base+subject_template)
         # path_message = Path(template_base+message_template)
-
+        
         if subject_template and message_template :
             subject, message = render_message_to_string(
                 path_subject, 
                 path_message, 
-                param_dict
+                param_dict,
+                language
             )
+            # subject = render_to_string(path_subject, param_dict)
+            # message = render_to_string(path_message, param_dict)
 
 
         if subject and message:
@@ -389,7 +388,10 @@ class wul_dashboard():
                 })
                 #update sitename params
                 self.send_mail_to_student(email, email_params)
+
             except Exception as ex:  # pylint: disable=broad-except
+                self.send_default_mail_to_student(email, email_params)
+
                 log.exception(
                     "Exception '{exception}' raised while sending email to new user.".format(exception=type(ex).__name__)
                 )
@@ -403,6 +405,7 @@ class wul_dashboard():
                 })
             else:
                 log.info(u'email sent to new created user at %s', email)
+
 
         return user
 
@@ -968,6 +971,29 @@ class wul_dashboard():
         return feedback
 
 
+    def send_default_mail_to_student(self, email, email_params) :
+
+        html = "<html><head></head><body><p>Bonjour,<br><br> Vous avez été inscrit.e à la formation : "+str(email_params['course'].display_name)+" sur la plateforme <a href=\"https://"+str(email_params['site_name'])+"\">"+str(email_params['site_name'])+"</a><br><br>Vous pouvez accéder à cette formation en utilisant les identifiants suivants : <br><br>e-mail : "+str(email)+"<br>mot de passe : "+str(email_params['password'])+"<br><br>Cordialement, <br>L'équipe WeUp Learning<br><hr><br>Hello,<br><br> You have been registered for the training : "+str(email_params['course'].display_name)+" on the platform <a href=\"https://"+str(email_params['site_name'])+"\">"+str(email_params['site_name'])+"</a><br><br>You can access this training using the following credentials : <br><br>e-mail : "+str(email)+"<br>password : "+str(email_params['password'])+" <br><br>Sincerely, <br>The WeUp Learning Team<br></p></body></html>"
+
+        part2 = MIMEText(html.encode('utf-8'), 'html', 'utf-8')
+        fromaddr = "ne-pas-repondre@themoocagency.com"
+        toaddr = email
+        msg = MIMEMultipart()
+        msg['From'] = fromaddr
+        msg['To'] = toaddr
+        try:
+            msg['Subject'] = "Bienvenue à la formation " + str(email_params['course'].display_name) + "/ Welcome to the "+str(email_params['course'].display_name)+ "course"
+        except:
+            msg['Subject'] = "Bienvenue / Welcome"
+
+        part = MIMEBase('application', 'octet-stream')
+        server = smtplib.SMTP('mail3.themoocagency.com', 25)
+        server.starttls()
+        server.login('contact', 'waSwv6Eqer89')
+        msg.attach(part2)
+        text = msg.as_string()
+        server.sendmail(fromaddr, toaddr, text)
+        server.quit()
 
 
 
