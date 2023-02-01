@@ -622,8 +622,10 @@ class wul_dashboard():
                             'course_key':str(self.course_key)
                         })
                         new_users.append(email)
-
-                    self.send_mail_to_student(email, email_params)
+                    try:
+                        self.send_mail_to_student(email, email_params)
+                    except:
+                        self.send_default_mail_to_student(email, email_params)
                     #enroll_email(course_id=self.course_key, student_email=email, auto_enroll=True, email_students=True, email_params=email_params)
 
                 # START - BVT specific treatment, enrollment via CF and notification to admin
@@ -973,7 +975,10 @@ class wul_dashboard():
 
     def send_default_mail_to_student(self, email, email_params) :
 
-        html = "<html><head></head><body><p>Bonjour,<br><br> Vous avez été inscrit.e à la formation : "+str(email_params['course'].display_name)+" sur la plateforme <a href=\"https://"+str(email_params['site_name'])+"\">"+str(email_params['site_name'])+"</a><br><br>Vous pouvez accéder à cette formation en utilisant les identifiants suivants : <br><br>e-mail : "+str(email)+"<br>mot de passe : "+str(email_params['password'])+"<br><br>Cordialement, <br>L'équipe WeUp Learning<br><hr><br>Hello,<br><br> You have been registered for the training : "+str(email_params['course'].display_name)+" on the platform <a href=\"https://"+str(email_params['site_name'])+"\">"+str(email_params['site_name'])+"</a><br><br>You can access this training using the following credentials : <br><br>e-mail : "+str(email)+"<br>password : "+str(email_params['password'])+" <br><br>Sincerely, <br>The WeUp Learning Team<br></p></body></html>"
+        if email_params['message'] == 'account_creation_and_enrollment':
+            html = "<html><head></head><body><p>Bonjour,<br><br> Vous avez été inscrit.e à la formation : "+str(email_params['course'].display_name)+" sur la plateforme <a href=\"https://"+str(email_params['site_name'])+"\">"+str(email_params['site_name'])+"</a><br><br>Vous pouvez accéder à cette formation en utilisant les identifiants suivants : <br><br>e-mail : "+str(email)+"<br>mot de passe : "+str(email_params['password'])+"<br><br>Cordialement, <br>L'équipe WeUp Learning<br><hr><br>Hello,<br><br> You have been registered for the training : "+str(email_params['course'].display_name)+" on the platform <a href=\"https://"+str(email_params['site_name'])+"\">"+str(email_params['site_name'])+"</a><br><br>You can access this training using the following credentials : <br><br>e-mail : "+str(email)+"<br>password : "+str(email_params['password'])+" <br><br>Sincerely, <br>The WeUp Learning Team<br></p></body></html>"
+        else:
+            html = "<html><head></head><body><p>Bonjour,<br><br> Vous avez été inscrit.e à la formation : "+str(email_params['course'].display_name)+" sur la plateforme <a href=\"https://"+str(email_params['site_name'])+"\">"+str(email_params['site_name'])+"</a><br><br>Vous pouvez accéder à cette formation en utilisant les identifiants déjà existants <br><br>Cordialement, <br>L'équipe WeUp Learning<br><hr><br>Hello,<br><br> You have been registered for the training : "+str(email_params['course'].display_name)+" on the platform <a href=\"https://"+str(email_params['site_name'])+"\">"+str(email_params['site_name'])+"</a><br><br>You can access this training using your existing credentials <br><br>Sincerely, <br>The WeUp Learning Team<br></p></body></html>"
 
         part2 = MIMEText(html.encode('utf-8'), 'html', 'utf-8')
         fromaddr = "ne-pas-repondre@themoocagency.com"
