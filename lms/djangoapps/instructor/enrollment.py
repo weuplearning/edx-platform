@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Enrollment operations for use by instructor APIs.
 
@@ -505,9 +506,6 @@ def get_subject_and_message(subject_template, message_template, param_dict):
     """
     Return the rendered subject and message with the appropriate parameters.
     """
-    log.info('in get_subject_and_message ---- 88888888888888')
-    log.info(subject_template)
-    log.info(param_dict)
     
     subject = render_to_string(subject_template, param_dict)
     message = render_to_string(message_template, param_dict)
@@ -524,7 +522,6 @@ def render_message_to_string(subject_template, message_template, param_dict, lan
     Returns two strings that correspond to the rendered, translated email
     subject and message.
     """
-    log.info('in render_message_to_string')
 
     language = language or settings.LANGUAGE_CODE
     with override_language(language):
