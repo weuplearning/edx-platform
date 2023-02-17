@@ -33,10 +33,6 @@ from openedx.core.lib.tempdir import mkdtemp_clean
 
 from django.core.validators import validate_email
 
-import logging
-import json
-
-
 from django.conf import settings
 
 #enroll
@@ -100,7 +96,7 @@ from openedx.core.djangoapps.course_groups.cohorts import is_course_cohorted
 # from social.apps.django_app.default.models import UserSocialAuth
 from social_django.models import UserSocialAuth
 
-
+import logging
 log = logging.getLogger(__name__)
 
 
@@ -866,15 +862,15 @@ class wul_dashboard():
                 user.is_active=True
                 user.save()
                 json ={
-                'success':'account activated'
+                    'success':'account activated'
                 }
             except:
                 json ={
-                'error':'error while activating account'
+                    'error':'error while activating account'
                 }
         else :
             json ={
-            'error':'user account does not exists'
+                'error':'user account does not exists'
             }
 
         return json
@@ -962,9 +958,6 @@ class wul_dashboard():
     #     }
     #     return retour
 
-        
-
-
     def feedbackGenerator(self, context, emails):
         feedback= "<p>"+context+"</p><ul>"
         for email in emails :
@@ -975,31 +968,66 @@ class wul_dashboard():
 
     def send_default_mail_to_student(self, email, email_params) :
 
-        if email_params['message'] == 'account_creation_and_enrollment':
-            html = "<html><head></head><body><p>Bonjour,<br><br> Vous avez été inscrit.e à la formation : "+str(email_params['course'].display_name)+" sur la plateforme <a href=\"https://"+str(email_params['site_name'])+"\">"+str(email_params['site_name'])+"</a><br><br>Vous pouvez accéder à cette formation en utilisant les identifiants suivants : <br><br>e-mail : "+str(email)+"<br>mot de passe : "+str(email_params['password'])+"<br><br>Cordialement, <br>L'équipe WeUp Learning<br><hr><br>Hello,<br><br> You have been registered for the training : "+str(email_params['course'].display_name)+" on the platform <a href=\"https://"+str(email_params['site_name'])+"\">"+str(email_params['site_name'])+"</a><br><br>You can access this training using the following credentials : <br><br>e-mail : "+str(email)+"<br>password : "+str(email_params['password'])+" <br><br>Sincerely, <br>The WeUp Learning Team<br></p></body></html>"
-        else:
-            html = "<html><head></head><body><p>Bonjour,<br><br> Vous avez été inscrit.e à la formation : "+str(email_params['course'].display_name)+" sur la plateforme <a href=\"https://"+str(email_params['site_name'])+"\">"+str(email_params['site_name'])+"</a><br><br>Vous pouvez accéder à cette formation en utilisant les identifiants déjà existants <br><br>Cordialement, <br>L'équipe WeUp Learning<br><hr><br>Hello,<br><br> You have been registered for the training : "+str(email_params['course'].display_name)+" on the platform <a href=\"https://"+str(email_params['site_name'])+"\">"+str(email_params['site_name'])+"</a><br><br>You can access this training using your existing credentials <br><br>Sincerely, <br>The WeUp Learning Team<br></p></body></html>"
+        log.info("wul_dashboard.py : send_default_mail_to_student")
+        try:
+            log.info(email_params['microsite'])
+            log.info(email_params['course_key'])
+        except:
+            log.info("email_params['microsite'] or email_params['course_key'] is not provided")
 
-        part2 = MIMEText(html.encode('utf-8'), 'html', 'utf-8')
-        fromaddr = "ne-pas-repondre@themoocagency.com"
+        message_dict = json.load(open('/edx/var/edxapp/media/wul_apps/dashboard/email_template.json'))
+
+        if email_params['microsite'] in message_dict.keys() and ( email_params['course_key'] in message_dict[email_params['microsite']].keys() or 'all' in message_dict[email_params['microsite']].keys() ): 
+            if email_params['course_key'] in message_dict[email_params['microsite']].keys():
+
+                if email_params['message'] == 'account_creation_and_enrollment':
+                    header = message_dict[email_params['microsite']][email_params['course_key']]['account_creation_and_enrollment']['header']
+                    html = message_dict[email_params['microsite']][email_params['course_key']]['account_creation_and_enrollment']['body']
+                else:
+                    header = message_dict[email_params['microsite']][email_params['course_key']]['enrolled_enroll']['header']
+                    html = message_dict[email_params['microsite']][email_params['course_key']]['enrolled_enroll']['body']
+
+            elif 'all' in message_dict[email_params['microsite']].keys():
+
+                if email_params['message'] == 'account_creation_and_enrollment':
+                    header = message_dict[email_params['microsite']]['all']['account_creation_and_enrollment']['header']
+                    html = message_dict[email_params['microsite']]['all']['account_creation_and_enrollment']['body']
+                else:
+                    header = message_dict[email_params['microsite']]['all']['enrolled_enroll']['header']
+                    html = message_dict[email_params['microsite']]['all']['enrolled_enroll']['body']
+
+        else :
+            if email_params['message'] == 'account_creation_and_enrollment':
+                html = "<html><head></head><body><p>Bonjour,<br><br> Vous avez été inscrit.e à la formation : "+str(email_params['course'].display_name)+" sur la plateforme <a href=\"https://"+str(email_params['site_name'])+"\">"+str(email_params['site_name'])+"</a><br><br>Vous pouvez accéder à cette formation en utilisant les identifiants suivants : <br><br>e-mail : "+str(email)+"<br>mot de passe : "+str(email_params['password'])+"<br><br>Cordialement, <br>L'équipe WeUp Learning<br><hr><br>Hello,<br><br> You have been registered for the training : "+str(email_params['course'].display_name)+" on the platform <a href=\"https://"+str(email_params['site_name'])+"\">"+str(email_params['site_name'])+"</a><br><br>You can access this training using the following credentials : <br><br>e-mail : "+str(email)+"<br>password : "+str(email_params['password'])+" <br><br>Sincerely, <br>The WeUp Learning Team<br></p></body></html>"
+            else:
+                html = "<html><head></head><body><p>Bonjour,<br><br> Vous avez été inscrit.e à la formation : "+str(email_params['course'].display_name)+" sur la plateforme <a href=\"https://"+str(email_params['site_name'])+"\">"+str(email_params['site_name'])+"</a><br><br>Vous pouvez accéder à cette formation en utilisant les identifiants déjà existants <br><br>Cordialement, <br>L'équipe WeUp Learning<br><hr><br>Hello,<br><br> You have been registered for the training : "+str(email_params['course'].display_name)+" on the platform <a href=\"https://"+str(email_params['site_name'])+"\">"+str(email_params['site_name'])+"</a><br><br>You can access this training using your existing credentials <br><br>Sincerely, <br>The WeUp Learning Team<br></p></body></html>"
+
+            try:
+                header = "Bienvenue à la formation " + str(email_params['course'].display_name) + "/ Welcome to the "+str(email_params['course'].display_name)+ "course"
+            except:
+                header = "Bienvenue / Welcome"
+
+        # Add email and password in the template
+        html = html.replace('$$email', str(email)).replace('$$password', str(email_params['password'])).replace('$$course_title', str(email_params['course'].display_name))
+        header = header.replace('$$email', str(email)).replace('$$password', str(email_params['password'])).replace('$$course_title', str(email_params['course'].display_name))
+
+        part = MIMEText(html.encode('utf-8'), 'html', 'utf-8')
+        try:
+            fromaddr = str(email_params['site_name'])+" <ne-pas-repondre@themoocagency.com>"
+        except:
+            fromaddr = "ne-pas-repondre@themoocagency.com"
         toaddr = email
         msg = MIMEMultipart()
         msg['From'] = fromaddr
         msg['To'] = toaddr
-        try:
-            msg['Subject'] = "Bienvenue à la formation " + str(email_params['course'].display_name) + "/ Welcome to the "+str(email_params['course'].display_name)+ "course"
-        except:
-            msg['Subject'] = "Bienvenue / Welcome"
-
-        part = MIMEBase('application', 'octet-stream')
+        msg['Subject'] = header
         server = smtplib.SMTP('mail3.themoocagency.com', 25)
         server.starttls()
         server.login('contact', 'waSwv6Eqer89')
-        msg.attach(part2)
+        msg.attach(part)
         text = msg.as_string()
         server.sendmail(fromaddr, toaddr, text)
         server.quit()
-
 
 
 def random_string(length):
