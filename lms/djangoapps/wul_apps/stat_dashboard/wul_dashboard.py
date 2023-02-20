@@ -978,27 +978,43 @@ class wul_dashboard():
         message_dict = json.load(open('/edx/var/edxapp/media/wul_apps/dashboard/email_template.json'))
 
         if email_params['microsite'] in message_dict.keys() and ( email_params['course_key'] in message_dict[email_params['microsite']].keys() or 'all' in message_dict[email_params['microsite']].keys() ): 
-            if email_params['course_key'] in message_dict[email_params['microsite']].keys():
 
+            if email_params['course_key'] in message_dict[email_params['microsite']].keys():
                 if email_params['message'] == 'account_creation_and_enrollment':
                     header = message_dict[email_params['microsite']][email_params['course_key']]['account_creation_and_enrollment']['header']
                     html = message_dict[email_params['microsite']][email_params['course_key']]['account_creation_and_enrollment']['body']
+                    # Add email and password in the template
+                    html = html.replace('$$email', str(email)).replace('$$password', str(email_params['password'])).replace('$$course_title', str(email_params['course'].display_name))
+                    header = header.replace('$$email', str(email)).replace('$$password', str(email_params['password'])).replace('$$course_title', str(email_params['course'].display_name))
+
                 else:
                     header = message_dict[email_params['microsite']][email_params['course_key']]['enrolled_enroll']['header']
                     html = message_dict[email_params['microsite']][email_params['course_key']]['enrolled_enroll']['body']
+                    # Add email and course_title in the template
+                    html = html.replace('$$email', str(email)).replace('$$course_title', str(email_params['course'].display_name))
+                    header = header.replace('$$email', str(email)).replace('$$course_title', str(email_params['course'].display_name))
+
 
             elif 'all' in message_dict[email_params['microsite']].keys():
-
                 if email_params['message'] == 'account_creation_and_enrollment':
                     header = message_dict[email_params['microsite']]['all']['account_creation_and_enrollment']['header']
                     html = message_dict[email_params['microsite']]['all']['account_creation_and_enrollment']['body']
+                    # Add email and password in the template
+                    html = html.replace('$$email', str(email)).replace('$$password', str(email_params['password'])).replace('$$course_title', str(email_params['course'].display_name))
+                    header = header.replace('$$email', str(email)).replace('$$password', str(email_params['password'])).replace('$$course_title', str(email_params['course'].display_name))
+
                 else:
                     header = message_dict[email_params['microsite']]['all']['enrolled_enroll']['header']
                     html = message_dict[email_params['microsite']]['all']['enrolled_enroll']['body']
+                    # Add email and course_title in the template
+                    html = html.replace('$$email', str(email)).replace('$$course_title', str(email_params['course'].display_name))
+                    header = header.replace('$$email', str(email)).replace('$$course_title', str(email_params['course'].display_name))
 
         else :
+
             if email_params['message'] == 'account_creation_and_enrollment':
                 html = "<html><head></head><body><p>Bonjour,<br><br> Vous avez été inscrit.e à la formation : "+str(email_params['course'].display_name)+" sur la plateforme <a href=\"https://"+str(email_params['site_name'])+"\">"+str(email_params['site_name'])+"</a><br><br>Vous pouvez accéder à cette formation en utilisant les identifiants suivants : <br><br>e-mail : "+str(email)+"<br>mot de passe : "+str(email_params['password'])+"<br><br>Cordialement, <br>L'équipe WeUp Learning<br><hr><br>Hello,<br><br> You have been registered for the training : "+str(email_params['course'].display_name)+" on the platform <a href=\"https://"+str(email_params['site_name'])+"\">"+str(email_params['site_name'])+"</a><br><br>You can access this training using the following credentials : <br><br>e-mail : "+str(email)+"<br>password : "+str(email_params['password'])+" <br><br>Sincerely, <br>The WeUp Learning Team<br></p></body></html>"
+
             else:
                 html = "<html><head></head><body><p>Bonjour,<br><br> Vous avez été inscrit.e à la formation : "+str(email_params['course'].display_name)+" sur la plateforme <a href=\"https://"+str(email_params['site_name'])+"\">"+str(email_params['site_name'])+"</a><br><br>Vous pouvez accéder à cette formation en utilisant les identifiants déjà existants <br><br>Cordialement, <br>L'équipe WeUp Learning<br><hr><br>Hello,<br><br> You have been registered for the training : "+str(email_params['course'].display_name)+" on the platform <a href=\"https://"+str(email_params['site_name'])+"\">"+str(email_params['site_name'])+"</a><br><br>You can access this training using your existing credentials <br><br>Sincerely, <br>The WeUp Learning Team<br></p></body></html>"
 
@@ -1007,9 +1023,6 @@ class wul_dashboard():
             except:
                 header = "Bienvenue / Welcome"
 
-        # Add email and password in the template
-        html = html.replace('$$email', str(email)).replace('$$password', str(email_params['password'])).replace('$$course_title', str(email_params['course'].display_name))
-        header = header.replace('$$email', str(email)).replace('$$password', str(email_params['password'])).replace('$$course_title', str(email_params['course'].display_name))
 
         part = MIMEText(html.encode('utf-8'), 'html', 'utf-8')
         try:
