@@ -813,6 +813,13 @@ CACHES = {
         'TIMEOUT': 300,
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
     },
+    'ora2-storage': {
+        'KEY_PREFIX': 'ora2-storage',
+        'KEY_FUNCTION': 'common.djangoapps.util.memcache.safe_key',
+        'LOCATION': ['localhost:11211'],
+        'TIMEOUT': '7200',
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+    },
     'staticfiles': {
         'KEY_FUNCTION': 'common.djangoapps.util.memcache.safe_key',
         'LOCATION': ['localhost:11211'],
@@ -3106,10 +3113,15 @@ PASSWORD_POLICY_COMPLIANCE_ROLLOUT_CONFIG = {
 
 # By default, don't use a file prefix
 ORA2_FILE_PREFIX = None
-
+ORA2_FILEUPLOAD_ROOT = os.path.join(MEDIA_ROOT, 'ora-upload/')
+ORA2_FILEUPLOAD_BACKEND = 'filesystem'
+FILE_UPLOAD_PERMISSIONS = 0o777
 # Default File Upload Storage bucket and prefix. Used by the FileUpload Service.
-FILE_UPLOAD_STORAGE_BUCKET_NAME = 'SET-ME-PLEASE (ex. bucket-name)'
-FILE_UPLOAD_STORAGE_PREFIX = 'submissions_attachments'
+FILE_UPLOAD_STORAGE_BUCKET_NAME = 'edxuploads'
+#FILE_UPLOAD_STORAGE_PREFIX = 'submissions_attachments'
+FILE_UPLOAD_STORAGE_PREFIX = 'local-files-storage'
+ORA2_FILEUPLOAD_CACHE_NAME = 'ora2-storage'
+
 
 ##### ACCOUNT LOCKOUT DEFAULT PARAMETERS #####
 MAX_FAILED_LOGIN_ATTEMPTS_ALLOWED = 6

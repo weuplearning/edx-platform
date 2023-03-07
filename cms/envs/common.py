@@ -366,7 +366,7 @@ FEATURES = {
     # .. toggle_target_removal_date: None
     # .. toggle_tickets: https://openedx.atlassian.net/browse/EDUCATOR-4951
     # .. toggle_warnings: This temporary feature toggle does not have a target removal date.
-    'ENABLE_ORA_ALL_FILE_URLS': False,
+    'ENABLE_ORA_ALL_FILE_URLS': True,
 
     # .. toggle_name: ENABLE_ORA_USER_STATE_UPLOAD_DATA
     # .. toggle_implementation: DjangoSetting
@@ -378,7 +378,7 @@ FEATURES = {
     # .. toggle_target_removal_date: None
     # .. toggle_tickets: https://openedx.atlassian.net/browse/EDUCATOR-4951
     # .. toggle_warnings: This temporary feature toggle does not have a target removal date.
-    'ENABLE_ORA_USER_STATE_UPLOAD_DATA': False,
+    'ENABLE_ORA_USER_STATE_UPLOAD_DATA': True,
 
     # .. toggle_name: DEPRECATE_OLD_COURSE_KEYS_IN_STUDIO
     # .. toggle_implementation: DjangoSetting
@@ -773,7 +773,7 @@ XBLOCK_FIELD_DATA_WRAPPERS = ()
 ORA2_FILE_PREFIX = 'default_env-default_deployment/ora2'
 
 # Default File Upload Storage bucket and prefix. Used by the FileUpload Service.
-FILE_UPLOAD_STORAGE_BUCKET_NAME = 'SET-ME-PLEASE (ex. bucket-name)'
+FILE_UPLOAD_STORAGE_BUCKET_NAME = 'local-files-storage'
 FILE_UPLOAD_STORAGE_PREFIX = 'submissions_attachments'
 
 ############################ Modulestore Configuration ################################
