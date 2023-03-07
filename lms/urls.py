@@ -54,6 +54,10 @@ from openedx.features.enterprise_support.api import enterprise_enabled
 from common.djangoapps.student import views as student_views
 from common.djangoapps.util import views as util_views
 
+#ORA2 - emploi-store
+import openassessment.fileupload.urls
+from openassessment.fileupload import views_filesystem
+
 import logging
 log = logging.getLogger()
 
@@ -215,6 +219,7 @@ if settings.FEATURES.get('ENABLE_OPENBADGES'):
 
 urlpatterns += [
     url(r'^openassessment/fileupload/', include('openassessment.fileupload.urls')),
+    url(r'^openassessment/storage', include(openassessment.fileupload.urls))
 ]
 
 # sysadmin dashboard, to see what courses are loaded, to delete & load courses
