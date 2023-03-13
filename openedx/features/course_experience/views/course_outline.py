@@ -55,6 +55,14 @@ class CourseOutlineFragmentView(EdxFragmentView):
         """
         Renders the course outline as a fragment.
         """
+        custom_fields = {}
+        user_profile = request.user.profile
+        try:
+            custom_fields = user_profile.custom_field
+        except:
+            pass
+
+
         from lms.urls import RESET_COURSE_DEADLINES_NAME
         from openedx.features.course_experience.urls import COURSE_HOME_VIEW_NAME
 
@@ -107,7 +115,8 @@ class CourseOutlineFragmentView(EdxFragmentView):
             'missed_deadlines': missed_deadlines,
             'missed_gated_content': missed_gated_content,
             'has_ended': course.has_ended(),
-            'user_grade': user_grade
+            'user_grade': user_grade,
+            'custom_fields': custom_fields
         }
 
         html = render_to_string('course_experience/course-outline-fragment.html', context)
