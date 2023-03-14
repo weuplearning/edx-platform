@@ -54,7 +54,6 @@ def render_partial(request,course_id):
 @require_GET
 def generate_pdf(request,course_id):
 
-    log.info(dir(request))
     #import value for the certificate
     certificate_config = configuration_helpers.get_value('CERTIFICATE_LAYOUT')[course_id]
 
@@ -62,7 +61,11 @@ def generate_pdf(request,course_id):
     page_width = certificate_config['certificate_width']
     page_height = certificate_config['certificate_height']
 
-    multi_certificate = certificate_config['multi_certificate']
+    try:
+        multi_certificate = certificate_config['multi_certificate']
+    except:
+        multi_certificate = None
+        
     if multi_certificate is not None:
         image_url = certificate_config['certificate_url'][request.GET.get("certificate")]
     else:
@@ -106,10 +109,8 @@ def generate_pdf(request,course_id):
     user_name = (request.user.first_name).capitalize() + " " + (request.user.last_name).upper()
     if user_name == " ":
         user_name = json.loads(request.user.profile.custom_field).get('first_name').capitalize() + " " + json.loads(request.user.profile.custom_field).get('last_name').upper()
-        log.info(user_name)
         if user_name == " ":
                 user_name = request.user.profile.name
-                log.info(user_name)
                 if user_name == "":
                     user_name = 'Missing information'
 
