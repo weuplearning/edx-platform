@@ -104,15 +104,14 @@ def generate_pdf(request,course_id):
 
     p.setFillColorRGB(font_color[0]/255, font_color[1]/255, font_color[2]/255)
 
-
-
-    user_name = (request.user.first_name).capitalize() + " " + (request.user.last_name).upper()
-    if user_name == " ":
-        user_name = json.loads(request.user.profile.custom_field).get('first_name').capitalize() + " " + json.loads(request.user.profile.custom_field).get('last_name').upper()
+    user_name = request.user.profile.name
+    if user_name == "":
+        user_name = (request.user.first_name).capitalize() + " " + (request.user.last_name).upper()
         if user_name == " ":
-                user_name = request.user.profile.name
-                if user_name == "":
-                    user_name = 'Missing information'
+            try:
+                user_name = json.loads(request.user.profile.custom_field).get('first_name').capitalize() + " " + json.loads(request.user.profile.custom_field).get('last_name').upper()
+            except:
+                user_name = 'Missing information'
 
     try:
         name_position_y = certificate_config['name_position_y']
