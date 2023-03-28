@@ -429,10 +429,13 @@ def get_password_link(request):
 @login_required
 def unlock_account(request):
     user_email = request.body
-    if WulUserActions(user_email).unlock_user_account() :
+    decoded_user_email = user_email.decode("utf-8")
+
+    if WulUserActions(decoded_user_email).unlock_user_account() :
         response={'success': 'User login failure was reset'}
     else :
         response={'error':'LoginFailure object doesn\'t exists'}
+
     return JsonResponse(response)
 
 @require_http_methods(["GET"])
