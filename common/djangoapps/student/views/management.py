@@ -128,6 +128,9 @@ def index(request, extra_context=None, user=AnonymousUser()):
     else:
         courses = sort_by_announcement(courses)
 
+    #For AFPA, reverses the display of courses so that the most recent are displayed first
+    courses.reverse()
+
     context = {'courses': courses}
 
     context['homepage_overlay_html'] = configuration_helpers.get_value('homepage_overlay_html')
