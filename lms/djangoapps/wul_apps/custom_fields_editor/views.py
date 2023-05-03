@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+"/edx/app/edxapp/edx-platform/lms/djangoapps/wul_apps/custom_fields_editor/views.py"
 import json
 import logging
 from pprint import pformat
@@ -93,7 +94,12 @@ class CustomFieldEditor(APIView):
 
         if not wul_verify_access(request.user).has_dashboard_access(course_id=None):
             return HttpResponseForbidden
-        user_id = request.user_id
+
+        try:
+            user_id = request.user_id
+        except:
+            user_id = request.user.id
+
         context = {
             "status":True,
             "message":'[WUL] custom_field for User {} successfully read'.format(user_id)
@@ -102,6 +108,7 @@ class CustomFieldEditor(APIView):
         try:
             user_profile = UserProfile.objects.get(user_id=user_id)
             custom_field = json.loads(user_profile.custom_field)
+            
         except:
             context['status'] = False
             context['message'] = '[WUL] Custom_field failed for User {} to be read'.format(user_id)
@@ -111,11 +118,14 @@ class CustomFieldEditor(APIView):
     
     def post(self, request, format='json'):
 
-        if not wul_verify_access(request.user).has_dashboard_access():
-            return HttpResponseForbidden
         # if not wul_verify_access(request.user).has_dashboard_access(course_id=None):
         #     return HttpResponseForbidden
-        user_id = request.data['user_id_for_api']
+        try:
+            if not wul_verify_access(request.user).has_dashboard_access():
+                return HttpResponseForbidden
+            user_id = request.data['user_id_for_api']
+        except:
+            user_id = request.user.id
 
         user = User.objects.get(id=user_id)
         user_profile = UserProfile.objects.get(user_id=user_id)
