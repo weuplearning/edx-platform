@@ -92,7 +92,7 @@ class CustomFieldView(APIView):
 class CustomFieldEditor(APIView):
     def get(self, request):
 
-        if not wul_verify_access(request.user).has_dashboard_access(course_id=None):
+        if not wul_verify_access(request.user).has_dashboard_access():
             return HttpResponseForbidden
 
         try:
@@ -118,11 +118,10 @@ class CustomFieldEditor(APIView):
     
     def post(self, request, format='json'):
 
-        # if not wul_verify_access(request.user).has_dashboard_access(course_id=None):
-        #     return HttpResponseForbidden
+        if not (wul_verify_access(request.user).has_dashboard_access() or request.data['authorized']):
+            return HttpResponseForbidden
+
         try:
-            if not wul_verify_access(request.user).has_dashboard_access():
-                return HttpResponseForbidden
             user_id = request.data['user_id_for_api']
         except:
             user_id = request.user.id
@@ -136,15 +135,13 @@ class CustomFieldEditor(APIView):
             "status":True,
             "message":'[WUL] custom_field for User {} successfully updated'.format(user_id)
         }
-        log.info(user_profile.custom_field)
+
         try: 
             custom_fields = json.loads(user_profile.custom_field)
             # As request.data is a querydict with multiplevalues for keys we update manually
             for key in request.data.keys():
-                # if key != 'user_id_for_api':
-                #     custom_fields[key] = request.data[key]
 
-                if key != 'user_id_for_api':
+                if key != 'user_id_for_api' or key != 'authorized':
                     if key == "virtual_class_1" or key == "virtual_class_2":
                         custom_fields[key] = json.loads(request.data[key]) 
                     else:
