@@ -11,7 +11,7 @@ bvt_course_dict = {
         "type":"checkbox",
         "required":False,
         "requiredStr":"",
-        "course":"course-v1:bvt+base+2022"
+        "course":"course-v1:bvt+base_01+2022"
     },
     {
         "name":"base_02",
@@ -24,7 +24,7 @@ bvt_course_dict = {
         "type":"checkbox",
         "required":False,
         "requiredStr":"",
-        "course":"course-v1:bvt+base+2022"
+        "course":"course-v1:bvt+base_02+2022"
     },
     {
         "name":"base_03",
@@ -37,7 +37,7 @@ bvt_course_dict = {
         "type":"checkbox",
         "required":False,
         "requiredStr":"",
-        "course":"course-v1:bvt+citernes+2022"
+        "course":"course-v1:bvt+base_03+2022"
     },
     {
         "name":"base_04",
@@ -50,7 +50,7 @@ bvt_course_dict = {
         "type":"checkbox",
         "required":False,
         "requiredStr":"",
-        "course":"course-v1:bvt+gpl+2022"
+        "course":"course-v1:bvt+base_04+2022"
     },
     {
         "name":"base_05",
@@ -770,10 +770,8 @@ bvt_course_dict = {
         "required":False,
         "requiredStr":"",
         "course":"course-v1:bvt+pp_19+2022"
-    }
-        ],
-        "gpl":[
-    {
+    },
+        {
         "name":"pp_20",
         "defaultValue":False,
         "errorMessages":"",
@@ -786,6 +784,8 @@ bvt_course_dict = {
         "requiredStr":"",
         "course":"course-v1:bvt+pp_20+2022"
     },
+        ],
+        "gpl":[
     {
         "name":"gpl_01",
         "defaultValue":False,
