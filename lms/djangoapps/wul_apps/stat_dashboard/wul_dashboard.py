@@ -10,6 +10,7 @@ importlib.reload(sys)
 import string
 import random
 from datetime import datetime
+from itertools import islice
 import os
 import csv
 import time
@@ -88,6 +89,7 @@ from courseware.courses import get_course_by_id
 
 #Course timer
 from lms.djangoapps.wul_apps.models import WulCourseOverview
+from lms.djangoapps.wul_apps.data.bvt_course_list import bvt_course_dict
 from django.core import serializers
 
 from openedx.core.djangoapps.course_groups.cohorts import is_course_cohorted
@@ -103,7 +105,6 @@ log = logging.getLogger(__name__)
 class wul_dashboard():
 
     def __init__(self,course_id=None,course_key=None,request=None):
-
         self.request = request
         self.site_name = None
         self.course_key = course_key
@@ -112,15 +113,11 @@ class wul_dashboard():
         self.course_module = modulestore().get_course(course_key, depth=0)
 
     def required_register_fields(self):
-
-        register_fields = [
-            {
-                "name":"email",
-                "required":True,
-                "label":"Email"
-            }
-        ]
-
+        register_fields = [{
+            "name":"email",
+            "required":True,
+            "label":"Email"
+        }]
         _microsite_register_fields = configuration_helpers.get_value("FORM_EXTRA")
 
         if _microsite_register_fields is not None:
@@ -130,20 +127,17 @@ class wul_dashboard():
                 required = row.get('required')
                 label = row.get('label')
 
-                register_fields.append(
-                        {
-                            "name":name,
-                            "required":required,
-                            "label":label
-                        }
-                    )
+                register_fields.append({
+                    "name":name,
+                    "required":required,
+                    "label":label
+                })
 
         return register_fields
 
     def required_certificates_fields(self):
 
         certificates_fields = []
-
         _microsite_certificates_fields = configuration_helpers.get_value("CERTIFICATE_FORM_EXTRA")
 
         if _microsite_certificates_fields is not None:
@@ -153,13 +147,11 @@ class wul_dashboard():
                 required = row.get('required')
                 label=row.get('label')
 
-                certificates_fields.append(
-                        {
-                            "name":name,
-                            "required":required,
-                            "label":label
-                        }
-                    )
+                certificates_fields.append({
+                    "name":name,
+                    "required":required,
+                    "label":label
+                })
 
         return certificates_fields
 
@@ -183,18 +175,17 @@ class wul_dashboard():
         )
         user.set_password(password)
         user.save()
-        registration = Registration()
+        registration=Registration()
         registration.register(user)
         """
         reg = Registration()
         reg.register(user)
         """
         #user.save()
-        profile = UserProfile(user=user)
-        profile.custom_field = json.dumps(custom_field)
+        profile=UserProfile(user=user)
+        profile.custom_field=json.dumps(custom_field)
         profile.name=complete_name
         profile.save()
-
         return user
 
     #enroll
@@ -220,7 +211,8 @@ class wul_dashboard():
         be used.
         Returns a boolean indicating whether the email was sent successfully.
         """
-        log.info("send_mail_to_students")
+
+        log.info("in send_mail_to_students method")
         # add some helpers and microconfig subsitutions
 
         if 'display_name' in param_dict:
@@ -234,9 +226,6 @@ class wul_dashboard():
         # see if there is an activation email template definition available as configuration,
         # if so, then render that
         message_type = param_dict['message']
-        # dest_path = "/edx/app/edxapp/edx-themes"
-        # dest_path = Path(settings.COMPREHENSIVE_THEME_DIRS[0])        
-        # template_base="/edx/app/edxapp/edx-themes/"+param_dict['microsite']+"/lms/templates/instructor/edx_ace/"
         template_base = "/edx/app/edxapp/edx-themes/" + param_dict['microsite'] + "/lms/templates/instructor/edx_ace/"
 
 
@@ -271,26 +260,14 @@ class wul_dashboard():
             ),
         }
 
-
         subject_template = email_template_dict.get(message_type, (None, None))[0] 
         message_template = email_template_dict.get(message_type, (None, None))[1]
 
-
         path_subject = template_base + subject_template
         path_message = template_base + message_template
-        # path_subject = Path(template_base+subject_template)
-        # path_message = Path(template_base+message_template)
         
         if subject_template and message_template :
-            subject, message = render_message_to_string(
-                path_subject, 
-                path_message, 
-                param_dict,
-                language
-            )
-            # subject = render_to_string(path_subject, param_dict)
-            # message = render_to_string(path_message, param_dict)
-
+            subject, message = render_message_to_string(path_subject, path_message, param_dict, language)
 
         if subject and message:
             # Remove leading and trailing whitespace from body
@@ -316,22 +293,22 @@ class wul_dashboard():
 
     def create_and_enroll_user(self,email, username, custom_field, password,complete_name, course_id, course_mode, enrolled_by, email_params, first_name, last_name, microsite):
         """
-        Create a new user and enroll him/her to the given course, return list of errors in the following format
-            Error format:
-                each error is key-value pait dict with following key-value pairs.
-                1. username: username of the user to enroll
-                1. email: email of the user to enroll
-                1. response: readable error message
-        :param email: user's email address
-        :param username: user's username
-        :param name: user's name
-        :param country: user's country
-        :param password: user's password
-        :param course_id: course identifier of the course in which to enroll the user.
-        :param course_mode: mode for user enrollment, e.g. 'honor', 'audit' etc.
-        :param enrolled_by: User who made the manual enrollment entry (usually instructor or support)
-        :param email_params: information to send to the user via email
-        :return: list of errors
+            Create a new user and enroll him/her to the given course, return list of errors in the following format
+                Error format:
+                    each error is key-value pait dict with following key-value pairs.
+                    1. username: username of the user to enroll
+                    1. email: email of the user to enroll
+                    1. response: readable error message
+            :param email: user's email address
+            :param username: user's username
+            :param name: user's name
+            :param country: user's country
+            :param password: user's password
+            :param course_id: course identifier of the course in which to enroll the user.
+            :param course_mode: mode for user enrollment, e.g. 'honor', 'audit' etc.
+            :param enrolled_by: User who made the manual enrollment entry (usually instructor or support)
+            :param email_params: information to send to the user via email
+            :return: list of errors
         """
         errors = list()
         user = ''
@@ -350,47 +327,50 @@ class wul_dashboard():
                     state_transition=UNENROLLED_TO_ENROLLED,
                 )
 
-                # add custom_field
         except IntegrityError:
             errors.append({
-                'username': username, 'email': email, 'response': _('Username {user} already exists.').format(user=username)
+                'username': username, 
+                'email': email, 
+                'response': _('Username {user} already exists.').format(user=username)
             })
         except Exception as ex:  # pylint: disable=broad-except
             log.exception(type(ex).__name__)
             errors.append({
-                'username': username, 'email': email, 'response': type(ex).__name__,
+                'username': username, 
+                'email': email, 
+                'response': type(ex).__name__,
             })
         else:
             try:
-                desired_start_date =custom_field['desired_start_date']
+                desired_start_date = custom_field['desired_start_date']
                 email_params.update({
                     'desired_start_date': desired_start_date
                 })
             except:
                 pass
 
+
+            # It's a new user, an email will be sent to each newly created user.
+            #update sitename params
+            email_params.update({
+                'message': 'account_creation_and_enrollment',
+                'email_address': email,
+                'password': password,
+                'platform_name': self.site_name,
+                'first_name': first_name,
+                'microsite':microsite,
+                'site_name':self.site_name,
+                'full_name':first_name+" "+last_name,
+                'course_key':str(self.course_key)
+            })
+
             try:
-                # It's a new user, an email will be sent to each newly created user.
-                email_params.update({
-                    'message': 'account_creation_and_enrollment',
-                    'email_address': email,
-                    'password': password,
-                    'platform_name': self.site_name,
-                    'first_name': first_name,
-                    'microsite':microsite,
-                    'site_name':self.site_name,
-                    'full_name':first_name+" "+last_name,
-                    'course_key':str(self.course_key)
-                })
-                #update sitename params
                 self.send_mail_to_student(email, email_params)
-
-            except Exception as ex:  # pylint: disable=broad-except
+            except:
                 self.send_default_mail_to_student(email, email_params)
-
-                log.exception(
-                    "Exception '{exception}' raised while sending email to new user.".format(exception=type(ex).__name__)
-                )
+            # except Exception as ex:  # pylint: disable=broad-except
+            else:
+                log.exception("Exception '{exception}' raised while sending email to new user.".format(exception=type(ex).__name__))
                 errors.append({
                     'username': username,
                     'email': email,
@@ -399,9 +379,8 @@ class wul_dashboard():
                           "Without the email student would not be able to login. "
                           "Please contact support for further information.").format(error=type(ex).__name__, email=email),
                 })
-            else:
-                log.info(u'email sent to new created user at %s', email)
 
+            log.info(u'email sent to new created user at %s', email)
 
         return user
 
@@ -410,11 +389,9 @@ class wul_dashboard():
         """
         generate a unique password for each student.
         """
-
         password = generate_random_string(password_length)
-        while password in generated_passwords:
+        while password in generated_passwords :
             password = generate_random_string(password_length)
-
         generated_passwords.append(password)
 
         return password
@@ -422,51 +399,60 @@ class wul_dashboard():
 
     def enroll_user_to_multiple_course(self, microsite, created_user, email, course_mode, _requester_user, new_custom_fields=None):
         """
-            - allows to enroll users in multiple courses
-            - works if selective_register_fields key exists on django admin - currently on BVT
+        Enrolls users in multiple courses.
+
+        Args:
+            microsite (str): The microsite name.
+            created_user: The user object created for enrollment.
+            email (str): The email address of the user.
+            course_mode: The enrollment mode for the course.
+            _requester_user: The user who initiated the enrollment.
+            new_custom_fields (dict, optional): Custom fields for the user. Defaults to None.
+
+        Note:
+            - The function works if the `selective_register_fields` key exists in the Django admin, currently on BVT.
+            - The function retrieves the custom fields from the user's profile and uses them for enrollment if `new_custom_fields` is not provided.
+
+        Raises:
+            Exception: Raises an exception if an error occurs during the enrollment process.
+
+        Returns:
+            None
+
         """
-        try:        
-            register_fields = configuration_helpers.get_value_for_org(microsite.lower(), 'FORM_EXTRA',{})
+        try:
             associated_courses = configuration_helpers.get_value_for_org(microsite.lower(), 'TMA_ASSOCIATED_COURSES',{})
-
-
-            custom_field = {}
-
-            if new_custom_fields is not None:
-                custom_field = new_custom_fields
-            else:
-                try:
-                    custom_field = json.loads(created_user.profile.custom_field)
-                except:
-                    pass
+            custom_field = new_custom_fields or json.loads(created_user.profile.custom_field)
             user = User.objects.get(email=email)
 
             if associated_courses.get('selective_register_fields') and custom_field:
-                for field_name in associated_courses.get('selective_register_fields'):
 
-                    custom_field_value = custom_field.get(field_name)
-                    for register_field in register_fields :
-                        if register_field.get('name') == field_name:
-                            # courseList = []
-                            course = register_field.get('course')
-                            course_key = CourseKey.from_string(course)
-                            if custom_field_value == 'true' :
-                                # ENROLL
-                                if not CourseEnrollment.is_enrolled(user, course_key):
-                                    # CourseEnrollment.enroll(user, course_key)
-                                    create_manual_course_enrollment(
-                                        user=user,
-                                        course_id=course_key,
-                                        mode=course_mode,
-                                        enrolled_by=_requester_user,
-                                        reason='Enrolling via csv upload',
-                                        state_transition=UNENROLLED_TO_ENROLLED,
-                                    )
-                                    log.info('enroll :'+str(user) + ' to '+ str(course_key))
-                                    continue
+                custom_field_value = custom_field.get("parcours")
+                available_courses = bvt_course_dict[custom_field_value]
+                random.shuffle(available_courses)  # Shuffle the available courses list
+
+                for course_info in available_courses:
+                    course = course_info.get('course')
+                    course_key = CourseKey.from_string(course)
+
+                    if not CourseEnrollment.is_enrolled(user, course_key):
+                        create_manual_course_enrollment(
+                            user=user,
+                            course_id=course_key,
+                            mode=course_mode,
+                            enrolled_by=_requester_user,
+                            reason='Enrolling via csv upload',
+                            state_transition=UNENROLLED_TO_ENROLLED,
+                        )
+                        log.info('Enrolled user ' + str(user) + ' in course ' + str(course_key))
+                        return
+                    available_courses.remove(course_info)  # Remove the enrolled course from available_courses
+
+            # User is already enrolled in all available courses
+            log.info('User ' + str(user) + ' is already enrolled in all available courses.')
+
         except:
-            log.info('EXCEPT error')
-            pass
+            log.info("EXCEPT ERROR : user "+ str(user) )
 
     def task_generate_user(self):
         """
@@ -476,15 +462,15 @@ class wul_dashboard():
             - l'utilisateur n'a pas de compte : création compte plateforme + inscription cours + email account_creation_and_enrollment
             Les emails des templates microsite sont utilisés.
         """
+
         task_input = self.request
         valid_rows = task_input.get("valid_rows")
         microsite = task_input.get("microsite")
-
         requester_id = task_input.get("requester_id")
         _requester_user = User.objects.get(pk=requester_id)
         self.site_name = task_input.get('site_name')+' '
 
-        log.warning(u'wul_dashboard.task_generate_user inscription users pour le microsite : '+microsite)  
+        log.warning(u'wul_dashboard.task_generate_user inscription users pour le microsite : '+str(microsite))  
         log.warning(u'wul_dashboard.task_generate_user inscription users par le username '+_requester_user.username+' email : '+_requester_user.email)
 
         generated_passwords = []
@@ -492,7 +478,6 @@ class wul_dashboard():
         _failed = []
         warnings = []
         registered_users_list = []
-
         #Get all keys from register form
         register_keys = []
         register_form = task_input.get("register_form")
@@ -501,7 +486,6 @@ class wul_dashboard():
 
         # for white labels we use 'shopping cart' which uses CourseMode.DEFAULT_SHOPPINGCART_MODE_SLUG as
         # course mode for creating course enrollments.
-
         # if CourseMode.is_white_label(self.course_key):
         #     course_mode = CourseMode.DEFAULT_SHOPPINGCART_MODE_SLUG
         # else:
@@ -509,7 +493,6 @@ class wul_dashboard():
         course_mode= None
 
         #TREATING EACH USER
-
         new_users = []
         already_enrolled_users = []
 
@@ -518,25 +501,30 @@ class wul_dashboard():
             try:
                 email = _user.get('email')
                 username = email.split('@')[0].replace('-','').replace('.','').replace('_','')[0:10]+'_'+random_string(5)
-                first_name=str(_user.get("first_name"))
-                last_name=str(_user.get("last_name"))
-                complete_name=first_name+' '+last_name
+                first_name = str(_user.get("first_name"))
+                last_name = str(_user.get("last_name"))
+                complete_name = first_name+' '+last_name
 
                 #check valid email
                 email_params = get_email_params(self.course, True, secure=True)
-                new_course_url='https://'+self.site_name.replace(' ','')+'/courses/'+str(self.course.id)
+                new_course_url = 'https://'+self.site_name.replace(' ','')+'/courses/'+str(self.course.id)
                 email_params.update({
                     'site_name': self.site_name,
-                    'course_url':new_course_url,
+                    'course_url': new_course_url,
                 })
             except:
                 _failed.append({
-                    'email': email, 'response': _('Invalid info {email_address}.').format(email_address=email)})
+                    'email': email, 
+                    'response': _('Invalid info {email_address}.').format(email_address=email)
+                })
+
             try:
                 validate_email(email)
             except ValidationError:
                 _failed.append({
-                    'email': email, 'response': _('Invalid email {email_address}.').format(email_address=email)})
+                    'email': email, 
+                    'response': _('Invalid email {email_address}.').format(email_address=email)
+                })
 
             created_user = ''
             if User.objects.filter(email=email).exists():
@@ -551,7 +539,9 @@ class wul_dashboard():
                     ).format(email=email, username=username)
 
                     warnings.append({
-                        'username': username, 'email': email, 'response': warning_message
+                        'username': username, 
+                        'email': email, 
+                        'response': warning_message
                     })
                     log.warning(u'email %s already exist', email)
                 else:
@@ -576,34 +566,36 @@ class wul_dashboard():
                     # IF THERE IS NO SSO GO FOR STANDARD BEHAVIOUR
                     if not UserSocialAuth.objects.filter(user=user).exists():
                         email_params.update({
-                            'message':'enrolled_enroll',
-                            'email_address':email,
+                            'message': 'enrolled_enroll',
+                            'email_address': email,
                             'platform_name': self.site_name,
                             'first_name': first_name,
-                            'microsite':microsite,
-                            'full_name':first_name+" "+last_name,
-                            'course_key':str(self.course_key)
+                            'microsite': microsite,
+                            'full_name': first_name+" "+last_name,
+                            'course_key': str(self.course_key)
                         })
                         already_enrolled_users.append(email)
+
+
                     else:
-                    # IF THERE IS SSO THEN ACT AS IF THIS WAS A NEW USER IN TERMS OF EMAIL
-                    # and change the password and update custom_fields if needed
+                        # IF THERE IS SSO THEN ACT AS IF THIS WAS A NEW USER IN TERMS OF EMAIL
+                        # change the password and update custom_fields if needed
                         password = self.generate_unique_password(generated_passwords)
                         user.set_password(password)
                         user.save()
-
-                        profile = UserProfile.objects.get(user_id=user.id)
-                        custom_field = {}
+                        profile=UserProfile.objects.get(user_id=user.id)
+                        custom_field={}
                         try:
-                            custom_field = json.loads(profile.custom_field)
+                            custom_field=json.loads(profile.custom_field)
                         except:
                             pass
 
                         for key,value in _user.items():
                             #assurer que la key est presente dans la liste des key et non presente dans les custom_fields actuels
                             if (key in register_keys) and (not key in custom_field.keys()):
-                                custom_field[key] = value
-                        profile.custom_field = json.dumps(custom_field)
+                                custom_field[key]=value
+
+                        profile.custom_field=json.dumps(custom_field)
                         profile.save()
 
                         email_params.update({
@@ -611,58 +603,77 @@ class wul_dashboard():
                             'email_address': email,
                             'password': password,
                             'platform_name': self.site_name,
-                            'site_name':self.site_name,
+                            'site_name': self.site_name,
                             'first_name': first_name,
-                            'microsite':microsite,
-                            'full_name':first_name+" "+last_name,
-                            'course_key':str(self.course_key)
+                            'microsite': microsite,
+                            'full_name': first_name+" "+last_name,
+                            'course_key': str(self.course_key)
                         })
                         new_users.append(email)
+
+
+                    if str(self.course_key).find('course-v1:bvt') != -1 :
+                        new_custom_fields = _user
+                        self.enroll_user_to_multiple_course(microsite, user, email, course_mode, _requester_user, new_custom_fields)
+
                     try:
                         self.send_mail_to_student(email, email_params)
                     except:
                         self.send_default_mail_to_student(email, email_params)
-                    #enroll_email(course_id=self.course_key, student_email=email, auto_enroll=True, email_students=True, email_params=email_params)
+
 
                 # START - BVT specific treatment, enrollment via CF and notification to admin
                 elif str(self.course_key).find('course-v1:bvt') != -1 : 
+                    new_custom_fields = _user
+                    self.enroll_user_to_multiple_course(microsite, user, email, course_mode, _requester_user, new_custom_fields)
+                    email_params.update({
+                        'message': 'enrolled_enroll',
+                        'email_address': email,
+                        'platform_name': self.site_name,
+                        'first_name': first_name,
+                        'microsite': microsite,
+                        'full_name': first_name+" "+last_name,
+                        'course_key': str(self.course_key)
+                    })
                     already_enrolled_users.append(email)
+                    try:
+                        self.send_mail_to_student(email, email_params)
+                    except:
+                        self.send_default_mail_to_student(email, email_params)
                 # END - BVT specific treatment
-
-                new_custom_fields = _user
-                self.enroll_user_to_multiple_course(microsite, user, email, course_mode, _requester_user, new_custom_fields)
-
 
             else:
                 # CREATE NEW ACCOUNT
                 password = self.generate_unique_password(generated_passwords)
-                #generate custom_field
+                # generate custom_field
                 custom_field = {}
                 for key,value in _user.items():
                     #assurer que la key est presente dans la liste des key et non presente dans les custom_fields actuels
                     if (key in register_keys) and (not key in custom_field.keys()):
-                        custom_field[key] = value
+                        custom_field[key]=value
 
-            
                 created_user = self.create_and_enroll_user(
                     email, username, custom_field, password, complete_name, self.course_id, course_mode, _requester_user, email_params, first_name, last_name, microsite
                 )
-                #maj de l'info
+                # maj de l'info
                 if created_user != '':
-                    _generates.append(
-                        {"id":created_user.id,"email":created_user.email})
+                    _generates.append({
+                        "id":created_user.id,
+                        "email":created_user.email
+                    })
                     registered_users_list.append(created_user.email)
                     self.enroll_user_to_multiple_course(microsite, created_user, email, course_mode, _requester_user)
-
                 else:
-                    _failed.append(
-                        {"email":email,"reponse":"creation failed"})
+                    _failed.append({
+                        "email":email,
+                        "reponse":"creation failed"
+                    })
                 new_users.append(email)
 
         log.warning(u'wul_dashboard.task_generate_user fin inscription users pour le microsite : '+microsite)
         log.warning(u'wul_dashboard.task_generate_user fin inscription users par le username '+_requester_user.username+' email : '+_requester_user.email)
 
-        #Send an email to requester with potential failures
+        # Send an email to requester with potential failures
         generated_users_list = ''
         # for user in registered_users_list :
         #     generated_users_list+="<li>{}</li>".format(user)
@@ -684,15 +695,16 @@ class wul_dashboard():
         if len(new_users) > 0 and len(already_enrolled_users) > 0 :
             for user in new_users:
                 generated_users_list+="<li>{}</li>".format(user)
-
             for user in already_enrolled_users:
                 generated_users_list_enrolled+="<li>{}</li>".format(user)
             html = "<html><head></head><body><p>Bonjour,<br><br> L'inscription par CSV de vos utilisateurs au cours "+course.display_name_with_default+" sur le microsite "+microsite+" est maintenant terminée, voici la liste des utilisateurs inscrits:<br>- Nouveaux inscrits:<br><ul>"+generated_users_list+"</ul><br>-Déjà inscrits:<br><ul>"+generated_users_list_enrolled+"</ul><br>"+status_text+"<br><br>L'équipe WeUp Learning<br></p></body></html>"
-        elif len(new_users) > 0:
+
+        elif len(new_users) > 0 :
             for user in new_users:
                 generated_users_list+="<li>{}</li>".format(user)
             html = "<html><head></head><body><p>Bonjour,<br><br> L'inscription par CSV de vos utilisateurs au cours "+course.display_name_with_default+" sur le microsite "+microsite+" est maintenant terminée, voici la liste des utilisateurs nouvellement inscrits sur la plateforme :<br><ul>"+generated_users_list+"</ul><br>"+status_text+"<br><br>L'équipe WeUp Learning<br></p></body></html>"
-        elif len(already_enrolled_users) > 0: 
+
+        elif len(already_enrolled_users) > 0 : 
             for user in already_enrolled_users:
                 generated_users_list_enrolled+="<li>{}</li>".format(user)
             html = "<html><head></head><body><p>Bonjour,<br><br> L'inscription par CSV de vos utilisateurs au cours "+course.display_name_with_default+" sur le microsite "+microsite+" est maintenant terminée, voici la liste des utilisateurs déjà inscrits sur la plateforme :<br><ul>"+generated_users_list_enrolled+"</ul><br>"+status_text+"<br><br>L'équipe WeUp Learning<br></p></body></html>"
@@ -722,45 +734,10 @@ class wul_dashboard():
 
         return retour
 
-    # def as_views(self):
-
-    #     _stat_dashboard_api = _stat_dashboard_api = stat_dashboard_api(self.request,self.course_id,course_key=self.course_key)
-    #     course_structure = _stat_dashboard_api.get_course_structure()
-
-    #     #ensure user is @themoocagency.com
-    #     _email = self.request.user.email
-    #     if "@themoocagency.com" in _email:
-    #         csv_limits = False
-    #     else:
-    #         csv_limits = True
-
-
-    #     total_participants=CourseEnrollment.objects.enrollment_counts(self.course_key)
-
-    #     #Course cohorted
-    #     course_cohorted = is_course_cohorted(self.course_key)
-
-    #     context = {
-    #         "course_id":self.course_id,
-    #         "course":self.course,
-    #         "course_module":self.course_module,
-    #         "course_structure":course_structure,
-    #         "register_fields":self.required_register_fields(),
-    #         "certificates_fields":self.required_certificates_fields(),
-    #         "csv_limits":csv_limits,
-    #         "total_participants":total_participants,
-    #         "cohorted":course_cohorted,
-    #     }
-
-    #     return render_to_response('dashboard/home.html', context)
-
     def ensure_user_exists(self):
-
         list_users = json.loads(self.request.body)
-
         _username = []
         _email = []
-
         for u in list_users:
             _id = u.get('id')
             email = u.get('email')
@@ -774,6 +751,7 @@ class wul_dashboard():
                 _email.append(q)
             except:
                 pass
+
             try:
                 user = User.objects.get(username=username)
                 q = {
@@ -788,7 +766,6 @@ class wul_dashboard():
             "username":_username,
             "email":_email
         }
-
         return context
 
     # def user_grade_task_list(self):
@@ -840,14 +817,12 @@ class wul_dashboard():
         json={}
         user_email=self.request.POST.get('user_email')
         user=User.objects.get(email=user_email)
-        if LoginFailures.objects.filter(user=user).exists():
-
-            user_failure = LoginFailures.objects.get(user=user)
-            user_failure.lockout_until = datetime.now()
+        if LoginFailures.objects.filter(user=user).exists() :
+            user_failure=LoginFailures.objects.get(user=user)
+            user_failure.lockout_until=datetime.now()
             user_failure.failure_count=0
             user_failure.save()
             json['success']='User login failure was reset'
-
         else :
             json['error']='LoginFailure object doesn\'t exists'
 
@@ -856,7 +831,7 @@ class wul_dashboard():
 
     def tma_activate_account(self):
         user_email=self.request.POST.get('user_email')
-        if User.objects.filter(email=user_email).exists():
+        if User.objects.filter(email=user_email).exists() :
             try :
                 user=User.objects.get(email=user_email)
                 user.is_active=True
@@ -874,7 +849,6 @@ class wul_dashboard():
             }
 
         return json
-
 
 
     # def task_add_time(self):
@@ -977,8 +951,7 @@ class wul_dashboard():
 
         message_dict = json.load(open('/edx/var/edxapp/media/wul_apps/dashboard/email_template.json'))
 
-        if email_params['microsite'] in message_dict.keys() and ( email_params['course_key'] in message_dict[email_params['microsite']].keys() or 'all' in message_dict[email_params['microsite']].keys() ): 
-
+        if email_params['microsite'] in message_dict.keys() and ( email_params['course_key'] in message_dict[email_params['microsite']].keys() or 'all' in message_dict[email_params['microsite']].keys() ) : 
             if email_params['course_key'] in message_dict[email_params['microsite']].keys():
                 if email_params['message'] == 'account_creation_and_enrollment':
                     header = message_dict[email_params['microsite']][email_params['course_key']]['account_creation_and_enrollment']['header']
@@ -994,8 +967,7 @@ class wul_dashboard():
                     html = html.replace('$$email', str(email)).replace('$$course_title', str(email_params['course'].display_name))
                     header = header.replace('$$email', str(email)).replace('$$course_title', str(email_params['course'].display_name))
 
-
-            elif 'all' in message_dict[email_params['microsite']].keys():
+            elif 'all' in message_dict[email_params['microsite']].keys() :
                 if email_params['message'] == 'account_creation_and_enrollment':
                     header = message_dict[email_params['microsite']]['all']['account_creation_and_enrollment']['header']
                     html = message_dict[email_params['microsite']]['all']['account_creation_and_enrollment']['body']
@@ -1011,7 +983,6 @@ class wul_dashboard():
                     header = header.replace('$$email', str(email)).replace('$$course_title', str(email_params['course'].display_name))
 
         else :
-
             if email_params['message'] == 'account_creation_and_enrollment':
                 html = "<html><head></head><body><p>Bonjour,<br><br> Vous avez été inscrit.e à la formation : "+str(email_params['course'].display_name)+" sur la plateforme <a href=\"https://"+str(email_params['site_name'])+"\">"+str(email_params['site_name'])+"</a><br><br>Vous pouvez accéder à cette formation en utilisant les identifiants suivants : <br><br>e-mail : "+str(email)+"<br>mot de passe : "+str(email_params['password'])+"<br><br>Cordialement, <br>L'équipe WeUp Learning<br><hr><br>Hello,<br><br> You have been registered for the training : "+str(email_params['course'].display_name)+" on the platform <a href=\"https://"+str(email_params['site_name'])+"\">"+str(email_params['site_name'])+"</a><br><br>You can access this training using the following credentials : <br><br>e-mail : "+str(email)+"<br>password : "+str(email_params['password'])+" <br><br>Sincerely, <br>The WeUp Learning Team<br></p></body></html>"
 
