@@ -21,6 +21,8 @@ from lms.djangoapps.wul_apps.custom_grade_report.bvt.views import run_script_fro
 
 from lms.djangoapps.wul_apps.custom_sso_tasks.views import sso_registration_views 
 
+from lms.djangoapps.wul_apps.google_drive.views import read_google_drive_file
+
 import logging
 log = logging.getLogger()
 
@@ -98,3 +100,7 @@ urlpatterns += (
     url(r'^{}/course_outline$'.format(settings.COURSE_ID_PATTERN), render_course_outline, name="render_course_outline"),
 )
 
+# Google Drive API
+urlpatterns += (
+    url(r'^read_google_drive_file$', read_google_drive_file, name="read_google_drive_file"),
+)
