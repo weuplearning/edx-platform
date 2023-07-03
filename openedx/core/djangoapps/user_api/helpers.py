@@ -188,6 +188,20 @@ class FormDescription(object):
             InvalidFieldError
 
         """
+
+        # Fix to format options values in a tuple format when it come from FORM_EXTRA
+        options_list = []
+        if options is not None:
+            for element in options:
+                try:
+                    options_list.append((element["name"], element["value"]))
+                except:
+                    pass
+
+        if len(options_list) > 0:
+            options = options_list
+
+            
         if field_type not in self.ALLOWED_TYPES:
             msg = u"Field type '{field_type}' is not a valid type.  Allowed types are: {allowed}.".format(
                 field_type=field_type,

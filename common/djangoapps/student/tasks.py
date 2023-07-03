@@ -29,10 +29,15 @@ def send_activation_email(self, msg_string, from_address=None):
     max_retries = settings.RETRY_ACTIVATION_EMAIL_MAX_ATTEMPTS
     retries = self.request.retries
 
-    if from_address is None:
-        from_address = configuration_helpers.get_value('ACTIVATION_EMAIL_FROM_ADDRESS') or (
-            configuration_helpers.get_value('email_from_address', settings.DEFAULT_FROM_EMAIL)
-        )
+    from_address = configuration_helpers.get_value('ACTIVATION_EMAIL_FROM_ADDRESS') or (
+        configuration_helpers.get_value('email_from_address', settings.DEFAULT_FROM_EMAIL)
+    )
+
+
+    from pprint import pformat
+    log.info("act conf hlp "+pformat(configuration_helpers.get_value('ACTIVATION_EMAIL_FROM_ADDRESS')))
+    log.info("adresse: "+pformat(from_address))
+
     msg.options['from_address'] = from_address
 
     dest_addr = msg.recipient.email_address

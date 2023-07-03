@@ -488,7 +488,7 @@ class RegistrationView(APIView):
         data = request.POST.copy()
         self._handle_terms_of_service(data)
 
-        log.info("[WUL] Email: "+str(data['email'])+" - Specialty: "+str(data['specialty'])+" - Company: "+str(data['company']))
+        # log.info("[WUL] Email: "+str(data['email'])+" - Specialty: "+str(data['specialty'])+" - Company: "+str(data['company']))
 
         response = self._handle_duplicate_email_username(request, data)
         if response:
@@ -551,7 +551,34 @@ class RegistrationView(APIView):
         except PermissionDenied:
             response = HttpResponseForbidden(_("Account creation not allowed."))
 
+        # WUL - Custom field params on registration
+        if user:
+            FORM_EXTRA = configuration_helpers.get_value('FORM_EXTRA', [])
+            if len(FORM_EXTRA):
+                form_extra_fields = []
+                for field in FORM_EXTRA:
+                    for key, value in field.items():
+                        if key == 'name':
+                            form_extra_fields.append(value)
+
+                self._update_custom_field_on_account_creation(user, form_extra_fields, data.dict())
+
+            
         return response, user
+
+    def _update_custom_field_on_account_creation(self, user, form_extra_fields, data):
+        custom_fields = json.loads(user.profile.custom_field)
+        log.info('data')
+        log.info(data)
+        for field in form_extra_fields:
+            if field in data.keys():
+                custom_fields[field] = data[field]
+        user.profile.custom_field = json.dumps(custom_fields)
+        user.profile.save()
+
+        log.info('custom_fields')
+        log.info(custom_fields)
+
 
     def _create_response(self, request, response_dict, status_code, redirect_url=None):
         if status_code == 200:

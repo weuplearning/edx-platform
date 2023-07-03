@@ -29,6 +29,15 @@ is_rtl = get_language_bidi()
             % endif
         </div>
     % endfor
+   <script>
+ // GTM event working but not sent to GA
+ window.dataLayer = window.dataLayer || [];
+ window.dataLayer.push({
+ 'event': 'activationMesssageDisplayed'
+ });
+ // Working GA event
+ gtag('event', 'Account creation', {'event_category':'Account creation', 'event_label':'Account creation'});
+   </script>
 % endif
 
 <%static:webpack entry="CourseGoals">

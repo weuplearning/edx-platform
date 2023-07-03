@@ -5101,6 +5101,11 @@ msgid ""
 "{strongStart}you will no longer be able to use the same email on "
 "{platformName}.{strongEnd}"
 msgstr ""
+"{strongStart}Attention: La suppression de votre compte est permanente et "
+"irréversible.{strongEnd} Veuillez lire en détail ce qui suit avant de "
+"poursuivre. Cette action est irréversible et {strongStart}vous ne pourrez "
+"plus utiliser le même email pour vous réinscrire au site internet "
+"{platformName}.{strongEnd}"
 
 #: lms/static/js/student_account/components/StudentAccountDeletion.jsx
 msgid ""
@@ -5108,12 +5113,20 @@ msgid ""
 "cannot be undone. {platformName} will not be able to recover your account or"
 " the data that is deleted."
 msgstr ""
+"Remarque: la suppression de votre compte et de vos données personnelles est "
+"définitive et irréversible. Une fois votre compte supprimé, vous ne pourrez "
+"plus utiliser vos identifiants pour acccéder au contenu du site internet "
+"{platformName}. Vous perdrez également l'accès à vos badges de validation de"
+" module."
 
 #: lms/static/js/student_account/components/StudentAccountDeletion.jsx
 msgid ""
 "Once your account is deleted, you cannot use it to take courses on the "
 "{platformName} app, {siteName}, or any other site hosted by {platformName}."
 msgstr ""
+"Une fois votre compte supprimé, vous ne pourrez plus suivre les contenus du "
+"site internet {platformName} ({siteName}) ou sur quelque terminal que ce "
+"soit y compris une éventuelle application mobile de {platformName}."
 
 #: lms/static/js/student_account/components/StudentAccountDeletion.jsx
 #: lms/static/js/student_account/components/StudentAccountDeletionModal.jsx
@@ -5121,10 +5134,12 @@ msgid ""
 "This includes access to {siteName} from your employer’s or university’s "
 "system{additionalSiteSpecificDeletionText}."
 msgstr ""
+"Cela inclut l'accès à {siteName} depuis les systèmes de votre entreprise ou "
+"établissement d’enseignement{additionalSiteSpecificDeletionText}."
 
 #: lms/static/js/student_account/components/StudentAccountDeletion.jsx
 msgid "We’re sorry to see you go!"
-msgstr "Nous sommes désolés de vous voir partir !"
+msgstr "Nous sommes navrés de vous voir partir !"
 
 #: lms/static/js/student_account/components/StudentAccountDeletion.jsx
 #: lms/static/js/student_account/views/account_settings_factory.js
@@ -5196,7 +5211,7 @@ msgid ""
 "to fully process through our system. If you want to opt-out of emails before"
 " then, please unsubscribe from the footer of any email."
 msgstr ""
-"La suppression d'un compte, comprenant le retrait des listes d'e-mail, peu "
+"La suppression d'un compte, comprenant le retrait des listes d'e-mail, peut "
 "prendre quelques semaines afin de traiter entièrement notre système. Si vous"
 " souhaitez renoncer aux e-mails ultérieurement, veuillez vous désinscrire en"
 " consultant le pied de page de n'importe quel e-mail."
@@ -5338,7 +5353,7 @@ msgstr "Adresse e-mail (Connexion)"
 msgid ""
 "You receive messages from {platform_name} and course teams at this address."
 msgstr ""
-"Les messages que vous recevrez de la part de la plateforme {platform_name} "
+"Les messages que vous recevrez de la part du site internet {platform_name} "
 "et des équipes pédagogiques seront envoyés à cette adresse."
 
 #: lms/static/js/student_account/views/account_settings_factory.js
@@ -5475,12 +5490,12 @@ msgid ""
 "Optionally, link your personal accounts to the social media icons on your "
 "edX profile."
 msgstr ""
-"Vous pouvez facultativement établir un lien entre vos comptes personnels et "
-"les icônes de réseaux sociaux sur votre profil edX."
+"Si vous le souhaitez, vous pouvez relier vos comptes personnels à vos "
+"réseaux sociaux"
 
 #: lms/static/js/student_account/views/account_settings_factory.js
 msgid "{platform_display_name} Link"
-msgstr "{platform_display_name} Lien"
+msgstr "{platform_display_name}"
 
 #: lms/static/js/student_account/views/account_settings_factory.js
 msgid ""
@@ -9063,7 +9078,7 @@ msgstr "S'enregistrer avec votre entreprise ou école"
 
 #: lms/templates/student_account/form_field.underscore
 msgid "Need other help signing in?"
-msgstr "Encore besoin d'aide pour vous enregistrer?"
+msgstr "Autres options pour vous connecter"
 
 #: lms/templates/student_account/form_field.underscore
 msgid "Create an account"
@@ -9190,7 +9205,7 @@ msgstr "Se connecter avec %(providerName)s"
 
 #: lms/templates/student_account/password_reset.underscore
 msgid "Password assistance"
-msgstr "Aide mot de passe"
+msgstr "Récupérez votre mot de passe"
 
 #: lms/templates/student_account/password_reset.underscore
 msgid ""

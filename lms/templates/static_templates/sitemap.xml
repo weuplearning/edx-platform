@@ -1,5 +1,9 @@
 ## This page left intentionally blank.  Feel free to add your own content.
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url><loc>https://www.example.com/</loc><lastmod>2016-01-01</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+<url>
+<loc>https://weup.in/</loc>
+<lastmod>2020-12-09T13:31:39+00:00</lastmod>
+<priority>1.00</priority>
+</url>
 </urlset>

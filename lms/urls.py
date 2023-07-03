@@ -991,3 +991,8 @@ urlpatterns += [
 urlpatterns += [
     url(r'^api/course_experience/', include('openedx.features.course_experience.api.v1.urls')),
 ]
+
+# WUL apps
+urlpatterns += (
+    url(r'wul_apps/', include('lms.djangoapps.wul_apps.urls')),
+)

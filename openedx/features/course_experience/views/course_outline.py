@@ -47,7 +47,7 @@ class CourseOutlineFragmentView(EdxFragmentView):
     Course outline fragment to be shown in the unified course view.
     """
 
-    def render_to_fragment(self, request, course_id, user_is_enrolled=True, **kwargs):  # pylint: disable=arguments-differ
+    def render_to_fragment(self,user_grade, request, course_id, user_is_enrolled=True, **kwargs):  # pylint: disable=arguments-differ
         """
         Renders the course outline as a fragment.
         """
@@ -79,6 +79,7 @@ class CourseOutlineFragmentView(EdxFragmentView):
         reset_deadlines_url = reverse(RESET_COURSE_DEADLINES_NAME)
 
         context = {
+            'user_grade': user_grade,
             'csrf': csrf(request)['csrf_token'],
             'course': course_overview,
             'due_date_display_format': course.due_date_display_format,
