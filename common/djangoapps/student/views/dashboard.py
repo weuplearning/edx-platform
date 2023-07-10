@@ -836,8 +836,9 @@ def student_dashboard(request):
         'resume_button_urls': resume_button_urls
     })
 
-    if len(course_enrollments) == 1:
-        # TODO : Rather use a reverse but for some reason courseware_course_tree is unknown
-        return redirect(reverse('openedx.course_experience.course_home', kwargs={'course_id': course_enrollments[0].course_id}))
+    # NEEDED REGARDING THE NEW DASHBOARD PAGE AMAZON
+    #if len(course_enrollments) == 1:
+    #    # TODO : Rather use a reverse but for some reason courseware_course_tree is unknown
+    #    return redirect(reverse('openedx.course_experience.course_home', kwargs={'course_id': course_enrollments[0].course_id}))
 
     return render_to_response('dashboard.html', context)

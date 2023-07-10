@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.csrf import ensure_csrf_cookie
 from edxmako.shortcuts import render_to_response
+from django.shortcuts import redirect
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 from opaque_keys.edx.locations import SlashSeparatedCourseKey
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
@@ -15,7 +16,7 @@ from courseware.courses import get_course_by_id, get_courses
 from django.core.exceptions import ObjectDoesNotExist
 #updated arbo
 from lms.djangoapps.grades.course_grade_factory import CourseGradeFactory
-from student.models import CourseEnrollment, UserProfile, LoginFailures
+from student.models import CourseEnrollment, UserProfile, LoginFailures, UNENROLLED_TO_ENROLLED
 from lms.djangoapps.wul_apps.wul_support_functions import is_course_opened, is_enrollment_opened, wul_verify_access
 from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse
@@ -23,6 +24,9 @@ from lms.djangoapps.wul_apps.models import WulCourseEnrollment
 from lms.djangoapps.wul_apps.wul_methods import WulUserActions
 from openedx.core.djangoapps.course_groups.cohorts import get_cohort_by_id, get_cohort_id, get_cohort_names, is_course_cohorted
 from lms.djangoapps.wul_apps.ensure_form.utils import ensure_form_factory
+from instructor.views.api import create_manual_course_enrollment
+
+
 from django.utils.translation import ugettext as _
 import json
 import logging
@@ -614,3 +618,20 @@ def generate_student_time_sheet(request, course_id, user_email):
 
 #breakline  si nom de cours trop long
 #change page quand arrive à la fin   if y < image_size => nouvelle page + image
+
+
+@login_required
+def course_registration(request, course_id):
+
+    course_key = SlashSeparatedCourseKey.from_string(str(course_id))
+
+    create_manual_course_enrollment(
+        user = request.user,
+        course_id = course_key,
+        mode = None,
+        enrolled_by = request.user,
+        reason = 'course-registration method',
+        state_transition = UNENROLLED_TO_ENROLLED,
+    )
+
+    return redirect('/dashboard')

@@ -11,7 +11,7 @@ from opaque_keys.edx.locations import SlashSeparatedCourseKey
 from student.models import User
 from student.models import UserProfile
 import json
-import logging
+
 from reportlab.pdfgen import canvas
 from reportlab.pdfbase.pdfmetrics import stringWidth
 from reportlab.rl_config import defaultPageSize
@@ -20,6 +20,9 @@ from reportlab.pdfbase import pdfmetrics
 from PyPDF2 import PdfFileWriter, PdfFileReader
 from datetime import date
 
+from lms.djangoapps.wul_apps.models import WulCourseEnrollment
+
+import logging
 log = logging.getLogger(__name__)
 
 
@@ -55,12 +58,20 @@ def generate_pdf(request,course_id):
     #import value for the certificate
     certificate_config = configuration_helpers.get_value('CERTIFICATE_LAYOUT')[course_id]
 
-
-
     # Setup SIZE, IMAGE, FONT and COLOR
     page_width = certificate_config['certificate_width']
     page_height = certificate_config['certificate_height']
-    image_url = certificate_config['certificate_url']
+
+    try:
+        multi_certificate = certificate_config['multi_certificate']
+    except:
+        multi_certificate = None
+        
+    if multi_certificate is not None:
+        image_url = certificate_config['certificate_url'][request.GET.get("certificate")]
+    else:
+        image_url = certificate_config['certificate_url']
+
     try:
         font_name = certificate_config['font_name']
         font_url = certificate_config['font_url']
@@ -90,15 +101,14 @@ def generate_pdf(request,course_id):
     try:
         font_color = certificate_config['font_color']
     except:
-        font_color = [255, 255, 255]
-    p.setFillColorRGB(font_color[0]/255, font_color[1]/255, font_color[2]/255) 
+        font_color = [0, 0, 0]
 
-    try:
-        user_name = request.user.profile.name
-    except:
-        try:
-            user_name = (request.user.first_name).capitalize() + " " + (request.user.last_name).upper()
-        except:
+    p.setFillColorRGB(font_color[0]/255, font_color[1]/255, font_color[2]/255)
+
+    user_name = request.user.profile.name
+    if user_name == "":
+        user_name = (request.user.first_name).capitalize() + " " + (request.user.last_name).upper()
+        if user_name == " ":
             try:
                 user_name = json.loads(request.user.profile.custom_field).get('first_name').capitalize() + " " + json.loads(request.user.profile.custom_field).get('last_name').upper()
             except:
@@ -108,6 +118,7 @@ def generate_pdf(request,course_id):
         name_position_y = certificate_config['name_position_y']
     except:
         name_position_y = False
+    
     if name_position_y :
         p.drawString(name_position_y, name_position_x, user_name)
     else:
@@ -140,17 +151,20 @@ def generate_pdf(request,course_id):
                 string_date_fr = string_date_en.replace(e, french_months[index])
 
         # Switch to multilingue
-        if date_lang == 'en' :
-            certificate_date += string_date_en
-        else:
-            certificate_date += string_date_fr
+        try:
+            if date_lang == 'en' :
+                certificate_date += string_date_en
+            else:
+                certificate_date += string_date_fr
+        except:
+            pass
+
         # COLOR
         try:
             font_color_2 = certificate_config['font_color_2']
         except:
-            font_color_2 = [255, 255, 255]
+            font_color_2 = [0, 0, 0]
         p.setFillColorRGB(font_color_2[0]/255, font_color_2[1]/255, font_color_2[2]/255) 
-
 
 
         # Write date at x and y with font_size_2
@@ -168,6 +182,53 @@ def generate_pdf(request,course_id):
             text_width_date = stringWidth(certificate_date, font_name, font_size_2)
             centered_date = (page_width - text_width_date) / 2.0
             p.drawString(centered_date, date_position_x , str(certificate_date))
+
+
+    # COURSE DURATION
+    try:
+        course_duration = certificate_config['course_duration']
+    except:
+        course_duration = False
+    
+    if course_duration :
+        enrollment = WulCourseEnrollment.get_enrollment(course_id, request.user)
+        timeInSecond = enrollment.global_time_tracking
+
+        def getTimeSpent():
+            hours = timeInSecond // 3600
+            seconds = timeInSecond % 3600
+            minutes = seconds // 60
+
+            timeSpent = "Temps passé sur le cours : "+str(hours)+"h "+str(minutes)+"min"
+            return timeSpent
+
+        try:
+            course_duration_position_x = certificate_config['course_duration_position_x']
+        except:
+            course_duration_position_x = False
+
+        try:
+            course_duration_position_y = certificate_config['course_duration_position_y']
+        except:
+            course_duration_position_y = False
+
+        if course_duration_position_x and course_duration_position_y:
+            p.drawString(course_duration_position_x, course_duration_position_y, getTimeSpent())
+
+
+    # custom CF to add
+    try:
+        custom_field_value = certificate_config['custom_field_value']
+    except:
+        custom_field_value = False
+
+    if custom_field_value : 
+        try :
+            cf = json.loads(request.user.profile.custom_field)
+            value = cf.get(custom_field_value['name'])
+            p.drawString(custom_field_value['position_x'], custom_field_value['position_y'], value)
+        except:
+            log.info('error with custom fields for certificate')
 
 
 

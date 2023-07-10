@@ -12,7 +12,7 @@ from lms.djangoapps.wul_apps.custom_fields_editor.views import CustomFieldView, 
 from lms.djangoapps.wul_apps.statistics.views import add_time_tracking, get_user_global_time
 from lms.djangoapps.wul_apps.ensure_form.views import ensure_form
 from lms.djangoapps.wul_apps.stat_dashboard.views import tma_create_user_from_csv, calculate_grades_xls
-from lms.djangoapps.wul_apps.user_dashboard.views import render_views, render_course_outline
+from lms.djangoapps.wul_apps.user_dashboard.views import render_views, render_course_outline, course_registration
 
 from lms.djangoapps.wul_apps.certificates.views import generate_pdf, ensure
 
@@ -91,4 +91,5 @@ urlpatterns += (
     url(r'^event$', render_views, name="render_views"),
     url(r'^coaching$', render_views, name="render_views"),
     url(r'^{}/course_outline$'.format(settings.COURSE_ID_PATTERN), render_course_outline, name="render_course_outline"),
+    url(r'^{}/course_registration$'.format(settings.COURSE_ID_PATTERN), course_registration, name="course_registration"),
 )
