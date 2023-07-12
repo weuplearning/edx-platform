@@ -841,4 +841,7 @@ def student_dashboard(request):
     #    # TODO : Rather use a reverse but for some reason courseware_course_tree is unknown
     #    return redirect(reverse('openedx.course_experience.course_home', kwargs={'course_id': course_enrollments[0].course_id}))
 
+    if request.path == "/dashboard/elearning":
+        return render_to_response('dashboard/elearning.html', context)
+
     return render_to_response('dashboard.html', context)
