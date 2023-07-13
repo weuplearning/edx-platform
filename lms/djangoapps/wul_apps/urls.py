@@ -20,6 +20,9 @@ from lms.djangoapps.wul_apps.certificates.views import generate_pdf, ensure
 from lms.djangoapps.wul_apps.converter_xlsx_to_targz.bvt.views import convert_to_tarfile_bvt 
 from lms.djangoapps.wul_apps.custom_grade_report.bvt.views import run_script_from_back 
 
+# Read Google Drive API
+from lms.djangoapps.wul_apps.google_drive.views import read_google_drive_file
+
 import logging
 log = logging.getLogger()
 
@@ -92,4 +95,9 @@ urlpatterns += (
     url(r'^coaching$', render_views, name="render_views"),
     url(r'^{}/course_outline$'.format(settings.COURSE_ID_PATTERN), render_course_outline, name="render_course_outline"),
     url(r'^{}/course_registration$'.format(settings.COURSE_ID_PATTERN), course_registration, name="course_registration"),
+)
+
+# Google Drive API
+urlpatterns += (
+    url(r'^read_google_drive_file$', read_google_drive_file, name="read_google_drive_file"),
 )
