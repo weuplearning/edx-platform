@@ -634,4 +634,5 @@ def course_registration(request, course_id):
         state_transition = UNENROLLED_TO_ENROLLED,
     )
 
-    return redirect('/dashboard')
+    # return redirect('/dashboard')
+    return redirect('/courses/'+course_id+'/course/')
