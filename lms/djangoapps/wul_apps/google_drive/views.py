@@ -34,4 +34,4 @@ def read_google_drive_file(request):
     file_content = response.decode('utf-8')
     file_content_json = json.loads(file_content)
 
-    return JsonResponse(file_content_json)
+    return JsonResponse(file_content_json, safe=False)
