@@ -105,6 +105,8 @@ urlpatterns = [
     url(r'', include('common.djangoapps.student.urls')),
     # TODO: Move lms specific student views out of common code
     url(r'^dashboard/?$', student_views.student_dashboard, name='dashboard'),
+    # elearning page for amazon , non enrolled courses
+    url(r'^dashboard/elearning/?$', student_views.student_dashboard, name='dashboard_elearning'),
     url(r'^change_enrollment$', student_views.change_enrollment, name='change_enrollment'),
 
     # Event tracking endpoints
