@@ -5,8 +5,11 @@
 <%namespace name='static' file='../static_content.html'/>
 
 <%!
+import re
+from math import ceil
 import json
 import pytz
+import logging
 from datetime import date, datetime, timedelta
 
 from django.utils import timezone
@@ -16,6 +19,8 @@ from django.utils.translation import ngettext
 from lms.djangoapps.courseware.access import has_access
 from openedx.core.djangolib.markup import HTML, Text
 from openedx.features.course_experience import RELATIVE_DATES_FLAG
+
+from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 %>
 
 <%
@@ -24,36 +29,608 @@ self_paced = context.get('self_paced', False)
 relative_dates_flag_is_enabled = RELATIVE_DATES_FLAG.is_enabled(str(course_key))
 is_course_staff = bool(user and course and has_access(user, 'staff', course, course.id))
 dates_banner_displayed = False
+log = logging.getLogger(__name__)
 %>
-<main role="main" class="course-outline" id="main" tabindex="-1">
+
+<head>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha384-pzjw8f+ua7Kw1TIq0v8FqFjcJ6pajs/rfdfs3SO+kD4Ck5BdPtF+to8xM6B5z6W5" crossorigin="anonymous">
+</head>
+
+
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+<style>
+
+
+
+    .carousel {
+      position: relative;
+      filter: drop-shadow(0 0 10px #0003);
+      perspective: 100px;
+      width: 100%;
+    margin: auto;
+    height: 400px;
+    margin-top: -50px;
+    }
+    
+    .carousel__viewport {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      display: flex;
+      overflow-x: scroll;
+      counter-reset: item;
+      scroll-behavior: smooth;
+      scroll-snap-type: x mandatory;
+      height: 423px;
+      overflow: hidden;
+      padding-left: 0;
+    }
+    
+    .carousel__slide {
+      position: relative;
+      flex: 0 0 100%;
+      width: 100%;
+      background-color:rgb(244, 244, 244);
+      counter-increment: item;
+      list-style: none;
+      margin-bottom: 25px;
+      /* display: flex;
+      justify-content: center; */
+    }
+    .carousel__slide:before {
+      content: counter(item);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate3d(-50%,-40%,70px);
+      color: #fff;
+      font-size: 2em;
+    }
+    
+    .carousel__snapper {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      scroll-snap-align: center;
+    }
+
+    .carousel__snapper__container {
+        display: flex;
+justify-content: center;
+align-items: center;
+padding-top: 30px;
+    }
+
+
+    
+    @media (hover: hover) {
+      .carousel__snapper {
+        /* animation-name: tonext, snap; */
+        animation-timing-function: ease;
+        animation-duration: 4s;
+        animation-iteration-count: infinite;
+      }
+    
+      .carousel__slide:last-child .carousel__snapper {
+        animation-name: tostart, snap;
+      }
+    }
+    
+    @media (prefers-reduced-motion: reduce) {
+      .carousel__snapper {
+        animation-name: none;
+      }
+    }
+    
+    
+    .carousel:hover .carousel__snapper,
+    .carousel:focus-within .carousel__snapper {
+      animation-name: none;
+    }
+    
+    .carousel__navigation {
+      position: absolute;
+      right: 0;
+      top: 335px;
+      left: 0;
+      text-align: center;
+    }
+    
+    .carousel__navigation-list,
+    .carousel__navigation-item {
+      display: inline-block;
+    }
+
+    .carousel__navigation-list{
+      padding-left: 0;
+    }
+    
+    .carousel__navigation-button {
+      display: inline-block;
+      width: 1.5rem;
+      height: 1.5rem;
+      background-color: #333;
+      background-clip: content-box;
+      border: 0.25rem solid transparent;
+      border-radius: 50%;
+      font-size: 0;
+      transition: transform 0.1s;
+    }
+    
+    .carousel::before,
+    .carousel::after,
+    .carousel__prev,
+    .carousel__next {
+      position: absolute;
+      top: 185px;
+      /* margin-top: 37.5%; */
+      width: 8rem;
+      /* height: 4rem; */
+      transform: translateY(-50%);
+      border-radius: 50%;
+      font-size: 0;
+      outline: 0;
+      color: black;
+    font-size: 5em;
+    }
+    
+    .carousel::before,
+    .carousel::after,
+    .carousel__prev {
+      left: 20px;
+    }
+    
+    .carousel::after,
+    .carousel::after,
+    .carousel__next {
+      right: -75px;
+    }
+    
+    .carousel::before,
+    .carousel::after {
+      content: '';
+      z-index: 1;
+      background-color: #333;
+      background-size: 1.5rem 1.5rem;
+      background-repeat: no-repeat;
+      background-position: center center;
+      color: #fff;
+      font-size: 2.5rem;
+      line-height: 4rem;
+      text-align: center;
+      pointer-events: none;
+    }
+    
+    .carousel::before {
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='0,50 80,100 80,0' fill='%23fff'/%3E%3C/svg%3E");
+    }
+    
+    .carousel::after {
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='100,50 20,100 20,0' fill='%23fff'/%3E%3C/svg%3E");
+    }
+    
+    .carousel_image {
+      width: 22%;
+    }
+
+  .course_logo {
+    height: 301px;
+  width: 301px;
+  border-radius: 20px;
+  display: flex;
+align-items: flex-end;
+  }
+
+  .course_logo_name {
+    margin: 1em;
+    color: #fff;
+    font-size: 1.1em;
+    width: 90%;
+  }
+
+  @font-face {
+    font-family: 'FontAwesome';
+    src: url('https://use.fontawesome.com/releases/v5.0.6/css/all.css');
+  }
+
+  .seq_video::before {
+    content:"\f008";
+    font-family: FontAwesome;
+  }
+  .seq_html::before {
+    content:"\f02d";
+    font-family: FontAwesome;
+  }
+  /* .seq_vertical .icon::before {
+    content:"\f00b";
+    font-family: FontAwesome;
+  }
+  .seq_problem .icon::before {
+    content:"\f044";
+    font-family: FontAwesome;
+  } */
+
+  /* new course layout*/
+  .progress_bar_and_score>.loader{
+    margin-right: 40px;
+    margin-left: 0px;
+  }
+
+  .progress_bar_and_score>.completed_percent{
+    width: 65px;
+    margin-left: 0px;
+  }
+
+  .progress-bar-grade{
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    border-radius: 0px;
+  }
+
+  .progress-bar-full{
+    border-radius: 0px;
+    height: 10px;
+  }
+
+  .empty-star.fa.fa-star-o{
+    background-color: rgba(0, 0, 0, 0);
+    color: rgb(255, 153, 0);
+    border-color: rgba(0, 0, 0, 0);
+    padding: 2px;
+    margin-right: 10px;
+    float: right;
+  }
+
+  .full-star.fa.fa-star{
+    color: rgb(255, 153, 0);
+    padding: 2px;
+    margin-right: 10px;
+    float: right;
+  }
+  
+  .course-outline .block-tree .section ol.outline-item .subsection{
+    border-top: 0px;
+  }
+
+  .course-outline .block-tree .section ol.outline-item{
+    background-color: #F4F5F6;
+  }
+
+  .course-outline .block-tree .section{
+    box-shadow: none;
+  }
+
+  .course-outline .block-tree .section{
+    border-bottom: none;
+  }
+
+  .course-outline .block-tree .section .section-name{
+    background-color: #F4F5F6;
+    border-top: 2px solid black;
+  }
+
+  .section-title{
+    color: black !important;
+  }
+
+  .page-content .page-content-main{
+    margin-left: 100px;
+    margin-right: 100px;
+  }
+
+  .course-outline .block-tree .section ol.outline-item .subsection .subsection-title{
+    margin-left: 50px;
+  }
+
+  .subsection {
+    height: 44px;
+  }
+
+  h4.subsection-title{
+    color: black !important;
+  }
+
+</style>
+    
+    
+    <style>
+    .flex-button {
+        display: flex !important;
+        justify-content: space-between;
+        align-items: center;
+        padding: 30px !important;
+    }
+    .progress_bar_and_score {
+        width: 30%;
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+    }
+    .completed_percent {
+        margin-left: 20px;
+        font-size: 1.5em;
+        margin-bottom: 0;
+    }
+    .accordion-flex {
+        display: flex !important;
+    }
+    .course_image_container{
+        background-image: url("/media/microsites/amazon/amazon_img.png");
+        height: 320px;
+        width: 340px;
+    }
+    
+    .course-outline .fa-chevron-right {
+        font-size: 1.6em;
+        margin-left: 15px;
+    }
+    .course-outline .fa-chevron-right.fa-rotate-90 {
+        font-size: 1.6em;
+    }
+    /* .course-outline .block-tree .section ol.outline-item {
+      display: flex;
+    height: 400px;
+    align-items: center;
+} */
+
+/* .complete-checkmark {
+  position: relative;
+  bottom: 260px;
+  left:-10px;
+  background: #f90;
+  border-radius: 100%;
+  color: #fff;
+  border: 1px solid #fff;
+  padding: 6px;
+} */
+
+.mobile_device{
+    display: none !important;
+}
+
+.tablet_device{
+    display: none !important;
+}
+
+
+
+
+@media screen and (max-width: 1440px) {
+  .desktop_device {
+    display:none !important;
+  }
+  .tablet_device{
+    display: block !important;
+}
+
+.progress_bar_and_score {
+  width: 100%;
+}
+.flex-button{
+  flex-direction: column;
+}
+}
+
+@media screen and (max-width: 991px) {
+  .footer-column {
+    width: 100% !important;
+}
+
+}
+
+
+@media screen and (max-width: 800px) {
+  .desktop_device {
+    display:none !important;
+  }
+  .tablet_device{
+    display: none !important;
+}
+
+.mobile_device{
+  display: block !important;
+}
+
+.progress_bar_and_score {
+  width: 100%;
+}
+.flex-button{
+  flex-direction: column;
+}
+}
+
+
+@media screen and (max-width: 520px) {
+  .progress-bar-full {
+    width: 74%;
+  }
+  .completed_percent {
+    margin-left: 10px;
+    font-size: 1.2em;
+}
+
+.carousel__navigation-button {
+
+    width: 1rem;
+    height: 1rem;
+
+}
+
+.course_logo {
+    height: 250px;
+  width: 250px;
+  }
+
+  .arrow_navigation {
+
+    bottom: -140px;
+
+}
+.complete-checkmark {
+
+    margin-bottom: 209px;
+}
+
+}
+
+
+.button_subsection {
+  display: flex;
+  width: 100%;
+margin-bottom: 1em;
+}
+
+
+.anchor{
+  display: block;
+  height: 200px; /*same height as header*/
+  margin-top: -200px; /*same height as header*/
+  visibility: hidden;
+}
+
+.bloc_course_vignet {
+  margin: 0 10px;
+}
+
+.squarebutton{
+  width: 1.8rem;
+  height: 1.8rem;
+  background-color: #f90;
+}
+
+a:hover{
+  text-decoration: none;
+}
+
+.carousel__navigation-item[data-active="active"] a {
+  background-color: #f90;
+  }
+.arrow_navigation {
+  cursor: pointer;
+  position: relative;
+  bottom: -215px;
+  z-index: 2;
+}
+
+.navigation_container {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 5px;
+}
+
+.arrow_navigation_right{
+  margin-right:-10px;
+}
+
+.loader {
+    margin-left: 25px;
+    border: 5px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 5px solid #f90;
+    width: 25px;
+    height: 25px;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+}
+
+.global-header .header-logo a .logo {
+  height: 114px;
+}
+
+.global-header .header-logo a {
+  margin: 0px 0 10px 40px;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.edit-note{
+  position: relative;
+  /* margin-right: -8px; */
+  left: -2px;
+}
+
+.help-icon {
+  position: relative;
+  /* margin-right: -7px; */
+  left: -2px;
+}
+
+.subsection-text{
+height: 44px;
+}
+
+.span_title_edit{
+  position: relative;
+  top: -6px;
+  margin-left: -4px;
+}
+
+.seq_video, .seq_html {
+  margin-right: 5px;
+}
+
+
+    </style>
+
+    
+<main role="main" class="desktop_device course-outline" id="main" tabindex="-1">
     <%include file="/dates_banner.html" />
     % if course_sections is not None:
-        <button class="btn btn-primary"
+        <button class="btn btn-primary "
                 id="expand-collapse-outline-all-button"
                 aria-expanded="false"
                 aria-controls="course-outline-block-tree"
                 >
-          <span class="expand-collapse-outline-all-extra-padding" id="expand-collapse-outline-all-span">${_("Expand All")}</span>
+            <span class="expand-collapse-outline-all-extra-padding" id="expand-collapse-outline-all-span">${_("Expand All")}</span>
         </button>
-        <ol class="block-tree accordion"
+        <ol class=" block-tree accordion"
             id="course-outline-block-tree"
             aria-labelledby="expand-collapse-outline-all-button">
-        % for section in course_sections:
+
+            % for section in course_sections:
             <%
             section_is_auto_opened = section.get('resume_block') is True
             scored = 'scored' if section.get('scored', False) else ''
+            section_id = section['id']
             %>
-                <li class="outline-item section ${scored}">
-                    <button class="section-name accordion-trigger outline-button"
+                <li class=" outline-item section ${scored}">
+
+                    <button class="section-name accordion-trigger outline-button flex-button"
                             aria-expanded="${ 'true' if section_is_auto_opened else 'false' }"
                             aria-controls="${ section['id'] }_contents"
                             id="${ section['id'] }">
-                        <span class="fa fa-chevron-right ${ 'fa-rotate-90' if section_is_auto_opened else '' }" aria-hidden="true"></span>
-                        <h3 class="section-title">${ section['display_name'] }</h3>
-            % if section.get('complete'):
-                            <span class="complete-checkmark fa fa-check" aria-hidden="true"></span>
-                            <span class="sr">${_("Completed")}</span>
-            % endif
+                            <span class="fa fa-chevron-right ${ 'fa-rotate-90' if section_is_auto_opened else '' }" aria-hidden="true"></span>
+                            <h3 class="section-title">${ section['display_name']}</h3>
+                        %for index, chapter in enumerate(user_grade.chapter_grades.keys()):
+                            %if section['display_name'] == user_grade.chapter_grades[chapter]['display_name']:
+                                <div class="progress_bar_and_score">
+                                    <div class="progress-bar-full">
+                                        <div style="width:0;" class="progress-bar-grade"></div>
+                                    </div>        
+                                    <div class="loader"></div>                                       
+    
+                                </div>  
+                            %endif
+                        %endfor
+
                     </button>
                     <ol class="outline-item accordion-panel ${ '' if section_is_auto_opened else 'is-hidden' }"
                         id="${ section['id'] }_contents"
@@ -66,6 +643,11 @@ dates_banner_displayed = False
                 graded = 'graded' if subsection.get('graded') else ''
                 num_graded_problems = subsection.get('num_graded_problems', 0)
                 %>
+                %for subsubsection in subsection.get('children', []):
+                    <%
+                    type = subsubsection.get('children', [])[0]['type'] if subsubsection.get('children', [])[0]['type'] else ''       
+                    %>
+                %endfor
                         <li class="subsection accordion ${ 'current' if subsection.get('resume_block') else '' } ${graded} ${scored}">
                             <a
                             % if enable_links:
@@ -80,7 +662,14 @@ dates_banner_displayed = False
                                       <span class="icon fa fa-pencil-square-o" aria-hidden="true"></span>
                             % endif
                                       <h4 class="subsection-title">
-                                          ${ subsection['display_name'] }
+                                        <% 
+                                        if subsection['display_name'] == "Testez vos connaissances !":
+                                            icon_type = 'custom_problem'
+                                        else:
+                                            icon_type = type
+                                        %>
+                                          <span class="seq_${type}" aria-hidden="true"></span>
+                                          <span class="span_title">${ subsection['display_name'] }</span>
                             % if num_graded_problems:
 <!--
                                           ${ngettext("({number} Question)",
@@ -89,9 +678,11 @@ dates_banner_displayed = False
 -->
                             % endif
                                       </h4>
+
                             % if subsection.get('complete'):
-                                <span class="complete-checkmark fa fa-check" aria-hidden="true"></span>
+                                <span class="full-star fa fa-star" aria-hidden="true"></span>
                                 <span class="sr">${_("Completed")}</span>
+
                             % endif
                             % if needs_prereqs:
                                     <div class="details prerequisite">
@@ -167,11 +758,791 @@ dates_banner_displayed = False
                         </li>
             % endfor
                     </ol>
+                    <!-- <ol class=" outline-item accordion-panel ${ '' if section_is_auto_opened else 'is-hidden' }"
+                        id="${ section['id'] }_contents"
+                        aria-labelledby="${ section['id'] }">
+                        <div class="navigation_container">
+                          <a class="arrow_navigation arrow_navigation_left" onclick="navigatePrevious('${ section_id}', '')">
+                            <i class="material-icons" style="font-size:45px;">arrow_back_ios</i>
+                          </a>
+                          <a class="arrow_navigation arrow_navigation_right"  onclick="navigateNext('${ section_id}', '')">
+                            <i class="material-icons" style="font-size:45px;">arrow_forward_ios</i>
+                        </a>
+                      </div>
+
+                        <section class="carousel" aria-label="Gallery">
+                          <%
+                          course_list = section.get('children', [])
+                          %>
+                            <ol class="carousel__viewport">
+                            % if len(course_list) <= 4:
+                                <li id="carousel__slide0_${ section['id'] }"
+                                tabindex="0"
+                                data-active="active"
+                                class="carousel__slide carousel__slide_${ section['id'] }">
+
+                                  <div class="carousel__snapper">
+                                      <div class=carousel__snapper__container>
+                                    % for subsection in section.get('children', []):
+                                      <%
+                                      course_name = subsection['display_name']
+                                      slug_img_name = re.sub(r'\W+', '_', course_name).lower()
+                                      %>
+                                      <a class="bloc_course_vignet"
+                                      % if enable_links:
+                                          href="${ subsection['lms_web_url'] }"
+                                      % else:
+                                          aria-disabled="true"
+                                      % endif
+                                      >
+
+                                          <div class ="course_logo" style="background: url('/media/microsites/amazon/courses/${slug_img_name}.png')">
+                                          <p class="course_logo_name">${course_name}</p>
+                                          % if subsection.get('complete'):
+                                          <span class="complete-checkmark fa fa-check" aria-hidden="true"></span>
+                                          <span class="sr">${_("Completed")}</span>
+                                          %endif
+                                        </div>
+                                    </a>
+                                    % endfor
+                                  </div>
+                                </div>
+                              </li>
+                            % else:
+
+                              <%
+                              rounded_course_list = ceil((len(course_list) / 4))
+                              course_list_list =[]
+                              course_name = subsection['display_name']
+                              slug_img_name = re.sub(r'\W+', '_', course_name).lower()
+                              range_index = 0
+                              %>
+                              
+                              %for i in range(rounded_course_list):
+                                  <%
+                                  course_list_list.append(course_list[range_index:range_index+4])
+                                  range_index+=4
+                                  %>
+                              % endfor
+
+                                % for index in range(rounded_course_list):
+                                % if index == 0:
+                                  <li id="carousel__slide${index}_${ section['id'] }"
+                                  tabindex="0"
+                                  data-active="active"
+                                  class="carousel__slide carousel__slide_${ section['id'] }">
+                                % else : 
+                                    <li id="carousel__slide${index}_${ section['id'] }"
+                                    tabindex="0"
+                                    class="carousel__slide carousel__slide_${ section['id'] }">
+                                % endif
+                                  <span class="anchor" id="carousel__slide${index}_${ section['id'] }_anchor"></span>
+                                    <div class="carousel__snapper">
+                                      <div class=carousel__snapper__container>
+
+                                        % for subsection in course_list_list[index]:
+                                        <%
+                                        course_name = subsection['display_name']
+                                        slug_img_name = re.sub(r'\W+', '_', course_name).lower()
+                                        %>
+                                        <a class="bloc_course_vignet"
+                                        % if enable_links:
+                                            href="${ subsection['lms_web_url'] }"
+                                        % else:
+                                            aria-disabled="true"
+                                        % endif
+                                        > 
+                                        % if slug_img_name == 'vendre_via_le_drive':
+                                          <div class ="course_logo" style="background: url('/media/microsites/amazon/courses/vendre_via_le_drive.31ef70b80544.png')">
+                                        % else:
+                                          <div class ="course_logo" style="background: url('/media/microsites/amazon/courses/${slug_img_name}.png')">
+                                        % endif
+                                          <p class="course_logo_name">${course_name}</p>
+                                          % if subsection.get('complete'):
+                                          <span class="complete-checkmark fa fa-check" aria-hidden="true"></span>
+                                          <span class="sr">${_("Completed")}</span>
+                                          %endif
+                                        </div>
+                                      </a>
+                                      % endfor
+
+                                          </div>
+                                    </div>
+
+                                  </li>
+                                %endfor
+
+                            % endif 
+                            </ol>
+                            % if len(course_list) > 4:
+     
+                              <aside class="carousel__navigation">
+                                <ol class="carousel__navigation-list">
+                                  % for index in range(rounded_course_list):
+                                  <li class="carousel__navigation-item">
+                                    %if index == 0:
+                                      <li class="carousel__navigation-item carousel__navigation-item_${ section['id'] }"
+                                      id="carousel__navigation-item${index}_${ section['id'] }"
+                                      data-active="active"
+                                      onclick="navigate('${ section_id }', '${index}', '')"
+                                      >
+                                      %else :
+                                      <li class="carousel__navigation-item carousel__navigation-item_${ section['id'] }"
+                                      id="carousel__navigation-item${index}_${ section['id'] }"
+                                      onclick="navigate('${ section_id }', '${index}', '')"
+                                      >
+                                    %endif
+                                    <a href="#carousel__slide${index}_${ section['id'] }_anchor"
+                                      class="carousel__navigation-button"
+                                      id="carousel__slide${index}_${ section['id'] }_dot" 
+                                      >Go to slide 1
+                                    </a>
+                                  </li>
+
+                                  %endfor
+
+                                </ol>
+                              </aside>
+
+                            %endif
+                          </section>
+                    </ol> -->
+
                 </li>
         % endfor
         </ol>
+
     % endif
 </main>
+
+
+
+
+<!-- tablet version  -->
+<main role="main" class=" tablet_device course-outline" id="main" tabindex="-1">
+  <%include file="/dates_banner.html" />
+  % if course_sections is not None:
+      <button class="btn btn-primary "
+              id="expand-collapse-outline-all-button"
+              aria-expanded="false"
+              aria-controls="course-outline-block-tree"
+              >
+          <span class="expand-collapse-outline-all-extra-padding" id="expand-collapse-outline-all-span">${_("Expand All")}</span>
+      </button>
+      <ol class=" block-tree accordion"
+          id="course-outline-block-tree"
+          aria-labelledby="expand-collapse-outline-all-button">
+          % for section in course_sections:
+          <%
+          section_is_auto_opened = section.get('resume_block') is True
+          scored = 'scored' if section.get('scored', False) else ''
+          section_id = section['id']
+          %>
+              <li class=" outline-item section ${scored}">
+
+                  <button class="section-name accordion-trigger outline-button flex-button"
+                          aria-expanded="${ 'true' if section_is_auto_opened else 'false' }"
+                          aria-controls="${ section['id'] }_contents_tablet"
+                          id="${ section['id'] }_tablet">
+                          <div class="button_subsection">
+                            <span id="arrow_rotate_${ section['block_id'] }" class="fa fa-chevron-right ${ 'fa-rotate-90' if section_is_auto_opened else '' }" aria-hidden="true"></span>
+
+                            <script>                                
+
+                              $(document.getElementById("${ section['id'] }_tablet")).on('click', function(e) {
+                                $(document.getElementById("arrow_rotate_${ section['block_id'] }")).toggleClass("fa-rotate-90"); 
+                                e.preventDefault();
+                              });
+
+                          </script>
+                            <h3 class="section-title">${ section['display_name']}</h3>
+                          </div>
+
+                      %for index, chapter in enumerate(user_grade.chapter_grades.keys()):
+                          %if section['display_name'] == user_grade.chapter_grades[chapter]['display_name']:
+                              <div class="progress_bar_and_score">
+                                  <div class="progress-bar-full">
+                                      <div style="width:0;" class="progress-bar-grade"></div>
+                                  </div>        
+                                  <!-- <h2 class="completed_percent"> 0 %</h2> -->
+                                  <div class="loader"></div>      
+                              </div>  
+                          %endif
+                      %endfor
+          % if section.get('complete'):
+                          <!-- <span class="complete-checkmark fa fa-check" aria-hidden="true"></span>
+                          <span class="sr">${_("Completed")}</span> -->
+          % endif
+                  </button>
+                  <ol class="outline-item accordion-panel ${ '' if section_is_auto_opened else 'is-hidden' }"
+                  id="${ section['id'] }_contents_tablet"
+                  aria-labelledby="${ section['id'] }_tablet">
+            % for subsection in section.get('children', []):
+                <%
+                gated_subsection = subsection['id'] in gated_content
+                needs_prereqs = not gated_content[subsection['id']]['completed_prereqs'] if gated_subsection else False
+                scored = 'scored' if subsection.get('scored', False) else ''
+                graded = 'graded' if subsection.get('graded') else ''
+                num_graded_problems = subsection.get('num_graded_problems', 0)
+                %>
+                %for subsubsection in subsection.get('children', []):
+                    <%
+                    type = subsubsection.get('children', [])[0]['type'] if subsubsection.get('children', [])[0]['type'] else ''       
+                    %>
+                %endfor
+                        <li class="subsection accordion ${ 'current' if subsection.get('resume_block') else '' } ${graded} ${scored}">
+                            <a
+                            % if enable_links:
+                                href="${ subsection['lms_web_url'] }"
+                            % else:
+                                aria-disabled="true"
+                            % endif
+                                class="subsection-text outline-button"
+                                id="${ subsection['id'] }"
+                            >
+                            % if graded and scored and 'special_exam_info' not in subsection:
+                                      <span class="icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            % endif
+                                      <h4 class="subsection-title">
+                                        <script>console.log("${subsection['display_name']}")</script>
+                                        % if subsection['display_name'] == "Testez vos connaissances !":
+                                        <span class="material-symbols-outlined edit-note">
+                                          edit_note
+                                          </span>
+                                          <span class="span_title span_title_edit">${ subsection['display_name'] }</span>
+                                        % elif subsection['display_name'] == "À votre avis ?":
+                                        <span class="material-symbols-outlined help-icon">
+                                          help
+                                          </span>
+                                          <span class="span_title span_title_edit">${ subsection['display_name'] }</span>
+                                        % else:
+                                            <i class="${'seq_'+type}" aria-hidden="true"></i>
+                                            <span class="span_title">${ subsection['display_name'] }</span>
+                                        % endif
+                            % if num_graded_problems:
+<!--
+                                          ${ngettext("({number} Question)",
+                                                     "({number} Questions)",
+                                                     num_graded_problems).format(number=num_graded_problems)}
+-->
+                            % endif
+                                      </h4>
+
+                            % if subsection.get('complete'):
+                                <span class="full-star fa fa-star" aria-hidden="true"></span>
+                                <span class="sr">${_("Completed")}</span>
+
+                            % endif
+                            % if needs_prereqs:
+                                    <div class="details prerequisite">
+                                        <span class="prerequisites-icon icon fa fa-lock" aria-hidden="true"></span>
+                                        ${ _("Prerequisite: ") }
+                                            <%
+                                                prerequisite_id = gated_content[subsection['id']]['prerequisite']
+                                                prerequisite_name = xblock_display_names.get(prerequisite_id)
+                                            %>
+                                            ${ prerequisite_name }
+                                    </div>
+                            % endif
+                                        <div class="details">
+
+                ## There are behavior differences between rendering of subsections which have
+                ## exams (timed, graded, etc) and those that do not.
+                ##
+                ## Exam subsections expose exam status message field as well as a status icon
+                <%
+                if subsection.get('due') is None or (self_paced and not in_edx_when):
+                    # examples: Homework, Lab, etc.
+                    data_string = subsection.get('format')
+                    data_datetime = ""
+                else:
+                    if 'special_exam_info' in subsection:
+                        data_string = _('due {date}')
+                    else:
+                        data_string = _("{subsection_format} due {{date}}").format(subsection_format=subsection.get('format'))
+                    data_datetime = subsection.get('due')
+                %>
+                % if subsection.get('format') or 'special_exam_info' in subsection:
+                                            <span class="subtitle">
+                    % if 'special_exam_info' in subsection:
+                                                    ## Display the exam status icon and status message
+                                                    <span
+                                                        class="menu-icon icon fa ${subsection['special_exam_info'].get('suggested_icon', 'fa-pencil-square-o')} ${subsection['special_exam_info'].get('status', 'eligible')}"
+                                                        aria-hidden="true"
+                                                    ></span>
+                                                    <span class="subtitle-name">
+                                                        ${subsection['special_exam_info'].get('short_description', '')}
+                                                    </span>
+
+                        ## completed exam statuses should not show the due date
+                        ## since the exam has already been submitted by the user
+                        % if not subsection['special_exam_info'].get('in_completed_state', False):
+                                                        <span
+                                                            class="localized-datetime subtitle-name"
+                                                            data-datetime="${data_datetime}"
+                                                            data-string="${data_string}"
+                                                            data-timezone="${user_timezone}"
+                                                            data-language="${user_language}"
+                                                        ></span>
+                        % endif
+                    % else:
+                                                    ## non-graded section, we just show the exam format and the due date
+                                                    ## this is the standard case in edx-platform
+                                                    <span
+                                                        class="localized-datetime subtitle-name"
+                                                        data-datetime="${data_datetime}"
+                                                        data-string="${data_string}"
+                                                        data-timezone="${user_timezone}"
+                                                        data-language="${user_language}"
+                                                    ></span>
+
+                        % if subsection.get('graded'):
+                                                <span class="sr">&nbsp;${_("This content is graded")}</span>
+                        % endif
+                    % endif
+                                            </span>
+                % endif
+                                        </div> <!-- /details -->
+                            </a>
+                        </li>
+            % endfor
+                    </ol>
+                  <!-- <ol class=" outline-item accordion-panel ${ '' if section_is_auto_opened else 'is-hidden' }"
+                      id="${ section['id'] }_contents_tablet"
+                      aria-labelledby="${ section['id'] }_tablet">
+                      <div class="navigation_container">
+                        <a class="arrow_navigation arrow_navigation_left" onclick="navigatePrevious('${ section_id}', '_tablet')">
+                          <i class="material-icons" style="font-size:45px;">arrow_back_ios</i>
+                        </a>
+                        <a class="arrow_navigation arrow_navigation_right"  onclick="navigateNext('${ section_id}', '_tablet')">
+                          <i class="material-icons" style="font-size:45px;">arrow_forward_ios</i>
+                      </a>
+                    </div>
+
+                      <section class="carousel" aria-label="Gallery">
+                        <%
+                        course_list = section.get('children', [])
+                        %>
+                          <ol class="carousel__viewport">
+                            % if len(course_list) <= 2:
+                                <li id="carousel__slide${index}_${ section['id'] }_mobile"
+                                tabindex="0"
+                                data-active="active"
+                                class="carousel__slide carousel__slide_${ section['id'] }_mobile">
+                                  <div class="carousel__snapper">
+                                      <div class=carousel__snapper__container>
+                                    % for subsection in section.get('children', []):
+                                      <%
+                                      course_name = subsection['display_name']
+                                      slug_img_name = re.sub(r'\W+', '_', course_name).lower()
+                                      %>
+                                      <a class="bloc_course_vignet"
+                                      % if enable_links:
+                                          href="${ subsection['lms_web_url'] }"
+                                      % else:
+                                          aria-disabled="true"
+                                      % endif
+                                      >
+                                          <div class ="course_logo" style="background: url('/media/microsites/amazon/courses/${slug_img_name}.png')">
+                                          <p class="course_logo_name">${course_name}</p>
+                                          % if subsection.get('complete'):
+                                          <span class="complete-checkmark fa fa-check" aria-hidden="true"></span>
+                                          <span class="sr">${_("Completed")}</span>
+                                          %endif
+                                        </div>
+                                    </a>
+                                    % endfor
+                                  </div>
+                                </div>
+                              </li>
+                            %else:
+
+                            <%
+                            rounded_course_list = ceil((len(course_list) / 2))
+                            course_list_list =[]
+                            course_name = subsection['display_name']
+                            slug_img_name = re.sub(r'\W+', '_', course_name).lower()
+                            range_index = 0
+                            %>
+
+                            %for i in range(rounded_course_list):
+                                <%
+                                course_list_list.append(course_list[range_index:range_index+4])
+                                range_index+=4
+                                %>
+                            % endfor
+
+                            % for index in range(rounded_course_list):
+
+                            % if index == 0:
+                              <li id="carousel__slide${index}_${ section['id'] }_tablet"
+                              tabindex="0"
+                              data-active="active"
+                              class="carousel__slide carousel__slide_${ section['id'] }_tablet">
+                            % else : 
+                              <li id="carousel__slide${index}_${ section['id'] }_tablet"
+                              tabindex="0"
+                              class="carousel__slide carousel__slide_${ section['id'] }_tablet">
+                            % endif
+
+                          <span class="anchor" id="carousel__slide${index}_${ section['id'] }_tablet_anchor"></span>
+                        <div class="carousel__snapper">
+                            <div class=carousel__snapper__container>
+                              %if len(course_list_list) > 0:
+                              % for subsection in course_list_list[index]:
+                            <%
+                            course_name = subsection['display_name']
+                            slug_img_name = re.sub(r'\W+', '_', course_name).lower()
+                            %>
+                            <a class="bloc_course_vignet"
+                            % if enable_links:
+                                href="${ subsection['lms_web_url'] }"
+                            % else:
+                                aria-disabled="true"
+                            % endif
+                            >
+                                % if slug_img_name == 'vendre_via_le_drive':
+                                <div class ="course_logo" style="background: url('/media/microsites/amazon/courses/vendre_via_le_drive.31ef70b80544.png')">
+                                % else:
+                                  <div class ="course_logo" style="background: url('/media/microsites/amazon/courses/${slug_img_name}.png')">
+                                % endif
+                                <p class="course_logo_name">${course_name}</p>
+                                % if subsection.get('complete'):
+                                <span class="complete-checkmark fa fa-check" aria-hidden="true"></span>
+                                <span class="sr">${_("Completed")}</span>
+                                %endif
+                              </div>
+                          </a>
+
+                          % endfor
+                          %endif
+                        </div>
+                      </div>
+
+                    </li>
+                    % endfor
+      
+                          </ol>
+                          <%
+                          course_list = section.get('children', [])
+                          number_of_subsections = len(course_list)
+                         
+                          %>
+                          <aside class="carousel__navigation">
+                            <ol class="carousel__navigation-list">
+                              % for index in range(rounded_course_list):
+                                %if index == 0:
+                                <li class="carousel__navigation-item carousel__navigation-item_${ section['id'] }_tablet"
+                                id="carousel__navigation-item${index}_${ section['id'] }_tablet"
+                                data-active="active"
+                                onclick="navigate('${ section_id }', '${index}', '_tablet')"
+                                >
+                                %else :
+                                <li class="carousel__navigation-item carousel__navigation-item_${ section['id'] }_tablet"
+                                id="carousel__navigation-item${index}_${ section['id'] }_tablet"
+                                onclick="navigate('${ section_id }', '${index}', '_tablet')"
+                                >
+                                %endif
+                                <a 
+                                href="#carousel__slide${index}_${ section['id'] }_tablet_anchor"
+                                  class="carousel__navigation-button">Go to slide 1</a>
+                              </li>
+                              %endfor
+                            </ol>
+                          </aside>
+
+                          % endif
+                        </section>
+                  </ol> -->
+
+              </li>
+      % endfor
+      </ol>
+
+  % endif
+</main>
+
+
+
+<!-- mobile version  -->
+  
+<main role="main" class=" mobile_device course-outline" id="main" tabindex="-1">
+  <%include file="/dates_banner.html" />
+  % if course_sections is not None:
+      <button class="btn btn-primary "
+              id="expand-collapse-outline-all-button"
+              aria-expanded="false"
+              aria-controls="course-outline-block-tree"
+              >
+          <span class="expand-collapse-outline-all-extra-padding" id="expand-collapse-outline-all-span">${_("Expand All")}</span>
+      </button>
+      <ol class=" block-tree accordion"
+          id="course-outline-block-tree"
+          aria-labelledby="expand-collapse-outline-all-button">
+          % for section in course_sections:
+          <%
+          section_is_auto_opened = section.get('resume_block') is True
+          scored = 'scored' if section.get('scored', False) else ''
+          section_id = section['id']
+          %>
+              <li class=" outline-item section ${scored}">
+
+                  <button class="section-name accordion-trigger outline-button flex-button"
+                          aria-expanded="${ 'true' if section_is_auto_opened else 'false' }"
+                          aria-controls="${ section['id'] }_contents_mobile"
+                          id="${ section['id'] }_mobile">
+                          <div class="button_subsection">
+                            <span id="arrow_rotate_${ section['block_id'] }_mobile" class="fa fa-chevron-right ${ 'fa-rotate-90' if section_is_auto_opened else '' }" aria-hidden="true"></span>
+                            <h3 class="section-title">${ section['display_name']}</h3>
+                          </div>
+
+                          <script>                                
+                            $(document.getElementById("${ section['id'] }_mobile")).on('click', function(e) {
+                              $(document.getElementById("arrow_rotate_${ section['block_id'] }_mobile")).toggleClass("fa-rotate-90"); 
+                              e.preventDefault();
+                            });
+
+                        </script>
+
+                      %for index, chapter in enumerate(user_grade.chapter_grades.keys()):
+                          %if section['display_name'] == user_grade.chapter_grades[chapter]['display_name']:
+                              <div class="progress_bar_and_score">
+                                  <div class="progress-bar-full">
+                                      <div style="width:0;" class="progress-bar-grade"></div>
+                                  </div>        
+                                  <!-- <h2 class="completed_percent"> 0 %</h2>      -->
+                                  <div class="loader"></div>      
+                              </div>  
+                          %endif
+                      %endfor
+          % if section.get('complete'):
+                          <!-- <span class="complete-checkmark fa fa-check" aria-hidden="true"></span>
+                          <span class="sr">${_("Completed")}</span> -->
+          % endif
+                  </button>
+                  <ol class="outline-item accordion-panel ${ '' if section_is_auto_opened else 'is-hidden' }"
+                  id="${ section['id'] }_contents_mobile"
+                  aria-labelledby="${ section['id'] }_mobile">
+            % for subsection in section.get('children', []):
+                <%
+                gated_subsection = subsection['id'] in gated_content
+                needs_prereqs = not gated_content[subsection['id']]['completed_prereqs'] if gated_subsection else False
+                scored = 'scored' if subsection.get('scored', False) else ''
+                graded = 'graded' if subsection.get('graded') else ''
+                num_graded_problems = subsection.get('num_graded_problems', 0)
+                %>
+                %for subsubsection in subsection.get('children', []):
+                    <%
+                    type = subsubsection.get('children', [])[0]['type'] if subsubsection.get('children', [])[0]['type'] else ''       
+                    %>
+                %endfor
+                        <li class="subsection accordion ${ 'current' if subsection.get('resume_block') else '' } ${graded} ${scored}">
+                            <a
+                            % if enable_links:
+                                href="${ subsection['lms_web_url'] }"
+                            % else:
+                                aria-disabled="true"
+                            % endif
+                                class="subsection-text outline-button"
+                                id="${ subsection['id'] }"
+                            >
+                            % if graded and scored and 'special_exam_info' not in subsection:
+                                      <span class="icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            % endif
+                                      <h4 class="subsection-title">
+                                          <span class="seq_${type}" aria-hidden="true"></span>
+                                          <span class="span_title">${ subsection['display_name'] }</span>
+                            % if num_graded_problems:
+<!--
+                                          ${ngettext("({number} Question)",
+                                                     "({number} Questions)",
+                                                     num_graded_problems).format(number=num_graded_problems)}
+-->
+                            % endif
+                                      </h4>
+
+                            % if subsection.get('complete'):
+                                <span class="full-star fa fa-star" aria-hidden="true"></span>
+                                <span class="sr">${_("Completed")}</span>
+
+                            % endif
+                            % if needs_prereqs:
+                                    <div class="details prerequisite">
+                                        <span class="prerequisites-icon icon fa fa-lock" aria-hidden="true"></span>
+                                        ${ _("Prerequisite: ") }
+                                            <%
+                                                prerequisite_id = gated_content[subsection['id']]['prerequisite']
+                                                prerequisite_name = xblock_display_names.get(prerequisite_id)
+                                            %>
+                                            ${ prerequisite_name }
+                                    </div>
+                            % endif
+                                        <div class="details">
+
+                ## There are behavior differences between rendering of subsections which have
+                ## exams (timed, graded, etc) and those that do not.
+                ##
+                ## Exam subsections expose exam status message field as well as a status icon
+                <%
+                if subsection.get('due') is None or (self_paced and not in_edx_when):
+                    # examples: Homework, Lab, etc.
+                    data_string = subsection.get('format')
+                    data_datetime = ""
+                else:
+                    if 'special_exam_info' in subsection:
+                        data_string = _('due {date}')
+                    else:
+                        data_string = _("{subsection_format} due {{date}}").format(subsection_format=subsection.get('format'))
+                    data_datetime = subsection.get('due')
+                %>
+                % if subsection.get('format') or 'special_exam_info' in subsection:
+                                            <span class="subtitle">
+                    % if 'special_exam_info' in subsection:
+                                                    ## Display the exam status icon and status message
+                                                    <span
+                                                        class="menu-icon icon fa ${subsection['special_exam_info'].get('suggested_icon', 'fa-pencil-square-o')} ${subsection['special_exam_info'].get('status', 'eligible')}"
+                                                        aria-hidden="true"
+                                                    ></span>
+                                                    <span class="subtitle-name">
+                                                        ${subsection['special_exam_info'].get('short_description', '')}
+                                                    </span>
+
+                        ## completed exam statuses should not show the due date
+                        ## since the exam has already been submitted by the user
+                        % if not subsection['special_exam_info'].get('in_completed_state', False):
+                                                        <span
+                                                            class="localized-datetime subtitle-name"
+                                                            data-datetime="${data_datetime}"
+                                                            data-string="${data_string}"
+                                                            data-timezone="${user_timezone}"
+                                                            data-language="${user_language}"
+                                                        ></span>
+                        % endif
+                    % else:
+                                                    ## non-graded section, we just show the exam format and the due date
+                                                    ## this is the standard case in edx-platform
+                                                    <span
+                                                        class="localized-datetime subtitle-name"
+                                                        data-datetime="${data_datetime}"
+                                                        data-string="${data_string}"
+                                                        data-timezone="${user_timezone}"
+                                                        data-language="${user_language}"
+                                                    ></span>
+
+                        % if subsection.get('graded'):
+                                                <span class="sr">&nbsp;${_("This content is graded")}</span>
+                        % endif
+                    % endif
+                                            </span>
+                % endif
+                                        </div> <!-- /details -->
+                            </a>
+                        </li>
+            % endfor
+                    </ol>
+                  <!-- <ol class=" outline-item accordion-panel ${ '' if section_is_auto_opened else 'is-hidden' }"
+                      id="${ section['id'] }_contents_mobile"
+                      aria-labelledby="${ section['id'] }_mobile">
+                      <div class="navigation_container">
+                        <a class="arrow_navigation arrow_navigation_left" onclick="navigatePrevious('${ section_id}', '_mobile')">
+                          <i class="material-icons" style="font-size:45px;">arrow_back_ios</i>
+                        </a>
+                        <a class="arrow_navigation arrow_navigation_right"  onclick="navigateNext('${ section_id}', '_mobile')">
+                          <i class="material-icons" style="font-size:45px;">arrow_forward_ios</i>
+                      </a>
+                    </div>
+                
+                      <section class="carousel" aria-label="Gallery">
+
+                        <%
+                        course_list = section.get('children', [])
+                        %>
+                          <ol class="carousel__viewport">
+                        % for index, subsection in enumerate(section.get('children', [])):
+                          % if index == 0:
+                            <li id="carousel__slide${index}_${ section['id'] }_mobile"
+                            tabindex="0"
+                            data-active="active"
+                            class="carousel__slide carousel__slide_${ section['id'] }_mobile">
+                          % else : 
+                            <li id="carousel__slide${index}_${ section['id'] }_mobile"
+                            tabindex="0"
+                            class="carousel__slide carousel__slide_${ section['id'] }_mobile">
+                          % endif
+                          <span class="anchor" id="carousel__slide${index}_${ section['id'] }_mobile_anchor"></span>
+                        <div class="carousel__snapper">
+                            <div class=carousel__snapper__container>
+
+                            <%
+                            course_name = subsection['display_name']
+                            slug_img_name = re.sub(r'\W+', '_', course_name).lower()
+                            %>
+                            <a class="bloc_course_vignet"
+                            % if enable_links:
+                                href="${ subsection['lms_web_url'] }"
+                            % else:
+                                aria-disabled="true"
+                            % endif
+                            >
+                              % if slug_img_name == 'vendre_via_le_drive':
+                              <div class ="course_logo" style="background: url('/media/microsites/amazon/courses/vendre_via_le_drive.31ef70b80544.png')">
+                              % else:
+                                <div class ="course_logo" style="background: url('/media/microsites/amazon/courses/${slug_img_name}.png')">
+                              % endif
+                                <p class="course_logo_name">${course_name}</p>
+                                % if subsection.get('complete'):
+                                <span class="complete-checkmark fa fa-check" aria-hidden="true"></span>
+                                <span class="sr">${_("Completed")}</span>
+                                %endif
+                              </div>
+                          </a>
+
+                        </div>
+                      </div>
+                    </li>
+                    % endfor
+      
+                          </ol>
+                          <%
+                          course_list = section.get('children', [])
+                          number_of_subsections = len(course_list)
+
+                         
+                          %>
+
+                          <aside class="carousel__navigation">
+                            <ol class="carousel__navigation-list">
+                              % for index in range(number_of_subsections):
+                                %if index == 0:
+                                <li class="carousel__navigation-item carousel__navigation-item_${ section['id'] }_mobile"
+                                id="carousel__navigation-item${index}_${ section['id'] }_mobile"
+                                data-active="active"
+                                onclick="navigate('${ section_id }', '${index}', '_mobile')"
+                                >
+                                %else :
+                                <li class="carousel__navigation-item carousel__navigation-item_${ section['id'] }_mobile"
+                                id="carousel__navigation-item${index}_${ section['id'] }_mobile"
+                                onclick="navigate('${ section_id }', '${index}', '_mobile')"
+                                >
+                                %endif
+                                <a 
+                                href="#carousel__slide${index}_${ section['id'] }_mobile_anchor"
+                                  class="carousel__navigation-button">Go to slide 1</a>
+                              </li>
+                              %endfor
+                            </ol>
+                          </aside>
+                        </section>
+
+                  </ol> -->
+
+              </li>
+      % endfor
+      </ol>
+
+  % endif
+</main>
+
 
 <%static:require_module_async module_name="js/dateutil_factory" class_name="DateUtilFactory">
     DateUtilFactory.transform('.localized-datetime');
@@ -180,3 +1551,154 @@ dates_banner_displayed = False
 <%static:webpack entry="CourseOutline">
     new CourseOutline();
 </%static:webpack>
+
+
+
+
+
+<script>
+  function navigate(sectionId, index, device) {
+    
+      let listElement = document.getElementsByClassName("carousel__navigation-item_" + sectionId + device)
+      for (let i = 0; i < listElement.length; i++) {
+          if (listElement[i].getAttribute("data-active") === "active") {
+              if (listElement[i].getAttribute("id") === "carousel__navigation-item_" + index + "_"+ sectionId + device) {
+                  break;
+              } else {
+                  listElement[i].removeAttribute("data-active")
+                  document.getElementById("carousel__navigation-item" + index + "_" + sectionId + device).setAttribute("data-active", "active")
+                  for (let i = 0; i < document.getElementsByClassName('carousel__slide_' + sectionId + device).length; i++) {
+                      if (document.getElementsByClassName('carousel__slide_' + sectionId + device)[i].getAttribute("data-active") === "active") {
+                          document.getElementsByClassName('carousel__slide_' + sectionId + device)[i].removeAttribute("data-active")
+                      }
+                  }
+                  document.getElementById('carousel__slide' + index + '_' + sectionId + device).setAttribute("data-active", "active")
+                  // window.location.href='#carousel__slide' + index + '_' + sectionId + '_mobile_anchor'
+                  break;
+              }
+
+          }
+      }
+  }
+
+
+  function navigateNext(sectionId, device) {
+
+        let listElement = document.getElementsByClassName('carousel__slide_' + sectionId + device)
+
+        for (let i = 0; i < listElement.length; i++) {
+            if (listElement[i].getAttribute("data-active") === "active") {
+                listElement[i + 1].setAttribute("data-active", "active")
+                listElement[i].removeAttribute("data-active")
+                document.getElementById("carousel__navigation-item" + i + "_" + sectionId + device).removeAttribute("data-active")
+                document.getElementById("carousel__navigation-item" + (i + 1) + "_" + sectionId + device).setAttribute("data-active", "active")
+                window.location.href='#carousel__slide' + (i + 1) + '_' + sectionId + device + '_anchor'
+
+                break;
+            }
+        }
+    }
+
+    function navigatePrevious(sectionId, device) {
+        let listElement = document.getElementsByClassName('carousel__slide_' + sectionId + device)
+        for (let i = 0; i < listElement.length; i++) {
+            if (listElement[i].getAttribute("data-active") === "active") {
+                listElement[i - 1].setAttribute("data-active", "active")
+                listElement[i].removeAttribute("data-active")
+                document.getElementById("carousel__navigation-item" + i + "_" + sectionId + device).removeAttribute("data-active")
+                document.getElementById("carousel__navigation-item" + (i - 1) + "_" + sectionId + device).setAttribute("data-active", "active")
+                window.location.href='#carousel__slide' + (i - 1) + '_' + sectionId + device + '_anchor'
+                
+                break;
+            }
+        } 
+    }
+</script>
+
+<!-- visibility hidden for introduction -->
+
+<script>
+  let introductionButton = document.getElementById("block-v1:amazon+amazon001+SP+type@chapter+block@2bae6b60b8a1423382a8915610cb9737")
+  let introductionButtonProgressBar = introductionButton.children[2]
+  introductionButtonProgressBar.style.visibility = "hidden"
+</script>
+
+<!-- Add completion instead of quiz result in progress bar -->
+<!-- TODO animate progress of completion bar -->
+<script>
+  window.addEventListener('load', function() {
+
+      for (course of completion_list) {
+        document.querySelectorAll("h3").forEach(function(element){
+
+          if(element.textContent === course.replace("\"", "'")){
+            // console.log(element)
+            let score = String(Math.floor(completion_object[course]) + "%")
+            let score_text = document.createElement("h2");
+            score_text.classList.add("completed_percent");
+            score_text.textContent = score 
+            if (element.nextElementSibling) {
+              element.nextElementSibling.children[0].children[0].style.width = score
+              // element.nextElementSibling.children[1].textContent = score 
+              element.nextElementSibling.children[1].replaceWith(score_text);
+            } else {
+              if (element.parentNode.nextElementSibling.children[0]) {
+                element.parentNode.nextElementSibling.children[0].children[0].style.width = score
+                // element.parentNode.nextElementSibling.children[1].textContent = score
+                element.parentNode.nextElementSibling.children[1].replaceWith(score_text);
+              } else {
+                element.parentNode.nextElementSibling.nextElementSibling.children[0].children[0].style.width = score
+                // element.parentNode.nextElementSibling.nextElementSibling.children[1].textContent = score
+                element.parentNode.nextElementSibling.nextElementSibling.children[1].replaceWith(score_text);
+              }
+
+            }
+            }
+          });
+      }
+      // new course layout
+      let progress_bar_and_score = document.getElementsByClassName("progress_bar_and_score");
+      for(let i=0; i< progress_bar_and_score.length; i++){
+        progress_bar_and_score[i].insertBefore(progress_bar_and_score[i].children[1],progress_bar_and_score[i].children[0]);
+      }
+  });
+  </script>
+
+  <script>
+    //new course layout
+    window.addEventListener('load', function() {
+      let subsectionTitle = document.getElementsByClassName("subsection-text outline-button");
+      for (let i=0; i<subsectionTitle.length; i++){
+        if(subsectionTitle[i].getElementsByClassName("full-star fa fa-star").length == 0){
+            let emptyStar = document.createElement("span");
+            emptyStar.className = "empty-star fa fa-star-o";
+            emptyStar.ariaHidden = "true";
+            subsectionTitle[i].appendChild(emptyStar);
+        }
+      }
+    })
+  </script>
+
+
+<!-- // remove webinaire section -->
+
+<script>
+
+  function removeWebinaireSection () {
+    let divs = document.getElementsByClassName("section-title")
+    const searchText = "webinaire";
+    for (const div of divs) {
+      if (div.textContent.includes(searchText)) {
+        console.log(div)
+        console.log(div.textContent)
+        console.log(div.parentElement.parentElement)
+        div.parentElement.parentElement.remove()
+      } 
+    }
+  }
+  
+  removeWebinaireSection()
+  const myTimeout = setTimeout(removeWebinaireSection, 1000);
+  
+  
+  </script>
