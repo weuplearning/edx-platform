@@ -281,9 +281,9 @@ align-items: flex-end;
     height: 10px;
   }
 
-  .empty-star.fa.fa-star-o{
+  .empty-star.far.fa-star{
     background-color: rgba(0, 0, 0, 0);
-    color: rgb(255, 153, 0);
+    color: rgb(218, 218, 218);
     border-color: rgba(0, 0, 0, 0);
     padding: 2px;
     margin-right: 10px;
@@ -587,6 +587,21 @@ height: 44px;
   margin-right: 5px;
 }
 
+.section-name.accordion-trigger.outline-button{
+  padding-left: 0px !important;
+}
+
+.course-outline .block-tree .section .section-name .section-title{
+  padding-left: 0px;
+}
+
+.course-outline .block-tree .outline-button .fa-chevron-right{
+  color: black !important;
+}
+
+.progress-bar-full{
+  height: 4px;
+}
 
     </style>
 
@@ -758,155 +773,6 @@ height: 44px;
                         </li>
             % endfor
                     </ol>
-                    <!-- <ol class=" outline-item accordion-panel ${ '' if section_is_auto_opened else 'is-hidden' }"
-                        id="${ section['id'] }_contents"
-                        aria-labelledby="${ section['id'] }">
-                        <div class="navigation_container">
-                          <a class="arrow_navigation arrow_navigation_left" onclick="navigatePrevious('${ section_id}', '')">
-                            <i class="material-icons" style="font-size:45px;">arrow_back_ios</i>
-                          </a>
-                          <a class="arrow_navigation arrow_navigation_right"  onclick="navigateNext('${ section_id}', '')">
-                            <i class="material-icons" style="font-size:45px;">arrow_forward_ios</i>
-                        </a>
-                      </div>
-
-                        <section class="carousel" aria-label="Gallery">
-                          <%
-                          course_list = section.get('children', [])
-                          %>
-                            <ol class="carousel__viewport">
-                            % if len(course_list) <= 4:
-                                <li id="carousel__slide0_${ section['id'] }"
-                                tabindex="0"
-                                data-active="active"
-                                class="carousel__slide carousel__slide_${ section['id'] }">
-
-                                  <div class="carousel__snapper">
-                                      <div class=carousel__snapper__container>
-                                    % for subsection in section.get('children', []):
-                                      <%
-                                      course_name = subsection['display_name']
-                                      slug_img_name = re.sub(r'\W+', '_', course_name).lower()
-                                      %>
-                                      <a class="bloc_course_vignet"
-                                      % if enable_links:
-                                          href="${ subsection['lms_web_url'] }"
-                                      % else:
-                                          aria-disabled="true"
-                                      % endif
-                                      >
-
-                                          <div class ="course_logo" style="background: url('/media/microsites/amazon/courses/${slug_img_name}.png')">
-                                          <p class="course_logo_name">${course_name}</p>
-                                          % if subsection.get('complete'):
-                                          <span class="complete-checkmark fa fa-check" aria-hidden="true"></span>
-                                          <span class="sr">${_("Completed")}</span>
-                                          %endif
-                                        </div>
-                                    </a>
-                                    % endfor
-                                  </div>
-                                </div>
-                              </li>
-                            % else:
-
-                              <%
-                              rounded_course_list = ceil((len(course_list) / 4))
-                              course_list_list =[]
-                              course_name = subsection['display_name']
-                              slug_img_name = re.sub(r'\W+', '_', course_name).lower()
-                              range_index = 0
-                              %>
-                              
-                              %for i in range(rounded_course_list):
-                                  <%
-                                  course_list_list.append(course_list[range_index:range_index+4])
-                                  range_index+=4
-                                  %>
-                              % endfor
-
-                                % for index in range(rounded_course_list):
-                                % if index == 0:
-                                  <li id="carousel__slide${index}_${ section['id'] }"
-                                  tabindex="0"
-                                  data-active="active"
-                                  class="carousel__slide carousel__slide_${ section['id'] }">
-                                % else : 
-                                    <li id="carousel__slide${index}_${ section['id'] }"
-                                    tabindex="0"
-                                    class="carousel__slide carousel__slide_${ section['id'] }">
-                                % endif
-                                  <span class="anchor" id="carousel__slide${index}_${ section['id'] }_anchor"></span>
-                                    <div class="carousel__snapper">
-                                      <div class=carousel__snapper__container>
-
-                                        % for subsection in course_list_list[index]:
-                                        <%
-                                        course_name = subsection['display_name']
-                                        slug_img_name = re.sub(r'\W+', '_', course_name).lower()
-                                        %>
-                                        <a class="bloc_course_vignet"
-                                        % if enable_links:
-                                            href="${ subsection['lms_web_url'] }"
-                                        % else:
-                                            aria-disabled="true"
-                                        % endif
-                                        > 
-                                        % if slug_img_name == 'vendre_via_le_drive':
-                                          <div class ="course_logo" style="background: url('/media/microsites/amazon/courses/vendre_via_le_drive.31ef70b80544.png')">
-                                        % else:
-                                          <div class ="course_logo" style="background: url('/media/microsites/amazon/courses/${slug_img_name}.png')">
-                                        % endif
-                                          <p class="course_logo_name">${course_name}</p>
-                                          % if subsection.get('complete'):
-                                          <span class="complete-checkmark fa fa-check" aria-hidden="true"></span>
-                                          <span class="sr">${_("Completed")}</span>
-                                          %endif
-                                        </div>
-                                      </a>
-                                      % endfor
-
-                                          </div>
-                                    </div>
-
-                                  </li>
-                                %endfor
-
-                            % endif 
-                            </ol>
-                            % if len(course_list) > 4:
-     
-                              <aside class="carousel__navigation">
-                                <ol class="carousel__navigation-list">
-                                  % for index in range(rounded_course_list):
-                                  <li class="carousel__navigation-item">
-                                    %if index == 0:
-                                      <li class="carousel__navigation-item carousel__navigation-item_${ section['id'] }"
-                                      id="carousel__navigation-item${index}_${ section['id'] }"
-                                      data-active="active"
-                                      onclick="navigate('${ section_id }', '${index}', '')"
-                                      >
-                                      %else :
-                                      <li class="carousel__navigation-item carousel__navigation-item_${ section['id'] }"
-                                      id="carousel__navigation-item${index}_${ section['id'] }"
-                                      onclick="navigate('${ section_id }', '${index}', '')"
-                                      >
-                                    %endif
-                                    <a href="#carousel__slide${index}_${ section['id'] }_anchor"
-                                      class="carousel__navigation-button"
-                                      id="carousel__slide${index}_${ section['id'] }_dot" 
-                                      >Go to slide 1
-                                    </a>
-                                  </li>
-
-                                  %endfor
-
-                                </ol>
-                              </aside>
-
-                            %endif
-                          </section>
-                    </ol> -->
 
                 </li>
         % endfor
@@ -1107,153 +973,6 @@ height: 44px;
                         </li>
             % endfor
                     </ol>
-                  <!-- <ol class=" outline-item accordion-panel ${ '' if section_is_auto_opened else 'is-hidden' }"
-                      id="${ section['id'] }_contents_tablet"
-                      aria-labelledby="${ section['id'] }_tablet">
-                      <div class="navigation_container">
-                        <a class="arrow_navigation arrow_navigation_left" onclick="navigatePrevious('${ section_id}', '_tablet')">
-                          <i class="material-icons" style="font-size:45px;">arrow_back_ios</i>
-                        </a>
-                        <a class="arrow_navigation arrow_navigation_right"  onclick="navigateNext('${ section_id}', '_tablet')">
-                          <i class="material-icons" style="font-size:45px;">arrow_forward_ios</i>
-                      </a>
-                    </div>
-
-                      <section class="carousel" aria-label="Gallery">
-                        <%
-                        course_list = section.get('children', [])
-                        %>
-                          <ol class="carousel__viewport">
-                            % if len(course_list) <= 2:
-                                <li id="carousel__slide${index}_${ section['id'] }_mobile"
-                                tabindex="0"
-                                data-active="active"
-                                class="carousel__slide carousel__slide_${ section['id'] }_mobile">
-                                  <div class="carousel__snapper">
-                                      <div class=carousel__snapper__container>
-                                    % for subsection in section.get('children', []):
-                                      <%
-                                      course_name = subsection['display_name']
-                                      slug_img_name = re.sub(r'\W+', '_', course_name).lower()
-                                      %>
-                                      <a class="bloc_course_vignet"
-                                      % if enable_links:
-                                          href="${ subsection['lms_web_url'] }"
-                                      % else:
-                                          aria-disabled="true"
-                                      % endif
-                                      >
-                                          <div class ="course_logo" style="background: url('/media/microsites/amazon/courses/${slug_img_name}.png')">
-                                          <p class="course_logo_name">${course_name}</p>
-                                          % if subsection.get('complete'):
-                                          <span class="complete-checkmark fa fa-check" aria-hidden="true"></span>
-                                          <span class="sr">${_("Completed")}</span>
-                                          %endif
-                                        </div>
-                                    </a>
-                                    % endfor
-                                  </div>
-                                </div>
-                              </li>
-                            %else:
-
-                            <%
-                            rounded_course_list = ceil((len(course_list) / 2))
-                            course_list_list =[]
-                            course_name = subsection['display_name']
-                            slug_img_name = re.sub(r'\W+', '_', course_name).lower()
-                            range_index = 0
-                            %>
-
-                            %for i in range(rounded_course_list):
-                                <%
-                                course_list_list.append(course_list[range_index:range_index+4])
-                                range_index+=4
-                                %>
-                            % endfor
-
-                            % for index in range(rounded_course_list):
-
-                            % if index == 0:
-                              <li id="carousel__slide${index}_${ section['id'] }_tablet"
-                              tabindex="0"
-                              data-active="active"
-                              class="carousel__slide carousel__slide_${ section['id'] }_tablet">
-                            % else : 
-                              <li id="carousel__slide${index}_${ section['id'] }_tablet"
-                              tabindex="0"
-                              class="carousel__slide carousel__slide_${ section['id'] }_tablet">
-                            % endif
-
-                          <span class="anchor" id="carousel__slide${index}_${ section['id'] }_tablet_anchor"></span>
-                        <div class="carousel__snapper">
-                            <div class=carousel__snapper__container>
-                              %if len(course_list_list) > 0:
-                              % for subsection in course_list_list[index]:
-                            <%
-                            course_name = subsection['display_name']
-                            slug_img_name = re.sub(r'\W+', '_', course_name).lower()
-                            %>
-                            <a class="bloc_course_vignet"
-                            % if enable_links:
-                                href="${ subsection['lms_web_url'] }"
-                            % else:
-                                aria-disabled="true"
-                            % endif
-                            >
-                                % if slug_img_name == 'vendre_via_le_drive':
-                                <div class ="course_logo" style="background: url('/media/microsites/amazon/courses/vendre_via_le_drive.31ef70b80544.png')">
-                                % else:
-                                  <div class ="course_logo" style="background: url('/media/microsites/amazon/courses/${slug_img_name}.png')">
-                                % endif
-                                <p class="course_logo_name">${course_name}</p>
-                                % if subsection.get('complete'):
-                                <span class="complete-checkmark fa fa-check" aria-hidden="true"></span>
-                                <span class="sr">${_("Completed")}</span>
-                                %endif
-                              </div>
-                          </a>
-
-                          % endfor
-                          %endif
-                        </div>
-                      </div>
-
-                    </li>
-                    % endfor
-      
-                          </ol>
-                          <%
-                          course_list = section.get('children', [])
-                          number_of_subsections = len(course_list)
-                         
-                          %>
-                          <aside class="carousel__navigation">
-                            <ol class="carousel__navigation-list">
-                              % for index in range(rounded_course_list):
-                                %if index == 0:
-                                <li class="carousel__navigation-item carousel__navigation-item_${ section['id'] }_tablet"
-                                id="carousel__navigation-item${index}_${ section['id'] }_tablet"
-                                data-active="active"
-                                onclick="navigate('${ section_id }', '${index}', '_tablet')"
-                                >
-                                %else :
-                                <li class="carousel__navigation-item carousel__navigation-item_${ section['id'] }_tablet"
-                                id="carousel__navigation-item${index}_${ section['id'] }_tablet"
-                                onclick="navigate('${ section_id }', '${index}', '_tablet')"
-                                >
-                                %endif
-                                <a 
-                                href="#carousel__slide${index}_${ section['id'] }_tablet_anchor"
-                                  class="carousel__navigation-button">Go to slide 1</a>
-                              </li>
-                              %endfor
-                            </ol>
-                          </aside>
-
-                          % endif
-                        </section>
-                  </ol> -->
 
               </li>
       % endfor
@@ -1440,101 +1159,6 @@ height: 44px;
                         </li>
             % endfor
                     </ol>
-                  <!-- <ol class=" outline-item accordion-panel ${ '' if section_is_auto_opened else 'is-hidden' }"
-                      id="${ section['id'] }_contents_mobile"
-                      aria-labelledby="${ section['id'] }_mobile">
-                      <div class="navigation_container">
-                        <a class="arrow_navigation arrow_navigation_left" onclick="navigatePrevious('${ section_id}', '_mobile')">
-                          <i class="material-icons" style="font-size:45px;">arrow_back_ios</i>
-                        </a>
-                        <a class="arrow_navigation arrow_navigation_right"  onclick="navigateNext('${ section_id}', '_mobile')">
-                          <i class="material-icons" style="font-size:45px;">arrow_forward_ios</i>
-                      </a>
-                    </div>
-                
-                      <section class="carousel" aria-label="Gallery">
-
-                        <%
-                        course_list = section.get('children', [])
-                        %>
-                          <ol class="carousel__viewport">
-                        % for index, subsection in enumerate(section.get('children', [])):
-                          % if index == 0:
-                            <li id="carousel__slide${index}_${ section['id'] }_mobile"
-                            tabindex="0"
-                            data-active="active"
-                            class="carousel__slide carousel__slide_${ section['id'] }_mobile">
-                          % else : 
-                            <li id="carousel__slide${index}_${ section['id'] }_mobile"
-                            tabindex="0"
-                            class="carousel__slide carousel__slide_${ section['id'] }_mobile">
-                          % endif
-                          <span class="anchor" id="carousel__slide${index}_${ section['id'] }_mobile_anchor"></span>
-                        <div class="carousel__snapper">
-                            <div class=carousel__snapper__container>
-
-                            <%
-                            course_name = subsection['display_name']
-                            slug_img_name = re.sub(r'\W+', '_', course_name).lower()
-                            %>
-                            <a class="bloc_course_vignet"
-                            % if enable_links:
-                                href="${ subsection['lms_web_url'] }"
-                            % else:
-                                aria-disabled="true"
-                            % endif
-                            >
-                              % if slug_img_name == 'vendre_via_le_drive':
-                              <div class ="course_logo" style="background: url('/media/microsites/amazon/courses/vendre_via_le_drive.31ef70b80544.png')">
-                              % else:
-                                <div class ="course_logo" style="background: url('/media/microsites/amazon/courses/${slug_img_name}.png')">
-                              % endif
-                                <p class="course_logo_name">${course_name}</p>
-                                % if subsection.get('complete'):
-                                <span class="complete-checkmark fa fa-check" aria-hidden="true"></span>
-                                <span class="sr">${_("Completed")}</span>
-                                %endif
-                              </div>
-                          </a>
-
-                        </div>
-                      </div>
-                    </li>
-                    % endfor
-      
-                          </ol>
-                          <%
-                          course_list = section.get('children', [])
-                          number_of_subsections = len(course_list)
-
-                         
-                          %>
-
-                          <aside class="carousel__navigation">
-                            <ol class="carousel__navigation-list">
-                              % for index in range(number_of_subsections):
-                                %if index == 0:
-                                <li class="carousel__navigation-item carousel__navigation-item_${ section['id'] }_mobile"
-                                id="carousel__navigation-item${index}_${ section['id'] }_mobile"
-                                data-active="active"
-                                onclick="navigate('${ section_id }', '${index}', '_mobile')"
-                                >
-                                %else :
-                                <li class="carousel__navigation-item carousel__navigation-item_${ section['id'] }_mobile"
-                                id="carousel__navigation-item${index}_${ section['id'] }_mobile"
-                                onclick="navigate('${ section_id }', '${index}', '_mobile')"
-                                >
-                                %endif
-                                <a 
-                                href="#carousel__slide${index}_${ section['id'] }_mobile_anchor"
-                                  class="carousel__navigation-button">Go to slide 1</a>
-                              </li>
-                              %endfor
-                            </ol>
-                          </aside>
-                        </section>
-
-                  </ol> -->
 
               </li>
       % endfor
@@ -1619,43 +1243,46 @@ height: 44px;
 
 <script>
   let introductionButton = document.getElementById("block-v1:amazon+amazon001+SP+type@chapter+block@2bae6b60b8a1423382a8915610cb9737")
-  let introductionButtonProgressBar = introductionButton.children[2]
-  introductionButtonProgressBar.style.visibility = "hidden"
+  if (introductionButton) {
+    let introductionButtonProgressBar = introductionButton.children[2]
+    introductionButtonProgressBar.style.visibility = "hidden"
+  }
+
 </script>
 
 <!-- Add completion instead of quiz result in progress bar -->
 <!-- TODO animate progress of completion bar -->
 <script>
   window.addEventListener('load', function() {
-
-      for (course of completion_list) {
-        document.querySelectorAll("h3").forEach(function(element){
-
-          if(element.textContent === course.replace("\"", "'")){
-            // console.log(element)
-            let score = String(Math.floor(completion_object[course]) + "%")
-            let score_text = document.createElement("h2");
-            score_text.classList.add("completed_percent");
-            score_text.textContent = score 
-            if (element.nextElementSibling) {
-              element.nextElementSibling.children[0].children[0].style.width = score
-              // element.nextElementSibling.children[1].textContent = score 
-              element.nextElementSibling.children[1].replaceWith(score_text);
+    
+    for (course of completion_list) {
+      
+      document.querySelectorAll("h3").forEach(function(element){
+        
+        if(element.textContent === course.replace("\"", "'").replace("&#39;", "'").replaceAll("&#34;", "\"")){
+          // console.log(element)
+          let score = String(Math.floor(completion_object[course]) + "%")
+          let score_text = document.createElement("h2");
+          score_text.classList.add("completed_percent");
+          score_text.textContent = score 
+          if (element.nextElementSibling) {
+            element.nextElementSibling.children[0].children[0].style.width = score
+            // element.nextElementSibling.children[1].textContent = score 
+            element.nextElementSibling.children[1].replaceWith(score_text);
+          } else {
+            if (element.parentNode.nextElementSibling.children[0]) {
+              element.parentNode.nextElementSibling.children[0].children[0].style.width = score
+              // element.parentNode.nextElementSibling.children[1].textContent = score
+              element.parentNode.nextElementSibling.children[1].replaceWith(score_text);
             } else {
-              if (element.parentNode.nextElementSibling.children[0]) {
-                element.parentNode.nextElementSibling.children[0].children[0].style.width = score
-                // element.parentNode.nextElementSibling.children[1].textContent = score
-                element.parentNode.nextElementSibling.children[1].replaceWith(score_text);
-              } else {
-                element.parentNode.nextElementSibling.nextElementSibling.children[0].children[0].style.width = score
-                // element.parentNode.nextElementSibling.nextElementSibling.children[1].textContent = score
-                element.parentNode.nextElementSibling.nextElementSibling.children[1].replaceWith(score_text);
-              }
-
+              element.parentNode.nextElementSibling.nextElementSibling.children[0].children[0].style.width = score
+              // element.parentNode.nextElementSibling.nextElementSibling.children[1].textContent = score
+              element.parentNode.nextElementSibling.nextElementSibling.children[1].replaceWith(score_text);
             }
-            }
-          });
-      }
+          }
+        }
+      });
+    }
       // new course layout
       let progress_bar_and_score = document.getElementsByClassName("progress_bar_and_score");
       for(let i=0; i< progress_bar_and_score.length; i++){
@@ -1671,10 +1298,20 @@ height: 44px;
       for (let i=0; i<subsectionTitle.length; i++){
         if(subsectionTitle[i].getElementsByClassName("full-star fa fa-star").length == 0){
             let emptyStar = document.createElement("span");
-            emptyStar.className = "empty-star fa fa-star-o";
-            emptyStar.ariaHidden = "true";
+            emptyStar.className = "empty-star far fa-star";
+            //emptyStar.ariaHidden = "true";
+            emptyStar.setAttribute('aria-hidden', 'true');
             subsectionTitle[i].appendChild(emptyStar);
         }
+      }
+
+      let chevrons = document.getElementsByClassName("fa fa-chevron-right");
+      for(let i=0; i<chevrons.length; i++){
+        let currentChevron = chevrons[i];
+        let parent = chevrons[i].parentNode;
+        chevrons[i].remove();
+        parent.append(currentChevron);
+
       }
     })
   </script>
