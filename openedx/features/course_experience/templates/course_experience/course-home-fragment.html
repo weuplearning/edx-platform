@@ -392,9 +392,15 @@ log = logging.getLogger()
         h4.subsection-title{
             font-size: 14px !important;
         }
-    }
+        .page-content .page-content-main {
+            margin: 0 !important;
+        }
+        .course-outline .block-tree .section ol.outline-item .subsection .subsection-title {
+            margin-left: unset !important;
+            display: inline-block;
+            max-width: 67vw;
+        }
 
-    @media screen and (max-width: 500px) {
         .grade-section-title {
             font-size: 14px;
         }
