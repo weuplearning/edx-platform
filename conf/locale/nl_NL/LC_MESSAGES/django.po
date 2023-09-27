@@ -12222,6 +12222,8 @@ msgstr "Privacybeleid"
 msgid "FAQ"
 msgstr "Veelgestelde vragen"
 
+#end of update
+
 #: cms/djangoapps/api/v1/serializers/course_runs.py
 msgid "Course team user does not exist"
 msgstr ""
