@@ -12207,7 +12207,7 @@ msgstr "1 september 2023 om ...u"
 msgid "Le 2 Septembre 2023 à …h"
 msgstr "2 september 2023 om ...u"
 
-msgid "L'Accélérateur du Numérique est un programme éducatif en ligne gratuit destiné à accompagner l'ensemble des entrepreneurs français à développer leur activité en ligne."
+msgid "L'Accélérateur du Numérique est un programme éducatif en ligne gratuit destiné à accompagner l'ensemble des entrepreneurs belges à développer leur activité en ligne."
 msgstr "De Amazon Small Business Academy (ASBA) biedt GRATIS leermiddelen om ondernemers te helpen hun bedrijf online op te starten, uit te bouwen, te lanceren en te laten groeien."
 
 msgid "Un programme initié par"
