@@ -420,11 +420,24 @@ class wul_dashboard():
             None
 
         """
+
         try:
             associated_courses = configuration_helpers.get_value_for_org(microsite.lower(), 'TMA_ASSOCIATED_COURSES',{})
-            custom_field = new_custom_fields or json.loads(created_user.profile.custom_field)
+            custom_field = json.loads(created_user.profile.custom_field)
             user = User.objects.get(email=email)
 
+            if new_custom_fields : 
+
+                for key,value in new_custom_fields.items():
+                    # Do not erase old CF
+                    custom_field[key]=value
+                
+                profile = UserProfile.objects.get(user_id=user.id)
+                profile.custom_field = json.dumps(custom_field)
+                profile.save()
+
+
+            # only BVT - 16/10/2023
             if associated_courses.get('selective_register_fields') and custom_field:
 
                 custom_field_value = custom_field.get("parcours")
@@ -453,6 +466,8 @@ class wul_dashboard():
 
         except:
             log.info("EXCEPT ERROR : user "+ str(user) )
+
+
 
     def task_generate_user(self):
         """
