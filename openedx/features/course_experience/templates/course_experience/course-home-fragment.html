@@ -21,6 +21,7 @@ from openedx.core.djangoapps.site_configuration import helpers as configuration_
 
 from lms.djangoapps.grades.course_grade import ZeroCourseGrade
 log = logging.getLogger()
+show_search = False 
 %>
 
 <%block name="header_extras">
@@ -578,7 +579,7 @@ course_id = str(course.id).translate({ord(i): None for i in ':+'})
             <nav aria-label="${_('Course Outline')}" class="sr-is-focusable" tabindex="-1">
             </nav>
         </div>
-        <div class="page-header-secondary top-search-bar">
+        <div class="page-header-secondary top-search-bar">z
             % if show_search:
                 <div class="page-header-search">
                     <form class="search-form input-group" role="search" action="${reverse('openedx.course_search.course_search_results', args=[course_key])}">
