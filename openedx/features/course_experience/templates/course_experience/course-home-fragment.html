@@ -824,4 +824,22 @@ course_id = str(course.id).translate({ord(i): None for i in ':+'})
 <script>
 $("div.grade-block").eq(1).hide();
 
+let titleLanguageElement = document.getElementsByClassName("header-courses")
+    let currentLanguage = 'fr'
+    if (titleLanguageElement) {
+        titleLanguageElement = document.getElementsByClassName("header-courses")[0].innerText
+    }
+
+    if (titleLanguageElement == "Dashboard") {
+        currentLanguage = "nl-nl";
+    }
+    if (currentLanguage = "nl-nl") {
+        const textToUpdate1 = document.getElementsByClassName("message-content")
+        if (textToUpdate1) {
+            textToUpdate1[0].innerText = "Welkom ! Activeer uw account vanuit uw mailbox. Controleer uw inbox, u zou een e-mail voor accountactivatie moeten hebben ontvangen. Controleer indien nodig uw ongewenste e-mails."
+        }
+        
+    }
+
+
 </script>
