@@ -6,10 +6,9 @@ from lms.djangoapps.wul_apps.certificates.certificate import certificate
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpRequest
 from django.contrib.auth.decorators import login_required
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
-from django.views.decorators.http import require_POST,require_GET,require_http_methods
+from django.views.decorators.http import require_POST, require_GET, require_http_methods
 from opaque_keys.edx.locations import SlashSeparatedCourseKey
-from student.models import User
-from student.models import UserProfile
+from student.models import User, UserProfile
 import json
 
 from reportlab.pdfgen import canvas
@@ -17,7 +16,7 @@ from reportlab.pdfbase.pdfmetrics import stringWidth
 from reportlab.rl_config import defaultPageSize
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
-from PyPDF2 import PdfFileWriter, PdfFileReader
+
 from datetime import date
 
 from lms.djangoapps.wul_apps.models import WulCourseEnrollment
@@ -65,9 +64,9 @@ def generate_pdf(request,course_id):
     try:
         multi_certificate = certificate_config['multi_certificate']
     except:
-        multi_certificate = None
-        
-    if multi_certificate is not None:
+        multi_certificate = False
+
+    if multi_certificate :
         image_url = certificate_config['certificate_url'][request.GET.get("certificate")]
     else:
         image_url = certificate_config['certificate_url']
@@ -78,55 +77,50 @@ def generate_pdf(request,course_id):
     except:
         font_name = 'OpenSans'
         font_url = "/edx/var/edxapp/staticfiles/fonts/OpenSans/OpenSans-Regular-webfont.ttf"
-    #import custom font
-    pdfmetrics.registerFont(TTFont(font_name,font_url))
+
+    pdfmetrics.registerFont(TTFont(font_name, font_url))
+
     # Create the HttpResponse object with the appropriate PDF headers.
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="certificat.pdf"'
 
-    # Create the PDF object, using the response object as its "file."
     p = canvas.Canvas(response)
-    # Change the page size
-    p.setPageSize((page_width,page_height))
-    # Draw the image at x, y. I positioned the x,y to be where i like here
-    p.drawImage(image_url, 0, 0, width=page_width,height=page_height)
-    # Draw things on the PDF. Here's where the PDF generation happens.
+    p.setPageSize((page_width, page_height))
+    p.drawImage(image_url, 0, 0, width=page_width, height=page_height)
 
 
 
-    # USER NAME
-    name_position_x = certificate_config['name_position_x']
+    # USERNAME
     font_size = certificate_config['font_size']
     p.setFont(font_name, font_size)
+
     try:
         font_color = certificate_config['font_color']
     except:
         font_color = [0, 0, 0]
-
     p.setFillColorRGB(font_color[0]/255, font_color[1]/255, font_color[2]/255)
 
-    user_name = request.user.profile.name
-    if user_name == "":
-        user_name = (request.user.first_name).capitalize() + " " + (request.user.last_name).upper()
-        if user_name == " ":
+    username = request.user.profile.name
+    if username == "":
+        username = (request.user.first_name).capitalize() + " " + (request.user.last_name).upper()
+        if username == " ":
             try:
-                user_name = json.loads(request.user.profile.custom_field).get('first_name').capitalize() + " " + json.loads(request.user.profile.custom_field).get('last_name').upper()
+                username = json.loads(request.user.profile.custom_field).get('first_name').capitalize() + " " + json.loads(request.user.profile.custom_field).get('last_name').upper()
             except:
-                user_name = 'Missing information'
+                username = 'Missing information'
 
+    name_position_y = certificate_config['name_position_y']
     try:
-        name_position_y = certificate_config['name_position_y']
+        name_position_x = certificate_config['name_position_x']
     except:
-        name_position_y = False
+        name_position_x = False
     
-    if name_position_y :
-        p.drawString(name_position_y, name_position_x, user_name)
+    if name_position_x :
+        p.drawString(name_position_x, name_position_y, username)
     else:
-        # Center the text horizontally
-
-        text_width = stringWidth(user_name, font_name, font_size)
+        text_width = stringWidth(username, font_name, font_size)
         centered_text = (page_width - text_width) / 2.0
-        p.drawString(centered_text, name_position_x, user_name)
+        p.drawString(centered_text, name_position_y, username)
 
 
 
@@ -135,53 +129,49 @@ def generate_pdf(request,course_id):
         certificate_date = certificate_config['date']
     except:
         certificate_date = False
-    try:
-        date_lang = certificate_config['date_lang'].lower()
-    except:
-        date_lang = 'fr'
 
     if certificate_date :
+        try:
+            date_lang = certificate_date['date_lang'].lower()
+        except:
+            date_lang = 'fr'
+
         today = date.today()
         string_date_en = today.strftime('%d %B %Y')
-
         english_months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
         french_months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
         for index, e in enumerate(english_months):
             if string_date_en.find(e) != -1 :
                 string_date_fr = string_date_en.replace(e, french_months[index])
 
-        # Switch to multilingue
-        try:
-            if date_lang == 'en' :
-                certificate_date += string_date_en
-            else:
-                certificate_date += string_date_fr
-        except:
-            pass
-
-        # COLOR
-        try:
-            font_color_2 = certificate_config['font_color_2']
-        except:
-            font_color_2 = [0, 0, 0]
-        p.setFillColorRGB(font_color_2[0]/255, font_color_2[1]/255, font_color_2[2]/255) 
-
-
-        # Write date at x and y with font_size_2
-        date_position_x = certificate_config['date_position_x']
-        try:
-            date_position_y = certificate_config['date_position_y']
-        except:
-            date_position_y = False
-        font_size_2 = certificate_config['font_size_2']
-
-        p.setFont(font_name, font_size_2)
-        if date_position_y:
-            p.drawString(date_position_y, date_position_x , str(certificate_date))
+        text_date = certificate_date['syntax_date']
+        if str(date_lang) == 'en' :
+            text_date += string_date_en
         else:
-            text_width_date = stringWidth(certificate_date, font_name, font_size_2)
+            text_date += string_date_fr
+
+        try:
+            font_color_date = certificate_date['font_color']
+        except:
+            font_color_date = [0, 0, 0]
+        p.setFillColorRGB(font_color_date[0]/255, font_color_date[1]/255, font_color_date[2]/255) 
+
+        font_size = certificate_date['font_size']
+        p.setFont(font_name, font_size)
+
+        date_position_y = certificate_date['position_y']
+        try:
+            date_position_x = certificate_date['position_x']
+        except:
+            date_position_x = False
+
+        if date_position_x:
+            p.drawString(date_position_x, date_position_y, str(text_date))
+        else:
+            text_width_date = stringWidth(str(text_date), font_name, font_size)
             centered_date = (page_width - text_width_date) / 2.0
-            p.drawString(centered_date, date_position_x , str(certificate_date))
+            p.drawString(centered_date, date_position_y, str(text_date))
+
 
 
     # COURSE DURATION
@@ -191,32 +181,26 @@ def generate_pdf(request,course_id):
         course_duration = False
     
     if course_duration :
-        enrollment = WulCourseEnrollment.get_enrollment(course_id, request.user)
-        timeInSecond = enrollment.global_time_tracking
+        try :
+            enrollment = WulCourseEnrollment.get_enrollment(course_id, request.user)
+            timeInSecond = enrollment.global_time_tracking
+            syntax_duration = course_duration['syntax_duration']
 
-        def getTimeSpent():
-            hours = timeInSecond // 3600
-            seconds = timeInSecond % 3600
-            minutes = seconds // 60
+            def getTimeSpent(syntax):
+                hours = timeInSecond // 3600
+                seconds = timeInSecond % 3600
+                minutes = seconds // 60
 
-            timeSpent = "Temps passé sur le cours : "+str(hours)+"h "+str(minutes)+"min"
-            return timeSpent
+                timeSpent = str(syntax) + str(hours) + "h " + str(minutes) + "min"
+                return timeSpent
 
-        try:
-            course_duration_position_x = certificate_config['course_duration_position_x']
-        except:
-            course_duration_position_x = False
-
-        try:
-            course_duration_position_y = certificate_config['course_duration_position_y']
-        except:
-            course_duration_position_y = False
-
-        if course_duration_position_x and course_duration_position_y:
-            p.drawString(course_duration_position_x, course_duration_position_y, getTimeSpent())
+            p.drawString(course_duration['position_x'], course_duration['position_y'], getTimeSpent(syntax_duration))
+        except :
+            log.info('error with course duration for certificate')
 
 
-    # custom CF to add
+
+    # CUSTOM FIELD
     try:
         custom_field_value = certificate_config['custom_field_value']
     except:
@@ -226,6 +210,13 @@ def generate_pdf(request,course_id):
         try :
             cf = json.loads(request.user.profile.custom_field)
             value = cf.get(custom_field_value['name'])
+
+            font_size_cf = custom_field_value['font_size']
+            p.setFont(font_name, font_size_cf)
+
+            font_color = custom_field_value['font_color']
+            p.setFillColorRGB(font_color[0]/255, font_color[1]/255, font_color[2]/255) 
+
             p.drawString(custom_field_value['position_x'], custom_field_value['position_y'], value)
         except:
             log.info('error with custom fields for certificate')
