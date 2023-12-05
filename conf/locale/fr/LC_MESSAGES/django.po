@@ -11325,7 +11325,7 @@ msgstr "Réinitialisez le mot de passe sur %(platform_name)s"
 
 #: openedx/core/djangoapps/user_authn/templates/user_authn/edx_ace/passwordresetsuccess/email/body.html
 msgid "Password Reset Success"
-msgstr ""
+msgstr "Réinitialisation de mot de passe réussie"
 
 #: openedx/core/djangoapps/user_authn/templates/user_authn/edx_ace/passwordresetsuccess/email/body.html
 #, python-format
@@ -11350,7 +11350,7 @@ msgstr "Bonjour %(name)s,"
 #: openedx/core/djangoapps/user_authn/templates/user_authn/edx_ace/passwordresetsuccess/email/subject.txt
 #, python-format
 msgid "Password reset completed on %(platform_name)s"
-msgstr ""
+msgstr "Réinitialisation de mot de passe réussie sur %(platform_name)s"
 
 #: openedx/core/djangoapps/user_authn/views/auto_auth.py
 msgid "Superuser creation not allowed"
