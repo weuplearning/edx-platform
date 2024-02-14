@@ -29,7 +29,7 @@ show_search = False
   <link rel="stylesheet" type="text/css" href="${static.url('weup/css/animate-4.1.1.min.css')}" />
 
   <style>
-    header.page-header.has-secondary.course-v1amazonIntroductionAZ_01_banner{
+    /* header.page-header.has-secondary.course-v1amazonIntroductionAZ_01_banner{
         background-image: url("/media/microsites/amazon/banners/course-v1amazon+Introduction+AZ_01.png");
     }
     header.page-header.has-secondary.course-v1amazonTransition_numeriqueAZ_03_banner{
@@ -61,18 +61,22 @@ show_search = False
     }
     header.page-header.has-secondary.course-v1amazonvendre_internationalAZ_10_banner{
         background-image: url("/media/microsites/amazon/banners/course-v1amazon+vendre_international+AZ_10.png");
-    }
+    } */
 
 
     header.page-header.has-secondary{
-        background-image: url("/media/microsites/amazon/banner_v3.png");
+        /* background-image: url("/media/microsites/amazon/banner_v3.png"); */
         padding-top: 10px !important;
         padding-bottom: 10px !important;
-        box-shadow: 0 3px 6px rgba(0,0,0,0.16);
-        height: 210px;
+        /* box-shadow: 0 3px 6px rgba(0,0,0,0.16); */
+        /* height: 210px; */
+        height: auto;
         margin: auto;
         background-position-x: center;
         background-size:cover;
+    }
+    .page-header{
+        border-bottom: 0px;
     }
     .page-header-main, .page-header-secondary{
         animation: bounce;
@@ -579,7 +583,7 @@ course_id = str(course.id).translate({ord(i): None for i in ':+'})
             <nav aria-label="${_('Course Outline')}" class="sr-is-focusable" tabindex="-1">
             </nav>
         </div>
-        <div class="page-header-secondary top-search-bar">z
+        <div class="page-header-secondary top-search-bar">
             % if show_search:
                 <div class="page-header-search">
                     <form class="search-form input-group" role="search" action="${reverse('openedx.course_search.course_search_results', args=[course_key])}">
@@ -824,22 +828,22 @@ course_id = str(course.id).translate({ord(i): None for i in ':+'})
 <script>
 $("div.grade-block").eq(1).hide();
 
-let titleLanguageElement = document.getElementsByClassName("header-courses")
-    let currentLanguage = 'fr'
-    if (titleLanguageElement) {
-        titleLanguageElement = document.getElementsByClassName("header-courses")[0].innerText
-    }
+// let titleLanguageElement = document.getElementsByClassName("header-courses")
+//     let currentLanguage = 'fr'
+//     if (titleLanguageElement) {
+//         titleLanguageElement = document.getElementsByClassName("header-courses")[0].innerText
+//     }
 
-    if (titleLanguageElement == "Dashboard") {
-        currentLanguage = "nl-nl";
-    }
-    if (currentLanguage = "nl-nl") {
-        const textToUpdate1 = document.getElementsByClassName("message-content")
-        if (textToUpdate1) {
-            textToUpdate1[0].innerText = "Welkom ! Activeer uw account vanuit uw mailbox. Controleer uw inbox, u zou een e-mail voor accountactivatie moeten hebben ontvangen. Controleer indien nodig uw ongewenste e-mails."
-        }
+//     if (titleLanguageElement == "Dashboard") {
+//         currentLanguage = "nl-nl";
+//     }
+//     if (currentLanguage = "nl-nl") {
+//         const textToUpdate1 = document.getElementsByClassName("message-content")
+//         if (textToUpdate1) {
+//             textToUpdate1[0].innerText = "Welkom ! Activeer uw account vanuit uw mailbox. Controleer uw inbox, u zou een e-mail voor accountactivatie moeten hebben ontvangen. Controleer indien nodig uw ongewenste e-mails."
+//         }
         
-    }
+//     }
 
 
 </script>
