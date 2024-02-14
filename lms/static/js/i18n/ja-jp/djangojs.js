@@ -184,7 +184,7 @@
     "Account Not Activated": "\u6709\u52b9\u5316\u3055\u308c\u3066\u3044\u306a\u3044\u30a2\u30ab\u30a6\u30f3\u30c8",
     "Account Settings": "\u30a2\u30ab\u30a6\u30f3\u30c8\u8a2d\u5b9a",
     "Account Settings page.": "\u30a2\u30ab\u30a6\u30f3\u30c8\u8a2d\u5b9a\u30da\u30fc\u30b8\u3002",
-    "Account deletion, including removal from email lists, may take a few weeks to fully process through our system. If you want to opt-out of emails before then, please unsubscribe from the footer of any email.": "La suppression d'un compte, comprenant le retrait des listes d'e-mail, peu prendre quelques semaines afin de traiter enti\u00e8rement notre syst\u00e8me. Si vous souhaitez renoncer aux e-mails ult\u00e9rieurement, veuillez vous d\u00e9sinscrire en consultant le pied de page de n'importe quel e-mail.",
+    "Account deletion, including removal from email lists, may take a few weeks to fully process through our system. If you want to opt-out of emails before then, please unsubscribe from the footer of any email.": "La suppression d'un compte, comprenant le retrait des listes d'e-mail, peut prendre quelques semaines afin de traiter enti\u00e8rement notre syst\u00e8me. Si vous souhaitez renoncer aux e-mails ult\u00e9rieurement, veuillez vous d\u00e9sinscrire en consultant le pied de page de n'importe quel e-mail.",
     "Action": "\u64cd\u4f5c",
     "Action required: Enter a valid date.": "\u5fc5\u9808: \u6b63\u3057\u3044\u65e5\u4ed8\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044\u3002",
     "Actions": "\u64cd\u4f5c",

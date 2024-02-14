@@ -248,7 +248,7 @@
     "Account Not Activated": "Compte non activ\u00e9",
     "Account Settings": "Paskyros nuostatos",
     "Account Settings page.": "Param\u00e8tres du compte",
-    "Account deletion, including removal from email lists, may take a few weeks to fully process through our system. If you want to opt-out of emails before then, please unsubscribe from the footer of any email.": "La suppression d'un compte, comprenant le retrait des listes d'e-mail, peu prendre quelques semaines afin de traiter enti\u00e8rement notre syst\u00e8me. Si vous souhaitez renoncer aux e-mails ult\u00e9rieurement, veuillez vous d\u00e9sinscrire en consultant le pied de page de n'importe quel e-mail.",
+    "Account deletion, including removal from email lists, may take a few weeks to fully process through our system. If you want to opt-out of emails before then, please unsubscribe from the footer of any email.": "La suppression d'un compte, comprenant le retrait des listes d'e-mail, peut prendre quelques semaines afin de traiter enti\u00e8rement notre syst\u00e8me. Si vous souhaitez renoncer aux e-mails ult\u00e9rieurement, veuillez vous d\u00e9sinscrire en consultant le pied de page de n'importe quel e-mail.",
     "Action": "Action",
     "Action required: Enter a valid date.": "Action requise : Entrez une date valide.",
     "Actions": "Veiksmai",

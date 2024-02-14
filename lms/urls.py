@@ -23,6 +23,7 @@ from lms.djangoapps.courseware.module_render import (
     xblock_view,
     xqueue_callback
 )
+from lms.djangoapps.wul_apps.views import media_access, protected_media_view
 from lms.djangoapps.courseware.views import views as courseware_views
 from lms.djangoapps.courseware.views.index import CoursewareIndex
 from lms.djangoapps.courseware.views.views import CourseTabView, EnrollStaffView, StaticCourseTabView
@@ -200,6 +201,8 @@ urlpatterns = [
     ),
     url(r'^api/discounts/', include(('openedx.features.discounts.urls', 'openedx.features.discounts'),
                                     namespace='api_discounts')),
+    url(r'^media/(?P<path>.*)$', media_access, name='media'),
+    #url(r'^media/(?P<filename>.*)', protected_media_view, name='protected_media'),
 ]
 
 if settings.FEATURES.get('ENABLE_MOBILE_REST_API'):
@@ -916,7 +919,7 @@ urlpatterns += [
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    #urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(
         settings.PROFILE_IMAGE_BACKEND['options']['base_url'],
         document_root=settings.PROFILE_IMAGE_BACKEND['options']['location']

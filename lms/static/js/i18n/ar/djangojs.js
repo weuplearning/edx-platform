@@ -295,7 +295,7 @@
     "Account Not Activated": "\u0627\u0644\u062d\u0633\u0627\u0628 \u063a\u064a\u0631 \u0645\u0641\u0639\u0651\u0644",
     "Account Settings": "\u0625\u0639\u062f\u0627\u062f\u0627\u062a \u0627\u0644\u062d\u0633\u0627\u0628",
     "Account Settings page.": "Param\u00e8tres du compte",
-    "Account deletion, including removal from email lists, may take a few weeks to fully process through our system. If you want to opt-out of emails before then, please unsubscribe from the footer of any email.": "La suppression d'un compte, comprenant le retrait des listes d'e-mail, peu prendre quelques semaines afin de traiter enti\u00e8rement notre syst\u00e8me. Si vous souhaitez renoncer aux e-mails ult\u00e9rieurement, veuillez vous d\u00e9sinscrire en consultant le pied de page de n'importe quel e-mail.",
+    "Account deletion, including removal from email lists, may take a few weeks to fully process through our system. If you want to opt-out of emails before then, please unsubscribe from the footer of any email.": "La suppression d'un compte, comprenant le retrait des listes d'e-mail, peut prendre quelques semaines afin de traiter enti\u00e8rement notre syst\u00e8me. Si vous souhaitez renoncer aux e-mails ult\u00e9rieurement, veuillez vous d\u00e9sinscrire en consultant le pied de page de n'importe quel e-mail.",
     "Action": "\u0627\u0644\u0625\u062c\u0631\u0627\u0621",
     "Action required: Enter a valid date.": "\u0625\u062c\u0631\u0627\u0621 \u0644\u0627\u0632\u0645: \u0623\u062f\u062e\u0644 \u062a\u0627\u0631\u064a\u062e\u0627\u064b \u0635\u0627\u0644\u062d\u0627\u064b.",
     "Actions": "\u0627\u0644\u0625\u062c\u0631\u0627\u0621\u0627\u062a",

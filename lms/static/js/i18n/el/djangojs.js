@@ -224,7 +224,7 @@
     "Account Not Activated": "\u039f \u03bb\u03bf\u03b3\u03b1\u03c1\u03b9\u03b1\u03c3\u03bc\u03cc\u03c2 \u03b4\u03b5\u03bd \u03b5\u03bd\u03b5\u03c1\u03b3\u03bf\u03c0\u03bf\u03b9\u03ae\u03b8\u03b7\u03ba\u03b5",
     "Account Settings": "\u03a1\u03c5\u03b8\u03bc\u03af\u03c3\u03b5\u03b9\u03c2 \u03bb\u03bf\u03b3\u03b1\u03c1\u03b9\u03b1\u03c3\u03bc\u03bf\u03cd",
     "Account Settings page.": "Param\u00e8tres du compte",
-    "Account deletion, including removal from email lists, may take a few weeks to fully process through our system. If you want to opt-out of emails before then, please unsubscribe from the footer of any email.": "La suppression d'un compte, comprenant le retrait des listes d'e-mail, peu prendre quelques semaines afin de traiter enti\u00e8rement notre syst\u00e8me. Si vous souhaitez renoncer aux e-mails ult\u00e9rieurement, veuillez vous d\u00e9sinscrire en consultant le pied de page de n'importe quel e-mail.",
+    "Account deletion, including removal from email lists, may take a few weeks to fully process through our system. If you want to opt-out of emails before then, please unsubscribe from the footer of any email.": "La suppression d'un compte, comprenant le retrait des listes d'e-mail, peut prendre quelques semaines afin de traiter enti\u00e8rement notre syst\u00e8me. Si vous souhaitez renoncer aux e-mails ult\u00e9rieurement, veuillez vous d\u00e9sinscrire en consultant le pied de page de n'importe quel e-mail.",
     "Action": "Action",
     "Action required: Enter a valid date.": "Action requise : Entrez une date valide.",
     "Actions": "Actions",

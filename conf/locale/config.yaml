@@ -6,7 +6,7 @@ edx_lang_map:
     zh_CN: zh_HANS
 
 locales:
-    - en  # English - Source Language
+    - en # English - Source Language
     # - am  # Amharic
     - ar  # Arabic
     # - az  # Azerbaijani
@@ -29,7 +29,7 @@ locales:
     - es_419  # Spanish (Latin America)
     # - es_AR  # Spanish (Argentina)
     # - es_EC  # Spanish (Ecuador)
-    # - es_ES  # Spanish (Spain)
+    - es_ES  # Spanish (Spain)
     # - es_MX  # Spanish (Mexico)
     # - es_PE  # Spanish (Peru)
     # - et_EE  # Estonian (Estonia)
@@ -62,7 +62,7 @@ locales:
     # - ms  # Malay
     # - nb  # Norwegian Bokmål
     # - ne  # Nepali
-    # - nl_NL  # Dutch (Netherlands)
+    - nl_NL  # Dutch (Netherlands)
     # - or  # Oriya
     - pl  # Polish
     - pt_BR  # Portuguese (Brazil)
