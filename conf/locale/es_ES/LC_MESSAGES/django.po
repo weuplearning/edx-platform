@@ -247,7 +247,7 @@ msgstr "Documentación"
 #: cms/templates/admin/base_site.html lms/templates/admin/base_site.html
 #: wiki/templates/wiki/base.html
 msgid "Log out"
-msgstr "Cerrar sesión"
+msgstr "Salir"
 
 #: common/djangoapps/course_modes/admin.py
 #: common/djangoapps/course_modes/models.py
@@ -1503,7 +1503,7 @@ msgstr "Contraseña incorrecta"
 #: common/djangoapps/util/password_policy_validators.py
 #, python-format
 msgid "at least %(min_length)d character"
-msgid_plural "at least %(min_length)d characters"
+msgid_plural "al menos %(min_length)d caracteres"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
@@ -1597,8 +1597,8 @@ msgstr[2] ""
 
 #: common/djangoapps/util/password_policy_validators.py
 #, python-format
-msgid "%(num)d uppercase letter"
-msgid_plural "%(num)d uppercase letters"
+msgid "%(num)d mayúscula"
+msgid_plural "%(num)d mayúsculas"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
@@ -1623,8 +1623,8 @@ msgstr[2] ""
 
 #: common/djangoapps/util/password_policy_validators.py
 #, python-format
-msgid "%(num)d lowercase letter"
-msgid_plural "%(num)d lowercase letters"
+msgid "%(num)d minúscula"
+msgid_plural "%(num)d minúsculas"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
@@ -5246,7 +5246,7 @@ msgstr ""
 
 #: common/templates/student/edx_ace/accountactivation/email/body.html
 msgid "Account Activation"
-msgstr ""
+msgstr "Activación de cuenta"
 
 #: common/templates/student/edx_ace/accountactivation/email/body.html
 #: common/templates/student/edx_ace/accountactivation/email/body.txt
@@ -5256,14 +5256,13 @@ msgid ""
 "engaging, high-quality %(platform_name)s courses. Note that you will not be "
 "able to log back into your account until you have activated it."
 msgstr ""
-"¡Ya casi estás ahí! Utilice el siguiente enlace para activar su cuenta y "
-"acceder a cursos %(platform_name)s atractivos y de alta calidad. Tenga en "
-"cuenta que no podrá volver a iniciar sesión en su cuenta hasta que la haya "
-"activado."
+"Utiliza el enlace de abajo para activar tu cuenta y "
+"acceder a los cursos de %(platform_name)s. Ten en cuenta que no podrás "
+"volver a iniciar sesión en tu cuenta hasta que la actives."
 
 #: common/templates/student/edx_ace/accountactivation/email/body.html
 msgid "Activate Your Account"
-msgstr "Activar tu cuenta"
+msgstr "Activa tu cuenta"
 
 #: common/templates/student/edx_ace/accountactivation/email/body.html
 #: common/templates/student/edx_ace/accountactivation/email/body.txt
@@ -5678,7 +5677,7 @@ msgstr "Política de accesibilidad"
 #: themes/stanford-style/lms/templates/footer.html
 #: themes/stanford-style/lms/templates/static_templates/tos.html
 msgid "Terms of Service"
-msgstr "Condiciones del servicio"
+msgstr "Condiciones de Uso"
 
 #: lms/djangoapps/branding/api.py
 msgid "Sitemap"
@@ -8743,7 +8742,7 @@ msgstr "Visitar %(site_name)s"
 msgid ""
 "This email was automatically sent from %(site_name)s to %(email_address)s"
 msgstr ""
-"Este correo electrónico fue enviado automáticamente desde %(site_name)s a "
+"Este mensaje de correo electrónico fue enviado automáticamente por %(site_name)s a "
 "%(email_address)s"
 
 #: lms/templates/instructor/edx_ace/addbetatester/email/body.txt
@@ -11330,7 +11329,7 @@ msgstr "Restablecimiento de contraseña completado en %(platform_name)s"
 
 #: openedx/core/djangoapps/user_authn/utils.py
 msgid "Create Account"
-msgstr "Crear cuenta"
+msgstr "Crea una cuenta"
 
 #: openedx/core/djangoapps/user_authn/views/auto_auth.py
 msgid "Superuser creation not allowed"
@@ -11540,7 +11539,7 @@ msgstr "El email no puede tener más de %(limit_value)s caracteres"
 
 #: openedx/core/djangoapps/user_authn/views/registration_form.py
 msgid "You must accept the terms of service."
-msgstr "Debes aceptar las condiciones del servicio."
+msgstr "Debes aceptar las condiciones de uso."
 
 #: openedx/core/djangoapps/user_authn/views/registration_form.py
 msgid "A level of education is required"
@@ -12042,6 +12041,10 @@ msgid "Welcome to {course_display_name}"
 msgstr ""
 
 #: openedx/features/course_experience/views/course_home_messages.py
+msgid "Welcome! Activate your account from your mailbox."
+msgstr "¡Bienvenido! Activa tu cuenta desde tu bandeja de entrada."
+
+#: openedx/features/course_experience/views/course_home_messages.py
 msgid ""
 "You must be enrolled in the course to see course content. Please contact "
 "your degree administrator or edX Support if you have questions."
@@ -12052,6 +12055,13 @@ msgstr ""
 msgid ""
 "{open_enroll_link}Enroll now{close_enroll_link} to access the full course."
 msgstr ""
+
+#: openedx/features/course_experience/views/course_home_messages.py
+msgid ""
+"Check your inbox for an account activation link. Check your SPAM folder if "
+"needed."
+msgstr "Revisa tu bandeja de entrada para encontrar el enlace de activación de la cuenta. Verifica tu carpeta de correo no deseado si es "
+"necesario."
 
 #: openedx/features/course_experience/views/course_home_messages.py
 #, python-brace-format
@@ -13993,7 +14003,7 @@ msgstr "Revisión"
 
 #: lms/templates/provider_login.html
 msgid "Log In"
-msgstr "Iniciar sesión"
+msgstr "Inicia sesión"
 
 #: lms/templates/provider_login.html
 msgid ""
@@ -14115,7 +14125,7 @@ msgstr "Objetivos al registrarse en {platform_name}"
 #: themes/stanford-style/lms/templates/register-form.html
 #: themes/stanford-style/lms/templates/register-shib.html
 msgid "I agree to the {link_start}Terms of Service{link_end}"
-msgstr "Acepto las {link_start}Condiciones del Servicio{link_end}"
+msgstr "Acepto las {link_start}Condiciones de Uso{link_end}"
 
 #: lms/templates/signup_modal.html
 #: themes/stanford-style/lms/templates/register-form.html
@@ -20087,7 +20097,7 @@ msgid ""
 " and access to private sites offered by MIT Open Learning, Wharton Executive"
 " Education, and Harvard Medical School"
 msgstr ""
-"y acceso a sitios privados ofrecidos por MIT Open Learning, Wharton "
+"y el acceso a sitios privados ofrecidos por MIT Open Learning, Wharton "
 "Executive Education y Harvard Medical School"
 
 #: lms/templates/student_account/finish_auth.html
@@ -20725,7 +20735,7 @@ msgid ""
 "{tos_link_start}Terms of Service{tos_link_end} and {honor_link_start}Honor "
 "Code{honor_link_end}"
 msgstr ""
-"{tos_link_start}Condiciones del servicio{tos_link_end} y "
+"{tos_link_start}Condiciones de Uso{tos_link_end} y "
 "{honor_link_start}Código de Honor{honor_link_end}"
 
 #: themes/stanford-style/lms/templates/footer.html

@@ -4,6 +4,8 @@ Toggles for accounts related code.
 
 from edx_toggles.toggles import WaffleFlag
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
+import logging
+log = logging.getLogger(__name__)
 
 # .. toggle_name: order_history.redirect_to_microfrontend
 # .. toggle_implementation: WaffleFlag
@@ -19,6 +21,9 @@ REDIRECT_TO_ORDER_HISTORY_MICROFRONTEND = WaffleFlag('order_history', 'redirect_
 
 
 def should_redirect_to_order_history_microfrontend():
+    log.info(f"order: {configuration_helpers.get_value('ENABLE_ORDER_HISTORY_MICROFRONTEND')}")
+    log.info(f"redirect: {REDIRECT_TO_ORDER_HISTORY_MICROFRONTEND.is_enabled()}")
+    log.info(f"both: {configuration_helpers.get_value('ENABLE_ORDER_HISTORY_MICROFRONTEND') and REDIRECT_TO_ORDER_HISTORY_MICROFRONTEND.is_enabled()}")
     return (
         configuration_helpers.get_value('ENABLE_ORDER_HISTORY_MICROFRONTEND') and
         REDIRECT_TO_ORDER_HISTORY_MICROFRONTEND.is_enabled()

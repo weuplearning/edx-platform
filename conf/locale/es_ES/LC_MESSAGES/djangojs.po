@@ -3719,7 +3719,7 @@ msgstr "Accede a {platform} para que podamos ayudarte mejor."
 #: lms/templates/student_account/hinted_login.underscore
 #: lms/templates/student_account/login.underscore
 msgid "Sign in"
-msgstr "Iniciar sesión"
+msgstr "Inicia sesión"
 
 #: common/static/bundles/SingleSupportForm.js
 #: lms/templates/student_account/institution_register.underscore
@@ -3730,7 +3730,7 @@ msgstr "Crea una cuenta"
 #: common/static/bundles/SingleSupportForm.js
 #: lms/djangoapps/support/static/support/jsx/logged_out_user.jsx
 msgid "Need help logging in?"
-msgstr "¿Necesita ayuda para iniciar sesión?"
+msgstr "¿Necesitas ayuda para iniciar sesión?"
 
 #: common/static/bundles/SingleSupportForm.js
 #: lms/djangoapps/support/static/support/jsx/single_support_form.jsx
@@ -3822,10 +3822,10 @@ msgid ""
 "these for your records before proceeding with deletion, follow the "
 "instructions for {htmlStart}printing or downloading a certificate{htmlEnd}."
 msgstr ""
-"También puede perder el acceso a los certificados verificados y otras "
-"credenciales del programa como los certificados de MicroMasters. Si desea "
-"hacer una copia de estos para sus registros antes de continuar con la "
-"eliminación, siga las instrucciones para imprimir {htmlStart} o descargar un"
+"También puedes perder el acceso a los certificados verificados y otras "
+"credenciales del programa, como los certificados de MicroMasters. Si deseas "
+"hacer una copia de estos para tus registros antes de proceder con la "
+"eliminación, sigue las instrucciones para imprimir {htmlStart} o descargar un"
 " certificado{htmlEnd}."
 
 #: common/static/bundles/StudentAccountDeletion.js
@@ -3850,18 +3850,18 @@ msgstr "Before proceeding, please {htmlStart}activate your account{htmlEnd}."
 msgid ""
 "{htmlStart}Want to change your email, name, or password instead?{htmlEnd}"
 msgstr ""
-"{htmlStart}Want to change your email, name, or password instead?{htmlEnd}"
+"{htmlStart}¿Prefieres cambiar tu correo electrónico, nombre o contraseña en su lugar?{htmlEnd}"
 
 #: common/static/bundles/StudentAccountDeletion.js
 #: common/static/bundles/StudentAccountDeletionInitializer.js
 #: lms/static/js/student_account/components/StudentAccountDeletion.jsx
 msgid ""
-"{strongStart}Warning: Account deletion is permanent.{strongEnd} Please read "
-"the above carefully before proceeding. This is an irreversible action, and "
-"{strongStart}you will no longer be able to use the same email on "
+"{strongStart}Warning: Account deletion is permanent.{strongEnd} Por favor "
+", lee lo anterior detenidamente antes de continuar. Esta es una acción irreversible y "
+"{strongStart}ya no podrás utilizar el mismo correo electrónico en "
 "{platformName}.{strongEnd}"
 msgstr ""
-"{strongStart}Warning: Account deletion is permanent.{strongEnd} Please read "
+"{strongStart}Advertencia: La eliminación de la cuenta es permanente.{strongEnd} Please read "
 "the above carefully before proceeding. This is an irreversible action, and "
 "{strongStart}you will no longer be able to use the same email on "
 "{platformName}.{strongEnd}"
@@ -3874,9 +3874,9 @@ msgid ""
 "cannot be undone. {platformName} will not be able to recover your account or"
 " the data that is deleted."
 msgstr ""
-"Please note: Deletion of your account and personal data is permanent and "
-"cannot be undone. {platformName} will not be able to recover your account or"
-" the data that is deleted."
+"Ten en cuenta: La eliminación de tu cuenta y datos personales es permanente y "
+"o puede deshacerse. {platformName} no podrá recuperar tu cuenta ni"
+" los datos que se eliminan."
 
 #: common/static/bundles/StudentAccountDeletion.js
 #: common/static/bundles/StudentAccountDeletionInitializer.js
@@ -3885,8 +3885,8 @@ msgid ""
 "Once your account is deleted, you cannot use it to take courses on the "
 "{platformName} app, {siteName}, or any other site hosted by {platformName}."
 msgstr ""
-"Once your account is deleted, you cannot use it to take courses on the "
-"{platformName} app, {siteName}, or any other site hosted by {platformName}."
+"Una vez que tu cuenta sea eliminada, no podrás utilizarla para tomar cursos en la "
+"aplicación de {platformName}, {siteName} o cualquier otro sitio alojado por {platformName}."
 
 #: common/static/bundles/StudentAccountDeletion.js
 #: common/static/bundles/StudentAccountDeletionInitializer.js
@@ -3896,8 +3896,8 @@ msgid ""
 "This includes access to {siteName} from your employer’s or university’s "
 "system{additionalSiteSpecificDeletionText}."
 msgstr ""
-"This includes access to {siteName} from your employer’s or university’s "
-"system{additionalSiteSpecificDeletionText}."
+"Esto incluye el acceso a {siteName} desde el sistema de tu empleador o universidad "
+"{additionalSiteSpecificDeletionText}."
 
 #: common/static/bundles/StudentAccountDeletion.js
 #: common/static/bundles/StudentAccountDeletionInitializer.js
@@ -6582,9 +6582,9 @@ msgstr "Dirección de correo electrónico (Iniciar sesión)"
 
 #: lms/static/js/student_account/views/account_settings_factory.js
 msgid ""
-"You receive messages from {platform_name} and course teams at this address."
+"Recibirás los mensajes de {platform_name} and course teams at this address."
 msgstr ""
-"You receive messages from {platform_name} and course teams at this address."
+"You receive messages from {platform_name} en está dirección de email."
 
 #: lms/static/js/student_account/views/account_settings_factory.js
 msgid "Recovery Email Address"
@@ -6609,7 +6609,7 @@ msgid ""
 "certificates."
 msgstr ""
 "El nombre que se utiliza para la verificación del identificador ID y que "
-"aparece en sus certificados."
+"aparece en tus certificados."
 
 #: lms/static/js/student_account/views/account_settings_factory.js
 msgid "Country or Region of Residence"
@@ -6617,7 +6617,7 @@ msgstr "País o región de residencia"
 
 #: lms/static/js/student_account/views/account_settings_factory.js
 msgid "The country or region where you live."
-msgstr "país o región donde viven"
+msgstr "País o región donde vives"
 
 #: lms/static/js/student_account/views/account_settings_factory.js
 msgid "Basic Account Information"
@@ -6632,8 +6632,8 @@ msgid ""
 "The name that identifies you on {platform_name}. You cannot change your "
 "username."
 msgstr ""
-"The name that identifies you on {platform_name}. You cannot change your "
-"username."
+"El nombre de usuario de {platform_name}. No puedes modificar el nombre de "
+"usuario."
 
 #: lms/static/js/student_account/views/account_settings_factory.js
 #: lms/templates/student_account/account.underscore
@@ -6643,8 +6643,8 @@ msgstr "Contraseña"
 #: lms/static/js/student_account/views/account_settings_factory.js
 msgid "Check your email account for instructions to reset your password."
 msgstr ""
-"Revise su cuenta de correo electrónico para obtener instrucciones para "
-"restablecer su contraseña."
+"Revisa tu cuenta de correo electrónico para obtener instrucciones para "
+"restablecer tu contraseña."
 
 #: lms/static/js/student_account/views/account_settings_factory.js
 msgid ""
@@ -6716,12 +6716,12 @@ msgid ""
 "Optionally, link your personal accounts to the social media icons on your "
 "edX profile."
 msgstr ""
-"Opcionalmente, vincule sus cuentas personales a los iconos de redes sociales"
-" en su perfil edX."
+"Opcional. Vincula tus cuentas personales a los iconos de redes sociales"
+" en tu perfil."
 
 #: lms/static/js/student_account/views/account_settings_factory.js
 msgid "{platform_display_name} Link"
-msgstr "{platform_display_name} Enlace"
+msgstr "Enlace de {platform_display_name}"
 
 #: lms/static/js/student_account/views/account_settings_factory.js
 msgid ""
@@ -9784,7 +9784,7 @@ msgid ""
 "Please enter your log-in or recovery email address below and we will send "
 "you an email with instructions."
 msgstr ""
-"Introduzca su dirección de correo electrónico de registro o recuperación a "
+"Introduce tu dirección de correo electrónico de registro a"
 "continuación y le enviaremos un correo electrónico con instrucciones."
 
 #: lms/templates/student_account/password_reset.underscore

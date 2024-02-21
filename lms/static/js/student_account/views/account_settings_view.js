@@ -46,7 +46,8 @@
                         expanded: false
                     }
                 ];
-                if (!view.options.disableOrderHistoryTab) {
+                //initially there was a ! before view.options.disableOrderHistoryTab but the function should_redirect_to_order_history_microfrontend does not mean to disable but rather enable
+                if (view.options.disableOrderHistoryTab) {
                     accountSettingsTabs.push({
                         name: 'ordersTabSections',
                         id: 'orders-tab',
