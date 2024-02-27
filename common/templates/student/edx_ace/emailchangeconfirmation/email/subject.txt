@@ -1,4 +1,4 @@
 {% load i18n %}
 {% autoescape off %}
-{% blocktrans trimmed %}Email Change Confirmation for {{ platform_name }}{% endblocktrans %}
+Confirmación de cambio de correo electrónico para Amazon Despega
 {% endautoescape %}

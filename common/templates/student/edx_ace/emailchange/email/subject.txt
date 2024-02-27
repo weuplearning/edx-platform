@@ -1,4 +1,4 @@
 {% load i18n %}
 {% autoescape off %}
-{% blocktrans trimmed %}Request to change {{ platform_name }} account e-mail{% endblocktrans %}
+Solicitud para cambiar el correo electrónico de tu cuenta en Amazon Despega
 {% endautoescape %}

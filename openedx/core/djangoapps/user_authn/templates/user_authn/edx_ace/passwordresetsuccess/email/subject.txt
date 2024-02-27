@@ -1,4 +1,4 @@
 {% load i18n %}
 {% autoescape off %}
-{% blocktrans trimmed %}Password reset completed on {{ platform_name }}{% endblocktrans %}
+Contraseña restablecida con éxito en Amazon Despega
 {% endautoescape %}

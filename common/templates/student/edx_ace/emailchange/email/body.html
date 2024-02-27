@@ -7,12 +7,11 @@
     <tr>
         <td>
             <h1>
-                {% trans "Email Change" as tmsg %}{{ tmsg | force_escape }}
+                Cambio de correo electrónico
             </h1>
             <p style="color: rgba(0,0,0,.75);">
-                {% filter force_escape %}
-                {% blocktrans %}We received a request to change the e-mail associated with your {{ platform_name }} account from {{ old_email }} to {{ new_email }}. If this is correct, please confirm your new e-mail address by visiting:{% endblocktrans %}
-                {% endfilter %}
+                Hemos recibido una solicitud para cambiar el correo electrónico asociado a tu cuenta de Amazon Despega de {{ old_email }} a {{ new_email }}.
+                Si esto es correcto, confirma tu nueva dirección de correo electrónico visitando:
                 <br />
             </p>
 
@@ -22,9 +21,7 @@
             {% include "ace_common/edx_ace/common/return_to_course_cta.html" with course_cta_text=course_cta_text course_cta_url=confirm_link %}
 
             <p style="color: rgba(0,0,0,.75);">
-                {% filter force_escape %}
-                {% blocktrans %}If you didn't request this, you don't need to do anything; you won't receive any more email from us. Please do not reply to this e-mail; if you require assistance, check the help section of the {{ platform_name }} web site.{% endblocktrans %}
-                {% endfilter %}
+                Si no hiciste esta solicitud, no es necesario que hagas nada; no recibirás más correos electrónicos de nuestra parte. Por favor, no respondas a este correo electrónico; si necesitas ayuda, consulta la sección de ayuda del sitio web de Amazon Despega.
                 <br />
             </p>
 

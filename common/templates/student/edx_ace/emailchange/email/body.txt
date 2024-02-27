@@ -1,6 +1,8 @@
 {% load i18n %}{% autoescape off %}
-{% blocktrans %}We received a request to change the e-mail associated with your {{ platform_name }} account from {{ old_email }} to {{ new_email }}. If this is correct, please confirm your new e-mail address by visiting:{% endblocktrans %}
+Hemos recibido una solicitud para cambiar el correo electrónico asociado a tu cuenta de Amazon Despega de {{ old_email }} a {{ new_email }}.
+Si esto es correcto, confirma tu nueva dirección de correo electrónico visitando:
 
 {{ confirm_link }}
 
-{% blocktrans %}If you didn't request this, you don't need to do anything; you won't receive any more email from us. Please do not reply to this e-mail; if you require assistance, check the help section of the {{ platform_name }} web site.{% endblocktrans %}{% endautoescape %}
+Si no hiciste esta solicitud, no es necesario que hagas nada; no recibirás más correos electrónicos de nuestra parte. Por favor, no respondas a este correo electrónico; si necesitas ayuda, consulta la sección de ayuda del sitio web de Amazon Despega.
+{% endautoescape %}

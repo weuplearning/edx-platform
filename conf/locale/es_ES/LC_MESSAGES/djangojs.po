@@ -6582,9 +6582,9 @@ msgstr "Dirección de correo electrónico (Iniciar sesión)"
 
 #: lms/static/js/student_account/views/account_settings_factory.js
 msgid ""
-"Recibirás los mensajes de {platform_name} and course teams at this address."
+"You receive messages from {platform_name} and course teams at this address."
 msgstr ""
-"You receive messages from {platform_name} en está dirección de email."
+"Recibirás los mensajes de {platform_name} en está dirección de email."
 
 #: lms/static/js/student_account/views/account_settings_factory.js
 msgid "Recovery Email Address"

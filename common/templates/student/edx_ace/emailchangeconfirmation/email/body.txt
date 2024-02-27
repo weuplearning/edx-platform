@@ -1,6 +1,8 @@
 {% load i18n %}{% autoescape off %}
-{% blocktrans %}This is to confirm that you changed the e-mail associated with {{ platform_name }} from {{ old_email }} to {{ new_email }}. If you did not make this request, please contact us immediately. Contact information is listed at:{% endblocktrans %}
+Este mail es para confirmar que has cambiado el correo electrónico asociado a tu cuenta de Amazon Despega de {{ old_email }} a {{ new_email }}.
 
-{{ contact_link }}
+Si no realizaste esta solicitud, por favor contáctanos de inmediato.
 
-{% blocktrans %}We keep a log of old e-mails, so if this request was unintentional, we can investigate.{% endblocktrans %}{% endautoescape %}
+Guardamos registros de los antiguos correos electrónicos. De esta manera, si tu solicitud no fue intencional, podemos investigarlo.
+
+{% endautoescape %}
