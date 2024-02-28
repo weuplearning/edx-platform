@@ -95,7 +95,7 @@ def generate_pdf(request,course_id):
 
 
     # USER NAME
-    name_position_x = certificate_config['name_position_x']
+    name_position_y = certificate_config['name_position_y']
     font_size = certificate_config['font_size']
     p.setFont(font_name, font_size)
     try:
@@ -115,18 +115,18 @@ def generate_pdf(request,course_id):
                 user_name = 'Missing information'
 
     try:
-        name_position_y = certificate_config['name_position_y']
+        name_position_x = certificate_config['name_position_x']
     except:
-        name_position_y = False
+        name_position_x = False
     
-    if name_position_y :
-        p.drawString(name_position_y, name_position_x, user_name)
+    if name_position_x :
+        p.drawString(name_position_x, name_position_y, user_name)
     else:
         # Center the text horizontally
 
         text_width = stringWidth(user_name, font_name, font_size)
         centered_text = (page_width - text_width) / 2.0
-        p.drawString(centered_text, name_position_x, user_name)
+        p.drawString(centered_text, name_position_y, user_name)
 
 
 
@@ -135,29 +135,10 @@ def generate_pdf(request,course_id):
         certificate_date = certificate_config['date']
     except:
         certificate_date = False
-    try:
-        date_lang = certificate_config['date_lang'].lower()
-    except:
-        date_lang = 'fr'
 
     if certificate_date :
         today = date.today()
-        string_date_en = today.strftime('%d %B %Y')
-
-        english_months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-        french_months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
-        for index, e in enumerate(english_months):
-            if string_date_en.find(e) != -1 :
-                string_date_fr = string_date_en.replace(e, french_months[index])
-
-        # Switch to multilingue
-        try:
-            if date_lang == 'en' :
-                certificate_date += string_date_en
-            else:
-                certificate_date += string_date_fr
-        except:
-            pass
+        string_date_en = today.strftime('%d/%m/%Y')
 
         # COLOR
         try:
@@ -166,22 +147,21 @@ def generate_pdf(request,course_id):
             font_color_2 = [0, 0, 0]
         p.setFillColorRGB(font_color_2[0]/255, font_color_2[1]/255, font_color_2[2]/255) 
 
-
         # Write date at x and y with font_size_2
-        date_position_x = certificate_config['date_position_x']
+        date_position_y = certificate_config['date_position_y']
         try:
-            date_position_y = certificate_config['date_position_y']
+            date_position_x = certificate_config['date_position_x']
         except:
-            date_position_y = False
+            date_position_x = False
         font_size_2 = certificate_config['font_size_2']
 
         p.setFont(font_name, font_size_2)
-        if date_position_y:
-            p.drawString(date_position_y, date_position_x , str(certificate_date))
+        if date_position_x:
+            p.drawString(date_position_x, date_position_y , str(string_date_en))
         else:
-            text_width_date = stringWidth(certificate_date, font_name, font_size_2)
+            text_width_date = stringWidth(string_date_en, font_name, font_size_2)
             centered_date = (page_width - text_width_date) / 2.0
-            p.drawString(centered_date, date_position_x , str(certificate_date))
+            p.drawString(centered_date, date_position_y , str(string_date_en))
 
 
     # COURSE DURATION
@@ -229,7 +209,6 @@ def generate_pdf(request,course_id):
             p.drawString(custom_field_value['position_x'], custom_field_value['position_y'], value)
         except:
             log.info('error with custom fields for certificate')
-
 
 
     # Close the PDF object cleanly, and we're done.
