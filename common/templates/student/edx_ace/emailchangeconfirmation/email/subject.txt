@@ -1,4 +1,4 @@
 {% load i18n %}
 {% autoescape off %}
-{% blocktrans trimmed %}Email Change Confirmation for {{ platform_name }}{% endblocktrans %}
+Conferma Cambio Email per il tuo account Accelera con Amazon
 {% endautoescape %}

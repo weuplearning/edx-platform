@@ -7,16 +7,16 @@
     <tr>
         <td>
             <h1>
-                {% trans "Password Reset Success" as tmsg %}{{ tmsg | force_escape }}
+                Reset della password completato
             </h1>
-            <p style="color: rgba(0,0,0,.75);">
+            <!-- <p style="color: rgba(0,0,0,.75);">
                 {% filter force_escape %}
                    {% blocktrans %}Hello {{ name }},{% endblocktrans %}
                 {% endfilter %}
-            </p>
+            </p> -->
             <p style="color: rgba(0,0,0,.75);">
                 {% filter force_escape %}
-                {% blocktrans %}This is to confirm that you have successfully changed your password associated with {{ platform_name }} account. Please sign-in to your account.{% endblocktrans %}
+                Ti confermiamo che la sua password è stata cambiata con successo. Puoi effettuare l'accesso a Accelera con Amazon utilizzando la tua nuova password.
                 {% endfilter %}
                 <br />
             </p>

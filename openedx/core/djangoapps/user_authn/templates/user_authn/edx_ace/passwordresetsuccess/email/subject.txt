@@ -1,4 +1,4 @@
 {% load i18n %}
 {% autoescape off %}
-{% blocktrans trimmed %}Password reset completed on {{ platform_name }}{% endblocktrans %}
+Reset della password completato su Accelera con Amazon
 {% endautoescape %}

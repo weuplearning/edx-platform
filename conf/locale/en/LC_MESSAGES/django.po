@@ -1,45 +1,45 @@
 # #-#-#-#-#  django-partial.po (0.1a)  #-#-#-#-#
 # edX translation file.
-# Copyright (C) 2020 EdX
+# Copyright (C) 2024 EdX
 # This file is distributed under the GNU AFFERO GENERAL PUBLIC LICENSE.
-# EdX Team <info@edx.org>, 2020.
+# EdX Team <info@edx.org>, 2024.
 #
 # #-#-#-#-#  django-studio.po (0.1a)  #-#-#-#-#
 # edX translation file.
-# Copyright (C) 2020 EdX
+# Copyright (C) 2024 EdX
 # This file is distributed under the GNU AFFERO GENERAL PUBLIC LICENSE.
-# EdX Team <info@edx.org>, 2020.
+# EdX Team <info@edx.org>, 2024.
 #
 # #-#-#-#-#  mako.po (0.1a)  #-#-#-#-#
 # edX translation file
-# Copyright (C) 2020 edX
+# Copyright (C) 2024 edX
 # This file is distributed under the GNU AFFERO GENERAL PUBLIC LICENSE.
-# EdX Team <info@edx.org>, 2020.
+# EdX Team <info@edx.org>, 2024.
 #
 # #-#-#-#-#  mako-studio.po (0.1a)  #-#-#-#-#
 # edX translation file
-# Copyright (C) 2020 edX
+# Copyright (C) 2024 edX
 # This file is distributed under the GNU AFFERO GENERAL PUBLIC LICENSE.
-# EdX Team <info@edx.org>, 2020.
+# EdX Team <info@edx.org>, 2024.
 #
 # #-#-#-#-#  wiki.po (0.1a)  #-#-#-#-#
 # edX translation file
-# Copyright (C) 2020 edX
+# Copyright (C) 2024 edX
 # This file is distributed under the GNU AFFERO GENERAL PUBLIC LICENSE.
-# EdX Team <info@edx.org>, 2020.
+# EdX Team <info@edx.org>, 2024.
 #
 # #-#-#-#-#  edx_proctoring_proctortrack.po (0.1a)  #-#-#-#-#
 # edX translation file
-# Copyright (C) 2020 edX
+# Copyright (C) 2024 edX
 # This file is distributed under the GNU AFFERO GENERAL PUBLIC LICENSE.
-# EdX Team <info@edx.org>, 2020.
+# EdX Team <info@edx.org>, 2024.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: 0.1a\n"
 "Report-Msgid-Bugs-To: openedx-translation@googlegroups.com\n"
-"POT-Creation-Date: 2020-10-25 20:51+0000\n"
-"PO-Revision-Date: 2020-10-25 20:51:22.874682\n"
+"POT-Creation-Date: 2024-01-16 09:57+0000\n"
+"PO-Revision-Date: 2024-01-16 09:57:53.005975\n"
 "Last-Translator: \n"
 "Language-Team: openedx-translation <openedx-translation@googlegroups.com>\n"
 "Language: en\n"
@@ -47,7 +47,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Generated-By: Babel 2.8.0\n"
+"Generated-By: Babel 2.8.1\n"
 
 #. #-#-#-#-#  django-partial.po (0.1a)  #-#-#-#-#
 #. Translators: 'Discussion' refers to the tab in the courseware that leads to
@@ -1291,8 +1291,7 @@ msgid ""
 msgstr ""
 
 #: common/djangoapps/util/password_policy_validators.py
-#, python-brace-format
-msgid "Your password must contain {length_instruction}."
+msgid "Your password must contain "
 msgstr ""
 
 #: common/djangoapps/util/password_policy_validators.py
@@ -2764,7 +2763,6 @@ msgstr ""
 
 #: common/lib/xmodule/xmodule/course_module.py
 #: lms/templates/courseware/info.html
-#: openedx/features/course_experience/templates/course_experience/course-home-fragment.html
 msgid "Course Handouts"
 msgstr ""
 
@@ -4484,24 +4482,15 @@ msgstr ""
 #: common/templates/student/edx_ace/accountactivation/email/body.html
 #: common/templates/student/edx_ace/accountactivation/email/body.txt
 #, python-format
-msgid "Enjoy learning with %(platform_name)s."
-msgstr ""
-
-#: common/templates/student/edx_ace/accountactivation/email/body.html
-#, python-format, python-brace-format
-msgid ""
-"If you need help, please use our web form at "
-"{start_anchor_web}%(support_url)s{end_anchor} or email "
-"{start_anchor_email}%(support_email)s{end_anchor}."
-msgstr ""
-
-#: common/templates/student/edx_ace/accountactivation/email/body.html
-#: common/templates/student/edx_ace/accountactivation/email/body.txt
-#, python-format
 msgid ""
 "This email message was automatically sent by %(lms_url)s because someone "
 "attempted to create an account on %(platform_name)s using this email "
 "address."
+msgstr ""
+
+#: common/templates/student/edx_ace/accountactivation/email/body.txt
+#, python-format
+msgid "Enjoy learning with %(platform_name)s."
 msgstr ""
 
 #: common/templates/student/edx_ace/accountactivation/email/body.txt
@@ -5346,14 +5335,6 @@ msgstr ""
 msgid "Not sure yet"
 msgstr ""
 
-#: lms/djangoapps/course_home_api/outline/v1/serializers.py
-#: openedx/features/course_experience/templates/course_experience/course-outline-fragment.html
-#, python-brace-format
-msgid "({number} Question)"
-msgid_plural "({number} Questions)"
-msgstr[0] ""
-msgstr[1] ""
-
 #: lms/djangoapps/course_home_api/outline/v1/views.py
 msgid ""
 "Please contact your degree administrator or edX Support if you have "
@@ -5638,7 +5619,6 @@ msgstr ""
 #: lms/djangoapps/courseware/date_summary.py
 #: cms/templates/group_configurations.html
 #: lms/templates/courseware/program_marketing.html
-#: openedx/features/course_experience/templates/course_experience/course-home-fragment.html
 msgid "Learn More"
 msgstr ""
 
@@ -6030,15 +6010,6 @@ msgid "Total number of users"
 msgstr ""
 
 #: lms/djangoapps/dashboard/sysadmin.py
-#: lms/djangoapps/support/views/manage_user.py lms/templates/tracking_log.html
-msgid "username"
-msgstr ""
-
-#: lms/djangoapps/dashboard/sysadmin.py
-msgid "email"
-msgstr ""
-
-#: lms/djangoapps/dashboard/sysadmin.py
 msgid "Create User Results"
 msgstr ""
 
@@ -6104,14 +6075,6 @@ msgstr ""
 
 #: lms/djangoapps/dashboard/sysadmin.py
 msgid "Enrollment information for all courses"
-msgstr ""
-
-#: lms/djangoapps/dashboard/sysadmin.py
-msgid "role"
-msgstr ""
-
-#: lms/djangoapps/dashboard/sysadmin.py
-msgid "full_name"
 msgstr ""
 
 #: lms/djangoapps/discussion/django_comment_client/base/views.py
@@ -6322,11 +6285,13 @@ msgid ""
 msgstr ""
 
 #: lms/djangoapps/instructor/views/api.py
+#: lms/djangoapps/wul_apps/stat_dashboard/wul_dashboard.py
 #, python-brace-format
 msgid "Invalid email {email_address}."
 msgstr ""
 
 #: lms/djangoapps/instructor/views/api.py
+#: lms/djangoapps/wul_apps/stat_dashboard/wul_dashboard.py
 #, python-brace-format
 msgid ""
 "An account with email {email} exists but the provided username {username} is"
@@ -6338,11 +6303,13 @@ msgid "File is not attached."
 msgstr ""
 
 #: lms/djangoapps/instructor/views/api.py
+#: lms/djangoapps/wul_apps/stat_dashboard/wul_dashboard.py
 #, python-brace-format
 msgid "Username {user} already exists."
 msgstr ""
 
 #: lms/djangoapps/instructor/views/api.py
+#: lms/djangoapps/wul_apps/stat_dashboard/wul_dashboard.py
 #, python-brace-format
 msgid ""
 "Error '{error}' while sending email to new user (user email={email}). "
@@ -6352,6 +6319,7 @@ msgstr ""
 
 #: lms/djangoapps/instructor/views/api.py
 #: lms/djangoapps/instructor_task/api_helper.py
+#: lms/djangoapps/wul_tasks/api_helper.py
 msgid "problem responses"
 msgstr ""
 
@@ -6377,6 +6345,7 @@ msgstr ""
 
 #: lms/djangoapps/instructor/views/api.py
 #: lms/djangoapps/instructor_task/api_helper.py
+#: lms/djangoapps/wul_tasks/api_helper.py
 msgid "enrolled learner profile"
 msgstr ""
 
@@ -6386,6 +6355,7 @@ msgstr ""
 
 #: lms/djangoapps/instructor/views/api.py
 #: lms/djangoapps/instructor/views/tools.py
+#: lms/djangoapps/wul_apps/stat_dashboard/grade_reports.py
 #: openedx/core/djangoapps/schedules/admin.py
 #: lms/templates/api_admin/catalogs/search.html
 #: lms/templates/ccx/enrollment.html lms/templates/staff_problem_info.html
@@ -6401,6 +6371,7 @@ msgstr ""
 #. meant to hold the user's email address.
 #: lms/djangoapps/instructor/views/api.py
 #: lms/djangoapps/instructor/views/instructor_dashboard.py
+#: lms/djangoapps/wul_apps/stat_dashboard/grade_reports.py
 #: openedx/core/djangoapps/user_authn/views/login_form.py
 #: openedx/core/djangoapps/user_authn/views/password_reset.py
 #: openedx/core/djangoapps/user_authn/views/registration_form.py
@@ -6488,6 +6459,7 @@ msgstr ""
 
 #: lms/djangoapps/instructor/views/api.py
 #: lms/djangoapps/instructor_task/api_helper.py
+#: lms/djangoapps/wul_tasks/api_helper.py
 msgid "enrollment"
 msgstr ""
 
@@ -6501,11 +6473,13 @@ msgstr ""
 
 #: lms/djangoapps/instructor/views/api.py
 #: lms/djangoapps/instructor_task/api_helper.py
+#: lms/djangoapps/wul_tasks/api_helper.py
 msgid "survey"
 msgstr ""
 
 #: lms/djangoapps/instructor/views/api.py
 #: lms/djangoapps/instructor_task/api_helper.py
+#: lms/djangoapps/wul_tasks/api_helper.py
 msgid "proctored exam results"
 msgstr ""
 
@@ -6572,6 +6546,7 @@ msgstr ""
 
 #: lms/djangoapps/instructor/views/api.py
 #: lms/djangoapps/instructor_task/api_helper.py
+#: lms/djangoapps/wul_tasks/api_helper.py
 msgid "ORA data"
 msgstr ""
 
@@ -6581,11 +6556,13 @@ msgstr ""
 
 #: lms/djangoapps/instructor/views/api.py
 #: lms/djangoapps/instructor_task/api_helper.py
+#: lms/djangoapps/wul_tasks/api_helper.py
 msgid "grade"
 msgstr ""
 
 #: lms/djangoapps/instructor/views/api.py
 #: lms/djangoapps/instructor_task/api_helper.py
+#: lms/djangoapps/wul_tasks/api_helper.py
 msgid "problem grade"
 msgstr ""
 
@@ -6882,18 +6859,22 @@ msgid "Due date extensions for {0} {1} ({2})"
 msgstr ""
 
 #: lms/djangoapps/instructor_task/api_helper.py
+#: lms/djangoapps/wul_tasks/api_helper.py
 msgid "Requested task is already running"
 msgstr ""
 
 #: lms/djangoapps/instructor_task/api_helper.py
+#: lms/djangoapps/wul_tasks/api_helper.py
 msgid "Error occured. Please try again later."
 msgstr ""
 
 #: lms/djangoapps/instructor_task/api_helper.py
+#: lms/djangoapps/wul_tasks/api_helper.py
 msgid "detailed enrollment"
 msgstr ""
 
 #: lms/djangoapps/instructor_task/api_helper.py
+#: lms/djangoapps/wul_tasks/api_helper.py
 #, python-brace-format
 msgid ""
 "The {report_type} report is being created. To view the status of the report,"
@@ -6902,22 +6883,26 @@ msgid ""
 msgstr ""
 
 #: lms/djangoapps/instructor_task/api_helper.py
+#: lms/djangoapps/wul_tasks/api_helper.py
 msgid "This component cannot be rescored."
 msgstr ""
 
 #: lms/djangoapps/instructor_task/api_helper.py
+#: lms/djangoapps/wul_tasks/api_helper.py
 msgid "This component does not support score override."
 msgstr ""
 
 #: lms/djangoapps/instructor_task/api_helper.py
+#: lms/djangoapps/wul_tasks/api_helper.py
 msgid "Scores must be between 0 and the value of the problem."
 msgstr ""
 
 #: lms/djangoapps/instructor_task/api_helper.py
+#: lms/djangoapps/wul_tasks/api_helper.py
 msgid "Not all problems in entrance exam support re-scoring."
 msgstr ""
 
-#: lms/djangoapps/instructor_task/models.py
+#: lms/djangoapps/instructor_task/models.py lms/djangoapps/wul_tasks/models.py
 msgid "An error has occurred. Task was not created."
 msgstr ""
 
@@ -6960,7 +6945,7 @@ msgstr ""
 
 #. Translators: This is a past-tense verb that is inserted into task progress
 #. messages as {action}.
-#: lms/djangoapps/instructor_task/tasks.py
+#: lms/djangoapps/instructor_task/tasks.py lms/djangoapps/wul_tasks/tasks.py
 msgid "graded"
 msgstr ""
 
@@ -7297,6 +7282,10 @@ msgstr ""
 msgid "Find information related to a learner's program enrollments"
 msgstr ""
 
+#: lms/djangoapps/support/views/manage_user.py lms/templates/tracking_log.html
+msgid "username"
+msgstr ""
+
 #: lms/djangoapps/support/views/manage_user.py
 msgid "user_support_url"
 msgstr ""
@@ -7510,6 +7499,151 @@ msgstr ""
 #: lms/djangoapps/verify_student/views.py
 #, python-brace-format
 msgid "Your {platform_name} Verification Has Been Denied"
+msgstr ""
+
+#: lms/djangoapps/wul_apps/custom_grade_report/bvt/views.py
+#: lms/djangoapps/wul_apps/stat_dashboard/views.py
+msgid ""
+"The grade report is being created. To view the status of the report, see "
+"Pending Tasks below."
+msgstr ""
+
+#: lms/djangoapps/wul_apps/custom_grade_report/bvt/views.py
+#: lms/djangoapps/wul_apps/stat_dashboard/views.py
+msgid ""
+"La création d'utilisateurs est en cours, veuillez attendre quelle se finisse"
+msgstr ""
+
+#: lms/djangoapps/wul_apps/dashboard/views.py
+#: lms/djangoapps/wul_apps/stat_dashboard/api.py
+#: lms/djangoapps/wul_apps/user_dashboard/views.py
+msgid "User has not logged in yet"
+msgstr ""
+
+#: lms/djangoapps/wul_apps/stat_dashboard/course_cut_off.py
+msgid "Course timer activated"
+msgstr ""
+
+#: lms/djangoapps/wul_apps/stat_dashboard/course_cut_off.py
+msgid "Error while activating timer"
+msgstr ""
+
+#: lms/djangoapps/wul_apps/stat_dashboard/course_cut_off.py
+msgid "Cours timer deleted"
+msgstr ""
+
+#: lms/djangoapps/wul_apps/stat_dashboard/course_cut_off.py
+msgid "Course date timer created"
+msgstr ""
+
+#: lms/djangoapps/wul_apps/stat_dashboard/course_cut_off.py
+msgid "Course timer created"
+msgstr ""
+
+#: lms/djangoapps/wul_apps/stat_dashboard/course_cut_off.py
+msgid "Invalid action requested"
+msgstr ""
+
+#: lms/djangoapps/wul_apps/stat_dashboard/course_cut_off.py
+msgid "No action requested"
+msgstr ""
+
+#: lms/djangoapps/wul_apps/stat_dashboard/course_cut_off.py
+msgid "cohort timer created"
+msgstr ""
+
+#: lms/djangoapps/wul_apps/stat_dashboard/course_cut_off.py
+msgid "Wrong parameters"
+msgstr ""
+
+#: lms/djangoapps/wul_apps/stat_dashboard/course_cut_off.py
+msgid "Cohort timer deleted"
+msgstr ""
+
+#: lms/djangoapps/wul_apps/stat_dashboard/grade_reports.py
+msgid "Last login"
+msgstr ""
+
+#: lms/djangoapps/wul_apps/stat_dashboard/grade_reports.py
+msgid "Register date"
+msgstr ""
+
+#: lms/djangoapps/wul_apps/stat_dashboard/grade_reports.py
+msgid "User id"
+msgstr ""
+
+#: lms/djangoapps/wul_apps/stat_dashboard/grade_reports.py
+msgid "Final Grade"
+msgstr ""
+
+#: lms/djangoapps/wul_apps/stat_dashboard/grade_reports.py
+msgid "Cohorte name"
+msgstr ""
+
+#: lms/djangoapps/wul_apps/stat_dashboard/grade_reports.py
+msgid "Time spent"
+msgstr ""
+
+#: lms/djangoapps/wul_apps/stat_dashboard/grade_reports.py
+msgid "Attestation"
+msgstr ""
+
+#: lms/djangoapps/wul_apps/stat_dashboard/grade_reports.py
+msgid "Best Grade"
+msgstr ""
+
+#: lms/djangoapps/wul_apps/stat_dashboard/grade_reports.py
+msgid "Best Grade Date"
+msgstr ""
+
+#: lms/djangoapps/wul_apps/stat_dashboard/grade_reports.py
+msgid "n.a."
+msgstr ""
+
+#: lms/djangoapps/wul_apps/stat_dashboard/grade_reports.py
+msgid "inv."
+msgstr ""
+
+#: lms/djangoapps/wul_apps/stat_dashboard/grade_reports.py
+#: lms/templates/instructor/instructor_dashboard_2/course_info.html
+msgid "Yes"
+msgstr ""
+
+#: lms/djangoapps/wul_apps/stat_dashboard/grade_reports.py
+#: lms/templates/instructor/instructor_dashboard_2/course_info.html
+msgid "No"
+msgstr ""
+
+#: lms/djangoapps/wul_apps/stat_dashboard/scheduled_grade_report.py
+msgid "Wrong action request"
+msgstr ""
+
+#: lms/djangoapps/wul_apps/stat_dashboard/views.py
+msgid ""
+"The grade report is currently being created. To view the status of the "
+"report, see Pending Tasks below. You will be able to download the report "
+"when it is complete."
+msgstr ""
+
+#: lms/djangoapps/wul_apps/stat_dashboard/views.py
+msgid "La création des utilisateurs a été lancée."
+msgstr ""
+
+#: lms/djangoapps/wul_apps/stat_dashboard/wul_dashboard.py
+#, python-brace-format
+msgid "Invalid info {email_address}."
+msgstr ""
+
+#: lms/djangoapps/wul_apps/statistics/views.py
+msgid "Time spent registered for user"
+msgstr ""
+
+#: lms/djangoapps/wul_apps/statistics/views.py
+msgid "Error while registering time"
+msgstr ""
+
+#: lms/djangoapps/wul_apps/statistics/views.py
+msgid "Missing parameters"
 msgstr ""
 
 #: lms/templates/admin/user_api/accounts/cancel_retirement_action.html
@@ -7949,7 +8083,7 @@ msgstr ""
 #, python-format
 msgid ""
 "Your approval status remains valid for one year, and it will expire "
-"%(expiry_date)s."
+"%(expiration_datetime)s."
 msgstr ""
 
 #: lms/templates/verify_student/edx_ace/verificationapproved/email/body.html
@@ -8525,12 +8659,6 @@ msgstr ""
 
 #: openedx/core/djangoapps/ace_common/templates/ace_common/edx_ace/common/base_body.html
 #: themes/red-theme/lms/templates/ace_common/edx_ace/common/base_body.html
-#: cms/templates/widgets/header.html
-msgid "Sign In"
-msgstr ""
-
-#: openedx/core/djangoapps/ace_common/templates/ace_common/edx_ace/common/base_body.html
-#: themes/red-theme/lms/templates/ace_common/edx_ace/common/base_body.html
 #, python-format
 msgid "%(platform_name)s on LinkedIn"
 msgstr ""
@@ -8567,11 +8695,6 @@ msgstr ""
 #: openedx/core/djangoapps/ace_common/templates/ace_common/edx_ace/common/base_body.html
 #: themes/red-theme/lms/templates/ace_common/edx_ace/common/base_body.html
 msgid "Download the Android app on the Google Play Store"
-msgstr ""
-
-#: openedx/core/djangoapps/ace_common/templates/ace_common/edx_ace/common/base_body.html
-#: themes/red-theme/lms/templates/ace_common/edx_ace/common/base_body.html
-msgid "Our mailing address is"
 msgstr ""
 
 #: openedx/core/djangoapps/ace_common/templates/ace_common/edx_ace/common/base_body.html
@@ -9920,6 +10043,10 @@ msgstr ""
 msgid "Password reset completed on %(platform_name)s"
 msgstr ""
 
+#: openedx/core/djangoapps/user_authn/utils.py
+msgid "Create Account"
+msgstr ""
+
 #: openedx/core/djangoapps/user_authn/views/auto_auth.py
 msgid "Superuser creation not allowed"
 msgstr ""
@@ -9965,6 +10092,13 @@ msgid ""
 msgstr ""
 
 #: openedx/core/djangoapps/user_authn/views/login.py
+#, python-brace-format
+msgid ""
+"To protect your account, it’s been temporarily locked. Try again in {locked_out_period} minutes.\n"
+"To be on the safe side, you can reset your password {link_start}here{link_end} before you try again.\n"
+msgstr ""
+
+#: openedx/core/djangoapps/user_authn/views/login.py
 msgid "Too many failed login attempts. Try again later."
 msgstr ""
 
@@ -9975,6 +10109,14 @@ msgid ""
 "sign-in attempts before your account is temporarily "
 "locked.{li_end}{li_start}If you've forgotten your password, click "
 "{link_start}here{link_end} to reset.{li_end}"
+msgstr ""
+
+#: openedx/core/djangoapps/user_authn/views/login.py
+#, python-brace-format
+msgid ""
+"Email or password is incorrect.\n"
+"You have {remaining_attempts} more sign-in attempts before your account is temporarily locked.\n"
+"If you{quote}ve forgotten your password, click {link_start}here{link_end} to reset.\n"
 msgstr ""
 
 #: openedx/core/djangoapps/user_authn/views/login.py
@@ -9993,10 +10135,6 @@ msgstr ""
 #: openedx/core/djangoapps/user_authn/views/password_reset.py
 #, python-brace-format
 msgid "The email address you used to register with {platform_name}"
-msgstr ""
-
-#: openedx/core/djangoapps/user_authn/views/login_form.py
-msgid "Create Account"
 msgstr ""
 
 #. Translators: This example email address is used as a placeholder in
@@ -10210,6 +10348,7 @@ msgstr ""
 #. in order to register a new account.
 #. Translators: "Terms of service" is a legal document users must agree to
 #. in order to register a new account.
+#. error_msg = _(u"You must accept the terms of service.")
 #: openedx/core/djangoapps/user_authn/views/registration_form.py
 #, python-brace-format
 msgid "You must agree to the {platform_name} {terms_of_service}"
@@ -10528,6 +10667,16 @@ msgid "{sign_in_link} or {register_link} and then enroll in this course."
 msgstr ""
 
 #: openedx/features/course_experience/views/course_home_messages.py
+msgid ""
+"Check your inbox for an account activation link. Check your SPAM folder if "
+"needed."
+msgstr ""
+
+#: openedx/features/course_experience/views/course_home_messages.py
+msgid "Welcome! Activate your account from your mailbox."
+msgstr ""
+
+#: openedx/features/course_experience/views/course_home_messages.py
 #, python-brace-format
 msgid "Welcome to {course_display_name}"
 msgstr ""
@@ -10693,6 +10842,11 @@ msgid ""
 "To participate in this assignment, the suggested schedule for your course "
 "needs updating. Don’t worry, we’ll shift all the due dates for you and you "
 "won’t lose any of your progress."
+msgstr ""
+
+#: themes/red-theme/lms/templates/ace_common/edx_ace/common/base_body.html
+#: cms/templates/widgets/header.html
+msgid "Sign In"
 msgstr ""
 
 #: themes/red-theme/lms/templates/schedules/edx_ace/recurringnudge_day3/email/body.txt
@@ -11211,7 +11365,7 @@ msgstr ""
 
 #: cms/djangoapps/contentstore/views/user.py
 #, python-brace-format
-msgid "User {email} has registered but has not yet activated his/her account."
+msgid "User {email} has registered but has not yet activated their account."
 msgstr ""
 
 #: cms/djangoapps/contentstore/views/user.py
@@ -12114,7 +12268,7 @@ msgid "Welcome to {platform_name}"
 msgstr ""
 
 #. Translators: 'Open edX' is a registered trademark, please keep this
-#. untranslated. See http://open.edx.org for more information.
+#. untranslated. See https://open.edx.org for more information.
 #: lms/templates/index_overlay.html
 msgid "It works! Powered by Open edX{registered_trademark}"
 msgstr ""
@@ -12627,6 +12781,10 @@ msgid "Git Logs"
 msgstr ""
 
 #: lms/templates/sysadmin_dashboard.html
+msgid "Note: Sysadmin panel will be deprecated in the next release."
+msgstr ""
+
+#: lms/templates/sysadmin_dashboard.html
 msgid "User Management"
 msgstr ""
 
@@ -12643,25 +12801,9 @@ msgid "Create user"
 msgstr ""
 
 #: lms/templates/sysadmin_dashboard.html
-msgid "Download list of all users (csv file)"
-msgstr ""
-
-#: lms/templates/sysadmin_dashboard.html
-msgid "Check and repair external authentication map"
-msgstr ""
-
-#: lms/templates/sysadmin_dashboard.html
 msgid ""
 "Go to each individual course's Instructor dashboard to manage course "
 "enrollment."
-msgstr ""
-
-#: lms/templates/sysadmin_dashboard.html
-msgid "Manage course staff and instructors"
-msgstr ""
-
-#: lms/templates/sysadmin_dashboard.html
-msgid "Download staff and instructor list (csv file)"
 msgstr ""
 
 #: lms/templates/sysadmin_dashboard.html
@@ -14437,7 +14579,6 @@ msgid "Handout Navigation"
 msgstr ""
 
 #: lms/templates/courseware/info.html
-#: openedx/features/course_experience/templates/course_experience/course-home-fragment.html
 msgid "Course Tools"
 msgstr ""
 
@@ -15658,7 +15799,8 @@ msgstr ""
 
 #: lms/templates/emails/passed_verification_email.txt
 msgid ""
-"Your verification is effective for one year. It will expire on {expiry_date}"
+"Your verification is effective for one year. It will expire on "
+"{expiration_datetime}"
 msgstr ""
 
 #: lms/templates/emails/photo_submission_confirmation.txt
@@ -16077,6 +16219,10 @@ msgid "Professional"
 msgstr ""
 
 #: lms/templates/instructor/instructor_dashboard_2/course_info.html
+msgid "Executive Education"
+msgstr ""
+
+#: lms/templates/instructor/instructor_dashboard_2/course_info.html
 msgid "Master's"
 msgstr ""
 
@@ -16102,14 +16248,6 @@ msgstr ""
 
 #: lms/templates/instructor/instructor_dashboard_2/course_info.html
 msgid "Has the course started?"
-msgstr ""
-
-#: lms/templates/instructor/instructor_dashboard_2/course_info.html
-msgid "Yes"
-msgstr ""
-
-#: lms/templates/instructor/instructor_dashboard_2/course_info.html
-msgid "No"
 msgstr ""
 
 #: lms/templates/instructor/instructor_dashboard_2/course_info.html
@@ -17480,7 +17618,6 @@ msgid ""
 "{link_start}homepage{link_end} ."
 msgstr ""
 
-#: lms/templates/static_templates/about.html
 #: lms/templates/static_templates/blog.html
 #: lms/templates/static_templates/contact.html
 #: lms/templates/static_templates/donate.html
@@ -17829,25 +17966,15 @@ msgstr ""
 msgid "Upcoming Dates"
 msgstr ""
 
-#: openedx/features/course_experience/templates/course_experience/course-home-fragment.html
-msgid "Goal: "
-msgstr ""
-
-#: openedx/features/course_experience/templates/course_experience/course-home-fragment.html
-msgid "Edit your course goal:"
-msgstr ""
-
-#: openedx/features/course_experience/templates/course_experience/course-home-fragment.html
-msgid "Pursue a verified certificate"
-msgstr ""
-
-#: openedx/features/course_experience/templates/course_experience/course-home-fragment.html
-msgid "Upgrade ({price})"
-msgstr ""
-
 #: openedx/features/course_experience/templates/course_experience/course-outline-fragment.html
 msgid "Expand All"
 msgstr ""
+
+#: openedx/features/course_experience/templates/course_experience/course-outline-fragment.html
+msgid "({number} Question)"
+msgid_plural "({number} Questions)"
+msgstr[0] ""
+msgstr[1] ""
 
 #: openedx/features/course_experience/templates/course_experience/course-outline-fragment.html
 msgid "Prerequisite: "
@@ -18017,14 +18144,6 @@ msgstr ""
 
 #: themes/edx.org/cms/templates/widgets/sock.html
 msgid "edX Partner Portal"
-msgstr ""
-
-#: themes/edx.org/lms/templates/dashboard.html
-msgid "Want to make edX better for everyone?"
-msgstr ""
-
-#: themes/edx.org/lms/templates/dashboard.html
-msgid "Get started"
 msgstr ""
 
 #: themes/edx.org/lms/templates/dashboard.html

@@ -1,6 +1,5 @@
 {% load i18n %}{% autoescape off %}
-{% blocktrans %}Hello {{ name }}, {% endblocktrans %}
-{% blocktrans %}This is to confirm that you have successfully changed your password associated with {{ platform_name }} account. Please sign-in to your account.{% endblocktrans %}
 
+Ti confermiamo che la sua password è stata cambiata con successo. Puoi effettuare l'accesso a Accelera con Amazon utilizzando la tua nuova password.
 {{ login_link }}
 {% endautoescape %}
