@@ -1465,6 +1465,7 @@
     "Reason for change:": "Grund f\u00fcr die \u00c4nderung:",
     "Receive updates": "Updates empfangen",
     "Recent Activity": "K\u00fcrzliche Aktivit\u00e4t",
+    "Recibir\u00e1s los mensajes de {platform_name} and course teams at this address.": "You receive messages from {platform_name} en est\u00e1 direcci\u00f3n de email.",
     "Recommended image resolution is {imageResolution}, maximum image file size should be {maxFileSize} and format must be one of {supportedImageFormats}.": "Empfohlene Bildaufl\u00f6sung ist {imageResolution}, maximale Bilddateigr\u00f6\u00dfe sollte {maxFileSize} sein und das Format muss eines von {supportedImageFormats} sein.",
     "Recover my password": "Mein Passwort wiederherstellen",
     "Recovery Email Address": "E-Mail-Adresse f\u00fcr die Wiederherstellung",
@@ -2579,7 +2580,7 @@
     "{organization}\\'s logo": "{organization}\\'s Logo",
     "{paragraphStart}You entered {boldStart}{email}{boldEnd}. If this email address is associated with your {platform_name} account, we will send a message with password recovery instructions to this email address.{paragraphEnd}{paragraphStart}If you do not receive a password reset message after 1 minute, verify that you entered the correct email address, or check your spam folder.{paragraphEnd}{paragraphStart}If you need further assistance, {anchorStart}contact technical support{anchorEnd}.{paragraphEnd}": "{paragraphStart}Sie haben {boldStart}{email}{boldEnd} eingegeben. Wenn diese E-Mail-Adresse mit Ihrem {platform_name} Konto verkn\u00fcpft ist, senden wir eine Nachricht mit Anweisungen zur Passwortwiederherstellung an diese E-Mail-Adresse.{paragraphEnd}{paragraphStart}Wenn Sie nach 1 Minute keine Nachricht zum Zur\u00fccksetzen des Passworts erhalten, \u00fcberpr\u00fcfen Sie, ob Sie die richtige E-Mail-Adresse eingegeben haben, oder \u00fcberpr\u00fcfen Sie Ihren Spam-Ordner.{paragraphEnd}{paragraphStart}Wenn Sie weitere Hilfe ben\u00f6tigen, {anchorStart}wenden Sie sich an den technischen Support {anchorEnd}.{paragraphEnd}",
     "{paragraph}=p;{preformatted}=pre;{heading3}=h3;{heading4}=h4;{heading5}=h5;{heading6}=h6": "{paragraph}=p;{preformatted}=pre;{heading3}=h3;{heading4}=h4;{heading5}=h5;{heading6}=h6",
-    "{platform_display_name} Link": "{platform_display_name} Enlace",
+    "{platform_display_name} Link": "Enlace de {platform_display_name}",
     "{screen_reader_start}Warning:{screen_reader_end} No content groups exist.": "{screen_reader_start}Warnung:{screen_reader_end} Es existieren keine Inhaltsgruppen.",
     "{screen_reader_start}Warning:{screen_reader_end} The previously selected content group was deleted. Select another content group.": "{screen_reader_start}Warnung:{screen_reader_end} Die zuvor ausgew\u00e4hlte Inhaltsgruppe wurde gel\u00f6scht. W\u00e4hlen Sie eine andere Inhaltsgruppe aus.",
     "{seconds} {unit}": "{seconds} {unit}",
@@ -2589,6 +2590,7 @@
     "{startTag}{requestToken}{endTag}{selector}": "{startTag}{requestToken}{endTag}{selector}",
     "{start_strong}{total}{end_strong} words submitted in total.": "{start_strong}{total}{end_strong} W\u00f6rter insgesamt \u00fcbertragen.",
     "{strongStart}Warning: Account deletion is permanent.{strongEnd} Please read the above carefully before proceeding. This is an irreversible action, and {strongStart}you will no longer be able to use the same email on {platformName}.{strongEnd}": "{strongStart}Warnung: Die L\u00f6schung des Kontos ist dauerhaft.{strongEnd} Bitte lesen Sie das oben genannte sorgf\u00e4ltig durch, bevor Sie fortfahren. Dies ist eine irreversible Aktion, und {strongStart} Sie k\u00f6nnen nicht mehr dieselbe E-Mail auf {platformName} verwenden.{strongEnd}.",
+    "{strongStart}Warning: Account deletion is permanent.{strongEnd} Por favor , lee lo anterior detenidamente antes de continuar. Esta es una acci\u00f3n irreversible y {strongStart}ya no podr\u00e1s utilizar el mismo correo electr\u00f3nico en {platformName}.{strongEnd}": "{strongStart}Advertencia: La eliminaci\u00f3n de la cuenta es permanente.{strongEnd} Please read the above carefully before proceeding. This is an irreversible action, and {strongStart}you will no longer be able to use the same email on {platformName}.{strongEnd}",
     "{team_count} Team": [
       "{team_count} Team",
       "{team_count} Teams"
