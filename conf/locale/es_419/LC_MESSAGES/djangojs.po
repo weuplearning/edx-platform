@@ -2425,7 +2425,7 @@ msgstr ""
 
 #: common/static/common/js/utils/edx.utils.validate.js
 msgid "%(field)s must have at least %(count)d characters."
-msgstr "%(field)s debe tener al menos %(count)d caracteres."
+msgstr "%(field)s debe tener al menos %(count)d caracteres, incluyendo 1 mayúscula, 1 minúscula y 1 número."
 
 #: common/static/common/js/utils/edx.utils.validate.js
 msgid "%(field)s can only contain up to %(count)d characters."

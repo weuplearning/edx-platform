@@ -124,7 +124,7 @@
       "%(errorCount)s errores en el formulario."
     ],
     "%(field)s can only contain up to %(count)d characters.": "%(field)s solo puede contener hasta %(count)d caracteres.",
-    "%(field)s must have at least %(count)d characters.": "%(field)s debe tener al menos %(count)d caracteres.",
+    "%(field)s must have at least %(count)d characters.": "%(field)s debe tener al menos %(count)d caracteres, incluyendo 1 may\u00fascula, 1 min\u00fascula y 1 n\u00famero.",
     "%(new_item_message)s": "%(new_item_message)s",
     "%(programName)s Home Page.": "P\u00e1gina de inicio de %(programName)s.",
     "%(sel)s of %(cnt)s selected": [

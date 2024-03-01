@@ -259,7 +259,7 @@ class NumericValidator(object):
             return
         raise ValidationError(
             ungettext(
-                'This password must contain at least %(min_numeric)d number.',
+                'Esta contraseña debe contener al menos %(min_numeric)d nùmero.',
                 'This password must contain at least %(min_numeric)d numbers.',
                 self.min_numeric
             ),
@@ -307,7 +307,7 @@ class UppercaseValidator(object):
             return
         raise ValidationError(
             ungettext(
-                'This password must contain at least %(min_upper)d uppercase letter.',
+                'Esta contraseña debe contener al menos %(min_upper)d letra mayúscula.',
                 'This password must contain at least %(min_upper)d uppercase letters.',
                 self.min_upper
             ),
@@ -355,7 +355,7 @@ class LowercaseValidator(object):
             return
         raise ValidationError(
             ungettext(
-                'This password must contain at least %(min_lower)d lowercase letter.',
+                'Esta contraseña debe contener al menos %(min_lower)d letra minúscula.',
                 'This password must contain at least %(min_lower)d lowercase letters.',
                 self.min_lower
             ),

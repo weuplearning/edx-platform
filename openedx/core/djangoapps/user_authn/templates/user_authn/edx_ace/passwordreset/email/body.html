@@ -7,10 +7,10 @@
     <tr>
         <td>
             <h1>
-                {% trans "Password Reset" as tmsg %}{{ tmsg | force_escape }}
+                Restablecimiento de contraseña
             </h1>
             <p style="color: rgba(0,0,0,.75);">
-                {% blocktrans %}You're receiving this e-mail because you requested a password reset for your user account at {{ platform_name }}.{% endblocktrans %}
+                Has recibido este correo electrónico porque has solicitado restablecer la contraseña de tu cuenta en Amazon Despega.
                 <br />
             </p>
 
@@ -28,7 +28,7 @@
                 </p>
             {% else %}
                 <p style="color: rgba(0,0,0,.75);">
-                    {% trans "If you didn't request this change, you can disregard this email - we have not yet reset your password." as tmsg %}{{ tmsg | force_escape }}
+                    Si no has solicitado este cambio, puedes ignorar este correo electrónico; aún no hemos restablecido tu contraseña.
                     <br />
                 </p>
                 {# xss-lint: disable=django-trans-missing-escape #}
@@ -49,7 +49,7 @@
                     display: inline-block;
                 ">
                     {# old email clients require the use of the font tag :( #}
-                    <font color="#ffffff"><b>{{ course_cta_text }}</b></font>
+                    <font color="#ffffff"><b>Cambiar mi contraseña</b></font>
                 </a>
             {% endif %}
         </td>
