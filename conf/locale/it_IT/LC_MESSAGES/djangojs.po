@@ -3807,10 +3807,7 @@ msgid ""
 "these for your records before proceeding with deletion, follow the "
 "instructions for {htmlStart}printing or downloading a certificate{htmlEnd}."
 msgstr ""
-"Potresti anche perdere l'accesso ai certificati verificati e ad altre "
-"credenziali di programmi come i certificati MicroMasters. Se desideri farne "
-"una copia per le tue necessità prima di procedere con l'eliminazione, segui "
-"le istruzioni per {htmlStart}stampare o scaricare un certificato{htmlEnd}."
+"Potresti anche perdere l'accesso ai certificati di fine curso. "
 
 #: common/static/bundles/StudentAccountDeletion.js
 #: common/static/bundles/StudentAccountDeletionInitializer.js
@@ -3835,8 +3832,8 @@ msgstr ""
 msgid ""
 "{htmlStart}Want to change your email, name, or password instead?{htmlEnd}"
 msgstr ""
-"{htmlStart}Vuoi forse cambiare invece la tua email, il nome, o la "
-"password?{htmlEnd}"
+"{htmlStart}Vuoi forse cambiare invece la tua email, il nome utente,"
+" o la password?{htmlEnd}"
 
 #: common/static/bundles/StudentAccountDeletion.js
 #: common/static/bundles/StudentAccountDeletionInitializer.js
@@ -3850,7 +3847,8 @@ msgstr ""
 "{strongStart}Avvertenza: L'eliminazione dell'account è "
 "definitiva.{strongEnd} Prima di procedere leggi attentamente quanto sopra. "
 "Questa è un'azione irreversibile e {strongStart}non sarai più in grado di "
-"utilizzare la stessa email su {platformName}.{strongEnd}"
+"utilizzare la stessa email sul sito https://acceleraconamazon.it/ "
+".{strongEnd}"
 
 #: common/static/bundles/StudentAccountDeletion.js
 #: common/static/bundles/StudentAccountDeletionInitializer.js
@@ -3872,8 +3870,7 @@ msgid ""
 "{platformName} app, {siteName}, or any other site hosted by {platformName}."
 msgstr ""
 "Una volta che il tuo account è stato eliminato, non puoi utilizzarlo per "
-"seguire corsi sull'app {platformName}, {siteName}, o su qualsiasi altro sito"
-" ospitato da {platformName}."
+"seguire i corsi sul sito https://acceleraconamazon.it/ "
 
 #: common/static/bundles/StudentAccountDeletion.js
 #: common/static/bundles/StudentAccountDeletionInitializer.js
@@ -3883,8 +3880,7 @@ msgid ""
 "This includes access to {siteName} from your employer’s or university’s "
 "system{additionalSiteSpecificDeletionText}."
 msgstr ""
-"Questo include l'accesso a {siteName} dal sistema del tuo datore di lavoro o"
-" università{additionalSiteSpecificDeletionText}."
+"."
 
 #: common/static/bundles/StudentAccountDeletion.js
 #: common/static/bundles/StudentAccountDeletionInitializer.js

@@ -134,9 +134,9 @@ def _register_course_home_messages(request, course, user_access, course_start_da
         #If user is not active then let's fix this first !
         CourseHomeMessages.register_info_message(
             request,
-            Text(_(u'Check your inbox for an account activation link. '
-                    'Check your SPAM folder if needed.')),
-            title= Text(_('Welcome! Activate your account from your mailbox.'))
+            Text(_(u'Cerca nella tua inbox il link di attivazione dell’account. '
+                    'Controllo nella cartella Spam in caso di necessità.')),
+            title= Text(_('Benvenuto! Attivia il tuo account attraverso la tua email'))
         )
 
 

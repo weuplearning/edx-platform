@@ -1,4 +1,4 @@
 {% load i18n %}
 {% autoescape off %}
-{% blocktrans trimmed %}Confirm your recovery email for {{ platform_name }} {% endblocktrans %}
+Reimposta la password del tuo account Accelera con Amazon
 {% endautoescape %}

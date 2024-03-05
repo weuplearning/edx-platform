@@ -7,15 +7,15 @@
     <tr>
         <td>
             <h1>
-                {% trans "Create Recovery Email" as create_recovery_text %}{{ create_recovery_text | force_escape }}
+                Reimposta la password. 
             </h1>
             <p style="color: rgba(0,0,0,.75);">
                 {% filter force_escape %}
-                {% blocktrans %}You've registered this recovery email address for {{ platform_name }}.{% endblocktrans %}
+                Stai ricevendo questa email perché è stato richiesto di reimpostare la password per l'account utente Accelera con Amazon. 
                 {% endfilter %}
                 <br/>
                 {% filter force_escape %}
-                {% blocktrans %}If you set this email address, click "confirm email."  If you didn't request this change, you can disregard this email.{% endblocktrans %}
+                Se non hai richiesto tu questa modifica, ignora questa email - non abbiamo ancora reimpostato la tua password. 
                 {% endfilter %}
                 <br />
             </p>
