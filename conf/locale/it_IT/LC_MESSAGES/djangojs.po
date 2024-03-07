@@ -3847,8 +3847,8 @@ msgstr ""
 "{strongStart}Avvertenza: L'eliminazione dell'account è "
 "definitiva.{strongEnd} Prima di procedere leggi attentamente quanto sopra. "
 "Questa è un'azione irreversibile e {strongStart}non sarai più in grado di "
-"utilizzare la stessa email sul sito https://acceleraconamazon.it/ "
-".{strongEnd}"
+"utilizzare la stessa email sul sito https://acceleraconamazon.it/"
+"{strongEnd}"
 
 #: common/static/bundles/StudentAccountDeletion.js
 #: common/static/bundles/StudentAccountDeletionInitializer.js
@@ -3870,7 +3870,7 @@ msgid ""
 "{platformName} app, {siteName}, or any other site hosted by {platformName}."
 msgstr ""
 "Una volta che il tuo account è stato eliminato, non puoi utilizzarlo per "
-"seguire i corsi sul sito https://acceleraconamazon.it/ "
+"seguire i corsi sul sito https://acceleraconamazon.it/"
 
 #: common/static/bundles/StudentAccountDeletion.js
 #: common/static/bundles/StudentAccountDeletionInitializer.js
@@ -3880,7 +3880,7 @@ msgid ""
 "This includes access to {siteName} from your employer’s or university’s "
 "system{additionalSiteSpecificDeletionText}."
 msgstr ""
-"."
+""
 
 #: common/static/bundles/StudentAccountDeletion.js
 #: common/static/bundles/StudentAccountDeletionInitializer.js
