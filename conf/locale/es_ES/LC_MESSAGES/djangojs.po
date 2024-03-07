@@ -3842,7 +3842,7 @@ msgstr ""
 #: common/static/bundles/StudentAccountDeletionInitializer.js
 #: lms/static/js/student_account/components/StudentAccountDeletion.jsx
 msgid "Before proceeding, please {htmlStart}activate your account{htmlEnd}."
-msgstr "Before proceeding, please {htmlStart}activate your account{htmlEnd}."
+msgstr "Antes de continuar, por favor {htmlStart} active su cuenta {htmlEnd}."
 
 #: common/static/bundles/StudentAccountDeletion.js
 #: common/static/bundles/StudentAccountDeletionInitializer.js
@@ -3856,14 +3856,15 @@ msgstr ""
 #: common/static/bundles/StudentAccountDeletionInitializer.js
 #: lms/static/js/student_account/components/StudentAccountDeletion.jsx
 msgid ""
-"{strongStart}Warning: Account deletion is permanent.{strongEnd} Por favor "
-", lee lo anterior detenidamente antes de continuar. Esta es una acción irreversible y "
-"{strongStart}ya no podrás utilizar el mismo correo electrónico en "
-"{platformName}.{strongEnd}"
-msgstr ""
-"{strongStart}Advertencia: La eliminación de la cuenta es permanente.{strongEnd} Please read "
+"{strongStart}Warning: Account deletion is permanent.{strongEnd} Please read "
 "the above carefully before proceeding. This is an irreversible action, and "
 "{strongStart}you will no longer be able to use the same email on "
+"{platformName}.{strongEnd}"
+msgstr ""
+"{strongStart}Advertencia: La eliminación de la cuenta es "
+"permanente.{strongEnd} Por favor lea cuidadosamente la información en la "
+"parte superior antes de proceder. Esta es una acción irreversible, y "
+"{strongStart}no podrá volver a usar el mismo correo electrónico en "
 "{platformName}.{strongEnd}"
 
 #: common/static/bundles/StudentAccountDeletion.js

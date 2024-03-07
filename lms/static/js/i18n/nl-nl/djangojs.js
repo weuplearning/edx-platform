@@ -1205,7 +1205,7 @@
     "Please enter non-negative integer.": "Voer aub een niet-negatief geheel getal in.",
     "Please enter valid start date and time.": "Por favor, introduce una fecha y hora de inicio v\u00e1lidas.",
     "Please enter your %(field)s.": "Voer alstublieft uw  %(field)s in.",
-    "Please enter your log-in or recovery email address below and we will send you an email with instructions.": "Introduce tu direcci\u00f3n de correo electr\u00f3nico de registro acontinuaci\u00f3n y le enviaremos un correo electr\u00f3nico con instrucciones.",
+    "Please enter your log-in or recovery email address below and we will send you an email with instructions.": "Introduce tu direcci\u00f3n de correo electr\u00f3nico de registro a continuaci\u00f3n y le enviaremos un correo electr\u00f3nico con instrucciones.",
     "Please fix the following errors:": "Alstublieft de volgende fouten verbeteren:",
     "Please follow the instructions here to upload a file elsewhere and link to it: {maxFileSizeRedirectUrl}": "Volg alstublieft de volgende instructies om een bestand te uploaden en ernaar te linken: {maxFileSizeRedirectUrl}",
     "Please note: Deletion of your account and personal data is permanent and cannot be undone. {platformName} will not be able to recover your account or the data that is deleted.": "Ten en cuenta: La eliminaci\u00f3n de tu cuenta y datos personales es permanente y o puede deshacerse. {platformName} no podr\u00e1 recuperar tu cuenta ni los datos que se eliminan.",

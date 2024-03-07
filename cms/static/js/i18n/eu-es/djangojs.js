@@ -195,6 +195,7 @@
     "Background color": "Atzeko planoaren kolorea",
     "Basic": "Oinarrizkoa",
     "Basic Account Information": "Kontuaren oinarrizko informazioa",
+    "Before proceeding, please {htmlStart}activate your account{htmlEnd}.": "Antes de continuar, por favor {htmlStart} active su cuenta {htmlEnd}.",
     "Biography": "Biografia",
     "Blockquote": "Aipua",
     "Blockquote (Ctrl+Q)": "Aipua (Ctrl+Q)",
@@ -1509,6 +1510,7 @@
     "{seconds} {unit}": "{seconds} {unit}",
     "{sessionDates} - Currently Selected": "{sessionDates} - Une honetan aukeratuta",
     "{start_strong}{total}{end_strong} words submitted in total.": "{start_strong}{total}{end_strong} denera bidalitako hitzak",
+    "{strongStart}Warning: Account deletion is permanent.{strongEnd} Please read the above carefully before proceeding. This is an irreversible action, and {strongStart}you will no longer be able to use the same email on {platformName}.{strongEnd}": "{strongStart}Advertencia: La eliminaci\u00f3n de la cuenta es permanente.{strongEnd} Por favor lea cuidadosamente la informaci\u00f3n en la parte superior antes de proceder. Esta es una acci\u00f3n irreversible, y {strongStart}no podr\u00e1 volver a usar el mismo correo electr\u00f3nico en {platformName}.{strongEnd}",
     "{totalItems} total": "denera {totalItems}",
     "{type} Progress": "{type} Aurrerapena",
     "\u2026": "\u2026"
