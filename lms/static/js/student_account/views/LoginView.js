@@ -162,8 +162,8 @@
                 var email = $('#password-reset-email').val(),
                     successTitle = gettext('Check Your Email'),
                     successMessageHtml = HtmlUtils.interpolateHtml(
-                        gettext('{paragraphStart}Ingresaste {boldStart}{email}{boldEnd}. Si esta dirección de correo electrónico está asociada con su cuenta de {platform_name}, le enviaremos un mensaje con instrucciones para recuperar la contraseña a esta dirección de correo electrónico.{paragraphEnd}' + // eslint-disable-line max-len
-                        '{paragraphStart}Si no recibe un mensaje de restablecimiento de contraseña después de 1 minuto, verifique que ingresó la dirección de correo electrónico correcta o revise su carpeta de correo no deseado.{paragraphEnd}' + // eslint-disable-line max-len
+                        gettext('{paragraphStart}Has introducido {boldStart}{email}{boldEnd}. Si esta dirección de correo electrónico está asociada con tu cuenta de {platform_name}, te enviaremos un mensaje con instrucciones para recuperar la contraseña a esta dirección de correo electrónico.{paragraphEnd}' + // eslint-disable-line max-len
+                        '{paragraphStart}Si no recibes un mensaje de restablecimiento de contraseña después de 1 minuto, asegúrate de haber introducido la dirección de correo electrónico correctamente y revisa tu carpeta de correo no deseado.{paragraphEnd}' + // eslint-disable-line max-len
                         '{paragraphStart}Si necesita más ayuda, {anchorStart}comuníquese con el soporte técnico{anchorEnd}.{paragraphEnd}'), { // eslint-disable-line max-len
                             boldStart: HtmlUtils.HTML('<b data-hj-suppress>'),
                             boldEnd: HtmlUtils.HTML('</b>'),
@@ -173,9 +173,7 @@
                             platform_name: this.platformName,
                             anchorStart: HtmlUtils.HTML(
                                 StringUtils.interpolate(
-                                    '<a href="{passwordResetSupportUrl}">', {
-                                        passwordResetSupportUrl: this.passwordResetSupportUrl
-                                    }
+                                    '<a href="mailto:sysadmin@weuplearning.com">'
                                 )
                             ),
                             anchorEnd: HtmlUtils.HTML('</a>')

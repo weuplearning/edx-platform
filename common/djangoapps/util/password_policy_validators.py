@@ -259,7 +259,7 @@ class NumericValidator(object):
             return
         raise ValidationError(
             ungettext(
-                'Esta contraseña debe contener al menos %(min_numeric)d nùmero.',
+                'Esta contraseña debe contener al menos %(min_numeric)d número.',
                 'This password must contain at least %(min_numeric)d numbers.',
                 self.min_numeric
             ),
