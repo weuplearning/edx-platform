@@ -136,7 +136,7 @@ def _register_course_home_messages(request, course, user_access, course_start_da
             request,
             Text(_(u'Cerca nella tua inbox il link di attivazione dell’account. '
                     'Controllo nella cartella Spam in caso di necessità.')),
-            title= Text(_('Benvenuto! Attivia il tuo account attraverso la tua email'))
+            title= Text(_('Benvenuto! Attiva il tuo account attraverso la tua email'))
         )
 
 

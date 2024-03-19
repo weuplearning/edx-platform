@@ -15,13 +15,6 @@ from openedx.core.djangolib.js_utils import js_escaped_string
   <%include file="/dates_banner.html" />
 % endif
 <%block name="bodyclass">view-in-course view-courseware courseware ${course.css_class or ''}</%block>
-<%block name="title"><title>
-    % if section_title:
-${static.get_page_title_breadcrumbs(section_title, course_name())}
-    % else:
-${static.get_page_title_breadcrumbs(course_name())}
-    %endif
-</title></%block>
 
 <%block name="header_extras">
 % for template_name in ["image-modal"]:
