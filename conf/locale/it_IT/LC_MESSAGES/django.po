@@ -14069,7 +14069,7 @@ msgstr ""
 
 #: lms/templates/problem.html
 msgid "Answers are displayed within the problem"
-msgstr "Le risposte sono visualizzate all'interno del problema "
+msgstr "Le risposte sono visualizzate all'interno del test"
 
 #: lms/templates/problem_notifications.html
 msgid "Next Hint"
