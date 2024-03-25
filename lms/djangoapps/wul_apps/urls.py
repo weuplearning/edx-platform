@@ -23,6 +23,9 @@ from lms.djangoapps.wul_apps.custom_sso_tasks.views import sso_registration_view
 
 from lms.djangoapps.wul_apps.google_drive.views import read_google_drive_file
 
+from lms.djangoapps.wul_apps.sncf_jobs.views import get_sncf_jobs_surete,get_sncf_jobs_conduite,get_sncf_jobs_dev
+
+
 import logging
 log = logging.getLogger()
 
@@ -104,4 +107,11 @@ urlpatterns += (
 # Google Drive API
 urlpatterns += (
     url(r'^read_google_drive_file$', read_google_drive_file, name="read_google_drive_file"),
+)
+
+# Altays Jobs API
+urlpatterns  += (
+    url(r'^get_sncf_jobs$', get_sncf_jobs_dev, name="get_sncf_jobs"),
+    url(r'^get_sncf_jobs_conduite$', get_sncf_jobs_conduite, name="get_sncf_jobs_conduite"),
+    url(r'^get_sncf_jobs_surete$', get_sncf_jobs_surete, name="get_sncf_jobs_surete"),
 )
