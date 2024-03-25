@@ -82,6 +82,11 @@ show_search = False
         animation: bounce;
         animation-duration: 0.5s;
     }
+    .page-header-main {
+        text-align : center;
+        padding: 50px;
+        font-size : xx-large;
+    }
     .page-header-secondary{
         padding-top: 25px !important;
         display: flex;
@@ -427,6 +432,9 @@ show_search = False
   </style>
 
 
+
+
+
 <!-- modal style -->
 <style>
      /* The Modal (background) */
@@ -508,107 +516,14 @@ completed_blocks = 0
 %endfor
                     
 
-
- <!-- The Modal -->
-<!-- get user's score -->
-%if int(user_grade.percent * 100) > 50:
-<script>
-    $(function () {
-        if (localStorage.getItem('popState') != 'shown') {
-            $("#myModal1").fadeIn();
-        }
-    
-        $('#popup-close').click(function (e) {
-            $('#myModal1').fadeOut();
-            localStorage.setItem('popState', 'shown');
-        });
-    });
-    
-    
-    $("body").click(function() {
-        if ($("#myModal1").is(":visible")) {
-            $("#myModal1").hide();
-            localStorage.setItem('popState', 'shown');
-        }
-    });
-    </script>
-%elif int(user_grade.percent * 100) == 100:
-<script>
-    $(function () {
-        if (localStorage.getItem('popState') != 'shown') {
-            $("#myModal2").fadeIn();
-        }
-    
-        $('#popup-close').click(function (e) {
-            $('#myModal2').fadeOut();
-            localStorage.setItem('popState', 'shown');
-        });
-    });
-    
-    
-    $("body").click(function() {
-        if ($("#myModal2").is(":visible")) {
-            $("#myModal2").hide();
-            localStorage.setItem('popState', 'shown');
-        }
-    });
-    </script>
-%endif
-
-
- <div id="myModal1" class="modal"> 
-   <div class="modal-content">
-     <span id="popup-close" class="close">&times;</span>
-     <img class="modal__image" src="/media/microsites/amazon/amazon-popup-1.gif" alt="mi parcours popup">
-   </div>
- </div>
- 
- <div id="myModal2" class="modal"> 
-    <div class="modal-content">
-      <span id="popup-close" class="close">&times;</span>
-      <img class="modal__image" src="/media/microsites/amazon/amazon-popup-2.gif" alt="mi parcours popup">
-    </div>
-  </div>
-
-  <!--end modal test -->
 <%
 course_id = str(course.id).translate({ord(i): None for i in ':+'})
 %>
 <div class="course-view page-content-container" id="course-container">
     <header class="page-header has-secondary ${course_id}_banner">
         <div class="page-header-main">
-            <nav aria-label="${_('Course Outline')}" class="sr-is-focusable" tabindex="-1">
+            <nav aria-label="${_('Course Outline')}" class="sr-is-focusable" tabindex="-1">${course.display_name_with_default}
             </nav>
-        </div>
-        <div class="page-header-secondary top-search-bar">
-            % if show_search:
-                <div class="page-header-search">
-                    <form class="search-form input-group" role="search" action="${reverse('openedx.course_search.course_search_results', args=[course_key])}">
-                        <label class="field-label sr-only" for="search" id="search-hint">${_('Search the course')}</label>
-                        <input
-                                class="field-input input-text search-input form-control"
-                                type="search"
-                                name="query"
-                                id="search"
-                                placeholder="${_('Search the course')}"
-                        />
-                        <span class="input-group-btn">
-                            <button class="btn btn-outline-primary search-button" type="submit">${_('Search')}</button>
-                        </span>
-                    </form>
-                </div>
-            % endif
-            <div class="form-actions">
-                % if resume_course_url:
-                    <a class="btn btn-primary action-resume-course" href="${resume_course_url}">
-                        % if has_visited_course:
-                            <span data-action-type="resume">${_("Resume Course")}</span>
-                        % else:
-                            <span data-action-type="start">${_("Start Course")}</span>
-                        % endif
-                    </a>
-                % endif
-            </div>
         </div>
     </header>
     <div class="page-header-secondary bottom-search-bar">
