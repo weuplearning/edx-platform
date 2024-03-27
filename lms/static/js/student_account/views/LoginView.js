@@ -173,9 +173,7 @@
                             platform_name: this.platformName,
                             anchorStart: HtmlUtils.HTML(
                                 StringUtils.interpolate(
-                                    '<a href="{passwordResetSupportUrl}">', {
-                                        passwordResetSupportUrl: this.passwordResetSupportUrl
-                                    }
+                                    '<a href="mailto:sysadmin@weuplearning.com">'
                                 )
                             ),
                             anchorEnd: HtmlUtils.HTML('</a>')
