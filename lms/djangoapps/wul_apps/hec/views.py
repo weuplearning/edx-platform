@@ -34,7 +34,7 @@ def hec_pe_check_email(request):
         
     
     response_ok = {'isValid' : True,'msg' : 'valid'}
-    response_notfound = {'isValid' : False,'msg' : 'access denied', 'data': emails,'input' : input_data}
+    response_notfound = {'isValid' : False,'msg' : 'access denied'}
     
     for email in emails:
         if(email.lower()==input_email):
