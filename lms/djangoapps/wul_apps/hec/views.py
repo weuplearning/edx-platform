@@ -22,8 +22,10 @@ def hec_pe_check_email(request):
         return JsonResponse(response, safe=False)
     
     # json file provided / modified via github
+    base_path = '/edx/var/edxapp/media/microsites/hec-pole-emploi'
+    repo = '/client_hec-pole-emploi/hec-pole-emploi_allowed-emails/'
     filename = 'email_template.json'
-    path = '/edx/var/edxapp/media/hec-pole-emploi/client_hec-pole-emploi/hec-pole-emploi_allowed-emails/' + filename
+    path = base_path + repo + filename
     email_json = json.load(open(path))
     emails = email_json.get('email_list_hec_pole_emploi',None)
     if(emails == None):
