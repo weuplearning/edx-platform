@@ -43,190 +43,187 @@ log = logging.getLogger(__name__)
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
 <style>
-
-
-
-    .carousel {
-      position: relative;
-      filter: drop-shadow(0 0 10px #0003);
-      perspective: 100px;
-      width: 100%;
+  .carousel {
+    position: relative;
+    filter: drop-shadow(0 0 10px #0003);
+    perspective: 100px;
+    width: 100%;
     margin: auto;
     height: 400px;
     margin-top: -50px;
-    }
+  }
+
+  .carousel__viewport {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    overflow-x: scroll;
+    counter-reset: item;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    height: 423px;
+    overflow: hidden;
+    padding-left: 0;
+  }
+
+  .carousel__slide {
+    position: relative;
+    flex: 0 0 100%;
+    width: 100%;
+    background-color:rgb(244, 244, 244);
+    counter-increment: item;
+    list-style: none;
+    margin-bottom: 25px;
+    /* display: flex;
+    justify-content: center; */
+  }
+  .carousel__slide:before {
+    content: counter(item);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%,-40%,70px);
+    color: #fff;
+    font-size: 2em;
+  }
+
+  .carousel__snapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    scroll-snap-align: center;
+  }
+
+  .carousel__snapper__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 30px;
+  }
+
+
     
-    .carousel__viewport {
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      display: flex;
-      overflow-x: scroll;
-      counter-reset: item;
-      scroll-behavior: smooth;
-      scroll-snap-type: x mandatory;
-      height: 423px;
-      overflow: hidden;
-      padding-left: 0;
-    }
-    
-    .carousel__slide {
-      position: relative;
-      flex: 0 0 100%;
-      width: 100%;
-      background-color:rgb(244, 244, 244);
-      counter-increment: item;
-      list-style: none;
-      margin-bottom: 25px;
-      /* display: flex;
-      justify-content: center; */
-    }
-    .carousel__slide:before {
-      content: counter(item);
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate3d(-50%,-40%,70px);
-      color: #fff;
-      font-size: 2em;
-    }
-    
+  @media (hover: hover) {
     .carousel__snapper {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      scroll-snap-align: center;
+      /* animation-name: tonext, snap; */
+      animation-timing-function: ease;
+      animation-duration: 4s;
+      animation-iteration-count: infinite;
     }
-
-    .carousel__snapper__container {
-        display: flex;
-justify-content: center;
-align-items: center;
-padding-top: 30px;
+  
+    .carousel__slide:last-child .carousel__snapper {
+      animation-name: tostart, snap;
     }
-
-
-    
-    @media (hover: hover) {
-      .carousel__snapper {
-        /* animation-name: tonext, snap; */
-        animation-timing-function: ease;
-        animation-duration: 4s;
-        animation-iteration-count: infinite;
-      }
-    
-      .carousel__slide:last-child .carousel__snapper {
-        animation-name: tostart, snap;
-      }
-    }
-    
-    @media (prefers-reduced-motion: reduce) {
-      .carousel__snapper {
-        animation-name: none;
-      }
-    }
-    
-    
-    .carousel:hover .carousel__snapper,
-    .carousel:focus-within .carousel__snapper {
+  }
+  
+  @media (prefers-reduced-motion: reduce) {
+    .carousel__snapper {
       animation-name: none;
     }
-    
-    .carousel__navigation {
-      position: absolute;
-      right: 0;
-      top: 335px;
-      left: 0;
-      text-align: center;
-    }
-    
-    .carousel__navigation-list,
-    .carousel__navigation-item {
-      display: inline-block;
-    }
+  }
+  
+  
+  .carousel:hover .carousel__snapper,
+  .carousel:focus-within .carousel__snapper {
+    animation-name: none;
+  }
+  
+  .carousel__navigation {
+    position: absolute;
+    right: 0;
+    top: 335px;
+    left: 0;
+    text-align: center;
+  }
+  
+  .carousel__navigation-list,
+  .carousel__navigation-item {
+    display: inline-block;
+  }
 
-    .carousel__navigation-list{
-      padding-left: 0;
-    }
-    
-    .carousel__navigation-button {
-      display: inline-block;
-      width: 1.5rem;
-      height: 1.5rem;
-      background-color: #333;
-      background-clip: content-box;
-      border: 0.25rem solid transparent;
-      border-radius: 50%;
-      font-size: 0;
-      transition: transform 0.1s;
-    }
-    
-    .carousel::before,
-    .carousel::after,
-    .carousel__prev,
-    .carousel__next {
-      position: absolute;
-      top: 185px;
-      /* margin-top: 37.5%; */
-      width: 8rem;
-      /* height: 4rem; */
-      transform: translateY(-50%);
-      border-radius: 50%;
-      font-size: 0;
-      outline: 0;
-      color: black;
-    font-size: 5em;
-    }
-    
-    .carousel::before,
-    .carousel::after,
-    .carousel__prev {
-      left: 20px;
-    }
-    
-    .carousel::after,
-    .carousel::after,
-    .carousel__next {
-      right: -75px;
-    }
-    
-    .carousel::before,
-    .carousel::after {
-      content: '';
-      z-index: 1;
-      background-color: #333;
-      background-size: 1.5rem 1.5rem;
-      background-repeat: no-repeat;
-      background-position: center center;
-      color: #fff;
-      font-size: 2.5rem;
-      line-height: 4rem;
-      text-align: center;
-      pointer-events: none;
-    }
-    
-    .carousel::before {
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='0,50 80,100 80,0' fill='%23fff'/%3E%3C/svg%3E");
-    }
-    
-    .carousel::after {
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='100,50 20,100 20,0' fill='%23fff'/%3E%3C/svg%3E");
-    }
-    
-    .carousel_image {
-      width: 22%;
-    }
+  .carousel__navigation-list{
+    padding-left: 0;
+  }
+  
+  .carousel__navigation-button {
+    display: inline-block;
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: #333;
+    background-clip: content-box;
+    border: 0.25rem solid transparent;
+    border-radius: 50%;
+    font-size: 0;
+    transition: transform 0.1s;
+  }
+  
+  .carousel::before,
+  .carousel::after,
+  .carousel__prev,
+  .carousel__next {
+    position: absolute;
+    top: 185px;
+    /* margin-top: 37.5%; */
+    width: 8rem;
+    /* height: 4rem; */
+    transform: translateY(-50%);
+    border-radius: 50%;
+    font-size: 0;
+    outline: 0;
+    color: black;
+  font-size: 5em;
+  }
+  
+  .carousel::before,
+  .carousel::after,
+  .carousel__prev {
+    left: 20px;
+  }
+  
+  .carousel::after,
+  .carousel::after,
+  .carousel__next {
+    right: -75px;
+  }
+  
+  .carousel::before,
+  .carousel::after {
+    content: '';
+    z-index: 1;
+    background-color: #333;
+    background-size: 1.5rem 1.5rem;
+    background-repeat: no-repeat;
+    background-position: center center;
+    color: #fff;
+    font-size: 2.5rem;
+    line-height: 4rem;
+    text-align: center;
+    pointer-events: none;
+  }
+  
+  .carousel::before {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='0,50 80,100 80,0' fill='%23fff'/%3E%3C/svg%3E");
+  }
+  
+  .carousel::after {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='100,50 20,100 20,0' fill='%23fff'/%3E%3C/svg%3E");
+  }
+  
+  .carousel_image {
+    width: 22%;
+  }
 
   .course_logo {
     height: 301px;
-  width: 301px;
-  border-radius: 20px;
-  display: flex;
-align-items: flex-end;
+    width: 301px;
+    border-radius: 20px;
+    display: flex;
+    align-items: flex-end;
   }
 
   .course_logo_name {
@@ -338,200 +335,166 @@ align-items: flex-end;
   h4.subsection-title{
     color: black !important;
   }
-
-</style>
-    
-    
-    <style>
-    .flex-button {
-        display: flex !important;
-        justify-content: space-between;
-        align-items: center;
-        padding: 30px !important;
-    }
-    .progress_bar_and_score {
-        width: 30%;
-        display: flex;
-        align-items: center;
-        margin-left: auto;
-    }
-    .completed_percent {
-        margin-left: 20px;
-        font-size: 1.5em;
-        margin-bottom: 0;
-    }
-    .accordion-flex {
-        display: flex !important;
-    }
-    .course_image_container{
-        background-image: url("/media/microsites/amazon/amazon_img.png");
-        height: 320px;
-        width: 340px;
-    }
-    
-    .course-outline .fa-chevron-right {
-        font-size: 1.6em;
-        margin-left: 15px;
-    }
-    .course-outline .fa-chevron-right.fa-rotate-90 {
-        font-size: 1.6em;
-    }
-    /* .course-outline .block-tree .section ol.outline-item {
-      display: flex;
-    height: 400px;
+  .flex-button {
+    display: flex !important;
+    justify-content: space-between;
     align-items: center;
-} */
-
-/* .complete-checkmark {
-  position: relative;
-  bottom: 260px;
-  left:-10px;
-  background: #f90;
-  border-radius: 100%;
-  color: #fff;
-  border: 1px solid #fff;
-  padding: 6px;
-} */
-
-.mobile_device{
-    display: none !important;
-}
-
-.tablet_device{
-    display: none !important;
-}
-
-
-
-
-@media screen and (max-width: 1440px) {
-  .desktop_device {
-    display:none !important;
+    padding: 30px !important;
   }
-  .tablet_device{
-    display: block !important;
-}
-
-.progress_bar_and_score {
-  width: 100%;
-}
-.flex-button{
-  flex-direction: column;
-}
-}
-
-@media screen and (max-width: 991px) {
-  .footer-column {
-    width: 100% !important;
-}
-
-}
-
-
-@media screen and (max-width: 800px) {
-  .desktop_device {
-    display:none !important;
-  }
-  .tablet_device{
-    display: none !important;
-}
-
-.mobile_device{
-  display: block !important;
-}
-
-.progress_bar_and_score {
-  width: 100%;
-}
-.flex-button{
-  flex-direction: column;
-}
-}
-
-
-@media screen and (max-width: 520px) {
-  .progress-bar-full {
-    width: 74%;
+  .progress_bar_and_score {
+    width: 30%;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
   }
   .completed_percent {
-    margin-left: 10px;
-    font-size: 1.2em;
-}
-
-.carousel__navigation-button {
-
-    width: 1rem;
-    height: 1rem;
-
-}
-
-.course_logo {
-    height: 250px;
-  width: 250px;
+    margin-left: 20px;
+    font-size: 1.5em;
+    margin-bottom: 0;
+  }
+  .accordion-flex {
+    display: flex !important;
+  }
+  .course_image_container{
+    background-image: url("/media/microsites/amazon/amazon_img.png");
+    height: 320px;
+    width: 340px;
+  }
+  
+  .course-outline .fa-chevron-right {
+    font-size: 1.6em;
+    margin-left: 15px;
+  }
+  .course-outline .fa-chevron-right.fa-rotate-90 {
+    font-size: 1.6em;
+  }
+  .mobile_device{
+    display: none !important;
   }
 
+  .tablet_device{
+    display: none !important;
+  }
+
+
+  @media screen and (max-width: 1440px) {
+    .desktop_device {
+      display:none !important;
+    }
+    .tablet_device{
+      display: block !important;
+    }
+    .progress_bar_and_score {
+      width: 100%;
+    }
+    .flex-button{
+      flex-direction: column;
+    }
+  }
+
+  @media screen and (max-width: 991px) {
+    .footer-column {
+      width: 100% !important;
+    }
+
+  }
+
+
+  @media screen and (max-width: 800px) {
+    .desktop_device {
+      display:none !important;
+    }
+    .tablet_device{
+      display: none !important;
+    }
+    .mobile_device{
+      display: block !important;
+    }
+    .progress_bar_and_score {
+      width: 100%;
+    }
+    .flex-button{
+      flex-direction: column;
+    }
+  }
+
+
+  @media screen and (max-width: 520px) {
+    .progress-bar-full {
+      width: 74%;
+    }
+    .completed_percent {
+      margin-left: 10px;
+      font-size: 1.2em;
+    }
+
+    .carousel__navigation-button {
+      width: 1rem;
+      height: 1rem;
+    }
+
+    .course_logo {
+      height: 250px;
+      width: 250px;
+    }
+    .arrow_navigation {
+      bottom: -140px;
+    }
+    .complete-checkmark {
+      margin-bottom: 209px;
+    }
+
+  }
+
+
+  .button_subsection {
+    display: flex;
+    width: 100%;
+    margin-bottom: 1em;
+  }
+
+  .anchor{
+    display: block;
+    height: 200px; /*same height as header*/
+    margin-top: -200px; /*same height as header*/
+    visibility: hidden;
+  }
+
+  .bloc_course_vignet {
+    margin: 0 10px;
+  }
+
+  .squarebutton{
+    width: 1.8rem;
+    height: 1.8rem;
+    background-color: #f90;
+  }
+
+  a:hover{
+    text-decoration: none;
+  }
+
+  .carousel__navigation-item[data-active="active"] a {
+    background-color: #f90;
+  }
   .arrow_navigation {
-
-    bottom: -140px;
-
-}
-.complete-checkmark {
-
-    margin-bottom: 209px;
-}
-
-}
-
-
-.button_subsection {
-  display: flex;
-  width: 100%;
-margin-bottom: 1em;
-}
-
-
-.anchor{
-  display: block;
-  height: 200px; /*same height as header*/
-  margin-top: -200px; /*same height as header*/
-  visibility: hidden;
-}
-
-.bloc_course_vignet {
-  margin: 0 10px;
-}
-
-.squarebutton{
-  width: 1.8rem;
-  height: 1.8rem;
-  background-color: #f90;
-}
-
-a:hover{
-  text-decoration: none;
-}
-
-.carousel__navigation-item[data-active="active"] a {
-  background-color: #f90;
+    cursor: pointer;
+    position: relative;
+    bottom: -215px;
+    z-index: 2;
   }
-.arrow_navigation {
-  cursor: pointer;
-  position: relative;
-  bottom: -215px;
-  z-index: 2;
-}
 
-.navigation_container {
-  display: flex;
-  justify-content: space-between;
-  padding: 0 5px;
-}
+  .navigation_container {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 5px;
+  }
 
-.arrow_navigation_right{
-  margin-right:-10px;
-}
+  .arrow_navigation_right{
+    margin-right:-10px;
+  }
 
-.loader {
+  .loader {
     margin-left: 25px;
     border: 5px solid #f3f3f3;
     border-radius: 50%;
@@ -540,70 +503,70 @@ a:hover{
     height: 25px;
     -webkit-animation: spin 2s linear infinite; /* Safari */
     animation: spin 2s linear infinite;
-}
+  }
 
-.global-header .header-logo a .logo {
-  height: 67px;
-}
+  .global-header .header-logo a .logo {
+    height: 67px;
+  }
 
-.global-header .header-logo a {
-  margin: 0px 0 10px 40px;
-}
+  .global-header .header-logo a {
+    margin: 0px 0 10px 40px;
+  }
 
-/* Safari */
-@-webkit-keyframes spin {
-  0% { -webkit-transform: rotate(0deg); }
-  100% { -webkit-transform: rotate(360deg); }
-}
+  /* Safari */
+  @-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+  }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
 
-.edit-note{
-  position: relative;
-  /* margin-right: -8px; */
-  left: -2px;
-}
+  .edit-note{
+    position: relative;
+    /* margin-right: -8px; */
+    left: -2px;
+  }
 
-.help-icon {
-  position: relative;
-  /* margin-right: -7px; */
-  left: -2px;
-}
+  .help-icon {
+    position: relative;
+    /* margin-right: -7px; */
+    left: -2px;
+  }
 
-.subsection-text{
-height: 44px;
-}
+  .subsection-text{
+  height: 44px;
+  }
 
-.span_title_edit{
-  position: relative;
-  top: -6px;
-  margin-left: -4px;
-}
+  .span_title_edit{
+    position: relative;
+    top: -6px;
+    margin-left: -4px;
+  }
 
-.seq_video, .seq_html {
-  margin-right: 5px;
-}
+  .seq_video, .seq_html {
+    margin-right: 5px;
+  }
 
-.section-name.accordion-trigger.outline-button{
-  padding-left: 0px !important;
-}
+  .section-name.accordion-trigger.outline-button{
+    padding-left: 0px !important;
+  }
 
-.course-outline .block-tree .section .section-name .section-title{
-  padding-left: 0px;
-}
+  .course-outline .block-tree .section .section-name .section-title{
+    padding-left: 0px;
+  }
 
-.course-outline .block-tree .outline-button .fa-chevron-right{
-  color: black !important;
-}
+  .course-outline .block-tree .outline-button .fa-chevron-right{
+    color: black !important;
+  }
 
-.progress-bar-full{
-  height: 4px;
-}
+  .progress-bar-full{
+    height: 4px;
+  }
 
-    </style>
+</style>
 
     
 <main role="main" class="desktop_device course-outline" id="main" tabindex="-1">
@@ -1289,36 +1252,35 @@ height: 44px;
         progress_bar_and_score[i].insertBefore(progress_bar_and_score[i].children[1],progress_bar_and_score[i].children[0]);
       }
   });
-  </script>
+</script>
 
-  <script>
-    //new course layout
-    window.addEventListener('load', function() {
-      let subsectionTitle = document.getElementsByClassName("subsection-text outline-button");
-      for (let i=0; i<subsectionTitle.length; i++){
-        if(subsectionTitle[i].getElementsByClassName("full-star fa fa-star").length == 0){
-            let emptyStar = document.createElement("span");
-            emptyStar.className = "empty-star far fa-star";
-            //emptyStar.ariaHidden = "true";
-            emptyStar.setAttribute('aria-hidden', 'true');
-            subsectionTitle[i].appendChild(emptyStar);
-        }
+<script>
+  //new course layout
+  window.addEventListener('load', function() {
+    let subsectionTitle = document.getElementsByClassName("subsection-text outline-button");
+    for (let i=0; i<subsectionTitle.length; i++){
+      if(subsectionTitle[i].getElementsByClassName("full-star fa fa-star").length == 0){
+          let emptyStar = document.createElement("span");
+          emptyStar.className = "empty-star far fa-star";
+          //emptyStar.ariaHidden = "true";
+          emptyStar.setAttribute('aria-hidden', 'true');
+          subsectionTitle[i].appendChild(emptyStar);
       }
+    }
 
-      let chevrons = document.getElementsByClassName("fa fa-chevron-right");
-      for(let i=0; i<chevrons.length; i++){
-        let currentChevron = chevrons[i];
-        let parent = chevrons[i].parentNode;
-        chevrons[i].remove();
-        parent.append(currentChevron);
+    let chevrons = document.getElementsByClassName("fa fa-chevron-right");
+    for(let i=0; i<chevrons.length; i++){
+      let currentChevron = chevrons[i];
+      let parent = chevrons[i].parentNode;
+      chevrons[i].remove();
+      parent.append(currentChevron);
 
-      }
-    })
-  </script>
+    }
+  })
+</script>
 
 
 <!-- // remove webinaire section -->
-
 <script>
 
   function removeWebinaireSection () {
@@ -1338,4 +1300,4 @@ height: 44px;
   const myTimeout = setTimeout(removeWebinaireSection, 1000);
   
   
-  </script>
+</script>
