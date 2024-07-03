@@ -364,7 +364,7 @@ msgstr "Nome"
 #: cms/static/js/views/assets.js lms/static/js/Markdown.Editor.js
 #: cms/templates/js/asset-upload-modal.underscore
 msgid "Choose File"
-msgstr "Escolher arquivo"
+msgstr "Escolher Arquivo"
 
 #. #-#-#-#-#  djangojs-partial.po (edx-platform)  #-#-#-#-#
 #. Translators: this is a message from the raw HTML editor displayed in the
@@ -1012,7 +1012,7 @@ msgstr "Selecione uma categoria"
 #: lms/templates/financial-assistance/financial_assessment_form.underscore
 #: lms/templates/student_account/account_settings.underscore
 msgid "Account Settings"
-msgstr "Configurações da conta"
+msgstr "Configurações da Conta"
 
 #: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
 msgid "Billing/Payment Options"
@@ -1201,7 +1201,7 @@ msgstr "Idioma"
 #: lms/djangoapps/teams/static/teams/templates/team-profile.underscore
 msgid ""
 "The language that team members primarily use to communicate with each other."
-msgstr "O idioma principal que os membros da equipe usam para se comunicar."
+msgstr "O idioma principal que os membros da equipe usam para comunicarem-se."
 
 #: lms/djangoapps/teams/static/teams/js/views/edit_team.js
 #: openedx/features/learner_profile/static/learner_profile/js/learner_profile_factory.js
@@ -1211,7 +1211,7 @@ msgstr "País"
 #: lms/djangoapps/teams/static/teams/js/views/edit_team.js
 #: lms/djangoapps/teams/static/teams/templates/team-profile.underscore
 msgid "The country that team members primarily identify with."
-msgstr "O país com o qual os membros da equipe se identificam."
+msgstr "O País que os membros da equipe principalmente se identificam"
 
 #: lms/djangoapps/teams/static/teams/js/views/edit_team.js
 #: lms/static/js/views/fields.js
@@ -1943,7 +1943,7 @@ msgstr "Pré-visualizar"
 #: lms/static/js/customwmd.js
 #: common/static/common/templates/discussion/templates.underscore
 msgid "Your question or idea (required)"
-msgstr "Sua pergunta ou ideia (obrigatório)"
+msgstr "Sua pergunta ou opinião (obrigatório)"
 
 #: lms/static/js/dashboard/donation.js
 msgid "Please enter a valid donation amount."
@@ -2251,7 +2251,7 @@ msgstr ""
 #: lms/static/js/edxnotes/views/tabs/search_results.js
 #: openedx/features/course_search/static/course_search/templates/dashboard_search_results.underscore
 msgid "Search Results"
-msgstr "Resultados da pesquisa"
+msgstr "Resultados da Pesquisa"
 
 #. Translators: this is a title shown before all Notes that have no associated
 #. tags. It is put within
