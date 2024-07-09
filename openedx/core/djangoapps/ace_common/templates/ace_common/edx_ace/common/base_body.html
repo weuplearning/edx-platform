@@ -64,8 +64,9 @@
                         <td width="70">
                             <a href="https://{{site_name}}">
                                 <img
-                                src="https://{{site_name}}/static/{{domain_prefix}}/images/logo.png" 
-                                height="30" alt="{% filter force_escape %}{% blocktrans %}Go to {{ platform_name }} Home Page{% endblocktrans %}{% endfilter %}"/
+                                src="https://{{site_name}}/media/microsites/af-brazil/logo.png" 
+                                style="width: 150px"
+                                alt="{% filter force_escape %}{% blocktrans %}Go to {{ platform_name }} Home Page{% endblocktrans %}{% endfilter %}"/
                                 >
                             </a>
                         </td>
@@ -173,7 +174,7 @@
                     <tr>
                         <!-- COPYRIGHT -->
                         <td>
-                            &copy; {% now "Y" %} {{ platform_name }}, {% trans "All rights reserved" as tmsg %}{{ tmsg | force_escape }}.<br/>
+                            &copy; {% now "Y" %} {{ platform_name }}, {{ "Todos os direitos reservados" | force_escape }}.<br/>
                         </td>
                     </tr>
                     {% if unsubscribe_url %}
