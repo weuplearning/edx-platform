@@ -1972,7 +1972,7 @@ msgstr ""
 "(%(routed_user_email)s): %(routed_profile_name)s"
 
 #: common/templates/student/edx_ace/accountactivation/email/body.html
-msgid "Account activation"
+msgid "Account Activation"
 msgstr "Ativação de conta"
 
 #: common/templates/student/edx_ace/accountactivation/email/body.html
@@ -1987,7 +1987,7 @@ msgstr ""
 "poderá fazer login novamente em sua conta até ativá-la."
 
 #: common/templates/student/edx_ace/accountactivation/email/body.html
-msgid "Activate your account"
+msgid "Activate Your Account"
 msgstr "ative sua conta"
 
 #: common/templates/student/edx_ace/accountactivation/email/body.html

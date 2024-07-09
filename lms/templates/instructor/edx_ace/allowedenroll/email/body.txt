@@ -1,14 +1,14 @@
 {% load i18n %}{% autoescape off %}{% blocktrans %}Dear student,{% endblocktrans %}
 
-{% blocktrans %}You have been invited to join {{ course_name }} at {{ site_name }} by a member of the course staff.{% endblocktrans %}
-{% if is_shib_course %}{% if auto_enroll %}{% blocktrans %}To access this course visit {{ course_url }} and login.{% endblocktrans %}
+{% blocktrans %}Você foi convidado a se unir a {{ course_name }} em {{ site_name }} por um membro da equipe do curso.{% endblocktrans %}
+{% if is_shib_course %}{% if auto_enroll %}{% blocktrans %}Para acessar este curso, visite {{ course_url }} e faça login.{% endblocktrans %}
 {% elif course_about_url is not None %}
-{% blocktrans %}To access this course visit {{ course_about_url }} and register for this course.{% endblocktrans %}
+{% blocktrans %}Para acessar este curso, visite {{ course_about_url }} e registre-se neste curso.{% endblocktrans %}
 {% endif %}
-{% else %}{% blocktrans %}To finish your registration, please visit {{ registration_url }} and fill out the registration form making sure to use {{ email_address }} in the Email field.{% endblocktrans %}
-{% if auto_enroll %}{% blocktrans %}Once you have registered and activated your account, you will see {{ course_name }} listed on your dashboard.{% endblocktrans %}
-{% elif course_about_url is not None %}{% blocktrans %}Once you have registered and activated your account, visit {{ course_about_url }} to join this course.{% endblocktrans %}
-{% else %}{% blocktrans %}You can then enroll in {{ course_name }}.{% endblocktrans %}
+{% else %}{% blocktrans %}Para finalizar seu cadastro, visite {{ registration_url }} e preencha o formulário de registro, certificando-se de usar {{ email_address }} no campo de e-mail.{% endblocktrans %}
+{% if auto_enroll %}{% blocktrans %}Depois de ter registrado e ativado sua conta, você verá {{ course_name }} listado em seu painel de instrumentos.{% endblocktrans %}
+{% elif course_about_url is not None %}{% blocktrans %}Assim que você tiver se cadastrado e ativado sua conta, visite {{ course_about_url }} para unir-se a este curso.{% endblocktrans %}
+{% else %}{% blocktrans %}Você pode então se matricular-se em {{ course_name }}.{% endblocktrans %}
 {% endif %}
 {% endif %}----
-{% blocktrans %}This email was automatically sent from {{ site_name }} to {{ email_address }}{% endblocktrans %}{% endautoescape %}
+{% blocktrans %}Este email foi enviado automaticamente de {{ site_name }} para {{ email_address }}{% endblocktrans %}{% endautoescape %}
