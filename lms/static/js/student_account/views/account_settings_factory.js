@@ -329,7 +329,8 @@
                     }
                 );
             }
-            aboutSectionsData.push(socialFields);
+            // 31/07/2024 - Ticket 19357 Removed social field for legal reasons
+            //aboutSectionsData.push(socialFields);
 
             // Add account deletion fields
             if (displayAccountDeletion) {
