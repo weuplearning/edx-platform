@@ -25,7 +25,7 @@ from lms.djangoapps.wul_apps.google_drive.views import read_google_drive_file
 
 from lms.djangoapps.wul_apps.sncf_jobs.views import get_sncf_jobs_surete,get_sncf_jobs_conduite,get_sncf_jobs_dev
 from lms.djangoapps.wul_apps.hec.views import hec_pe_check_email
-
+from lms.djangoapps.wul_apps.social_networks.views import share_linkedin, share_facebook
 
 import logging
 log = logging.getLogger()
@@ -120,4 +120,11 @@ urlpatterns  += (
 # hec pole emploi email checker
 urlpatterns +=(
     url(r'^hec_pe_check_email$', hec_pe_check_email, name="hec_pe_check_email"),
+)
+
+
+# Share on social network
+urlpatterns +=(
+    url(r'^social_network/share_linkedin$', share_linkedin, name="share_linkedin"),
+    url(r'^social_network/share_facebook$', share_facebook, name="share_facebook"),
 )
