@@ -121,3 +121,8 @@ urlpatterns  += (
 urlpatterns +=(
     url(r'^hec_pe_check_email$', hec_pe_check_email, name="hec_pe_check_email"),
 )
+
+# open badge factory
+urlpatterns  += (
+    url(r'^obf_issue_badge$', issue_badge, name="obf_issue_badge"),
+)
