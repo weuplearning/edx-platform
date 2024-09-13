@@ -28,6 +28,7 @@ from lms.djangoapps.wul_apps.hec.views import hec_pe_check_email
 from lms.djangoapps.wul_apps.social_networks.views import share_linkedin, share_facebook
 
 from lms.djangoapps.wul_apps.open_badge_factory.views import issue_badge
+from lms.djangoapps.wul_apps.custom_fields_editor_umn.views import CustomFieldViewUmn, CustomFieldEditorUmn
 
 
 import logging
@@ -137,3 +138,7 @@ urlpatterns +=(
     url(r'^social_network/share_facebook$', share_facebook, name="share_facebook"),
 )
 
+# umn - custom fields
+urlpatterns += (
+    url(r'^custom_field_editor_umn/', CustomFieldEditorUmn.as_view(), name='custom_field_editor_umn'),
+)

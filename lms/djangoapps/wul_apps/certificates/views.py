@@ -20,6 +20,7 @@ from reportlab.pdfbase import pdfmetrics
 from datetime import date
 
 from lms.djangoapps.wul_apps.models import WulCourseEnrollment
+import requests
 
 import logging
 log = logging.getLogger(__name__)
@@ -56,6 +57,7 @@ def generate_pdf(request,course_id):
 
     #import value for the certificate
     certificate_config = configuration_helpers.get_value('CERTIFICATE_LAYOUT')[course_id]
+    base_url = configuration_helpers.get_value('LMS_ROOT_URL')
 
     # Setup SIZE, IMAGE, FONT and COLOR
     page_width = certificate_config['certificate_width']
@@ -124,13 +126,67 @@ def generate_pdf(request,course_id):
 
 
 
+    # GRADE
+    try:
+        certificate_grade = certificate_config['grade']
+    except:
+        certificate_grade = False
+    
+    if certificate_grade :
+
+        result = ensure(request, course_id)
+
+
+        # Accessing JSON data from JsonResponse
+        if isinstance(result, JsonResponse):
+            # Decode byte content to string and load it as a Python dict
+            content = result.content.decode('utf-8')
+            data = json.loads(content)
+            log.info(data)
+        else:
+            log.error("Result is not a JsonResponse object")
+
+        log.info('°°°°°°°°Jsonresponseattribute you can only storefunction')
+                 
+
+
+        text_grade = certificate_grade['syntax_grade']
+        text_grade += str(data.get("grade"))
+
+        log.info("text_grade")
+        log.info(text_grade)
+        try:
+            font_color_grade = certificate_grade['font_color']
+        except:
+            font_color_grade = [0, 0, 0]
+        p.setFillColorRGB(font_color_grade[0]/255, font_color_grade[1]/255, font_color_grade[2]/255) 
+
+        font_size = certificate_grade['font_size']
+        p.setFont(font_name, font_size)
+
+        grade_position_y = certificate_grade['position_y']
+        try:
+            grade_position_x = certificate_grade['position_x']
+        except:
+            grade_position_x = False
+
+        if grade_position_x:
+            p.drawString(grade_position_x, grade_position_y, str(text_grade))
+        else:
+            text_width_grade = stringWidth(str(text_grade), font_name, font_size)
+            centered_grade = (page_width - text_width_grade) / 2.0
+            p.drawString(centered_grade, grade_position_y, str(text_grade))
+
+
+
+
     # CERTIFICATE DATE
     try:
         certificate_date = certificate_config['date']
     except:
         certificate_date = False
 
-    if certificate_date :
+    if certificate_date:
         try:
             date_lang = certificate_date['date_lang'].lower()
         except:
@@ -138,17 +194,31 @@ def generate_pdf(request,course_id):
 
         today = date.today()
         string_date_en = today.strftime('%d %B %Y')
+
         english_months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
         french_months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
+        portuguese_months = ['de Janeiro de', 'de Fevereiro de', 'de Março de', 'de Abril de', 'de Maio de', 'de Junho de', 'de Julho de', 'de Agosto de', 'de Setembro de', 'de Outubro de', 'de Novembro de', 'de Dezembro de']
+
+        string_date_fr = string_date_en
+        string_date_pt = string_date_en
+
+        # Replace English months with French months
         for index, e in enumerate(english_months):
-            if string_date_en.find(e) != -1 :
+            if string_date_en.find(e) != -1:
                 string_date_fr = string_date_en.replace(e, french_months[index])
+                string_date_pt = string_date_en.replace(e, portuguese_months[index])
 
         text_date = certificate_date['syntax_date']
-        if str(date_lang) == 'en' :
+
+        if str(date_lang) == 'en':
             text_date += string_date_en
-        else:
+        elif str(date_lang) == 'fr':
             text_date += string_date_fr
+        elif str(date_lang) == 'pt':
+            text_date += string_date_pt
+        else:
+            text_date += string_date_fr         
+
 
         try:
             font_color_date = certificate_date['font_color']
