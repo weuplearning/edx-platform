@@ -25,34 +25,65 @@ def share_linkedin(request):
     upload_badge_link_data = get_upload_link_linkedin(access_token, profile_info.get('sub'))
     upload_badge(upload_badge_link_data, badge)
 
-    badge_data = {
-        "author": "urn:li:person:"+profile_info.get('sub') ,
-        "lifecycleState": "PUBLISHED",
-        "specificContent": {
-            "com.linkedin.ugc.ShareContent": {
-                "shareCommentary": {
-                    "text": "Acabei de ganhar um troféu por ter concluído uma lição do curso de francês Partiu Paris, nível A1, com sucesso!"
-                },
-                "shareMediaCategory": "IMAGE",
-                "media": [
-                    {
-                        "status": "READY",
-                        "description": {
-                            "text": "badge " + badge
-                        },
-                        "media": upload_badge_link_data["value"]["asset"],
-                        "title": {
-                            "text": "Premier pas"
+    if course_id.find("OFM") == -1 :
+
+        badge_data = {
+            "author": "urn:li:person:"+profile_info.get('sub') ,
+            "lifecycleState": "PUBLISHED",
+            "specificContent": {
+                "com.linkedin.ugc.ShareContent": {
+                    "shareCommentary": {
+                        "text": " Acabei de ganhar um troféu por ter concluído uma lição do curso de francês Partiu Paris, nível A1, da Aliança Francesa Online, com sucesso!"
+                    },
+                    "shareMediaCategory": "IMAGE",
+                    "media": [
+                        {
+                            "status": "READY",
+                            "description": {
+                                "text": "badge " + badge
+                            },
+                            "media": upload_badge_link_data["value"]["asset"],
+                            "title": {
+                                "text": "Premier pas"
+                            }
                         }
-                    }
-                ]
+                    ]
+                }
+            },
+            "visibility": {
+                "com.linkedin.ugc.MemberNetworkVisibility": "PUBLIC"
             }
-        },
-        "visibility": {
-            "com.linkedin.ugc.MemberNetworkVisibility": "PUBLIC"
         }
-    }
-    
+    else :
+
+        badge_data = {
+            "author": "urn:li:person:"+profile_info.get('sub') ,
+            "lifecycleState": "PUBLISHED",
+            "specificContent": {
+                "com.linkedin.ugc.ShareContent": {
+                    "shareCommentary": {
+                        "text": "Acabei de ganhar um troféu por ter concluído uma lição do curso Objectif Français Militaire, nível A1, da Aliança Francesa Online com sucesso!"
+                    },
+                    "shareMediaCategory": "IMAGE",
+                    "media": [
+                        {
+                            "status": "READY",
+                            "description": {
+                                "text": "badge " + badge
+                            },
+                            "media": upload_badge_link_data["value"]["asset"],
+                            "title": {
+                                "text": "Premier pas"
+                            }
+                        }
+                    ]
+                }
+            },
+            "visibility": {
+                "com.linkedin.ugc.MemberNetworkVisibility": "PUBLIC"
+            }
+        }
+
     share_badge_on_linkedin(access_token, badge_data)
 
     url_value = "https://cursos.aliancafrancesaonline.com.br/courses/" + course_id + "/progress"
@@ -152,7 +183,8 @@ def upload_badge(upload_badge_link_data, badge):
 
     return  response
 
-    
+
+
 def share_badge_on_linkedin(access_token, badge_data):
     headers = {
         'Authorization': f'Bearer {access_token}',
@@ -172,11 +204,10 @@ def share_badge_on_linkedin(access_token, badge_data):
 
 
 
-
 @login_required
 def share_facebook(request):
 
-    # Project is currently cancelled 
+    # Project is currently cancelled
     log.info(request)
     log.info(dir(request))
 
