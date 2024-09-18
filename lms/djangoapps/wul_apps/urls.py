@@ -29,6 +29,7 @@ from lms.djangoapps.wul_apps.social_networks.views import share_linkedin, share_
 
 from lms.djangoapps.wul_apps.open_badge_factory.views import issue_badge
 from lms.djangoapps.wul_apps.custom_fields_editor_umn.views import CustomFieldViewUmn, CustomFieldEditorUmn
+from lms.djangoapps.wul_apps.data.views import csvDataWeup
 
 
 import logging
@@ -142,3 +143,12 @@ urlpatterns +=(
 urlpatterns += (
     url(r'^custom_field_editor_umn/', CustomFieldEditorUmn.as_view(), name='custom_field_editor_umn'),
 )
+
+
+# af-brasil - API rest
+urlpatterns += (
+    url(r'^csv_data_weup/{}'.format(settings.COURSE_ID_PATTERN), csvDataWeup, name='csv_data_weup'),
+)
+
+
+
