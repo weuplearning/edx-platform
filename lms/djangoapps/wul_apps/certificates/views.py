@@ -116,7 +116,7 @@ def generate_pdf(request,course_id):
         name_position_x = certificate_config['name_position_x']
     except:
         name_position_x = False
-    
+
     if name_position_x :
         p.drawString(name_position_x, name_position_y, username)
     else:
@@ -131,7 +131,7 @@ def generate_pdf(request,course_id):
         certificate_grade = certificate_config['grade']
     except:
         certificate_grade = False
-    
+
     if certificate_grade :
 
         result = ensure(request, course_id)
@@ -142,19 +142,15 @@ def generate_pdf(request,course_id):
             # Decode byte content to string and load it as a Python dict
             content = result.content.decode('utf-8')
             data = json.loads(content)
-            log.info(data)
         else:
             log.error("Result is not a JsonResponse object")
 
         log.info('°°°°°°°°Jsonresponseattribute you can only storefunction')
-                 
 
 
         text_grade = certificate_grade['syntax_grade']
         text_grade += str(data.get("grade"))
 
-        log.info("text_grade")
-        log.info(text_grade)
         try:
             font_color_grade = certificate_grade['font_color']
         except:
@@ -249,7 +245,7 @@ def generate_pdf(request,course_id):
         course_duration = certificate_config['course_duration']
     except:
         course_duration = False
-    
+
     if course_duration :
         try :
             enrollment = WulCourseEnrollment.get_enrollment(course_id, request.user)
