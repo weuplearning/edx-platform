@@ -3,6 +3,7 @@ from django.conf import settings
 from pprint import pformat
 import json
 import hashlib
+import csv
 
 from xmodule.mongo_utils import connect_to_mongodb
 
@@ -202,3 +203,51 @@ class certificate():
 
     def view_partial_certificate(self,request):
         return self.view(request,partial=True)
+
+    def grade_csv_and_user(self):
+
+        context = self.check_certificate()
+
+        course_id = str(self.course.id)
+
+        csv_file_path = '/edx/var/edxapp/media/microsites/af-brazil/data/' + str(course_id) +'.csv'
+        csv_data = False
+        csv_user_grade = []
+        best_grade_for_section = []
+        global_grade_sum = 0
+        global_grade_count = 0
+
+        try :
+            with open(csv_file_path, newline='') as csvfile:
+                csvreader = csv.reader(csvfile, delimiter=';')
+                csv_data = []
+                for row in csvreader:
+                    csv_data.append(row)
+        except :
+            csv_data = False
+
+        if csv_data :
+            for user_data_csv in csv_data :
+                if len(user_data_csv)>1 and self.user.email == user_data_csv[1] :
+
+                    csv_user_grade = user_data_csv[4:-7]
+                    i=0
+                    for grade_section_csv in csv_user_grade : 
+                        if float(grade_section_csv) < context["grade_summary"]["section_breakdown"][global_grade_count]["percent"] :
+                            grade_section_csv = context["grade_summary"]["section_breakdown"][global_grade_count]["percent"]
+                            # context["grade_summary"]["section_breakdown"][i] = grade_section_csv
+                        global_grade_count+=1
+                        
+                        best_grade_for_section.append(grade_section_csv)
+                        global_grade_sum += float(grade_section_csv)
+
+
+                    continue
+        else :
+            context = self.check_certificate()
+            return JsonResponse(context)
+
+
+        grade_object= {"global_grade" : global_grade_sum/global_grade_count , "section_grades" : best_grade_for_section}
+
+        return JsonResponse(grade_object , safe=False)

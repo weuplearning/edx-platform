@@ -29,9 +29,14 @@ log = logging.getLogger(__name__)
 @login_required
 @require_GET
 def ensure(request,course_id):
-
     course_key = SlashSeparatedCourseKey.from_string(course_id)
     return certificate(course_key,request.user).ensure_certificate()
+
+@login_required
+@require_GET
+def ensure_csv(request,course_id):
+    course_key = SlashSeparatedCourseKey.from_string(course_id)
+    return certificate(course_key,request.user).grade_csv_and_user()
 
 @login_required
 @require_GET
@@ -126,6 +131,7 @@ def generate_pdf(request,course_id):
 
 
 
+
     # GRADE
     try:
         certificate_grade = certificate_config['grade']
@@ -133,25 +139,26 @@ def generate_pdf(request,course_id):
         certificate_grade = False
     
     if certificate_grade :
-
-        result = ensure(request, course_id)
-
+        result = ensure_csv(request, course_id)
 
         # Accessing JSON data from JsonResponse
         if isinstance(result, JsonResponse):
             # Decode byte content to string and load it as a Python dict
             content = result.content.decode('utf-8')
             data = json.loads(content)
-            log.info(data)
         else:
             log.error("Result is not a JsonResponse object")
+             
+        try :
+            text_grade = certificate_grade['syntax_grade']
+        except:
+            text_grade = str(data.get("grade")) + '%'
 
-        log.info('°°°°°°°°Jsonresponseattribute you can only storefunction')
-                 
+        try :
+            text_grade = text_grade.replace('{note}',str(data.get('global_grade')*100))
+        except : 
+            text_grade = text_grade.replace('{note}',str(data.get("grade")))
 
-
-        text_grade = certificate_grade['syntax_grade']
-        text_grade += str(data.get("grade"))
 
         log.info("text_grade")
         log.info(text_grade)
@@ -197,7 +204,7 @@ def generate_pdf(request,course_id):
 
         english_months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
         french_months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
-        portuguese_months = ['de Janeiro de', 'de Fevereiro de', 'de Março de', 'de Abril de', 'de Maio de', 'de Junho de', 'de Julho de', 'de Agosto de', 'de Setembro de', 'de Outubro de', 'de Novembro de', 'de Dezembro de']
+        portuguese_months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
 
         string_date_fr = string_date_en
         string_date_pt = string_date_en
@@ -208,7 +215,11 @@ def generate_pdf(request,course_id):
                 string_date_fr = string_date_en.replace(e, french_months[index])
                 string_date_pt = string_date_en.replace(e, portuguese_months[index])
 
-        text_date = certificate_date['syntax_date']
+        try :
+            text_date = certificate_date['syntax_date']
+        except:
+            text_date = ''
+
 
         if str(date_lang) == 'en':
             text_date += string_date_en
