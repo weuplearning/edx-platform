@@ -31,6 +31,7 @@ from openedx.core.djangoapps.user_api.accounts.utils import is_secondary_email_f
     <link type="text/css" rel="stylesheet" href="${STATIC_URL}paragon/static/paragon.min.css">
 </%block>
 
+
 <%block name="js_extra">
 <%static:require_module module_name="js/student_account/views/account_settings_factory" class_name="AccountSettingsFactory">
     var fieldsData = ${ fields | n, dump_js_escaped_json },
@@ -39,6 +40,7 @@ from openedx.core.djangoapps.user_api.accounts.utils import is_secondary_email_f
         platformName = '${ static.get_platform_name() | n, js_escaped_string }',
         contactEmail = '${ static.get_contact_email_address() | n, js_escaped_string }',
         allowEmailChange = ${ bool(settings.FEATURES['ALLOW_EMAIL_ADDRESS_CHANGE']) | n, dump_js_escaped_json },
+        socialPlatforms = ${ settings.SOCIAL_PLATFORMS | n, dump_js_escaped_json },
 
         syncLearnerProfileData = ${ bool(sync_learner_profile_data) | n, dump_js_escaped_json },
         enterpriseName = '${ enterprise_name | n, js_escaped_string }',
@@ -60,6 +62,7 @@ from openedx.core.djangoapps.user_api.accounts.utils import is_secondary_email_f
         platformName,
         contactEmail,
         allowEmailChange,
+        socialPlatforms,
 
         syncLearnerProfileData,
         enterpriseName,
@@ -84,3 +87,9 @@ from openedx.core.djangoapps.user_api.accounts.utils import is_secondary_email_f
 <%static:webpack entry="StudentAccountDeletionInitializer">
 </%static:webpack>
 </%block>
+
+<style>
+    #accounts-tab, #orders-tab, #aboutTabSections-tabpanel>.section:nth-child(3), .account-deletion-details>p:nth-child(3), .account-deletion-details>p:nth-child(4) {
+        display: none;
+    }
+</style>
