@@ -157,7 +157,7 @@ def generate_pdf(request,course_id):
         try :
             text_grade = text_grade.replace('{note}',str(data.get('global_grade')*100))
         except : 
-            text_grade = text_grade.replace('{note}',str(data.get("grade")))
+            text_grade = text_grade.replace('{note}',str(data.get("grade")*100))
 
 
         log.info("text_grade")
@@ -204,7 +204,7 @@ def generate_pdf(request,course_id):
 
         english_months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
         french_months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
-        portuguese_months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
+        portuguese_months = ['de janeiro', 'de fevereiro', 'de março', 'de abril', 'de maio', 'de junho', 'de julho', 'de agosto', 'de setembro', 'de outubro', 'de novembro', 'de dezembro']
 
         string_date_fr = string_date_en
         string_date_pt = string_date_en

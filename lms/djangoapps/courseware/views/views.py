@@ -613,16 +613,22 @@ class StaticCourseTabView(EdxFragmentView):
             course=course,
             will_recheck_access=True,
         )
+
         chapter_module = get_current_child(course_module)
-        log.info(chapter_module.url_name)
 
         if chapter_module is not None:
             section_module = get_current_child(chapter_module)
-        
-        log.info(section_module.url_name)
 
-        chapter_module_url = chapter_module.url_name
-        section_module_url = section_module.url_name
+            try : 
+                chapter_module_url = chapter_module.url_name
+            except : 
+                chapter_module_url = None
+
+            try :
+                section_module_url = section_module.url_name
+
+            except :
+                section_module_url = None
 
         try:
             accordion = render_accordion(request, str(course.id), chapter_module_url, section_module_url)

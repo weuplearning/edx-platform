@@ -233,20 +233,20 @@ class certificate():
                     csv_user_grade = user_data_csv[4:-7]
                     i=0
                     for grade_section_csv in csv_user_grade : 
+
                         if float(grade_section_csv) < context["grade_summary"]["section_breakdown"][global_grade_count]["percent"] :
                             grade_section_csv = context["grade_summary"]["section_breakdown"][global_grade_count]["percent"]
                             # context["grade_summary"]["section_breakdown"][i] = grade_section_csv
                         global_grade_count+=1
-                        
                         best_grade_for_section.append(grade_section_csv)
                         global_grade_sum += float(grade_section_csv)
 
-
                     continue
-        else :
+
+
+        if not csv_data or csv_user_grade == [] :
             context = self.check_certificate()
             return JsonResponse(context)
-
 
         grade_object= {"global_grade" : global_grade_sum/global_grade_count , "section_grades" : best_grade_for_section}
 
