@@ -287,6 +287,28 @@ def generate_pdf(request,course_id):
         except:
             log.info('error with custom fields for certificate')
 
+    # CUSTOM FIELD
+    try:
+        custom_field_value_2 = certificate_config['custom_field_value_2']
+    except:
+        custom_field_value_2 = False
+
+    if custom_field_value_2 : 
+        try :
+            cf = json.loads(request.user.profile.custom_field)
+            value = "Matricule : "
+            value += cf.get(custom_field_value_2['name'])
+
+            font_size_cf = custom_field_value_2['font_size']
+            p.setFont(font_name, font_size_cf)
+
+            font_color = custom_field_value_2['font_color']
+            p.setFillColorRGB(font_color[0]/255, font_color[1]/255, font_color[2]/255) 
+
+            p.drawString(custom_field_value_2['position_x'], custom_field_value_2['position_y'], value)
+        except:
+            log.info('error with custom fields for certificate')
+
 
 
     # Close the PDF object cleanly, and we're done.
