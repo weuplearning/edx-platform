@@ -110,6 +110,16 @@ def find_best_referent(custom_fields):
         return "INVALID_REFERENT"
     return "UNKNOWN_REFERENT"
 
+def fill_regular_users(custom_fields):
+    # used to avoid filling custom fields with bad data from login form
+    custom_fields['school'] = ''
+    custom_fields['diplomalvl'] = '' 
+    custom_fields['formation'] = ''
+    custom_fields['class'] = ''
+    custom_fields['year'] = ''
+    custom_fields['referent'] = 'N/A'
+    return custom_fields
+
 class CustomFieldEditorUmn(APIView):
     def get(self, request):
 
@@ -137,6 +147,8 @@ class CustomFieldEditorUmn(APIView):
 
         return JsonResponse(custom_field, status=200)
     
+
+        
     def post(self, request, format='json'):
 
         if not (wul_verify_access(request.user).has_dashboard_access() or request.data['authorized']):
@@ -160,10 +172,7 @@ class CustomFieldEditorUmn(APIView):
         try: 
             custom_fields = json.loads(user_profile.custom_field)
             # As request.data is a querydict with multiplevalues for keys we update manually
-            log.error('Before custom field referent')
-            custom_fields["referent"] = find_best_referent(custom_fields)
-            log.error('after custom field referent')
-            log.error(custom_fields["referent"])
+
 
             for key in request.data.keys():
 
@@ -178,6 +187,11 @@ class CustomFieldEditorUmn(APIView):
 
                     if key == "last_name":
                         user.first_name = custom_fields["last_name"]
+            user_status = custom_fields.get('status','')
+            if(user_status == 'learner' or user_status == 'teacher'):
+                custom_fields["referent"] = find_best_referent(custom_fields)
+            else:
+                custom_fields = fill_regular_users(custom_fields)
             custom_fields["last_update_maker"] = request.user.email
             custom_fields["last_update_date"] = int(round(time.time() * 1000))
 
