@@ -120,6 +120,17 @@ def fill_regular_users(custom_fields):
     custom_fields['referent'] = 'N/A'
     return custom_fields
 
+def reset_custom_fields(custom_fields):
+    custom_fields.pop('schoolregion',None)
+    custom_fields.pop('school',None)
+    custom_fields.pop('status',None) 
+    custom_fields.pop('diplomalvl',None) 
+    custom_fields.pop('formation',None)
+    custom_fields.pop('class',None)
+    custom_fields.pop('year',None)
+    custom_fields.pop('referent',None)
+    return custom_fields
+
 class CustomFieldEditorUmn(APIView):
     def get(self, request):
 
@@ -192,8 +203,13 @@ class CustomFieldEditorUmn(APIView):
                 custom_fields["referent"] = find_best_referent(custom_fields)
             else:
                 custom_fields = fill_regular_users(custom_fields)
+            if(user_status == 'reset'):
+                custom_fields = reset_custom_fields(custom_fields)
+
             custom_fields["last_update_maker"] = request.user.email
             custom_fields["last_update_date"] = int(round(time.time() * 1000))
+            # used a version marker : 1 - 09/10/2024
+            custom_fields["update_marker"] = 1
 
             user_profile.custom_field = json.dumps(custom_fields)
             user.save()
