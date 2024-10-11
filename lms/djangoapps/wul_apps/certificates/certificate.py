@@ -227,17 +227,30 @@ class certificate():
             csv_data = False
 
         if csv_data :
+            log.info('in csv_data')
             for user_data_csv in csv_data :
                 if len(user_data_csv)>1 and self.user.email == user_data_csv[1] :
 
                     csv_user_grade = user_data_csv[4:-7]
-                    i=0
+                    i = 0                
+                    log.info('csv_user_grade')
+                    log.info(csv_user_grade)
+
+
                     for grade_section_csv in csv_user_grade : 
 
-                        if float(grade_section_csv) < context["grade_summary"]["section_breakdown"][global_grade_count]["percent"] :
-                            grade_section_csv = context["grade_summary"]["section_breakdown"][global_grade_count]["percent"]
-                            # context["grade_summary"]["section_breakdown"][i] = grade_section_csv
+                        if float(grade_section_csv) < context["grade_summary"]["section_breakdown"][i]["percent"] :
+
+                            grade_section_csv = context["grade_summary"]["section_breakdown"][i]["percent"]
+
                         global_grade_count+=1
+                        if course_id == 'course-v1:af-brasil+OFM+01' :
+                            i+=1
+                        elif i < 15 :
+                            i+=15
+                        else : 
+                            i-=14
+                        
                         best_grade_for_section.append(grade_section_csv)
                         global_grade_sum += float(grade_section_csv)
 
