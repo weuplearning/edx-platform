@@ -117,12 +117,13 @@ def generate_pdf(request,course_id):
     except:
         name_position_x = False
 
-    if name_position_x :
+    if name_position_x and font_size != 0:
         p.drawString(name_position_x, name_position_y, username)
     else:
-        text_width = stringWidth(username, font_name, font_size)
-        centered_text = (page_width - text_width) / 2.0
-        p.drawString(centered_text, name_position_y, username)
+        if font_size != 0:
+            text_width = stringWidth(username, font_name, font_size)
+            centered_text = (page_width - text_width) / 2.0
+            p.drawString(centered_text, name_position_y, username)
 
 
 
