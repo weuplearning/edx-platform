@@ -8,13 +8,13 @@
         <td>
             <h1>
                 {% filter force_escape %}
-                {% blocktrans %}You have been invited to {{ course_name }}{% endblocktrans %}
+                {% blocktrans %}Você foi convidado para {{ course_name }}{% endblocktrans %}
                 {% endfilter %}
             </h1>
 
             <p style="color: rgba(0,0,0,.75);">
                 {% filter force_escape %}
-                {% blocktrans %}You have been invited to join {{ course_name }} at {{ site_name }} by a member of the course staff.{% endblocktrans %}
+                {% blocktrans %}Você foi convidado para participar {{ course_name }} no {{ site_name }} por um membro da equipe do curso.{% endblocktrans %}
                 {% endfilter %}
                 <br />
             </p>
@@ -23,7 +23,7 @@
             {% if auto_enroll %}
                 <p style="color: rgba(0,0,0,.75);">
                     {% filter force_escape %}
-                    {% blocktrans %}To access this course click on the button below and login:{% endblocktrans %}
+                    {% blocktrans %}Para acessar este curso clique no botão abaixo e faça login:{% endblocktrans %}
                     {% endfilter %}
                     <br />
                 </p>
@@ -32,7 +32,7 @@
             {% elif course_about_url is not None %}
                 <p style="color: rgba(0,0,0,.75);">
                     {% filter force_escape %}
-                    {% blocktrans %}To access this course visit it and register:{% endblocktrans %}
+                    {% blocktrans %}Para acessar este curso acesse-o e inscreva-se:{% endblocktrans %}
                     {% endfilter %}
                     <br />
                 </p>
@@ -42,38 +42,32 @@
         {% else %}
             <p style="color: rgba(0,0,0,.75);">
                 {% filter force_escape %}
-                {% blocktrans %}Please finish your registration and fill out the registration form making sure to use {{ email_address }} in the Email field:{% endblocktrans %}
+                {% blocktrans %}Por favor, finalize seu cadastro e preencha o formulário de cadastro certificando-se de usar {{ email_address }} no campo Email:{% endblocktrans %}
                 {% endfilter %}
                 <br />
             </p>
             {# xss-lint: disable=django-trans-missing-escape #}
-            {% trans "Finish Your Registration" as button_cta_text %}
+            {% trans "Conclua seu registro" as button_cta_text %}
             {% include "ace_common/edx_ace/common/return_to_course_cta.html" with course_cta_text=button_cta_text course_cta_url=registration_url %}
 
             <p style="color: rgba(0,0,0,.75);">
                 {% if auto_enroll %}
                     {% filter force_escape %}
-                    {% blocktrans %}Once you have registered and activated your account, you will see {{ course_name }} listed on your dashboard.{% endblocktrans %}
+                    {% blocktrans %}Depois de registrar e ativar sua conta, você verá {{ course_name }} listado em seu painel.{% endblocktrans %}
                     {% endfilter %}
                 {% elif course_about_url is not None %}
                     {% filter force_escape %}
-                    {% blocktrans %}Once you have registered and activated your account, you will be able to access this course:{% endblocktrans %}
+                    {% blocktrans %}Depois de registrar e ativar sua conta, você poderá acessar este curso:{% endblocktrans %}
                     {% endfilter %}
                     {% include "ace_common/edx_ace/common/return_to_course_cta.html" with course_cta_text=course_name course_cta_url=course_about_url %}
                 {% else %}
                     {% filter force_escape %}
-                    {% blocktrans %}You can then enroll in {{ course_name }}.{% endblocktrans %}
+                    {% blocktrans %}Você pode então se inscrever em {{ course_name }}.{% endblocktrans %}
                     {% endfilter %}
                 {% endif %}
                 <br />
             </p>
         {% endif %}
-            <p style="color: rgba(0,0,0,.75);">
-                {% filter force_escape %}
-                {% blocktrans %}This email was automatically sent from {{ site_name }} to {{ email_address }}{% endblocktrans %}
-                {% endfilter %}
-                <br />
-            </p>
         </td>
     </tr>
 </table>

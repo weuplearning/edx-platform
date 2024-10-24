@@ -8,30 +8,26 @@
         <td>
             <h1>
                 {% filter force_escape %}
-                {% blocktrans %}
-                    You have been enrolled in {{ course_name }}
-                {% endblocktrans %}
+                    Olá!
                 {% endfilter %}
             </h1>
 
             <p style="color: rgba(0,0,0,.75);">
                 {% filter force_escape %}
-                {% blocktrans %}You have been enrolled in {{ course_name }} at {{ site_name }} by a member of the course staff. This course will now appear on your {{ site_name }} dashboard.{% endblocktrans %}
+                Você foi inscrito/a no curso {{ course_name }} na plataforma {{ site_name }} pela equipe pedagógica da Aliança Francesa Online (AF Online). 
                 {% endfilter %}
                 <br />
+                {% filter force_escape %}                
+                O seu curso deve aparecer na página inicial "Meus cursos" no site cursos.aliancafrancesaonline.com.br ou clicando aqui:
+                {% endfilter %}
             </p>
 
-            {% filter force_escape %}
-                {% blocktrans asvar course_cta_text %}Access the Course Materials Now{% endblocktrans %}
+            {% filter force_escape %}                
+                {% blocktrans asvar course_cta_text %}Ir para o meu curso{% endblocktrans %}
             {% endfilter %}
             {% include "ace_common/edx_ace/common/return_to_course_cta.html" with course_cta_text=course_cta_text course_cta_url=course_url %}
 
-            <p style="color: rgba(0,0,0,.75);">
-                {% filter force_escape %}
-                {% blocktrans %}This email was automatically sent from {{ site_name }} to {{ full_name }}{% endblocktrans %}
-                {% endfilter %}
-                <br />
-            </p>
+
         </td>
     </tr>
 </table>
