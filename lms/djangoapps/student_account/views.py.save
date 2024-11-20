@@ -57,71 +57,17 @@ from openedx.core.djangoapps.user_api.errors import UserNotFound
 #MODIF HERE
 import re
 from django.db import IntegrityError
-from django.core.exceptions import PermissionDenied
 import datetime
 import base64
 from pprint import pformat
 
 AUDIT_LOG = logging.getLogger("audit")
-log = logging.getLogger()
 
-def do_tma_login(request,pid,entity_id, no_redirect = False, true_password =  None):
+def do_tma_login(request,pid,entity_id, no_redirect = False):
     #AUDIT_LOG.info(u"User exists already")
-    AUDIT_LOG.info("Trying to authenticate... "+pformat(request.POST))
-    AUDIT_LOG.info(request)
-    AUDIT_LOG.info(pid)
-
-    log.info('User.objects.filter(email=request.POST.get("email"))')
-    log.info(User.objects.filter(email=request.POST.get('email')))
-    log.info(User.objects.filter(email=request.POST.get('email'))[0])
-    log.info(dir(User.objects.filter(email=request.POST.get('email'))[0]))
-    log.info(User.objects.filter(email=request.POST.get('email'))[0].username)
-
-    password = pid
-    if true_password:
-        password = true_password
-
-    try:
-        #user = authenticate(username=UserProfile.objects.filter(amundiid__exact=pid)[0].user.username, password=password, request=request)
-        log.info('try authenticate')
-        user = authenticate(username=User.objects.filter(email=request.POST.get('email'))[0].username, password=password, request=request)
-    except:
-        log.info('in except do_tma_login')
-        log.info(entity_id)
-
-        if entity_id == 'amundi_ext':
-            AUDIT_LOG.info("Error in authentication for : "+pformat(request.POST))
-            response = JsonResponse({
-                "success": False,
-                "message": "Email ou mot de passe incorrect",
-                "redirect_url": '/amundi_ext-apoc/psso?email=true&username=true&password=true&cgu=true&firstname=true&lastname=true&company=amundi_ext'
-                },
-                status=500
-            )
-            return response
-        if entity_id == 'herta':
-            AUDIT_LOG.info("Error in authentication for : "+pformat(request.POST))
-            response = JsonResponse({
-                "success": False,
-                "message": "Email ou mot de passe incorrect",
-                "redirect_url": '/herta-apoc/psso?email=true&username=true&password=true&cgu=true&firstname=true&lastname=true&company=herta'
-                },
-                status=500
-            )
-            return response
-
-    AUDIT_LOG.info(user)
-
-    if user is not None:
-        try:        
-            login(request, user)
-        except:
-            raise PermissionDenied
-    else:
-        raise PermissionDenied
-
-
-    AUDIT_LOG.info('avant le redirect pour /mooc-agency-apoc')
+    AUDIT_LOG.info("account exists, authenticating... "+pformat(request.POST))
+    user = authenticate(username=UserProfile.objects.filter(amundiid__exact=pid)[0].user.username, password=pid, request=request)
+    login(request, user)
     request.session.set_expiry(0)
     response = HttpResponseRedirect('/mooc-agency-apoc')
     if entity_id == 'amundi':
@@ -139,12 +85,6 @@ def do_tma_login(request,pid,entity_id, no_redirect = False, true_password =  No
             "success": True,
             "redirect_url": '/amundi_ext-apoc',
         })
-    if entity_id == 'herta':
-        response = JsonResponse({
-            "success": True,
-            "redirect_url": '/herta-apoc',
-        })
-
 
     set_logged_in_cookies(request, response, user)
     #SET UP AN ADDITIONNAL COOKIE WITH ALL RANKING INFORMATION
@@ -160,19 +100,13 @@ def do_tma_login(request,pid,entity_id, no_redirect = False, true_password =  No
     stage_id = 0
     stage_status = 0
     stage_score = 0
-    #retour_score = setscore(user_id,first,stage_id,stage_status,stage_score)
-    #retour_status = setstatus(user_id,first,status,score)
+    retour_score = setscore(user_id,first,stage_id,stage_status,stage_score)
+    retour_status = setstatus(user_id,first,status,score)
     user_info = {'username':username,'first_name':first_name,'last_name':last_name,'avatar':avatar}
-    is_admin = request.user.is_staff
+    is_admin = False
     #data = {'user':user_info,'score':retour_score,'status':retour_status} 
-    last_login = str(request.user.last_login)
-    data = {'user_id':user_id,'username':username,'first_name':first_name,'last_name':last_name,'avatar':avatar,'admin':is_admin,'company':entity_id,'last_login':last_login}
-
-    # Update - Cyril - 19 11 2024 
-    # data = base64.b64encode(json.dumps(data).encode('utf-8'))
-    data = base64.b64encode(json.dumps(data).encode('utf-8')).decode('utf-8')
-
-    AUDIT_LOG.info("All set, redirecting...")
+    data = {'user_id':user_id,'username':username,'first_name':first_name,'last_name':last_name,'avatar':avatar,'admin':is_admin,'company':entity_id}
+    data = base64.b64encode(json.dumps(data).encode('utf-8'))
     #reponse = HttpResponseRedirect('/media/apoc/APOCamundi/interface/home/index.html')
     ## WARNING COOKIES CREATED HERE SHOULD BE DESTROYED in /edx/app/edxapp/edx-platform/common/djangoapps/student/cookies.py at logout, do the change !
     ## and also below when logging out
@@ -198,7 +132,6 @@ def do_tma_login(request,pid,entity_id, no_redirect = False, true_password =  No
             response = HttpResponseRedirect('/amundi-apoc')
         response.set_cookie('cookie_apoc_am', data)
     if entity_id == 'amundi_ext':
-        log.info(entity_id)
         #response = HttpResponseRedirect('/media/apoc/APOC AMUNDI DEPLOIEMENT/interface/home/index.html')
         if no_redirect:
             response = JsonResponse({
@@ -207,18 +140,7 @@ def do_tma_login(request,pid,entity_id, no_redirect = False, true_password =  No
             })
         else:
             response = HttpResponseRedirect('/amundi_ext-apoc')
-        response.set_cookie('cookie_apoc_am', data)
-        # response.set_cookie('cookie_apoc_amext', data)
-    if entity_id == 'herta':
-        #response = HttpResponseRedirect('/media/apoc/APOC AMUNDI DEPLOIEMENT/interface/home/index.html')
-        if no_redirect:
-            response = JsonResponse({
-                "success": True,
-                "redirect_url": '/herta-apoc',
-            })
-        else:
-            response = HttpResponseRedirect('/herta-apoc')
-        response.set_cookie('cookie_apoc_herta', data)
+        response.set_cookie('cookie_apoc_amext', data)
 
     return response
 
@@ -228,14 +150,14 @@ def validate_username(username):
     else:
         return False
 
-def do_tma_user_creation(data, request=None):
+def do_tma_user_creation(data):
     if not validate_username(data['username']):
          return {'success':False,'message':"Le pseudo doit contenir uniquement des lettres sans accents et des chiffres. Les espaces sont interdits."}
     #Now create the user
     user = User(
         username=data['username'],
         email=data['email'],
-        is_active=True,
+        is_active=False,
         last_name=data['last_name'],
         first_name=data['first_name']
     )                
@@ -261,9 +183,6 @@ def do_tma_user_creation(data, request=None):
             return {'success':False,'message':"L'email existe déjà. Merci d'en utiliser un autre."}
         else:
             return {'success':False,'message':'Une erreur est survenue, merci de vider votre cache et de redémarrer votre navigateur avant de réessayer'}
-    except:
-         AUDIT_LOG.info("Unexpected error:" + pformat(sys.exc_info()[0]))
-    AUDIT_LOG.info("Account was created for: "+pformat(user))
     # add this account creation to password history
     # NOTE, this will be a NOP unless the feature has been turned on in configuration
     password_history_entry = PasswordHistory()
@@ -280,7 +199,7 @@ def do_tma_user_creation(data, request=None):
         **{key: data.get(key) for key in profile_fields}
     )
 
-    profile.amundiid = data['PID']
+    profile.amundiid = data['password']
     profile.city = data['entity_id']
 
     try:
@@ -288,10 +207,7 @@ def do_tma_user_creation(data, request=None):
     except Exception:  # pylint: disable=broad-except
         log.exception("UserProfile creation failed for user {id}.".format(id=user.id))
         raise
-    AUDIT_LOG.info("profile was created for: "+pformat(data))
-
-
-    return {'success':True,"message":"Votre compte a été créé"}
+    return {'success':True,"message":"Votre cômpte a été créé"}
 
 ##MODIF HERE
 #@require_http_methods(['GET'])
@@ -301,136 +217,16 @@ def do_tma_user_creation(data, request=None):
 def auto_login_and_registration(request, initial_mode="login"):
     """Custom view for auto login"""
     #FIRST WE CHECK IDENTITY
-
-    log.info(request)
-    log.info(initial_mode)
-
-    log.info(request.path.rsplit('/', 1)[1])
-
     entity_id='amundi'
     if ('company' in request.POST and request.POST['company'] is 'adp') or request.path.rsplit('/', 1)[1]=='adp':
         entity_id='adp'
     if 'entity_id' in request.POST and str(request.POST['entity_id']) == 'adp':
         entity_id='adp'
 
-    if ('company_id' in request.POST and str(request.POST['company_id']) == 'amundi_ext') or request.path.rsplit('/', 1)[1]=='amundi_ext' or ('company_id' in request.GET and str(request.GET['company_id']) == 'amundi_ext'):
+    if ('company' in request.POST and request.POST['company'] is 'amundi_ext') or request.path.rsplit('/', 1)[1]=='amundi_ext':
         entity_id='amundi_ext'
-    if ('company' in request.POST and str(request.POST['company']) == 'amundi_ext') or request.path.rsplit('/', 1)[1]=='amundi_ext' or ('company' in request.GET and str(request.GET['company']) == 'amundi_ext'):
+    if 'entity_id' in request.POST and str(request.POST['entity_id']) == 'amundi_ext':
         entity_id='amundi_ext'
-    if ('entity_id' in request.POST and str(request.POST['entity_id']) == 'amundi_ext') or ('entity_id' in request.GET and str(request.GET['entity_id']) == 'amundi_ext'):
-        entity_id='amundi_ext'
-
-
-    if ('company_id' in request.POST and str(request.POST['company_id']) == 'herta') or request.path.rsplit('/', 1)[1]=='herta' or ('company_id' in request.GET and str(request.GET['company_id']) == 'herta'):
-        entity_id='herta'
-    if ('company' in request.POST and str(request.POST['company']) == 'herta') or request.path.rsplit('/', 1)[1]=='herta' or ('company' in request.GET and str(request.GET['company']) == 'herta'):
-        entity_id='herta'
-    if ('entity_id' in request.POST and str(request.POST['entity_id']) == 'herta') or ('entity_id' in request.GET and str(request.GET['entity_id']) == 'herta'):
-        entity_id='herta'
-
-
-	
-    if ('company' in request.POST and request.POST['company'] is 'amundi') or request.path.rsplit('/', 1)[1]=='amundi':
-        entity_id='amundi'
-        return redirect('/amundi_ext-apoc/psso?email=true&username=true&password=true&cgu=true&firstname=true&lastname=true&company=amundi_ext')
-    if 'entity_id' in request.POST and str(request.POST['entity_id']) == 'amundi':
-        entity_id='amundi'
-        return redirect('/amundi_ext-apoc/psso?email=true&username=true&password=true&cgu=true&firstname=true&lastname=true&company=amundi_ext')
-
-
-    AUDIT_LOG.info("Company: "+entity_id)
-
-    AUDIT_LOG.info(request.POST)
-    AUDIT_LOG.info(request.POST.get('username'))
-    AUDIT_LOG.info(request.POST.get('PID',None))
-    AUDIT_LOG.info(request.user.is_authenticated())
-    # Modif - Cyril - 19 11 2024
-    entity_id = 'amundi_ext'
-
-    # Over simplified code for amundi_ext
-    if entity_id == 'amundi_ext':
-        if request.user.is_authenticated():
-        # we are already authenticated
-            AUDIT_LOG.info('already authent')
-            response = HttpResponseRedirect("/amundi_ext-apoc")
-            return response
-        elif request.POST.get('username',None):
-        # we are enrolling
-            username = request.POST.get('username')
-            firstname = request.POST.get('firstname')
-            lastname = request.POST.get('lastname')
-            email = request.POST.get('email')
-            password = request.POST.get('password')
-            pid_given = request.POST.get('PID')
-            data = {"username":username,"first_name":firstname,"last_name":lastname,"email":email,'password':password,'PID':pid_given,'name':firstname+' '+lastname,'entity_id':entity_id,'goals':entity_id}
-
-            log.info(data)
-
-            creation_result = do_tma_user_creation(data, request)
-            if creation_result['success']:
-                log.info("return creation succeeded ")
-
-                new_user = User.objects.filter(email=email)
-                log.info('new_user')
-                log.info(new_user)
-                new_user = new_user[0]
-                log.info(dir(new_user))
-
-                data['user_id']=new_user.id
-                data['avatar']=get_profile_image_urls_for_user(new_user)['medium']
-                data['admin']=new_user.is_staff
-                data['company']=entity_id
-                data['last_login']=None
-
-                data = base64.b64encode(json.dumps(data).encode('utf-8')).decode('utf-8')
-                response = JsonResponse({
-                    "success": True,
-                    "redirect_url": '/mooc-agency-apoc',
-                })
-                response.set_cookie('cookie_apoc', data)
-
-
-                #return JsonResponse({'message':"Creation succeeded"}, status=200)
-                return response
-
-        elif request.POST.get('PID',None):
-        # we are logging in
-            log.info('PID is not None')
-            return do_tma_login(request,request.POST.get('PID'),entity_id,no_redirect = True,true_password = request.POST['password'])
-        else:
-        # we need to create account or login
-            return redirect('/amundi_ext-apoc/psso?email=true&username=true&password=true&cgu=true&firstname=true&lastname=true&company=amundi_ext')
-
-
-    # Over simplified code for HERTA
-    if entity_id == 'herta':
-        if request.user.is_authenticated():
-        # we are already authenticated
-            response = HttpResponseRedirect("/herta-apoc")
-            return response
-        elif request.POST.get('username',None):
-        # we are enrolling
-            username = request.POST.get('username')
-            firstname = request.POST.get('firstname')
-            lastname = request.POST.get('lastname')
-            email = request.POST.get('email')
-            password = request.POST.get('password')
-            pid_given = request.POST.get('PID')
-            data = {"username":username,"first_name":firstname,"last_name":lastname,"email":email,'password':password,'PID':pid_given,'name':firstname+' '+lastname,'entity_id':entity_id,'goals':entity_id}
-
-            creation_result = do_tma_user_creation(data)
-            if creation_result['success']:
-                return JsonResponse({'message':"Creation succeeded"}, status=200)
-        elif request.POST.get('PID',None):
-        # we are logging in
-                return do_tma_login(request,request.POST.get('PID'),entity_id,no_redirect = True,true_password = request.POST['password'])
-        else:
-        # we need to create account or login
-            return redirect('/herta-apoc/psso?email=true&username=true&password=true&cgu=true&firstname=true&lastname=true&company=herta')
-
-
-
-    log.info(request.user)
 
     #FIRST WE LOOK IF WE ARE ALREADY AUTHENTICATED
     if request.user.is_authenticated():
@@ -486,11 +282,29 @@ def auto_login_and_registration(request, initial_mode="login"):
     AUDIT_LOG.info("NOT authenticated: "+pformat(request.POST))
 
     if request.POST.get('PID',None) or (request.session.get('amundi_PID',None) and request.session.get('enrolling',None)):
-        ## HERE WE ENROLL DEPENDING ON THE ENTITY ID, WHICH MAY BE OVERWRITTEN BY SESSION
+        ## HERE WE ENROLL DEPENDING ON THE ENTITY ID, WHICH IS THE LAST PART OF THE URL
+        entity_id='amundi'
+        #apoc_enroll_courseid='course-v1:APOC+APOC01+2017Q2'
+        AUDIT_LOG.info("session data"+pformat(request.session.get('entity_id',None)))
         if request.session.get('entity_id',None):
             entity_id = request.session.get('entity_id',None)
 
-        AUDIT_LOG.info("Entity: "+entity_id)
+        #SPECIFIC FOR ADP
+        if(request.path.rsplit('/', 1)[1]=='adp') or request.POST.get('entity_id',None)=='adp' or request.POST.get('company_id',None)=='adp':
+            AUDIT_LOG.info("ADP inside")
+            entity_id = 'adp'
+
+        #SPECIFIC FOR Amundi
+        if(request.path.rsplit('/', 1)[1]=='amundi') or request.POST.get('entity_id',None)=='amundi' or request.POST.get('company_id',None)=='amundi':
+            AUDIT_LOG.info("amundi inside")
+            entity_id = 'amundi'
+
+        #SPECIFIC FOR AmundiExt
+        if(request.path.rsplit('/', 1)[1]=='amundi_ext') or request.POST.get('entity_id',None)=='amundi_ext' or request.POST.get('company_id',None)=='amundi_ext':
+            AUDIT_LOG.info("amundi_ext inside")
+            entity_id = 'amundi_ext'
+
+
 
         if request.POST.get('PID',None):
             pid_given = request.POST.get('PID',None)
@@ -499,31 +313,18 @@ def auto_login_and_registration(request, initial_mode="login"):
         AUDIT_LOG.info("pid_given:"+pid_given)
 
         if UserProfile.objects.filter(amundiid__exact=pid_given).exists():
-            AUDIT_LOG.info("amundi_ext user exists pid: "+str(pid_given))
-            if entity_id == 'amundi_ext':
-                return do_tma_login(request,pid_given,entity_id,no_redirect = True,true_password = request.POST['password'])
-            else:
-                return do_tma_login(request,request.POST['PID'],entity_id,no_redirect = True)
+            return do_tma_login(request,request.POST['PID'],entity_id)
         else:
             # We have currently no user with that PID
-            AUDIT_LOG.info("No user with that PID: "+pid_given)
-            if (request.session.get('enrolling',None) and request.POST.get('username',None)) or (entity_id == "amundi_ext" and request.POST.get('username',None)):
+            if request.session.get('enrolling',None) and request.POST.get('username',None):
                 #if we are enrolling
                 AUDIT_LOG.info("creating account for "+pformat(request.session))
                 AUDIT_LOG.info("POST data: "+pformat(request.POST))
+                entity_id = request.session.get('entity_id',None)
                 username = request.POST.get('username',None)
                 AUDIT_LOG.info("SESSION data: "+pformat(request.session))
-
-                if request.POST.get('firstname',None):
-                    firstname = request.POST.get('firstname')
-                else:
-                    firstname = request.session['amundi_firstname']
-
-                if request.POST.get('lastname',None):
-                    lastname = request.POST.get('lastname')
-                else:
-                    lastname = request.session['amundi_lastname']
-
+                firstname = request.session['amundi_firstname']
+                lastname = request.session['amundi_lastname']
                 #taking email from POST as it is the email given by the user
                 if 'email' in request.POST:
                     if request.POST['email']  == '':
@@ -533,20 +334,15 @@ def auto_login_and_registration(request, initial_mode="login"):
                 else:
                     email = request.session['amundi_email']
 
-                if entity_id == "amundi_ext":
-                    password = request.POST.get('password')
-                else:
-                    password = request.session['amundi_PID']
-
-                #AUDIT_LOG.info("session_data and contact email - fn: "+request.session['amundi_firstname']+" ln: "+request.session['amundi_lastname']+" amundi_email: "+request.session['amundi_email']+"contact email: "+request.POST.get('email',None)+" password: "+request.session['amundi_PID'])
-                data = {"username":username,"first_name":firstname,"last_name":lastname,"email":email,'password':password,'PID':pid_given,'name':firstname+' '+lastname,'entity_id':entity_id,'goals':entity_id}
+                password = request.session['amundi_PID']
+                AUDIT_LOG.info("session_data and contact email - fn: "+request.session['amundi_firstname']+" ln: "+request.session['amundi_lastname']+" amundi_email: "+request.session['amundi_email']+"contact email: "+request.POST.get('email',None)+" password: "+request.session['amundi_PID'])
+                data = {"username":username,"first_name":firstname,"last_name":lastname,"email":email,'password':password,'name':firstname+' '+lastname,'entity_id':entity_id,"goals":request.session['amundi_email']}
                 AUDIT_LOG.info("user creation for pid: "+pid_given+" and data: "+pformat(data))
                 if request.POST.get('cgu',None) and username:
                     creation_result = do_tma_user_creation(data)
                     if creation_result['success']:
                         AUDIT_LOG.info("Creation succeeded for pid: "+pid_given)
-                        if 'enrolling' in request.session.keys():
-                            del request.session['enrolling']
+                        del request.session['enrolling']
                     else:
                         message = "Error in user creation: "+pformat(data)+str(creation_result['message'])
                         AUDIT_LOG.info(message)
@@ -560,18 +356,11 @@ def auto_login_and_registration(request, initial_mode="login"):
                     message = "No username or no cgu: "+pformat(data)
                     AUDIT_LOG.info(message)
                     return JsonResponse({'message':message}, status=500)
-
-                if entity_id == 'amundi_ext':
-                    AUDIT_LOG.info("we are amundi_ext so try to login with real pwd for pid: "+str(pid_given))
-                    return JsonResponse({'message':"Creation succeeded"}, status=200)
-                else:
-                    return do_tma_login(request,request.POST['PID'],entity_id,no_redirect = True)
+                    
+                return do_tma_login(request,pid_given,entity_id,no_redirect = True)
 
             else:
                 # if we are not currently enrolling already, then we want to start enrolling
-                log.info('not yet enrolled')
-
-
                 if 'email' in request.POST:
                     request.session['amundi_email']=request.POST['email']
                 if 'firstname' in request.POST:
@@ -622,18 +411,8 @@ def auto_login_and_registration(request, initial_mode="login"):
 
 
                 if entity_id == 'amundi_ext':
-                    apoc_enroll_courseid = 'course-v1:amundi_ext+APOC04+2020Q2'
                     cookie_name = 'cookie_apoc_amext'
-                    params += "firstname=true"
-                    params += "&lastname=true"
-                    params += "&email=true"
-                    params += "&password=true"
-                    params += "&cgu=true"
-                    params += "&username=true"
-                    params += "&company_id="+entity_id
-                    response = HttpResponseRedirect('/amundi_ext-apoc'+params)
-                    
-
+                    self.auto_login_and_registration(request
                 if entity_id == 'amundi':
                     apoc_enroll_courseid = 'course-v1:APOC+APOC01+2017Q2'
                     params += "firstname=false"
@@ -647,9 +426,7 @@ def auto_login_and_registration(request, initial_mode="login"):
                     cookie_name = 'cookie_apoc_am'
                     response = HttpResponseRedirect('/amundi-apoc'+params)
 
-                log.info('after set up register ')
-                log.info(response)
-    
+                    
                 #We are ready so do the redirect
                 response.delete_cookie(
                      cookie_name.encode('utf-8'),
@@ -662,11 +439,7 @@ def auto_login_and_registration(request, initial_mode="login"):
             return redirect('/register?course_id='+apoc_enroll_courseid+'&enrollment_action=enroll&entity_id='+entity_id)
     else:
         #If no PID and not authenticated
-        #if entity_id == 'amundi_ext':
-        log.info('redirect else' )
-        return redirect('/amundi_ext-apoc/psso?email=true&username=true&password=true&cgu=true&firstname=true&lastname=true&company=amundi_ext')
-
-        #return redirect('/media/not_authorized.html')
+        return redirect('/media/not_authorized.html')
 
 @require_http_methods(['GET'])
 @ensure_csrf_cookie
@@ -757,7 +530,6 @@ def login_and_registration_form(request, initial_mode="login"):
 
 
 @require_http_methods(['POST'])
-@csrf_exempt
 def password_change_request_handler(request):
     """Handle password change requests originating from the account page.
 

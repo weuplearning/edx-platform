@@ -102,8 +102,12 @@ if settings.FEATURES["ENABLE_COMBINED_LOGIN_REGISTRATION"]:
             {'initial_mode': 'login'}, name="signin_user"),
         url(r'^register$', 'student_account.views.login_and_registration_form',
             {'initial_mode': 'register'}, name="register_user"),
+        #MODIF HERE
         url(r'^autologreg$', 'student_account.views.auto_login_and_registration',
             {'initial_mode': 'register'}, name="auto_login_register"),
+        url(r'^autologreg/.*$', 'student_account.views.auto_login_and_registration',
+            {'initial_mode': 'register'}, name="auto_login_register"),
+
         url(r'^accounts/login$', 'student_account.views.login_and_registration_form',
             {'initial_mode': 'login'}, name="accounts_login"),
     )
@@ -722,3 +726,12 @@ urlpatterns += (
     url(r'^404$', handler404),
     url(r'^500$', handler500),
 )
+
+urlpatterns += (
+    url(
+        r'^apoc/',
+        include('apoc.urls')
+    ),
+    #url(r'^forum_api/{}/forum/new_messages$'.format(settings.COURSE_ID_PATTERN), 'forum_api.views.new_message', name="forum_api_new_message")
+)
+

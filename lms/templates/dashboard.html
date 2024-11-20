@@ -97,7 +97,7 @@ from django.core.urlresolvers import reverse
 
       </ul>
     % else:
-      <section class="empty-dashboard-message">
+      <!-- MODIF HERE<section class="empty-dashboard-message">
         <p>${_("Looks like you haven't enrolled in any courses yet.")}</p>
 
         % if settings.FEATURES.get('COURSES_ARE_BROWSABLE'):
@@ -105,7 +105,7 @@ from django.core.urlresolvers import reverse
             ${_("Find courses now!")}
           </a>
         %endif
-      </section>
+      </section>-->
     % endif
 
     % if staff_access and len(errored_courses) > 0:

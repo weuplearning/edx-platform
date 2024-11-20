@@ -21,10 +21,172 @@ from django.core.urlresolvers import reverse
 <%block name="js_extra">
 <%include file="_js_body_dependencies.html" />
 <%static:js group='discussion'/>
+<%!
+from openedx.core.djangoapps.user_api.accounts.image_helpers import get_profile_image_urls_for_user
+from django.contrib.auth.models import User
+from student.models import UserProfile
+%>
 </%block>
-
+<!--
 <%include file="_discussion_course_navigation.html" args="active_page='discussion'" />
+-->
+<script>
 
+var files_root;
+%if UserProfile.objects.get(user=user).city=="adp":
+files_root="APOCamundi";
+%endif
+%if UserProfile.objects.get(user=user).city=="amundi":
+files_root="APOC%20AMUNDI%20DEPLOIEMENT";
+%endif
+%if UserProfile.objects.get(user=user).city=="sodexo":
+files_root="APOC%20SODEXO";
+%endif
+
+
+
+</script>
+<script>
+var img_avatar = '${get_profile_image_urls_for_user(user)['medium']}';
+var img_logo = 'https://apoc.themoocagency.com/media/apoc/'+files_root+'/interface/home/assetsExt/dashboard/images/logo.png';
+$(document).ready(function(){
+ $('#dashBoardMiniRightLogLeft').css('background-image','url("'+img_avatar+'")');
+ $('#dashBoardMiniLeft').css('background-image','url("'+img_logo+'")');
+ $('#dashBoardMiniRightLogRightDashboard').text('');
+ $('#logName').text('${user.username}');
+ $('body').attr('style','background-color:#D5D5D5 !important;');
+})
+var glossary=function(){window.location.assign('https://apoc.themoocagency.com/media/apoc/' + files_root + '/interface/home/index.html?page=glossaire')
+						;}
+var frameWork=function(){window.location.assign('https://apoc.themoocagency.com/media/apoc/'+files_root+'/interface/home/index.html?page=biblio');}
+var welcome3=function(){window.location.assign('https://apoc.themoocagency.com/media/apoc/'+files_root+'/interface/home/index.html');}
+var tuto=function(){window.location.assign('https://apoc.themoocagency.com/media/apoc/'+files_root+'/interface/home/index.html?page=tutoriel');}
+var bibli=function(){window.location.assign('https://apoc.themoocagency.com/media/apoc/'+files_root+'/interface/home/index.html?page=biblio');}
+
+
+</script>
+<section id="nav_apoc">
+<div id="up_header_tma">
+</div>
+<div style="" class='lateralbar3 bodywelcome' id="bodyWelcome">
+
+   <div class="content" style="margin-left:-57px;padding-bottom:0;">
+
+      <ul id="sdt_menu" class="sdt_menu"  >
+         <div id="font_tma"></div>
+	 <div id="font_tma_bis"></div>
+	 <div id="nav_apoc_bis"></div>
+	 <div id="border_tma"></div>
+
+<a onclick="welcome3()">
+
+         <li class="fa fa-home hvr-sink" style="position:relative;z-index:40000;margin-left:-18px;font-size:30px;color:#B3B3B3;width:88px;margin-top:12px;background-color:#FAFAFA;height:37px;padding-left:28px;-moz-box-shadow: 0px 5px 5px 0px #C6C6C5;-webkit-box-shadow: 0px 5px 5px 0px #C6C6C5;-o-box-shadow: 0px 5px 5px 0px #C6C6C5;box-shadow: 0px 5px 5px 0px #C6C6C5;filter:progid:DXImageTransform.Microsoft.Shadow(color=#C6C6C5, Direction=224, Strength=5);" onclick="welcome()"></li>
+</a>
+         <li style="text-align:center;margin-left:-5px;" id="listItem01">
+
+            <a onclick="tuto()" style="">
+
+            <img src="" alt=""/>
+
+            <span class="sdt_active"></span>
+
+            <span class="sdt_wrap">
+
+            <span class="sdt_link">COMMENT JOUER</span></br>
+
+            <span class="sdt_descr">TUTORIEL</span>
+
+            </span>
+
+            </a>
+
+         </li>
+
+         <li style="text-align:"  id="listItem02">
+
+            <a href="#" style="">
+
+            <img src="" alt=""/>
+
+            <span class="sdt_active"></span>
+
+            <span class="sdt_wrap">
+
+            <span class="sdt_link">FORUM</span></br>
+
+            <span class="sdt_descr" style="text-transform:uppercase;">vos échanges</span>
+
+            </span>
+
+            </a>
+
+            <!-- <div class="sdt_box"> -->
+
+            <!-- <a href="#">Websites</a> -->
+
+            <!-- <a href="#">Illustrations</a> -->
+
+            <!-- <a href="#">Photography</a> -->
+
+            <!-- </div> -->
+
+         </li>
+
+         <li style="text-align:center;"  id="listItem03" onclick="glossary();">
+
+            <a onclick="glossary()" style="">
+
+            <img src="" alt=""/>
+
+            <span class="sdt_active"></span>
+
+            <span class="sdt_wrap">
+
+            <span class="sdt_link">GLOSSAIRE</span></br>
+
+            <span class="sdt_descr" style="text-transform:uppercase;">gestion financière</span>
+
+            </span>
+
+            </a>
+
+         </li>
+
+         <li style="text-align:center;"  id="listItem04" onclick="bibli();">
+
+            <a onlick="bibli()"style="">
+
+            <img src="" alt=""/>
+
+            <span class="sdt_active"></span>
+
+            <span class="sdt_wrap">
+
+            <span class="sdt_link" style="text-transform:uppercase;">bibliothèque</span></br>
+
+            <span class="sdt_descr" style="text-transform:uppercase;">à télécharger</span>
+
+            </span>
+
+            </a>
+
+            <!-- <div class="sdt_box"> -->
+
+            <!-- <a href="#">Job Board Website</a> -->
+
+            <!-- <a href="#">Shopping Cart</a> -->
+
+            <!-- <a href="#">Interactive Maps</a> -->
+
+            <!-- </div> -->
+
+         </li>
+
+      </ul>
+
+   </div>
+  </div>
+</section>
 <section class="discussion container" id="discussion-container"
          data-roles="${roles}"
          data-course-id="${course_id | h}"
@@ -45,5 +207,173 @@ from django.core.urlresolvers import reverse
     </div>
 </section>
 
+
+
 <%include file="_underscore_templates.html" />
 <%include file="_thread_list_template.html" />
+<style>
+@media (min-width: 1200px){
+.container {
+    width: 708px;
+}
+}
+@media (min-width: 992px){
+.container {
+    width: 708px;
+}
+}
+@media (min-width: 768px){
+.container {
+    width: 708px;
+}
+}
+.container {
+ min-width: 0px;
+ padding: 0;
+}
+body.discussion .wmd-panel {
+ min-width: 0px;
+}
+#discussion-container {
+ margin-left: 230px;
+}
+</style>
+<link rel="stylesheet" href="/media/apoc_tma_theme/menuLeft/css/hover.css" type="text/css" media="screen"/>
+<link rel="stylesheet" href="/media/apoc_tma_theme/menuLeft/css/style.css" type="text/css" media="screen"/>
+<link rel="stylesheet" href="/media/apoc_tma_theme/menutop/css/style.css" type="text/css" media="screen"/>
+<link rel="stylesheet" href="/media/apoc/APOCamundi/etape1/css/interfacestyle.css" type="text/css" media="screen"/>
+<!--
+<!-- <script type="text/javascript" src="/media/apoc_tma_theme/menutop/js/starter.js"></script> -->
+<!-- <script type="text/javascript" src="/media/apoc_tma_theme/menutop/js/starter.js"></script> -->
+-->
+<script>
+var userFName = '${user.first_name}';
+var userLName = '${user.last_name}';
+var welcome = '/media/apoc/'+files_root+'i/interface/home/index.html';
+var iframegestion1 = '';
+var iframegestion2 = '';
+var iframegestion3 = '';
+var iframegestion4 = '';
+var iframegestion5 = '';
+var iframegestion6 = '';
+var iframegestion7 = '';
+var iframegestion8 = '';
+</script>
+<!-- <script type="text/javascript" src="/media/apoc_tma_theme/dashboard/js/starter.js"></script> -->
+
+<style>
+#bodyWelcome {
+ height: auto;
+ margin-left: calc((100% - 792px) / 2);
+ float: none;
+}
+.textcontainer {
+    width: 200px;
+    float: left;
+    height: 50px;
+    margin-top: 10px;
+    line-height: 0.9;
+    padding-top: 7px;
+    font-size: 11px;
+    text-align: left;
+}
+
+.menutitle {
+    font-family: 'Helvetica Neue LT Std 55 Roman';
+    font-weight: bold;
+    margin: 10px;
+    margin-left: 0px;
+    text-transform: uppercase;
+    font-size: 12px;
+    color: #727272;
+    cursor: pointer;
+}
+
+.menutext {
+    font-family: 'Helvetica Neue LT Std 55 Roman';
+    font-weight: bold;
+    margin-left: 0px;
+    text-transform: uppercase;
+    font-size: 9px;
+    color: #727272;
+}
+.container .discussion-body .blank-slate .home-helpgrid {
+ width: 100%;
+}
+.container .discussion-body .discussion-article {
+ padding-left: 5px;
+ padding-right: 5px;
+}
+/*#dashBoardMiniRightLogRightDashboard {display:none;}*/
+#up_header_tma {
+ background-image:url('/media/apoc_tma_theme/bansup.png');
+ width: 807px;
+ height: 90px;
+ margin-left: auto;
+ margin-right: auto;
+ margin-bottom: -30px;
+ margin-top: 30px;
+ /*margin-left: 185px;*/
+}
+#sdt_menu {
+ position: relative;
+}
+#font_tma {
+ position: absolute;
+ width: 300px;
+ height: 10px;
+ background: linear-gradient(black,#828282 );
+ opacity: 0.1;
+ left: -19px;
+}
+#font_tma_bis {
+ position: absolute;
+ width: 300px;
+ height: 39px;
+ linear-gradient(to right, #efefef 0%,#f1f1f1 86%,#f8f8f8 100%);
+ opacity: 0.1;
+ left: -19px;
+ top: 20px;
+}
+#global-navigation,body .content-wrapper {
+ width: 1200px;
+ margin-left: auto;
+ margin-right: auto;
+ background-color: #fff;
+}
+
+body .content-wrapper {
+ background-color: #EFEFEF;
+}
+body,.ltr discussion lang_fr {
+ background-color: #D5D5D5 !important;
+ min-height: 100vh;
+}
+.content-wrapper {
+ width: 1200px !important;
+}
+#nav_apoc {
+ background-color: #fff;
+}
+.container .discussion-body {
+ margin-top: 40px;
+}
+#nav_apoc_bis {
+position: absolute;
+z-index:1000;
+left: -20px;
+bottom:-80px;
+height: 30px;
+background-color: #EFEFEF;
+width: 795px;
+}
+#border_tma {
+ position: absolute;
+ z-index: 10;
+ width: 10px;
+ height: 70px;
+ left: -30px;
+ background-image:url('/media/apoc_tma_theme/border.png');
+}
+
+</style>

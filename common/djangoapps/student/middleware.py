@@ -21,6 +21,8 @@ class UserStandingMiddleware(object):
             # one or zero user_accounts associated with a UserStanding
         except UserStanding.DoesNotExist:
             pass
+        except AttributeError:
+            pass
         else:
             if user_account.account_status == UserStanding.ACCOUNT_DISABLED:
                 msg = _(

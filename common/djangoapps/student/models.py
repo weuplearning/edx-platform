@@ -232,7 +232,6 @@ class UserProfile(models.Model):
     # for users imported from our first class.
     language = models.CharField(blank=True, max_length=255, db_index=True)
     location = models.CharField(blank=True, max_length=255, db_index=True)
-
     # Optional demographic data we started capturing from Fall 2012
     this_year = datetime.now(UTC).year
     VALID_YEARS = range(this_year, this_year - 120, -1)
@@ -1070,13 +1069,13 @@ class CourseEnrollment(models.Model):
         if check_access:
             if course is None:
                 raise NonExistentCourseError
-            if CourseEnrollment.is_enrollment_closed(user, course):
-                log.warning(
-                    u"User %s failed to enroll in course %s because enrollment is closed",
-                    user.username,
-                    course_key.to_deprecated_string()
-                )
-                raise EnrollmentClosedError
+            #if CourseEnrollment.is_enrollment_closed(user, course):
+            #    log.warning(
+            #        u"User %s failed to enroll in course %s because enrollment is closed",
+            #        user.username,
+            #        course_key.to_deprecated_string()
+            #    )
+            #    raise EnrollmentClosedError
 
             if CourseEnrollment.objects.is_course_full(course):
                 log.warning(
@@ -1855,3 +1854,40 @@ class CourseEnrollmentAttribute(models.Model):
             name=self.name,
             value=self.value,
         )
+#APOC
+class ApocStatus(models.Model):
+    class Meta(object):
+        db_table = "auth_apocstatus"
+
+    user = models.ForeignKey(User, db_index=True)
+    current_stage = models.IntegerField(blank=True,null=True)
+    score = models.FloatField(blank=True,null=True)
+    scorebis = models.FloatField(blank=True,null=True)
+    timestamp = models.DateTimeField(auto_now=True,null=True)
+
+    def __unicode__(self):
+        """Unicode representation of the attribute. """
+        return u"{namespace}:{name}, {value}".format(
+            namespace=self.namespace,
+            name=self.name,
+            value=self.value,
+        )
+
+    def __unicode__(self):
+    #    return unicode(repr(self))
+        return unicode(self.user.id)
+class ApocScore(models.Model):
+    class Meta(object):
+        db_table = "auth_apocscore"
+
+    user = models.ForeignKey(User, db_index=True)
+    stage_id = models.IntegerField(blank=True,null=True)
+    stage_status = models.CharField(max_length=30,null=True)
+    stage_score = models.FloatField(blank=True,null=True)
+    stage_begin = models.DateTimeField(auto_now=True)
+    stage_last_accessed = models.DateTimeField(auto_now=True)
+
+    def __unicode__(self):
+    #    return unicode(repr(self))
+        return unicode(self.user.id)
+

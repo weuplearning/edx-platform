@@ -203,3 +203,25 @@ from branding import api as branding_api
   }());
 </script>
 % endif
+<script>
+if(window.location.href.indexOf("/register")>-1){
+
+$( document ).ready(function() {
+setInterval(function(){
+   $("body").css("background-color","white !important");
+   $("#register-username-desc").html("Votre pseudonyme (ne peut être changé)");
+   $("#global-navigation").css('height','200px');
+   $(".nav-wrapper").css('display','none');
+   $("label[for='register-honor_code']").html("J'accepte les conditions d'utilisation");
+   $("label[for='register-honor_code']").css('text-align','left');
+},250);
+});
+
+}
+
+</script>
+<style>
+body{
+background-color:white !important;
+}
+</style>

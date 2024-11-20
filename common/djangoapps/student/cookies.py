@@ -9,6 +9,8 @@ from django.utils.http import cookie_date
 from django.conf import settings
 from django.core.urlresolvers import reverse, NoReverseMatch
 
+#MODIF HERE
+from apoc.views import setstatus,setscore
 
 def set_logged_in_cookies(request, response, user):
     """
@@ -92,12 +94,23 @@ def set_logged_in_cookies(request, response, user):
     # Convert relative URL paths to absolute URIs
     for url_name, url_path in header_urls.iteritems():
         header_urls[url_name] = request.build_absolute_uri(url_path)
-
+    """
+    user_id = user.id
+    first = False
+    status = 0
+    score = 0
+    stage_id = 0
+    stage_status = 0
+    stage_score = 0
+    retour_score = setscore(user_id,first,stage_id,stage_status,stage_score)
+    retour_status = setstatus(user_id,first,status,score)
+    data = {'score':retour_score,'status':retour_status}
+    """
     user_info = {
         'version': settings.EDXMKTG_USER_INFO_COOKIE_VERSION,
         'username': user.username,
         'email': user.email,
-        'header_urls': header_urls,
+        'header_urls': header_urls 
     }
 
     # In production, TLS should be enabled so that this cookie is encrypted
@@ -110,7 +123,7 @@ def set_logged_in_cookies(request, response, user):
     # loop in the third-party auth flow, which calls `is_logged_in_cookie_set` to determine
     # whether it needs to set the cookie or continue to the next pipeline stage.
     user_info_cookie_is_secure = request.is_secure()
-
+    
     response.set_cookie(
         settings.EDXMKTG_USER_INFO_COOKIE_NAME.encode('utf-8'),
         json.dumps(user_info),
@@ -126,13 +139,13 @@ def delete_logged_in_cookies(response):
     Delete cookies indicating that the user is logged in.
 
     Arguments:
-        response (HttpResponse): The response sent to the client.
+        response (HttpResponse): The response sent to the client. 
 
     Returns:
         HttpResponse
 
     """
-    for cookie_name in [settings.EDXMKTG_LOGGED_IN_COOKIE_NAME, settings.EDXMKTG_USER_INFO_COOKIE_NAME]:
+    for cookie_name in [settings.EDXMKTG_LOGGED_IN_COOKIE_NAME, settings.EDXMKTG_USER_INFO_COOKIE_NAME,'cookie_apoc','cookie_apoc_am','cookie_apoc_am_ext','sessionid','csrftoken']:
         response.delete_cookie(
             cookie_name.encode('utf-8'),
             path='/',

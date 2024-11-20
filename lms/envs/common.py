@@ -1923,6 +1923,12 @@ INSTALLED_APPS = (
     'teams',
 
     'xblock_django',
+
+    #MODIF TMA TO FIX 500 ERROR WHEN DELETING USERS http://www.dangtrinh.com/2014/05/edx-platform-error-when-deleting-users.html
+    'social.apps.django_app.default',
+    
+    #forum_api geoffrey
+    #'forum_api'
 )
 
 ######################### CSRF #########################################

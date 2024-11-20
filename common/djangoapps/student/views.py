@@ -125,6 +125,11 @@ from notification_prefs.views import enable_notifications
 # Note that this lives in openedx, so this dependency should be refactored.
 from openedx.core.djangoapps.user_api.preferences import api as preferences_api
 
+# MODIF HERE
+from apoc.views import setstatus,setscore
+from openedx.core.djangoapps.user_api.accounts.image_helpers import get_profile_image_urls_for_user
+from django.http import HttpResponseRedirect
+
 
 log = logging.getLogger("edx.student")
 AUDIT_LOG = logging.getLogger("audit")
@@ -662,9 +667,52 @@ def dashboard(request):
         'courses_requirements_not_met': courses_requirements_not_met,
         'ccx_membership_triplets': ccx_membership_triplets,
     }
+    # custom action
+    #return render_to_response('dashboard.html', context)
+    user_id = request.user.id
+    username = request.user.username
+    first_name = request.user.first_name
+    last_name = request.user.last_name
+    avatar = get_profile_image_urls_for_user(request.user)['medium']
+    first = True
+    status = 0
+    score = 0
+    stage_id = 0
+    stage_status = 0
+    stage_score = 0
+    retour_score = setscore(user_id,first,stage_id,stage_status,stage_score)
+    retour_status = setstatus(user_id,first,status,score)
+    user_info = {'username':username,'first_name':first_name,'last_name':last_name,'avatar':avatar}
+    data = {'user':user_info,'score':retour_score,'status':retour_status}
 
-    return render_to_response('dashboard.html', context)
+    is_admin = False
+    userprofile = UserProfile.objects.get(user=request.user)
+    entity_id = userprofile.city
+    data = {'user_id':user_id,'username':username,'first_name':first_name,'last_name':last_name,'avatar':avatar,'admin':is_admin,'company':entity_id}
+    
+    log.info("redirect to mooc-agency-apoc")
+    if userprofile.city == 'adp':
+        #reponse = HttpResponseRedirect('/media/apoc/APOCamundi/interface/home/index.html')
+        #reponse = HttpResponseRedirect('/media/apoc/APOCamundi/frameWork/index.html')
+        response = HttpResponseRedirect('/mooc-agency-apoc')
+    elif userprofile.city == 'sodexo':
+        #reponse = HttpResponseRedirect('/media/apoc/APOC%20SODEXO/interface/home/index.html')
+        #reponse = HttpResponseRedirect('/media/apoc/APOC%20SODEXO/frameWork/index.html')
+        response = HttpResponseRedirect('/mooc-agency-apoc')
+    elif userprofile.city == 'amundi':
+        #reponse = HttpResponseRedirect('/media/apoc/APOC%20AMUNDI%20DEPLOIEMENT/interface/home/index.html')
+        #response = HttpResponseRedirect('/media/not_authorized.html')
 
+        response = HttpResponseRedirect('/mooc-agency-apoc')
+
+
+    else:
+        #response = HttpResponseRedirect('/media/not_authorized.html')
+
+        response = HttpResponseRedirect('/mooc-agency-apoc')
+
+    response.set_cookie('cookie_apoc', data)
+    return response    
 
 def _create_recent_enrollment_message(course_enrollment_pairs, course_modes):
     """Builds a recent course enrollment message
@@ -1195,6 +1243,25 @@ def login_user(request, error=""):  # pylint: disable-msg=too-many-statements,un
 
         # Ensure that the external marketing site can
         # detect that the user is logged in.
+	# MODIF HERE SET A NEW COOKIE
+	"""
+        user_id = user.id
+        username = user.username
+        first_name = user.first_name
+        last_name = user.last_name
+        avatar = get_profile_image_urls_for_user(user)['medium']
+        first = False
+        status = 0
+        score = 0
+        stage_id = 0
+        stage_status = 0
+        stage_score = 0
+        retour_score = setscore(user_id,first,stage_id,stage_status,stage_score)
+        retour_status = setstatus(user_id,first,status,score)
+	user_info_tma = {'username':username,'first_name':first_name,'last_name':last_name,'avatar':avatar}
+        data = {'user':user_info_tma,'score':retour_score,'status':retour_status}
+	response.set_cookie('cookie_apoc', data)
+	"""
         return set_logged_in_cookies(request, response, user)
 
     if settings.FEATURES['SQUELCH_PII_IN_LOGS']:
@@ -1257,9 +1324,8 @@ def logout_user(request):
     if settings.FEATURES.get('AUTH_USE_CAS'):
         target = reverse('cas-logout')
     else:
-        target = '/'
+        target = '/media/disconnected.html'
     response = redirect(target)
-
     delete_logged_in_cookies(response)
     return response
 
@@ -1376,7 +1442,7 @@ def user_signup_handler(sender, **kwargs):  # pylint: disable=unused-argument
             log.info(u'user {} originated from a white labeled "Microsite"'.format(kwargs['instance'].id))
 
 
-def _do_create_account(form):
+def _do_create_account(form,course_id):
     """
     Given cleaned post variables, create the User and UserProfile objects, as well as the
     registration for this user.
@@ -1433,9 +1499,19 @@ def _do_create_account(form):
         **{key: form.cleaned_data.get(key) for key in profile_fields}
     )
     extended_profile = form.cleaned_extended_profile
+
     #MODIF HERE
-    profile.amundiid=form.cleaned_data["password"]
+    profile.amundiid = ''
+    if "course-v1:APOC+APOC01+2017Q2" in course_id:
+        profile.amundiid = form.cleaned_data["password"]
+        profile.city = "amundi"
+    if "course-v1:ADP+APOC02+2018Q1" in course_id:
+        profile.amundiid = form.cleaned_data["password"]
+        profile.city = "adp"
+    if "course-v1:Sodexo+APOC03+2018Q1" in course_id:
+        profile.city = "sodexo"
     #END OF MODIF HERE
+
     if extended_profile:
         profile.meta = json.dumps(extended_profile)
     try:
@@ -1538,7 +1614,8 @@ def create_account_with_params(request, params):
     # Perform operations within a transaction that are critical to account creation
     with transaction.commit_on_success():
         # first, create the account
-        (user, profile, registration) = _do_create_account(form)
+        # MODIF HERE
+        (user, profile, registration) = _do_create_account(form,params.get('course_id'))
 
         # next, link the account with social auth, if provided via the API.
         # (If the user is using the normal register page, the social auth pipeline does the linking, not this code)
@@ -1634,7 +1711,8 @@ def create_account_with_params(request, params):
             user.email == running_pipeline['kwargs'].get('details', {}).get('email')
         )
     )
-    if send_email:
+    #if send_email:
+    if False:
         context = {
             'name': profile.name,
             'key': registration.activation_key,
@@ -1726,6 +1804,23 @@ def create_account(request, post_override=None):
         'redirect_url': redirect_url,
     })
     set_logged_in_cookies(request, response, user)
+    #GEOFFREY
+    user_id = user.id
+    username = user.username
+    first_name = user.first_name
+    last_name = user.last_name
+    avatar = get_profile_image_urls_for_user(request.user)['medium']
+    first = True
+    status = 0
+    score = 0
+    stage_id = 0
+    stage_status = 0
+    stage_score = 0
+    retour_score = setscore(user_id,first,stage_id,stage_status,stage_score)
+    retour_status = setstatus(user_id,first,status,score)
+    user_info = {'username':username,'first_name':first_name,'last_name':last_name,'avatar':avatar}
+    data = {'user':user_info,'score':retour_score,'status':retour_status}
+    reponse.set_cookie('cookie_apoc', data)
     return response
 
 
@@ -1778,7 +1873,7 @@ def auto_auth(request):
     # If successful, this will return a tuple containing
     # the new user object.
     try:
-        user, profile, reg = _do_create_account(form)
+        user, profile, reg = _do_create_account(form,course_id)
     except AccountValidationError:
         # Attempt to retrieve the existing user.
         user = User.objects.get(username=username)

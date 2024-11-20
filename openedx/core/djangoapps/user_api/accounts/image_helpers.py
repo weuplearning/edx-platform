@@ -92,7 +92,8 @@ def get_profile_image_urls_for_user(user):
         dictionary of {size_display_name: url} for each image.
 
     """
-    if user.profile.has_profile_image:
+    #if user.profile.has_profile_image:
+    if False :
         return _get_profile_image_urls(
             _make_profile_image_name(user.username),
             get_profile_image_storage(),
