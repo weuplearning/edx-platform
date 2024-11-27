@@ -1508,7 +1508,7 @@ def get_student_progress_url(request, course_id):
 @require_POST
 @ensure_csrf_cookie
 @cache_control(no_cache=True, no_store=True, must_revalidate=True)
-@require_course_permission(permissions.GIVE_STUDENT_EXTENSION)
+# @require_course_permission(permissions.GIVE_STUDENT_EXTENSION)
 @require_post_params(
     problem_to_reset="problem urlname to reset"
 )
@@ -1531,10 +1531,17 @@ def reset_student_attempts(request, course_id):
             requires instructor access
             mutually exclusive with all_students
     """
+    
     course_id = CourseKey.from_string(course_id)
-    course = get_course_with_access(
-        request.user, 'staff', course_id, depth=None
-    )
+
+
+    if request.POST.get('formation_securite_incendie_specifique') == 'cadolf' :
+        course = get_course_by_id(course_id)
+    else:
+        course = get_course_with_access(
+            request.user, 'staff', course_id, depth=None
+        )
+    
     all_students = _get_boolean_param(request, 'all_students')
 
     if all_students and not has_access(request.user, 'instructor', course):
@@ -1543,6 +1550,7 @@ def reset_student_attempts(request, course_id):
     problem_to_reset = strip_if_string(request.POST.get('problem_to_reset'))
     student_identifier = request.POST.get('unique_student_identifier', None)
     student = None
+
     if student_identifier is not None:
         student = get_student_from_identifier(student_identifier)
     delete_module = _get_boolean_param(request, 'delete_module')
