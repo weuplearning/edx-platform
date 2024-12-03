@@ -108,11 +108,11 @@ def generate_pdf(request,course_id):
     p.setFillColorRGB(font_color[0]/255, font_color[1]/255, font_color[2]/255)
 
     username = request.user.profile.name
-    if username == "":
+    if username.find('None') != -1 :
         username = (request.user.first_name).capitalize() + " " + (request.user.last_name).upper()
-        if username == " ":
+        if username.find('None') != -1 :
             try:
-                username = json.loads(request.user.profile.custom_field).get('first_name').capitalize() + " " + json.loads(request.user.profile.custom_field).get('last_name').upper()
+                username = json.loads(request.user.profile.custom_field).get('name').capitalize()
             except:
                 username = 'Missing information'
 
@@ -121,7 +121,7 @@ def generate_pdf(request,course_id):
         name_position_x = certificate_config['name_position_x']
     except:
         name_position_x = False
-    
+
     if name_position_x :
         p.drawString(name_position_x, name_position_y, username)
     else:
@@ -137,7 +137,7 @@ def generate_pdf(request,course_id):
         certificate_grade = certificate_config['grade']
     except:
         certificate_grade = False
-    
+
     if certificate_grade :
         result = ensure_csv(request, course_id)
 
@@ -148,16 +148,16 @@ def generate_pdf(request,course_id):
             data = json.loads(content)
         else:
             log.error("Result is not a JsonResponse object")
-             
+
         try :
             text_grade = certificate_grade['syntax_grade']
         except:
-            text_grade = str(data.get("grade")) + '%'
+            text_grade = str(round(data.get("grade"),2)) + '%'
 
         try :
-            text_grade = text_grade.replace('{note}',str(data.get('global_grade')*100))
-        except : 
-            text_grade = text_grade.replace('{note}',str(data.get("grade")*100))
+            text_grade = text_grade.replace('{note}',str(round(data.get('global_grade')*100, 2)))
+        except :
+            text_grade = text_grade.replace('{note}',str(round(data.get("grade")*100, 2)))
 
 
         log.info("text_grade")
