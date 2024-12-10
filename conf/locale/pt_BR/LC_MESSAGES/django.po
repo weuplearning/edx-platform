@@ -1776,30 +1776,30 @@ msgstr[1] ""
 msgid "This password must contain at least %(min_upper)d uppercase letter."
 msgid_plural ""
 "This password must contain at least %(min_upper)d uppercase letters."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "A sua senha deve ter pelo menos %(min_upper)d letra maiúscula."
+msgstr[1] "Esta senha deve conter no mínimo %(min_upper)d letras maiúsculas."
 
 #: common/djangoapps/util/password_policy_validators.py
 #, python-format
 msgid "Your password must contain at least %(min_upper)d uppercase letter."
 msgid_plural ""
 "Your password must contain at least %(min_upper)d uppercase letters."
-msgstr[0] ""
+msgstr[0] "A sua senha deve ter pelo menos %(min_upper)d letra maiúscula."
 msgstr[1] ""
 
 #: common/djangoapps/util/password_policy_validators.py
 #, python-format
 msgid "%(num)d uppercase letter"
 msgid_plural "%(num)d uppercase letters"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(num)d letra maiúscula"
+msgstr[1] "%(num)d letras maiúsculas"
 
 #: common/djangoapps/util/password_policy_validators.py
 #, python-format
 msgid "This password must contain at least %(min_lower)d lowercase letter."
 msgid_plural ""
 "This password must contain at least %(min_lower)d lowercase letters."
-msgstr[0] ""
+msgstr[0] "A sua senha deve ter pelo menos %(min_upper)d letra minúscula."
 msgstr[1] ""
 
 #: common/djangoapps/util/password_policy_validators.py
@@ -1807,14 +1807,14 @@ msgstr[1] ""
 msgid "Your password must contain at least %(min_lower)d lowercase letter."
 msgid_plural ""
 "Your password must contain at least %(min_lower)d lowercase letters."
-msgstr[0] ""
+msgstr[0] "A sua senha deve ter pelo menos %(min_upper)d letra minúscula."
 msgstr[1] ""
 
 #: common/djangoapps/util/password_policy_validators.py
 #, python-format
 msgid "%(num)d lowercase letter"
 msgid_plural "%(num)d lowercase letters"
-msgstr[0] ""
+msgstr[0] "%(num)d letra minúscula."
 msgstr[1] ""
 
 #: common/djangoapps/util/password_policy_validators.py
@@ -11153,11 +11153,15 @@ msgid ""
 "Usernames can only contain letters (A-Z, a-z), numerals (0-9), underscores "
 "(_), and hyphens (-)."
 msgstr ""
+"Nomes de usuário devem conter apenas letras(A-Z, a-z), números (0-9), "
+"sublinhados (_) e hífens (-), sem espaço."
 
 #: openedx/core/djangoapps/user_api/accounts/__init__.py
 msgid ""
 "Usernames can only contain letters, numerals, and @/./+/-/_ characters."
 msgstr ""
+"Nomes de usuário devem conter apenas letras(A-Z, a-z), números (0-9), "
+"sublinhados (_) e hífens (-), sem espaço."
 
 #. Translators: This message is shown to users who attempt to create a new
 #. account using
@@ -11382,7 +11386,7 @@ msgstr "Lembrar-me"
 #. below a field meant to hold the user's email address.
 #: openedx/core/djangoapps/user_api/api.py
 msgid "This is what you will use to login."
-msgstr ""
+msgstr "Isto é o que você usará para fazer login."
 
 #. Translators: This label appears above a field on the registration form
 #. meant to confirm the user's email address.
@@ -11395,7 +11399,7 @@ msgstr ""
 #. below a field meant to hold the user's full name.
 #: openedx/core/djangoapps/user_api/api.py
 msgid "This name will be used on any certificates that you earn."
-msgstr ""
+msgstr "Este nome será usado em todos os certificados que você ganhar."
 
 #: cms/templates/register.html lms/templates/register-form.html
 #: lms/templates/register-shib.html lms/templates/signup_modal.html
@@ -11411,6 +11415,8 @@ msgstr "Nome de usuário público"
 msgid ""
 "The name that will identify you in your courses. It cannot be changed later."
 msgstr ""
+"O nome que irá identificá-lo em seus cursos. Você não pode alterar "
+"posteriormente."
 
 #. Translators: This label appears above a dropdown menu on the registration
 #. form used to select the user's highest completed level of education.
