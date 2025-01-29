@@ -176,7 +176,7 @@ def get_sncf_jobs_conduite(request):
     url_conduite_transverse = jobs_url_builder(domain=domain,key=k_conduite_transverse,key_prefix=k_prefix,arguments=arguments)
 
     # blacklist=[]
-    blacklist=[' FRET']
+    blacklist=[' FRET',' fret',' Fret']
 
     # Emploi repère autorisés
     job_markers_conduite = ['852','470','854','301','853','599','303','310']
