@@ -13358,7 +13358,7 @@ msgstr ""
 
 #: lms/templates/_gated_content.html lms/templates/seq_module.html
 msgid "Content Locked"
-msgstr "Contenu vérouillé"
+msgstr "Contenu verrouillé"
 
 #: lms/templates/_gated_content.html
 msgid ""

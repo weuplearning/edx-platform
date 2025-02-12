@@ -13072,17 +13072,19 @@ msgstr ""
 
 #: lms/templates/_gated_content.html lms/templates/seq_module.html
 msgid "Content Locked"
-msgstr ""
+msgstr "Conteúdo bloqueado"
 
 #: lms/templates/_gated_content.html
 msgid ""
 "You must complete the prerequisites for '{prereq_section_name}' to access "
 "this content."
 msgstr ""
+"Você deve completar a subseção '{prereq_section_name}' para acessar "
+"este conteúdo."
 
 #: lms/templates/_gated_content.html
 msgid "Go to Prerequisite Section"
-msgstr ""
+msgstr "Ir para pré-requisito"
 
 #: lms/templates/annotatable.html
 msgid "Collapse Instructions"
