@@ -54,6 +54,36 @@ def share_linkedin(request):
                 "com.linkedin.ugc.MemberNetworkVisibility": "PUBLIC"
             }
         }
+
+    elif course_id.find("OFM+02") != -1 :
+
+        badge_data = {
+            "author": "urn:li:person:"+profile_info.get('sub') ,
+            "lifecycleState": "PUBLISHED",
+            "specificContent": {
+                "com.linkedin.ugc.ShareContent": {
+                    "shareCommentary": {
+                        "text": " Acabei de ganhar um badge por ter concluído uma lição do curso Objectif Français Militaire, nível A2, da Aliança Francesa Online com sucesso!"
+                    },
+                    "shareMediaCategory": "IMAGE",
+                    "media": [{
+                        "status": "READY",
+                        "description": {
+                            "text": "badge " + badge
+                        },
+                        "media": upload_badge_link_data["value"]["asset"],
+                        "title": {
+                            "text": "Premier pas"
+                        }
+                    }]
+                }
+            },
+            "visibility": {
+                "com.linkedin.ugc.MemberNetworkVisibility": "PUBLIC"
+            }
+        }
+
+
     else :
 
         badge_data = {
