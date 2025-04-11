@@ -46,6 +46,12 @@ username = get_enterprise_learner_generic_name(request) or student.username
 </script>
 </%block>
 
+<style>
+#course-success, .wrapper-auto-cert {
+    display: none !important;
+}
+</style>
+
 <%include file="/courseware/course_navigation.html" args="active_page='progress'" />
 
 <main id="main" aria-label="Content" tabindex="-1">
