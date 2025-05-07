@@ -4,13 +4,299 @@
 
 <%block name="pagetitle">${_("FAQ")}</%block>
 
+
 <main id="main" aria-label="Content" tabindex="-1">
-    <section class="container about">
-        <h1>
-            <%block name="pageheader">${page_header or _("FAQ")}</%block>
-        </h1>
-        <p>
-            <%block name="pagecontent">${page_content or _("This page left intentionally blank. Feel free to add your own content.")}</%block>
-        </p>
-    </section>
+    <div id="faqList">
+
+        <h2>FAQ - Foire Aux Questions</h2>
+
+        <div style="border-bottom: solid 1px black;">
+            <div class="faq-question">
+                <span>Comment s'inscrire à un cours ?</span>
+                <span class="fa fa-chevron-down"></span>
+            </div>
+            <div class="faq-answer">Pour vous inscrire, connectez-vous à votre compte, allez sur la page du cours et cliquez sur "S'inscrire".</div>
+        </div>
+
+
+        <div style="border-bottom: solid 1px black;">
+            <div class="faq-question">
+                <span>Les cours sont-ils gratuits ?</span>
+                <span class="fa fa-chevron-down"></span>
+            </div>
+            <div class="faq-answer">Certains cours sont gratuits, tandis que d'autres nécessitent un paiement pour obtenir un certificat.</div>
+        </div>
+
+
+        <div style="border-bottom: solid 1px black;">
+            <div class="faq-question">
+                <span>Comment obtenir un certificat ?</span>
+                <span class="fa fa-chevron-down"></span>
+            </div>
+            <div class="faq-answer">Un certificat est délivré après la réussite des évaluations et le paiement des frais éventuels.</div>
+        </div>
+
+
+        <div style="border-bottom: solid 1px black;">
+            <div class="faq-question">
+                <span>Puis-je accéder aux cours depuis mon mobile ?</span>
+                <span class="fa fa-chevron-down"></span>
+            </div>
+            <div class="faq-answer">Oui ! Vous pouvez suivre les cours sur votre smartphone via un navigateur web ou une application mobile dédiée.</div>
+        </div>
+
+
+        <div style="border-bottom: solid 1px black;">
+
+            <div class="faq-question">
+                <span>Que faire si j’ai oublié mon mot de passe ?</span>
+                <span class="fa fa-chevron-down"></span>
+            </div>
+            <div class="faq-answer">Vous pouvez réinitialiser votre mot de passe en cliquant sur "Mot de passe oublié" sur la page de connexion.</div>
+        </div>
+
+
+        <div style="border-bottom: solid 1px black;">
+            <div class="faq-question">
+                <span>Y a-t-il des prérequis pour suivre un cours ?</span>
+                <span class="fa fa-chevron-down"></span>
+            </div>
+            <div class="faq-answer">Certains cours exigent des connaissances préalables. Consultez la description du cours pour en savoir plus.</div>
+        </div>
+
+
+        <div style="border-bottom: solid 1px black;">
+            <div class="faq-question">
+                <span>Comment contacter le support ?</span>
+                <span class="fa fa-chevron-down"></span>
+            </div>
+            <div class="faq-answer">Vous pouvez nous contacter via le formulaire de contact ci dessous.</div>
+        </div>
+
+
+        <div style="border-bottom: solid 1px black;">
+            <div class="faq-question">
+                <span>Puis-je obtenir un remboursement ?</span>
+                <span class="fa fa-chevron-down"></span>
+            </div>
+            <div class="faq-answer">Les remboursements sont possibles sous certaines conditions. Consultez notre politique de remboursement.</div>
+        </div>
+
+
+        <div style="border-bottom: solid 1px black;">
+            <div class="faq-question">
+                <span>Combien de temps ai-je accès aux cours ?</span>
+                <span class="fa fa-chevron-down"></span>
+            </div>
+            <div class="faq-answer">L'accès dépend du type de cours : certains sont accessibles à vie, d'autres pour une durée limitée.</div>
+        </div>
+
+
+        <div style="border-bottom: solid 1px black;">
+            <div class="faq-question">
+                <span>Comment fonctionne l’évaluation ?</span>
+                <span class="fa fa-chevron-down"></span>
+            </div>
+            <div class="faq-answer">Les évaluations peuvent inclure des quiz, des devoirs et des examens finaux notés.</div>
+        </div>
+
+
+        <div style="border-bottom: solid 1px black;">
+            <div class="faq-question">
+                <span>Je ne trouve pas la réponse à ma question, comment contacter demander une assistance ?</span>
+                <span class="fa fa-chevron-down"></span>
+            </div>
+            <div class="faq-answer">
+
+                <p>En cas de question supplémentaire vous pouvez nous contacter via le formulaire ci dessous (soyez le plus précis possible afin de traiter votre demande au plus vite) :</p>
+
+                <div id="contactForm">
+
+                    <form action="contactForm" method="POST">
+                        <label for="name">Nom complet :</label>
+                        <input type="text" id="name" name="name" required>
+
+                        <label for="email">Email :</label>
+                        <input type="email" id="email" name="email" required>
+
+                        <label for="message">Message :</label>
+                        <textarea id="message" name="message" rows="5" required></textarea>
+
+                        <button type="button" onclick="clickTosend()">Envoyer</button>
+                    </form>
+                    <p id="pMessage"></p> 
+
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
 </main>
+
+
+<style>
+    .content-wrapper {
+        min-height: calc(100vh - 82px - 200px) ;
+        margin-top: 50px 0px;
+    }
+    #faqList {
+        max-width: 80vw;
+        margin: auto;
+    }
+    .faq-container {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+        background: #f9f9f9;
+    }
+    .faq-question {
+        cursor: pointer;
+        padding: 15px 10px;
+        margin: 5px 0;
+        border-radius: 5px;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: background 0.3s ease-in-out;
+    }
+    .faq-question:hover {
+        background: var( --primary );
+        opacity: 0.6;
+        color: white;
+    }
+
+    .faq-answer {
+        display: none;
+        padding: 10px;
+        margin: 5px 0;
+        background: #ffffff;
+        border-left: 4px solid black;
+    }
+
+
+    /* FORMULAIRE */
+    #contactForm {
+        margin: 20px;
+        padding: 20px;
+        max-width: 500px;
+        margin: auto;
+    }
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    label {
+        font-weight: bold;
+        margin-bottom: 0px;
+    }
+    input, textarea {
+        width: 100%;
+        padding: 10px !important;
+        height: 100% !important;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    button {
+        width: 70%;
+        margin: auto;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background-image: unset !important;
+    }
+    #pMessage {
+        color: green;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+</style>
+
+
+
+<script>
+
+$(document).ready(function(){
+    $(".faq-question").click(function(){
+        var answer = $(this).next(".faq-answer");
+        var arrow = $(this).find(".fa-chevron-down");
+
+        console.log(answer);
+        console.log(arrow);
+        
+
+        // Ferme toutes les autres réponses
+        $(".faq-answer").not(answer).slideUp();
+        $(".fa-chevron-down").not(arrow).removeClass("fa-rotate-180");
+
+        // Toggle la réponse sélectionnée
+        answer.slideToggle();
+        // arrow.addClass("fa-rotate-180");
+        arrow.toggleClass("fa-rotate-180");
+        // arrow.text(arrow.hasClass("fa-rotate-180") ? "🔼" : "🔽");
+    });
+});
+
+
+function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+
+function sendEmail(data) {
+    $.ajax({
+        url: '/wul_apps/mail_sender/contact_msg',
+        dataType: 'json',
+        type: 'POST',
+        headers: {
+            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        },
+        data: data,
+        success: function(data){
+            console.log('message sent');
+            $('#pMessage').text("Votre message a bien été pris en compte.").css("color", "green");
+        },
+        error: function() {
+            $('#pMessage').text("Une erreur est survenue, veuillez réessayer ou contactez technical@weuplearning.com").css("color", "red");
+        }
+    });
+};
+
+
+function clickTosend() {
+
+    var name = $("input[name=name").val();
+    var email = $("input[name=email").val();
+    var message = $("textarea[name=message").val();
+
+
+    if (name.length > 0  && email.length > 0 && message.length > 0) {
+
+
+        if (!validateEmail(email)) {
+            alert("Attention, l'adresse email n'est pas dans le bon format.");
+            return;
+        }
+
+        var data = {
+            name: name,
+            email: email,
+            message: message,
+        }
+
+        sendEmail(data)
+
+
+    } else {
+        alert("Attention, tous les champs sont obligatoires.");
+    };
+
+};
+
+</script>
