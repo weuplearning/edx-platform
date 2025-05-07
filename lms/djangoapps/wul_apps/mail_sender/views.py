@@ -12,6 +12,8 @@ from email.mime.base import MIMEBase
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+
+import requests  
 import smtplib
 
 import logging
@@ -21,12 +23,14 @@ log = logging.getLogger()
 @csrf_exempt
 @require_POST
 def contact_msg(request):
+
     toaddr = 'support@weuplearning.com'
     cc = ['cyril.adolf@weuplearning.com']
 
     name = str(request.POST.get('name'))
     email = str(request.POST.get('email'))
     message = str(request.POST.get('message'))
+
     url = str(request.site)
 
     if name and message and email : 
@@ -49,7 +53,7 @@ def contact_msg(request):
         text = msg.as_string()
         server.sendmail(fromaddr, toaddrs, text)
         server.quit()
-        data = {}
-        data['email'] = email
 
-        return JsonResponse(data)
+        return JsonResponse({'email': email})
+
+    return JsonResponse({'error': 'Champs requis manquants.'}, status=400)
