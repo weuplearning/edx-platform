@@ -27,8 +27,13 @@ from lms.djangoapps.wul_apps.sncf_jobs.views import get_sncf_jobs_surete,get_snc
 from lms.djangoapps.wul_apps.hec.views import hec_pe_check_email
 from lms.djangoapps.wul_apps.social_networks.views import share_linkedin, share_facebook
 
+from lms.djangoapps.wul_apps.mail_sender.views import contact_msg
+
 from lms.djangoapps.wul_apps.open_badge_factory.views import issue_badge
 from lms.djangoapps.wul_apps.custom_fields_editor_umn.views import CustomFieldViewUmn, CustomFieldEditorUmn
+
+from lms.djangoapps.wul_apps.data_visualisation.views import DashboardDataView
+
 
 
 import logging
@@ -142,3 +147,16 @@ urlpatterns +=(
 urlpatterns += (
     url(r'^custom_field_editor_umn/', CustomFieldEditorUmn.as_view(), name='custom_field_editor_umn'),
 )
+
+# Data visualisation
+urlpatterns += (
+    url(r'^data_visualisation$', render_views, name="render_views"),
+    url(r'^api/stats', DashboardDataView.as_view(), name="dashboard_data_view")
+)
+
+
+# Contact Send_mail
+urlpatterns += (
+    url(r'^mail_sender/contact_msg$', contact_msg, name="contact_msg"),
+)
+
