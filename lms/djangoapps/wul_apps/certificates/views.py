@@ -69,6 +69,26 @@ def draw_text(p, text, font_name, font_size, color, x, y, page_width):
         p.drawString(centered_x, y, text)
 
 
+def draw_multiline_text_centered(canvas, text, font_name, font_size, font_color, x, y, line_spacing=1.2):
+    """
+    Dessine un texte multi-ligne, centré horizontalement sur la position X donnée,
+    avec Y représentant le haut du bloc de texte (pas le centre).
+    """
+
+    lines = text.split('\n')
+    line_height = font_size * line_spacing
+    start_y = y
+
+    canvas.setFont(font_name, font_size)
+    canvas.setFillColorRGB(font_color[0]/255, font_color[1]/255, font_color[2]/255)
+
+    for i, line in enumerate(lines):
+        text_width = stringWidth(line, font_name, font_size)
+        line_x = x - text_width / 2  # centré horizontalement autour de x
+        line_y = start_y - i * line_height
+        canvas.drawString(line_x, line_y, line)
+
+
 def get_username(user):
     name = user.profile.name
     if name:
@@ -155,13 +175,35 @@ def generate_pdf(request, course_id):
 
     # GRADE
     certificate_grade = safe_get(certificate_config, 'grade')
+    detailed_grade = safe_get(certificate_config, 'detailed_grade')
+
     if certificate_grade:
         result = ensure(request, course_id)
         if isinstance(result, JsonResponse):
             data = json.loads(result.content.decode('utf-8'))
 
-            text_grade = certificate_grade['syntax_grade'] + str(data.get("grade"))
+            text_grade = safe_get(certificate_grade, 'syntax_grade')
+            text_grade += str(data.get("grade")*100) + '%'
+
             draw_text(p, text_grade, font_name, certificate_grade['font_size'], safe_get(certificate_grade, 'font_color', [0, 0, 0]), safe_get(certificate_grade, 'position_x'), certificate_grade['position_y'], page_width)
+
+            if detailed_grade :
+
+                text_grade_detailed = safe_get(detailed_grade, 'syntax_detailed_grade')
+                detailed_grade_data = data.get("grade_summary").get("section_breakdown")
+                for section in detailed_grade_data :
+                    text_grade_detailed += section['detail'] + '\n'
+
+                draw_multiline_text_centered(
+                    canvas=p,
+                    text=text_grade_detailed,
+                    font_name=font_name,
+                    y=safe_get(detailed_grade, 'position_y', 0),
+                    x=safe_get(detailed_grade, 'position_x', 0),
+                    font_size=safe_get(detailed_grade, 'font_size'),
+                    font_color=safe_get(detailed_grade, 'font_color', [255, 255, 255]),
+                    line_spacing=1.2
+                )
 
     # DATE
     certificate_date = safe_get(certificate_config, 'date')
