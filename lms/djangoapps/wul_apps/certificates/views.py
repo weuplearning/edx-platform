@@ -183,7 +183,8 @@ def generate_pdf(request, course_id):
             data = json.loads(result.content.decode('utf-8'))
 
             text_grade = safe_get(certificate_grade, 'syntax_grade')
-            text_grade += str(data.get("grade")*100) + '%'
+            grade_g = f"{data.get('grade') * 100:.0f}%"
+            text_grade += grade_g
 
             draw_text(p, text_grade, font_name, certificate_grade['font_size'], safe_get(certificate_grade, 'font_color', [0, 0, 0]), safe_get(certificate_grade, 'position_x'), certificate_grade['position_y'], page_width)
 
