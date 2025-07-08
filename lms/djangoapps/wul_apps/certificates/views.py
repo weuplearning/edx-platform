@@ -17,7 +17,7 @@ from reportlab.rl_config import defaultPageSize
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
 
-from datetime import date
+from datetime import date, datetime
 
 from lms.djangoapps.wul_apps.models import WulCourseEnrollment
 import requests
@@ -56,6 +56,77 @@ def render_partial(request,course_id):
     course_key = SlashSeparatedCourseKey.from_string(course_id)
     return certificate(course_key,request.user).view_partial_certificate(request)
 
+
+def safe_get(config, key, default=None):
+    try:
+        return config[key]
+    except (KeyError, TypeError):
+        return default
+
+
+def draw_text(p, text, font_name, font_size, color, x, y, page_width):
+    p.setFont(font_name, font_size)
+    p.setFillColorRGB(color[0]/255, color[1]/255, color[2]/255)
+    if x:
+        p.drawString(x, y, text)
+    else:
+        text_width = stringWidth(text, font_name, font_size)
+        centered_x = (page_width - text_width) / 2.0
+        p.drawString(centered_x, y, text)
+
+
+def get_username(user):
+    name = user.profile.name
+    if name:
+        return name
+    full_name = f"{user.first_name.capitalize()} {user.last_name.upper()}"
+    if full_name.strip():
+        return full_name
+    try:
+        cf = json.loads(user.profile.custom_field)
+        return f"{cf.get('first_name', '').capitalize()} {cf.get('last_name', '').upper()}"
+    except:
+        return "Missing information"
+
+
+def translate_date(today, lang):
+    string_date = today.strftime('%d %B %Y')
+    months = {
+        'en': [],
+        'fr': ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+        'pt': ['de Janeiro de', 'de Fevereiro de', 'de Março de', 'de Abril de', 'de Maio de', 'de Junho de', 'de Julho de', 'de Agosto de', 'de Setembro de', 'de Outubro de', 'de Novembro de', 'de Dezembro de'],
+    }
+    english_months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    for i, month in enumerate(english_months):
+        if month in string_date:
+            if lang in months and months[lang]:
+                return string_date.replace(month, months[lang][i])
+    return string_date
+
+
+def check_user_success_date(user, course_id):
+    """ Check if the user success date already exists, if not create it """
+
+    today_str = date.today().isoformat() 
+    try:
+        user_profile = UserProfile.objects.get(user=user)
+        user_custom_fields = json.loads(user_profile.custom_field)
+    except:
+        return today_str
+
+    field_name = 'success_date_' + course_id
+    if field_name in user_custom_fields and user_custom_fields[field_name] != '':
+        context = {'is_recorded': True, 'success_date': user_custom_fields[field_name]}
+    else:
+        # The first time, add the success date to the custom field
+        user_custom_fields[field_name] = today_str
+        user_profile.custom_field = json.dumps(user_custom_fields)
+        user_profile.save()
+        context = {'is_recorded': False, 'success_date': today_str}
+
+    return context['success_date']
+
+
 @login_required
 @require_GET
 def generate_pdf(request,course_id):
@@ -67,24 +138,14 @@ def generate_pdf(request,course_id):
     # Setup SIZE, IMAGE, FONT and COLOR
     page_width = certificate_config['certificate_width']
     page_height = certificate_config['certificate_height']
+    image_url = certificate_config['certificate_url']
 
-    try:
-        multi_certificate = certificate_config['multi_certificate']
-    except:
-        multi_certificate = False
-
+    multi_certificate = safe_get(certificate_config, 'multi_certificate', False)
     if multi_certificate :
         image_url = certificate_config['certificate_url'][request.GET.get("certificate")]
-    else:
-        image_url = certificate_config['certificate_url']
 
-    try:
-        font_name = certificate_config['font_name']
-        font_url = certificate_config['font_url']
-    except:
-        font_name = 'OpenSans'
-        font_url = "/edx/var/edxapp/staticfiles/fonts/OpenSans/OpenSans-Regular-webfont.ttf"
-
+    font_name = safe_get(certificate_config, 'font_name', 'OpenSans')
+    font_url = safe_get(certificate_config, 'font_url', "/edx/var/edxapp/staticfiles/fonts/OpenSans/OpenSans-Regular-webfont.ttf")
     pdfmetrics.registerFont(TTFont(font_name, font_url))
 
     # Create the HttpResponse object with the appropriate PDF headers.
@@ -98,36 +159,10 @@ def generate_pdf(request,course_id):
 
 
     # USERNAME
+    username = get_username(request.user)
     font_size = certificate_config['font_size']
-    p.setFont(font_name, font_size)
-
-    try:
-        font_color = certificate_config['font_color']
-    except:
-        font_color = [0, 0, 0]
-    p.setFillColorRGB(font_color[0]/255, font_color[1]/255, font_color[2]/255)
-
-    username = request.user.profile.name
-    if username.find('None') != -1 :
-        username = (request.user.first_name).capitalize() + " " + (request.user.last_name).upper()
-        if username.find('None') != -1 :
-            try:
-                username = json.loads(request.user.profile.custom_field).get('name').capitalize()
-            except:
-                username = 'Missing information'
-
-    name_position_y = certificate_config['name_position_y']
-    try:
-        name_position_x = certificate_config['name_position_x']
-    except:
-        name_position_x = False
-
-    if name_position_x :
-        p.drawString(name_position_x, name_position_y, username)
-    else:
-        text_width = stringWidth(username, font_name, font_size)
-        centered_text = (page_width - text_width) / 2.0
-        p.drawString(centered_text, name_position_y, username)
+    font_color = safe_get(certificate_config, 'font_color', [0, 0, 0])
+    draw_text(p, username, font_name, font_size, font_color, safe_get(certificate_config, 'name_position_x'), certificate_config['name_position_y'], page_width)
 
 
 
@@ -188,95 +223,30 @@ def generate_pdf(request,course_id):
 
 
     # CERTIFICATE DATE
-    try:
-        certificate_date = certificate_config['date']
-    except:
-        certificate_date = False
-
+    certificate_date = safe_get(certificate_config, 'date')
     if certificate_date:
-        try:
-            date_lang = certificate_date['date_lang'].lower()
-        except:
-            date_lang = 'fr'
+        date_lang = safe_get(certificate_date, 'date_lang', 'fr').lower()
 
-        today = date.today()
-        string_date_en = today.strftime('%d %B %Y')
+        date_value = check_user_success_date(request.user, course_id)
+        formatted_date = datetime.strptime(date_value, "%Y-%m-%d").date()
+        string_date = translate_date(formatted_date, date_lang)
 
-        english_months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-        french_months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
-        portuguese_months = ['de janeiro', 'de fevereiro', 'de março', 'de abril', 'de maio', 'de junho', 'de julho', 'de agosto', 'de setembro', 'de outubro', 'de novembro', 'de dezembro']
+        text_date = certificate_date['syntax_date'] + string_date
+        draw_text(p, text_date, font_name, certificate_date['font_size'], safe_get(certificate_date, 'font_color', [0, 0, 0]), safe_get(certificate_date, 'position_x'), certificate_date['position_y'], page_width)
 
-        string_date_fr = string_date_en
-        string_date_pt = string_date_en
-
-        # Replace English months with French months
-        for index, e in enumerate(english_months):
-            if string_date_en.find(e) != -1:
-                string_date_fr = string_date_en.replace(e, french_months[index])
-                string_date_pt = string_date_en.replace(e, portuguese_months[index])
-
-        try :
-            text_date = certificate_date['syntax_date']
-        except:
-            text_date = ''
-
-
-        if str(date_lang) == 'en':
-            text_date += string_date_en
-        elif str(date_lang) == 'fr':
-            text_date += string_date_fr
-        elif str(date_lang) == 'pt':
-            text_date += string_date_pt
-        else:
-            text_date += string_date_fr         
-
-
-        try:
-            font_color_date = certificate_date['font_color']
-        except:
-            font_color_date = [0, 0, 0]
-        p.setFillColorRGB(font_color_date[0]/255, font_color_date[1]/255, font_color_date[2]/255) 
-
-        font_size = certificate_date['font_size']
-        p.setFont(font_name, font_size)
-
-        date_position_y = certificate_date['position_y']
-        try:
-            date_position_x = certificate_date['position_x']
-        except:
-            date_position_x = False
-
-        if date_position_x:
-            p.drawString(date_position_x, date_position_y, str(text_date))
-        else:
-            text_width_date = stringWidth(str(text_date), font_name, font_size)
-            centered_date = (page_width - text_width_date) / 2.0
-            p.drawString(centered_date, date_position_y, str(text_date))
 
 
 
     # COURSE DURATION
-    try:
-        course_duration = certificate_config['course_duration']
-    except:
-        course_duration = False
-    
+    course_duration = safe_get(certificate_config, 'course_duration')
     if course_duration :
-        try :
+        try:
             enrollment = WulCourseEnrollment.get_enrollment(course_id, request.user)
-            timeInSecond = enrollment.global_time_tracking
-            syntax_duration = course_duration['syntax_duration']
-
-            def getTimeSpent(syntax):
-                hours = timeInSecond // 3600
-                seconds = timeInSecond % 3600
-                minutes = seconds // 60
-
-                timeSpent = str(syntax) + str(hours) + "h " + str(minutes) + "min"
-                return timeSpent
-
-            p.drawString(course_duration['position_x'], course_duration['position_y'], getTimeSpent(syntax_duration))
-        except :
+            hours = enrollment.global_time_tracking // 3600
+            minutes = (enrollment.global_time_tracking % 3600) // 60
+            text_duration = f"{course_duration['syntax_duration']}{hours}h {minutes}min"
+            p.drawString(course_duration['position_x'], course_duration['position_y'], text_duration)
+        except:
             log.info('error with course duration for certificate')
 
 
