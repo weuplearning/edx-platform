@@ -592,23 +592,23 @@ def _send_course_email(entry_id, email_id, to_list, global_email_context, subtas
                     total_recipients,
                     email
                 )
-                if exc.smtp_code >= 400 and exc.smtp_code < 500:
-                    # This will cause the outer handler to catch the exception and retry the entire task.
-                    raise exc
-                else:
-                    # This will fall through and not retry the message.
-                    log.warning(
-                        u'BulkEmail ==> Task: %s, SubTask: %s, EmailId: %s, Recipient num: %s/%s, \
-                        Email not delivered to %s due to error %s',
-                        parent_task_id,
-                        task_id,
-                        email_id,
-                        recipient_num,
-                        total_recipients,
-                        email,
-                        exc.smtp_error
-                    )
-                    subtask_status.increment(failed=1)
+#                if exc.smtp_code >= 400 and exc.smtp_code < 500:
+#                    # This will cause the outer handler to catch the exception and retry the entire task.
+#                    raise exc
+#                else:
+#                    # This will fall through and not retry the message.
+#                    log.warning(
+#                        u'BulkEmail ==> Task: %s, SubTask: %s, EmailId: %s, Recipient num: %s/%s, \
+#                        Email not delivered to %s due to error %s',
+#                        parent_task_id,
+#                        task_id,
+#                        email_id,
+#                        recipient_num,
+#                        total_recipients,
+#                        email,
+#                        exc.smtp_error
+#                    )
+                subtask_status.increment(failed=1)
 
             except SINGLE_EMAIL_FAILURE_ERRORS as exc:
                 # This will fall through and not retry the message.
