@@ -5,6 +5,7 @@ import os
 from django.http import JsonResponse, HttpResponseForbidden
 from rest_framework.views import APIView
 from django.utils.dateparse import parse_date
+from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
@@ -42,6 +43,9 @@ class DashboardDataView(APIView):
         org = configuration_helpers.get_value('course_org_filter')[0]
         json_dir_path = '/edx/var/edxapp/data_visualisation/'+ org 
         json_file_path = os.path.join(json_dir_path, 'datavis_report.json')
+
+
+
 
         if os.path.exists(json_file_path):
             with open(json_file_path, 'rb') as file:
@@ -137,9 +141,45 @@ class DashboardDataView(APIView):
 
 
 
-
-
-
     # def get_quiz_success_rate(self, course=None):
     #     return 70
+
+
+
+def get_dashboard_data(request):
+    """
+    Access site config and more if necessary
+    """
+
+    log.info(request)
+    log.info(request.user)
+
+    if not wul_verify_access(request.user).has_dashboard_access() or not configuration_helpers.get_value('WUL_DASHBOARD_CONFIG'):
+        return HttpResponseForbidden
+
+    csrf_token = get_token(request)
+    log.info(csrf_token)
+    email = request.user.email
+
+    data = {
+        "platform_name": configuration_helpers.get_value("platform_name", default="Open edX"),
+        "dashboard_config": configuration_helpers.get_value("WUL_DASHBOARD_CONFIG", default={}),
+        "lms_base": configuration_helpers.get_value("LMS_BASE", default="lms.example.com"),
+        "expiration_date": configuration_helpers.get_value("EXPIRATION_DATE", default="01-01-2030"),
+        "form": configuration_helpers.get_value("FORM_EXTRA", default="[]"),
+        "csrf_token": csrf_token,
+        "user_email": email
+        # ajoute d'autres valeurs utiles ici
+    }
+
+    log.info("data")
+    log.info(data)
+
+
+    return JsonResponse(data)
+
+
+
+
+
 
