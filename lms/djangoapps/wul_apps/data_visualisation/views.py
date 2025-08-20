@@ -59,73 +59,73 @@ class DashboardDataView(APIView):
 
 
 
-    def post(self, request, format='json'):
+    # def post(self, request, format='json'):
 
-        log.info("POST")
-        log.info(request)
-        log.info(request.user)
+    #     log.info("POST")
+    #     log.info(request)
+    #     log.info(request.user)
 
-        if not wul_verify_access(request.user).has_dashboard_access() or not configuration_helpers.get_value('WUL_DASHBOARD_CONFIG'):
-            return HttpResponseForbidden
-
-
-        try:
-            data = request.data
-
-            log.info('data')
-            log.info(data)
-            log.info(type(data))
-
-            start_date = parse_date(data.get("start"))
-            end_date = parse_date(data.get("end")) or datetime.today().date()
-
-        except (TypeError, ValueError, json.JSONDecodeError):
-            log.info("POST error")
-            log.info(request)
-            return JsonResponse({"error": "Invalid date format"}, status=400)
+    #     if not wul_verify_access(request.user).has_dashboard_access() or not configuration_helpers.get_value('WUL_DASHBOARD_CONFIG'):
+    #         return HttpResponseForbidden
 
 
-        log.info(f"Start: {start_date}, End: {end_date}")
+    #     try:
+    #         data = request.data
+
+    #         log.info('data')
+    #         log.info(data)
+    #         log.info(type(data))
+
+    #         start_date = parse_date(data.get("start"))
+    #         end_date = parse_date(data.get("end")) or datetime.today().date()
+
+    #     except (TypeError, ValueError, json.JSONDecodeError):
+    #         log.info("POST error")
+    #         log.info(request)
+    #         return JsonResponse({"error": "Invalid date format"}, status=400)
 
 
-        # à mettre dans un try ? 
-            # except servir un message d'erreur
-        org = configuration_helpers.get_value('course_org_filter')[0]
-        log.info("org")
-        log.info(org)
+    #     log.info(f"Start: {start_date}, End: {end_date}")
 
 
-        courses = CourseOverview.objects.filter(org=org)
-        log.info('courses')
-        log.info(courses)
-
-        data = {}
-
-        for course in courses:
-
-            stats = {
-                "countEnrollment" : 0,
-                "countFinishedEnrollment": 0, 
-                "averageProgression": {},
-                "averageTimeTracking": {}
-            }
-
-            enrollments = CourseEnrollment.objects.filter(course_id=course.id)
-            stats["countEnrollment"] = enrollments.count()
-            log.info("course")
-            log.info(course)
+    #     # à mettre dans un try ? 
+    #         # except servir un message d'erreur
+    #     org = configuration_helpers.get_value('course_org_filter')[0]
+    #     log.info("org")
+    #     log.info(org)
 
 
-            completed_count = sum(1 for e in enrollments if CourseGradeFactory().read(e.user, course).passed)
+    #     courses = CourseOverview.objects.filter(org=org)
+    #     log.info('courses')
+    #     log.info(courses)
 
-            stats["countFinishedEnrollment"] = completed_count
-            stats["averageProgression"] = self.get_course_completion_rate(course, enrollments)
+    #     data = {}
 
-            data[str(course.id)] = stats
+    #     for course in courses:
+
+    #         stats = {
+    #             "countEnrollment" : 0,
+    #             "countFinishedEnrollment": 0, 
+    #             "averageProgression": {},
+    #             "averageTimeTracking": {}
+    #         }
+
+    #         enrollments = CourseEnrollment.objects.filter(course_id=course.id)
+    #         stats["countEnrollment"] = enrollments.count()
+    #         log.info("course")
+    #         log.info(course)
+
+
+    #         completed_count = sum(1 for e in enrollments if CourseGradeFactory().read(e.user, course).passed)
+
+    #         stats["countFinishedEnrollment"] = completed_count
+    #         stats["averageProgression"] = self.get_course_completion_rate(course, enrollments)
+
+    #         data[str(course.id)] = stats
 
 
 
-        return JsonResponse(data)
+    #     return JsonResponse(data)
 
 
 
