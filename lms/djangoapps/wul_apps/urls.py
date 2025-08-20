@@ -32,7 +32,7 @@ from lms.djangoapps.wul_apps.mail_sender.views import contact_msg
 from lms.djangoapps.wul_apps.open_badge_factory.views import issue_badge
 from lms.djangoapps.wul_apps.custom_fields_editor_umn.views import CustomFieldViewUmn, CustomFieldEditorUmn
 
-from lms.djangoapps.wul_apps.data_visualisation.views import DashboardDataView
+from lms.djangoapps.wul_apps.data_visualisation.views import DashboardDataView, get_dashboard_data
 
 
 
@@ -76,7 +76,7 @@ urlpatterns += (
 
 #GRADE REPORT
 urlpatterns += (
-    url(r'^dashboard/(?P<course_id>[^/]*)/stat_dashboard/xls_grade_reports/$', calculate_grades_xls,name='calculate_grades_xls'),
+    url(r'^dashboard/{}/stat_dashboard/xls_grade_reports/$'.format(settings.COURSE_ID_PATTERN), calculate_grades_xls, name='calculate_grades_xls'),
 )
 
 #Interface Statistiques
@@ -151,9 +151,9 @@ urlpatterns += (
 # Data visualisation
 urlpatterns += (
     url(r'^data_visualisation$', render_views, name="render_views"),
-    url(r'^api/stats', DashboardDataView.as_view(), name="dashboard_data_view")
+    url(r'^api/stats', DashboardDataView.as_view(), name="dashboard_data_view"),
+    url(r'^api/dashboard_data', get_dashboard_data, name="get_dashboard_data")
 )
-
 
 # Contact Send_mail
 urlpatterns += (

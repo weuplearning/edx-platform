@@ -28,12 +28,14 @@ def submit_calculate_grades_xls(request, course_key):
     """
     AlreadyRunningError is raised if the course's grades are already being updated.
     """
+
     task_type = 'grade_course'
     task_class = calculate_grades_xls
     site_name = configuration_helpers.get_value('SITE_NAME')
 
     _microsite = configuration_helpers.get_value('domain_prefix')
     register_form = configuration_helpers.get_value('FORM_EXTRA')
+
     if register_form is None:
         register_form = []
     certificate_form = configuration_helpers.get_value('CERTIFICATE_FORM_EXTRA')
@@ -41,8 +43,10 @@ def submit_calculate_grades_xls(request, course_key):
         certificate_form = []
     if _microsite is None:
         _microsite = '_';
+
     _form = json.loads(request.body).get('fields')
     scope = json.loads(request.body).get('scope')
+
     users_admin = []
     certificate_advanced_config = {}
     include_days_left_in_report = False
@@ -100,12 +104,8 @@ def submit_generate_users(request, course_key):
     microsite = configuration_helpers.get_value('domain_prefix')
     register_form = configuration_helpers.get_value('FORM_EXTRA')
     site_name = configuration_helpers.get_value('SITE_NAME')
-    log.info("********************************SUBMITGENERATEUSER***********************")
-    log.info(microsite)
-    log.info(register_form)
-    log.info(site_name)
-    
-    if register_form is None:
+
+    if register_form is None :
         register_form = []
     #recuperations des donnees du call issues du csv genere
     _fields = wul_dashboard(course_key=course_key).required_register_fields()
@@ -118,6 +118,7 @@ def submit_generate_users(request, course_key):
     #list of invalid rows
     invalid_rows = []
     #check each rows
+
     for row in rows:
         _ensure = True
         for field in _fields:
@@ -141,10 +142,8 @@ def submit_generate_users(request, course_key):
         "site_name":site_name,
         "register_form":register_form,
     }
-
     task_key = ""
 
-    # return submit_task(request, task_type, task_class, course_key, task_input, task_key, microsite)
     return submit_task(request, task_type, task_class, course_key, task_input, task_key, microsite)
 
 

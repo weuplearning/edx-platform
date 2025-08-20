@@ -8,7 +8,6 @@ Instructor Dashboard Views
 /edx/app/edxapp/edx-platform/lms/djangoapps/wul_apps/stat_dashboard/
 """
 
-import logging
 import json
 
 from django.contrib.auth.decorators import login_required
@@ -28,10 +27,11 @@ from django.views.decorators.cache import cache_control
 from django.db import IntegrityError, transaction
 from lms.djangoapps.instructor_task.api_helper import AlreadyRunningError
 from django.utils.translation import ugettext as _
-log = logging.getLogger(__name__)
-
 
 from lms.djangoapps.wul_tasks.api import submit_generate_users, submit_calculate_grades_xls
+
+import logging
+log = logging.getLogger(__name__)
 
 
 
@@ -204,6 +204,7 @@ from lms.djangoapps.wul_tasks.api import submit_generate_users, submit_calculate
 #@require_level('staff')
 def calculate_grades_xls(request,course_id):
     course_key = SlashSeparatedCourseKey.from_string(course_id)
+
     try:
         submit_calculate_grades_xls(request, course_key)
         success_status = _("The grade report is being created."

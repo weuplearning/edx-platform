@@ -441,7 +441,6 @@ class WulCourseGradeReport(object):
         custom_fields_header = []
         for element in register_fields:
             custom_fields_header.append(element['label'])
-        
         time_tracking = _task_input['time_tracking']
 
         context.update_status(u'Starting grades')
