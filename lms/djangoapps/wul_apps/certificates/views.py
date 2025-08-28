@@ -1,6 +1,3 @@
-'''
-/edx/app/edxapp/edx-platform/lms/djangoapps/wul_apps/certificates
-'''
 # -*- coding: utf-8 -*-
 from lms.djangoapps.wul_apps.certificates.certificate import certificate
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpRequest
@@ -70,11 +67,6 @@ def draw_text(p, text, font_name, font_size, color, x, y, page_width):
 
 
 def draw_multiline_text_centered(canvas, text, font_name, font_size, font_color, x, y, line_spacing=1.2):
-    """
-    Dessine un texte multi-ligne, centré horizontalement sur la position X donnée,
-    avec Y représentant le haut du bloc de texte (pas le centre).
-    """
-
     lines = text.split('\n')
     line_height = font_size * line_spacing
     start_y = y
@@ -119,8 +111,6 @@ def translate_date(today, lang):
 
 
 def check_user_success_date(user, course_id):
-    """ Check if the user success date already exists, if not create it """
-
     today_str = date.today().isoformat() 
     try:
         user_profile = UserProfile.objects.get(user=user)
@@ -132,7 +122,6 @@ def check_user_success_date(user, course_id):
     if field_name in user_custom_fields and user_custom_fields[field_name] != '':
         context = {'is_recorded': True, 'success_date': user_custom_fields[field_name]}
     else:
-        # The first time, add the success date to the custom field
         user_custom_fields[field_name] = today_str
         user_profile.custom_field = json.dumps(user_custom_fields)
         user_profile.save()
@@ -141,20 +130,17 @@ def check_user_success_date(user, course_id):
     return context['success_date']
 
 
-@login_required
-@require_GET
-def generate_pdf(request, course_id):
+def generate_certificate_pdf(user, course_id, certificate_type=None):
 
     certificate_config = configuration_helpers.get_value('CERTIFICATE_LAYOUT')[course_id]
-    base_url = configuration_helpers.get_value('LMS_ROOT_URL')
 
     page_width = certificate_config['certificate_width']
     page_height = certificate_config['certificate_height']
     image_url = certificate_config['certificate_url']
 
     multi_certificate = safe_get(certificate_config, 'multi_certificate', False)
-    if multi_certificate:
-        image_url = image_url[request.GET.get("certificate")]
+    if multi_certificate and certificate_type:
+        image_url = image_url[certificate_type]
 
     font_name = safe_get(certificate_config, 'font_name', 'OpenSans')
     font_url = safe_get(certificate_config, 'font_url', "/edx/var/edxapp/staticfiles/fonts/OpenSans/OpenSans-Regular-webfont.ttf")
@@ -168,17 +154,19 @@ def generate_pdf(request, course_id):
     p.drawImage(image_url, 0, 0, width=page_width, height=page_height)
 
     # USERNAME
-    username = get_username(request.user)
+    username = get_username(user)
     font_size = certificate_config['font_size']
     font_color = safe_get(certificate_config, 'font_color', [0, 0, 0])
-    draw_text(p, username, font_name, font_size, font_color, safe_get(certificate_config, 'name_position_x'), certificate_config['name_position_y'], page_width)
+    draw_text(p, username, font_name, font_size, font_color,
+              safe_get(certificate_config, 'name_position_x'),
+              certificate_config['name_position_y'], page_width)
 
     # GRADE
     certificate_grade = safe_get(certificate_config, 'grade')
     detailed_grade = safe_get(certificate_config, 'detailed_grade')
 
     if certificate_grade:
-        result = ensure(request, course_id)
+        result = certificate(SlashSeparatedCourseKey.from_string(course_id), user).ensure_certificate()
         if isinstance(result, JsonResponse):
             data = json.loads(result.content.decode('utf-8'))
 
@@ -186,13 +174,16 @@ def generate_pdf(request, course_id):
             grade_g = f"{data.get('grade') * 100:.0f}%"
             text_grade += grade_g
 
-            draw_text(p, text_grade, font_name, certificate_grade['font_size'], safe_get(certificate_grade, 'font_color', [0, 0, 0]), safe_get(certificate_grade, 'position_x'), certificate_grade['position_y'], page_width)
+            draw_text(p, text_grade, font_name,
+                      certificate_grade['font_size'],
+                      safe_get(certificate_grade, 'font_color', [0, 0, 0]),
+                      safe_get(certificate_grade, 'position_x'),
+                      certificate_grade['position_y'], page_width)
 
-            if detailed_grade :
-
+            if detailed_grade:
                 text_grade_detailed = safe_get(detailed_grade, 'syntax_detailed_grade')
                 detailed_grade_data = data.get("grade_summary").get("section_breakdown")
-                for section in detailed_grade_data :
+                for section in detailed_grade_data:
                     text_grade_detailed += section['detail'] + '\n'
 
                 draw_multiline_text_centered(
@@ -210,19 +201,22 @@ def generate_pdf(request, course_id):
     certificate_date = safe_get(certificate_config, 'date')
     if certificate_date:
         date_lang = safe_get(certificate_date, 'date_lang', 'fr').lower()
-
-        date_value = check_user_success_date(request.user, course_id)
+        date_value = check_user_success_date(user, course_id)
         formatted_date = datetime.strptime(date_value, "%Y-%m-%d").date()
         string_date = translate_date(formatted_date, date_lang)
 
         text_date = certificate_date['syntax_date'] + string_date
-        draw_text(p, text_date, font_name, certificate_date['font_size'], safe_get(certificate_date, 'font_color', [0, 0, 0]), safe_get(certificate_date, 'position_x'), certificate_date['position_y'], page_width)
+        draw_text(p, text_date, font_name,
+                  certificate_date['font_size'],
+                  safe_get(certificate_date, 'font_color', [0, 0, 0]),
+                  safe_get(certificate_date, 'position_x'),
+                  certificate_date['position_y'], page_width)
 
     # COURSE DURATION
     course_duration = safe_get(certificate_config, 'course_duration')
     if course_duration:
         try:
-            enrollment = WulCourseEnrollment.get_enrollment(course_id, request.user)
+            enrollment = WulCourseEnrollment.get_enrollment(course_id, user)
             hours = enrollment.global_time_tracking // 3600
             minutes = (enrollment.global_time_tracking % 3600) // 60
             text_duration = f"{course_duration['syntax_duration']}{hours}h {minutes}min"
@@ -230,23 +224,47 @@ def generate_pdf(request, course_id):
         except:
             log.info('error with course duration for certificate')
 
-    # CUSTOM FIELD 1 & 2
+    # CUSTOM FIELDS
     for field_key in ['custom_field_value', 'custom_field_value_2']:
         cf_data = safe_get(certificate_config, field_key)
         if cf_data:
             try:
-                cf = json.loads(request.user.profile.custom_field)
+                cf = json.loads(user.profile.custom_field)
                 value = cf.get(cf_data['name'], '')
                 if field_key == 'custom_field_value_2':
                     value = f"Matricule : {value}"
-                draw_text(p, value, font_name, cf_data['font_size'], cf_data['font_color'], cf_data['position_x'], cf_data['position_y'], page_width)
+                draw_text(p, value, font_name,
+                          cf_data['font_size'], cf_data['font_color'],
+                          cf_data['position_x'], cf_data['position_y'],
+                          page_width)
             except:
                 log.info(f'error with {field_key} for certificate')
 
     p.showPage()
     p.save()
-
     return response
+
+
+@login_required
+@require_GET
+def generate_pdf(request, course_id):
+    certificate_type = request.GET.get("certificate")
+    return generate_certificate_pdf(request.user, course_id, certificate_type)
+
+
+@login_required
+@require_POST
+def generate_pdf_for_user(request):
+    """ Admin function to generate certificate for a given user (used in dashboard_datavis) """
+
+    user_id = json.loads(request.body).get('userId')
+    try:
+        user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'error': 'User not found'}, status=404)
+
+    certificate_type = json.loads(request.body).get('certificate_type', None)
+    return generate_certificate_pdf(user, json.loads(request.body).get('courseId') , certificate_type)
 
 
 @login_required
@@ -288,4 +306,3 @@ def record_name(request):
     except:
         context = {'name_recorded': False}
     return JsonResponse(context)
-
