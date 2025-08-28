@@ -13,8 +13,10 @@ from lms.djangoapps.wul_apps.statistics.views import add_time_tracking, get_user
 from lms.djangoapps.wul_apps.ensure_form.views import ensure_form
 from lms.djangoapps.wul_apps.stat_dashboard.views import tma_create_user_from_csv, calculate_grades_xls
 from lms.djangoapps.wul_apps.user_dashboard.views import render_views, render_course_outline, course_registration
+from django.views.generic.base import RedirectView
 
-from lms.djangoapps.wul_apps.certificates.views import generate_pdf, ensure
+
+from lms.djangoapps.wul_apps.certificates.views import generate_pdf, ensure, generate_pdf_for_user
 
 from lms.djangoapps.wul_apps.converter_xlsx_to_targz.bvt.views import convert_to_tarfile_bvt 
 from lms.djangoapps.wul_apps.custom_grade_report.bvt.views import run_script_from_back 
@@ -150,10 +152,13 @@ urlpatterns += (
 
 # Data visualisation
 urlpatterns += (
+    url(r'^data_visualisation/.+$', RedirectView.as_view(url='/wul_apps/data_visualisation')),
     url(r'^data_visualisation$', render_views, name="render_views"),
     url(r'^api/stats', DashboardDataView.as_view(), name="dashboard_data_view"),
-    url(r'^api/dashboard_data', get_dashboard_data, name="get_dashboard_data")
+    url(r'^api/dashboard_data', get_dashboard_data, name="get_dashboard_data"),
+    url(r'^api/generate_pdf_from_datavis$', generate_pdf_for_user, name="generate_pdf_for_user")
 )
+
 
 # Contact Send_mail
 urlpatterns += (
