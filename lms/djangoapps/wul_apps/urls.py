@@ -14,7 +14,7 @@ from lms.djangoapps.wul_apps.ensure_form.views import ensure_form
 from lms.djangoapps.wul_apps.stat_dashboard.views import tma_create_user_from_csv, calculate_grades_xls
 from lms.djangoapps.wul_apps.user_dashboard.views import render_views, render_course_outline, course_registration
 from django.views.generic.base import RedirectView
-
+from lms.djangoapps.wul_apps.umn_learner_data_api.views import PowerBIAuthView
 
 from lms.djangoapps.wul_apps.certificates.views import generate_pdf, ensure, generate_pdf_for_user
 
@@ -165,3 +165,6 @@ urlpatterns += (
     url(r'^mail_sender/contact_msg$', contact_msg, name="contact_msg"),
 )
 
+urlpatterns += (
+    url(r'^api/umn/reporting', PowerBIAuthView.as_view(), name="powerbi-auth"),
+)
