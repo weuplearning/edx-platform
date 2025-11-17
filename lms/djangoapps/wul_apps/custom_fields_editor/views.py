@@ -29,30 +29,28 @@ class CustomFieldView(APIView):
             "message":'[WUL] custom_field for User {} successfully read'.format(user_id)
         }
 
-        user_email = request.user.email
+        # user_email = request.user.email
+        # user = User.objects.get(email=user_email)
+        # form_factory = ensure_form_factory()
+        # db = 'ensure_form'
+        # collection = 'certificate_form'
+        # form_factory.connect(db=db,collection=collection)
+        # form_factory.get_user_form_extra(user)
+        # form_factory.get_user_certificate_form_extra(user)
+        # certificate_form_extra = form_factory.user_certificate_form_extra
 
-        user = User.objects.get(email=user_email)
-
-        form_factory = ensure_form_factory()
-        db = 'ensure_form'
-        collection = 'certificate_form'
-        form_factory.connect(db=db,collection=collection)
-        form_factory.get_user_form_extra(user)
-        form_factory.get_user_certificate_form_extra(user)
-        certificate_form_extra = form_factory.user_certificate_form_extra
-
-        try :
-            cas_pratique_grade = int(certificate_form_extra["cas_pratique_grade"])
-        except:
-            pass
+        # try :
+        #     cas_pratique_grade = int(certificate_form_extra["cas_pratique_grade"])
+        # except:
+        #     pass
 
         try:
             user_profile = UserProfile.objects.get(user_id=user_id)
             custom_field = json.loads(user_profile.custom_field)
-            try :
-                custom_field["cas_pratique_grade"] = cas_pratique_grade
-            except:
-                pass
+            # try :
+            #     custom_field["cas_pratique_grade"] = cas_pratique_grade
+            # except:
+            #     pass
 
         except:
             context['status'] = False
