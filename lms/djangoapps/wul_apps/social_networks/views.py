@@ -18,22 +18,23 @@ def share_linkedin(request):
 
     course_id = "course-v1" + section.split("course-v1")[1]
     course_id = course_id.replace(' ','+')
+    org = course_id.split("+")[0].split("v1:")[1]
     badge = section.split("course-v1")[0]
 
-    access_token = get_access_token(auth_code, section)
+    access_token = get_access_token(str(request.site), auth_code, section)
     profile_info = get_user_profile(access_token)
     upload_badge_link_data = get_upload_link_linkedin(access_token, profile_info.get('sub'))
-    upload_badge(upload_badge_link_data, badge)
+    upload_badge(upload_badge_link_data, badge, org)
 
-    if course_id.find("OFM") == -1 :
-
+    if course_id.find("max-havelaar") == -1 :
+        # Max-havelaar
         badge_data = {
-            "author": "urn:li:person:"+profile_info.get('sub') ,
+            "author": "urn:li:person:"+profile_info.get('sub'),
             "lifecycleState": "PUBLISHED",
             "specificContent": {
                 "com.linkedin.ugc.ShareContent": {
                     "shareCommentary": {
-                        "text": " Acabei de ganhar um troféu por ter concluído uma lição do curso de francês Partiu Paris, nível A1, da Aliança Francesa Online, com sucesso!"
+                        "text": "Je viens de gagner le trophée pour avoir réussi le MOOC Commerce équitable, par Max Havelaar."
                     },
                     "shareMediaCategory": "IMAGE",
                     "media": [
@@ -55,7 +56,8 @@ def share_linkedin(request):
             }
         }
     else :
-
+        # ajouter une plateforme ici
+        # ajouter une plateforme ici
         badge_data = {
             "author": "urn:li:person:"+profile_info.get('sub') ,
             "lifecycleState": "PUBLISHED",
@@ -86,18 +88,19 @@ def share_linkedin(request):
 
     share_badge_on_linkedin(access_token, badge_data)
 
-    url_value = "https://cursos.aliancafrancesaonline.com.br/courses/" + course_id + "/progress"
+    url_value = "https://" + str(request.site) + "/courses/" + course_id + "/progress"
     return HttpResponseRedirect(url_value)
 
 
 
-def get_access_token(auth_code, section):
+def get_access_token(path, auth_code, section):
     url = "https://www.linkedin.com/oauth/v2/accessToken"
     linkedIn_id = configuration_helpers.get_value('linkedIn_id', None)
+
     data = {
         "grant_type": "authorization_code",
         "code": auth_code,
-        'redirect_uri': 'https://cursos.aliancafrancesaonline.com.br/wul_apps/social_network/share_linkedin?section='+ section, 
+        'redirect_uri': 'https://' + path + '/wul_apps/social_network/share_linkedin?section='+ section, 
         "client_id": linkedIn_id["client_id"],
         "client_secret": linkedIn_id["client_secret"]
     }
@@ -131,8 +134,7 @@ def get_user_profile(access_token):
 
 
 
-
-def get_upload_link_linkedin(access_token,user_id):
+def get_upload_link_linkedin(access_token, user_id):
     headers = {
         'Authorization': f'Bearer {access_token}',
         'Content-Type': 'application/json',
@@ -164,13 +166,13 @@ def get_upload_link_linkedin(access_token,user_id):
 
 
 
-def upload_badge(upload_badge_link_data, badge):
+def upload_badge(upload_badge_link_data, badge, org):
     headers = {
         'Authorization': 'Bearer redacted',
         'media-type-family': 'STILLIMAGE'
     }
     url = upload_badge_link_data["value"]["uploadMechanism"]["com.linkedin.digitalmedia.uploading.MediaUploadHttpRequest"]["uploadUrl"]
-    file_path= '/edx/var/edxapp/media/microsites/af-brazil/badge/'+badge+'.png'
+    file_path= '/edx/var/edxapp/media/microsites/'+org+'/badge/'+badge+'.png'
 
     with open(file_path, 'rb') as f:
         files = {'file': f}
@@ -204,13 +206,16 @@ def share_badge_on_linkedin(access_token, badge_data):
 
 
 
+
+
+# Project is currently cancelled
 @login_required
 def share_facebook(request):
 
-    # Project is currently cancelled
     log.info(request)
     log.info(dir(request))
 
-    url_value = "https://cursos.aliancafrancesaonline.com.br/dashboard"
+    url_value = "https://" + str(request.site) + "/dashboard"
+
     return HttpResponseRedirect(url_value)
 
