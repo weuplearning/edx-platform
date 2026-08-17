@@ -1,113 +1,229 @@
-<!-- WUL TIME TRACKING -->
+<!-- WUL TIME TRACKING v2 -->
 <script src="/media/wul_apps/interface_stat/jquery.idle.js"></script>
 <script type="text/javascript">
-  var time_spent=0;
-  var can_reset_timer=false;
+(function () {
 
-  //Start timer on page ready
-  $(document).ready(function(){
-    start_timer();
-  });
+  // ---------------------------------------------------------------------
+  // Config
+  // ---------------------------------------------------------------------
+  var COURSE_ID        = "${str(course.id)}";
+  var TRACK_URL         = '/wul_apps/' + COURSE_ID + '/wul_stats/time_tracker';
+  var IDLE_MS           = 900000;
+  var HEARTBEAT_MS      = 30000;
+  var MAX_DELTA_S        = 90;
+  var LEADER_KEY         = 'wul_leader_' + COURSE_ID;
+  var LEADER_TIMEOUT_MS  = 10000;
 
+  // ---------------------------------------------------------------------
+  // State
+  // ---------------------------------------------------------------------
+  var tabId          = 'tab_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+  var isLeaderTab     = false;
+  var isPageVisible   = !document.hidden;
+  var isUserIdle      = false;
+  var lastTick        = Date.now();
+  var heartbeatTimer  = null;
 
-  $(document).idle({
-  idle: 900000,
-  onIdle: function(){
-    time=end_timer();
-    send_time(time);
-  },
+  // ---------------------------------------------------------------------
+  // Election d'un onglet "leader" (empêche 2 onglets/fenêtres du même
+  // cours d'envoyer du temps en double sur le même intervalle réel)
+  // ---------------------------------------------------------------------
+  function claimLeadershipIfPossible() {
+    try {
+      var now = Date.now();
+      var raw = localStorage.getItem(LEADER_KEY);
+      var data = raw ? JSON.parse(raw) : null;
 
-  onActive: function(){
-    if(can_reset_timer){
-      start_timer();
-    }
-  },
-
-  onHide: function(){
-    time=end_timer();
-    send_time(time);
-  },
-
-  onShow: function(){
-    if(can_reset_timer){
-      start_timer();
+      if (!data || (now - data.ts) > LEADER_TIMEOUT_MS || data.id === tabId) {
+        localStorage.setItem(LEADER_KEY, JSON.stringify({ id: tabId, ts: now }));
+        isLeaderTab = true;
+      } else {
+        isLeaderTab = false;
+      }
+    } catch (e) {
+      isLeaderTab = true;
     }
   }
-});
 
-  //Send timer when user leaves the page
-  window.addEventListener('beforeunload', function (e) {
-    time=end_timer();
-    send_time(time);
-  });
-
-
-  function start_timer() {
-    startTime = new Date();
-    can_reset_timer=false;
-    $('#time-message').html("Votre temps de formation est décompté.");
-    $('.recording-dot').addClass('recording-time').removeClass('not-recording-time');
-  };
-
-  function end_timer() {
-    endTime = new Date();
-    var timeDiff = endTime - startTime; //in ms
-    // strip the ms
-    timeDiff /= 1000;
-    // get seconds
-    var seconds = Math.round(timeDiff);
-    $('#time-message').html("Votre temps de formation n'est plus décompté.");
-    $('.recording-dot').removeClass('recording-time').addClass('not-recording-time');
-    console.log('time sent');
-    console.log(seconds);
-    //reset_timer
-    return seconds;
+  // ---------------------------------------------------------------------
+  // UI
+  // ---------------------------------------------------------------------
+  function updateUI(tracking) {
+    if (tracking) {
+      $('#time-message').html("Votre temps de formation est décompté.");
+      $('.recording-dot').addClass('recording-time').removeClass('not-recording-time');
+    } else {
+      $('#time-message').html("Votre temps de formation n'est plus décompté.");
+      $('.recording-dot').removeClass('recording-time').addClass('not-recording-time');
+    }
   }
 
-  function get_section(){
-    if(window.location.href.indexOf('discussion')>0){
-      section="forum";
+  // ---------------------------------------------------------------------
+  // Section / sous-section (identique à l'original, avec un garde-fou)
+  // ---------------------------------------------------------------------
+  function get_section() {
+    try {
+      if (window.location.href.indexOf('discussion') > 0) {
+        return "forum";
+      } else if (window.location.href.indexOf('/courseware/') > 0) {
+        return window.location.href.split('/courseware/')[1].split('/')[0];
+      }
+      return '';
+    } catch (e) {
+      return '';
     }
-    else if(window.location.href.indexOf('/courseware/')>0){
-      section=window.location.href.split('/courseware/')[1].split('/')[0];
-    }
-    else{
-      section=''
-    }
-    return section;
   }
 
-  function get_sub_section(){
-    if(window.location.href.indexOf('discussion')<0){
-      sub_section=window.location.href.split('/courseware/')[1].split('/')[1].replace('/','');
+  function get_sub_section() {
+    try {
+      if (window.location.href.indexOf('discussion') < 0) {
+        return window.location.href.split('/courseware/')[1].split('/')[1].replace('/', '');
+      }
+      return "forum";
+    } catch (e) {
+      return '';
     }
-    else{
-      sub_section="forum";
-    }
-    return sub_section;
   }
 
-  function send_time(time){
-    section=get_section();
-    subsection=get_sub_section();
-    console.log('time sent : '+time);
+  // ---------------------------------------------------------------------
+  // Envoi du temps (mêmes paramètres et même URL que l'API actuelle)
+  // ---------------------------------------------------------------------
+  function send_time(seconds) {
+    var section = get_section();
+    var subsection = get_sub_section();
+
     $.ajax({
-      url : '/wul_apps/${str(course.id)}/wul_stats/time_tracker',
-      type : 'POST',
-      data : {
-        'course_section' : section,
-        'course_sub_section':subsection,
-        'time':time,
+      url: TRACK_URL,
+      type: 'POST',
+      data: {
+        'course_section': section,
+        'course_sub_section': subsection,
+        'time': seconds
       },
-      dataType:'json',
-      success : function(data) {
-        if ('success' in data){
-          can_reset_timer=true;
-        }
+      dataType: 'json',
+      success: function (data) {
+        // rien de particulier à faire : chaque envoi est un petit incrément
+        // indépendant, pas besoin d'attendre un "ok" pour continuer à tracker.
+      },
+      error: function () {
+        console.warn('wul_time_tracker: échec envoi (', seconds, 's ) - perdu, pas grave, pas dupliqué');
       }
     });
   }
 
-</script>
+  function sendBeaconTime(seconds) {
+    var section = get_section();
+    var subsection = get_sub_section();
 
+    if (navigator.sendBeacon) {
+      var fd = new FormData();
+      fd.append('course_section', section);
+      fd.append('course_sub_section', subsection);
+      fd.append('time', seconds);
+      navigator.sendBeacon(TRACK_URL, fd);
+    } else {
+      // fallback si sendBeacon indisponible
+      $.ajax({
+        url: TRACK_URL,
+        type: 'POST',
+        async: false,
+        data: {
+          'course_section': section,
+          'course_sub_section': subsection,
+          'time': seconds
+        },
+        dataType: 'json'
+      });
+    }
+  }
+
+  // ---------------------------------------------------------------------
+  // Coeur du tracking : on calcule un delta depuis le dernier "tick" et on
+  // reset systématiquement lastTick, qu'on envoie ou non, pour ne jamais
+  // recompter deux fois le même intervalle.
+  // ---------------------------------------------------------------------
+  function flush(reason, useBeacon) {
+    var now = Date.now();
+    var deltaMs = now - lastTick;
+    lastTick = now;
+
+    if (!isLeaderTab) return;
+    if (!isPageVisible || isUserIdle) return;
+
+    var seconds = Math.round(deltaMs / 1000);
+    if (seconds <= 0) return;
+
+    if (seconds > MAX_DELTA_S) {
+      console.warn('wul_time_tracker: delta anormal (' + seconds + 's, raison: ' + reason + '), plafonné à ' + MAX_DELTA_S + 's');
+      seconds = MAX_DELTA_S;
+    }
+
+    if (useBeacon) {
+      sendBeaconTime(seconds);
+    } else {
+      send_time(seconds);
+    }
+  }
+
+  // ---------------------------------------------------------------------
+  // Heartbeat
+  // ---------------------------------------------------------------------
+  function startHeartbeat() {
+    if (heartbeatTimer) return;
+    heartbeatTimer = setInterval(function () {
+      claimLeadershipIfPossible();
+      if (isPageVisible && !isUserIdle) {
+        flush('heartbeat', false);
+      }
+    }, HEARTBEAT_MS);
+  }
+
+  // ---------------------------------------------------------------------
+  // Page Visibility API : remplace onHide/onShow du plugin idle, plus fiable
+  // ---------------------------------------------------------------------
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) {
+      isPageVisible = false;
+      flush('page_hidden', false);
+      updateUI(false);
+    } else {
+      isPageVisible = true;
+      lastTick = Date.now();
+      updateUI(!isUserIdle);
+    }
+  });
+
+  // ---------------------------------------------------------------------
+  // Détection d'inactivité (on garde jquery.idle, mais seulement onIdle/onActive)
+  // ---------------------------------------------------------------------
+  $(document).ready(function () {
+    claimLeadershipIfPossible();
+    lastTick = Date.now();
+    updateUI(true);
+    startHeartbeat();
+
+    $(document).idle({
+      idle: IDLE_MS,
+      onIdle: function () {
+        isUserIdle = true;
+        flush('idle', false);
+        updateUI(false);
+      },
+      onActive: function () {
+        isUserIdle = false;
+        lastTick = Date.now();
+        updateUI(isPageVisible);
+      }
+    });
+  });
+
+  // ---------------------------------------------------------------------
+  // Fermeture / navigation hors de la page
+  // ---------------------------------------------------------------------
+  window.addEventListener('beforeunload', function () {
+    flush('beforeunload', true);
+  });
+
+})();
+</script>
 <!-- END WUL TIME TRACKING -->
