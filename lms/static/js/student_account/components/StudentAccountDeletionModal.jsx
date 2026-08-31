@@ -92,13 +92,6 @@ class StudentAccountDeletionConfirmationModal extends React.Component {
       validationMessage,
     } = this.state;
     const { onClose } = this.props;
-    const loseAccessText = StringUtils.interpolate(
-      gettext('You may also lose access to verified certificates and other program credentials like MicroMasters certificates. If you want to make a copy of these for your records before proceeding with deletion, follow the instructions for {htmlStart}printing or downloading a certificate{htmlEnd}.'),
-      {
-        htmlStart: '<a href="https://edx.readthedocs.io/projects/edx-guide-for-students/en/latest/SFD_certificates.html#printing-a-certificate" rel="noopener" target="_blank">',
-        htmlEnd: '</a>',
-      },
-    );
 
     const noteDeletion = StringUtils.interpolate(
       gettext('You have selected “Delete my account.” Deletion of your account and personal data is permanent and cannot be undone. {platformName} will not be able to recover your account or the data that is deleted.'),
@@ -107,21 +100,6 @@ class StudentAccountDeletionConfirmationModal extends React.Component {
       },
     );
 
-    const bodyDeletion = StringUtils.interpolate(
-      gettext('If you proceed, you will be unable to use this account to take courses on the {platformName} app, {siteName}, or any other site hosted by {platformName}.'),
-      {
-        platformName: this.props.platformName,
-        siteName: this.props.siteName,
-      },
-    );
-
-    const bodyDeletion2 = StringUtils.interpolate(
-      gettext('This includes access to {siteName} from your employer’s or university’s system{additionalSiteSpecificDeletionText}.'),
-      {
-        siteName: this.props.siteName,
-        additionalSiteSpecificDeletionText: this.props.additionalSiteSpecificDeletionText,
-      },
-    );
 
 
     return (
@@ -161,11 +139,6 @@ class StudentAccountDeletionConfirmationModal extends React.Component {
                     </div>
                     <div className="alert-content">
                       <h3 className="alert-title">{noteDeletion}</h3>
-                      <p>
-                        <span>{bodyDeletion} </span>
-                        <span>{bodyDeletion2}</span>
-                      </p>
-                      <p dangerouslySetInnerHTML={{ __html: loseAccessText }} />
                     </div>
                   </div>
                 )}
