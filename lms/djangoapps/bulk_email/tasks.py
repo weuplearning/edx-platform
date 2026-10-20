@@ -536,6 +536,26 @@ def _send_course_email(entry_id, email_id, to_list, global_email_context, subtas
                 subtask_status.increment(failed=1)
                 continue
 
+
+
+
+
+            # CA - 07102026
+            # Needed after anonymised script
+            if email.find('@retired') != -1 :
+                to_list.pop()
+                total_recipients_failed += 1
+                log.info(
+                    u"BulkEmail ==> Email address %s is anonymised user. Skipping sending email.",
+                    email
+                )
+                subtask_status.increment(failed=1)
+                continue
+
+
+
+
+
             email_context['email'] = email
             email_context['name'] = current_recipient['profile__name']
             email_context['user_id'] = current_recipient['pk']
